@@ -1,2 +1,2 @@
 # ts-helpers
-various helper functions and utility types
+various typescript helper functions and utility types
