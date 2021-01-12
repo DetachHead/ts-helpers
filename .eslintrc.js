@@ -36,6 +36,7 @@ module.exports = {
 			'error',
 			'never'
 		],
-		'expect-type/expect': 'error'
+		'expect-type/expect': 'error',
+		'@typescript-eslint/ban-types': 'off'
 	}
 }
