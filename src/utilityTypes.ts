@@ -1,3 +1,5 @@
+import {Primitive} from 'utility-types'
+
 type PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T ? ((t: T, ...a: A) => void) extends ((...x: infer X) => void) ? X : never : never;
 type EnumerateInternal<A extends Array<unknown>, N extends number> = { 0: A, 1: EnumerateInternal<PrependNextNum<A>, N> }[N extends A['length'] ? 0 : 1];
 
@@ -35,5 +37,12 @@ export type Range<FROM extends number, TO extends number> = Exclude<Enumerate<TO
 export type FixedSizeArray<T, N extends number> = {
     //TODO: figure out why this is
     //@ts-expect-error template literal type w/ generic here is failing, not sure why but the type still works if we just ignore the error
-    readonly [k in `${Enumerate<N>}`]: T;
+    readonly [k in Enumerate<N>]: T;
 } & { length: N } & Readonly<T[]>;
+
+/**
+ * creates a stringified version of `T`
+ * @example
+ * type Foo = ToString<1|2> //'1'|'2'
+ */
+export type ToString<T extends Exclude<Primitive, symbol>> = `${T}`
