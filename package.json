@@ -1,7 +1,8 @@
 {
   "name": "@detachhead/ts-helpers",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "main.js",
+  "types": "dist/main.d.ts",
   "scripts": {
     "test": "jest",
     "lint:check": "eslint src --ext .ts",
@@ -9,9 +10,9 @@
     "build": "rimraf ./dist && tsc"
   },
   "keywords": [],
-  "author": "",
+  "author": "detachhead",
   "license": "ISC",
-  "description": "",
+  "description": "various typescript helper functions and utility types",
   "dependencies": {
     "@types/lodash": "^4.14.167",
     "lodash": "^4.17.20",
