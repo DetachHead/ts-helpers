@@ -1,7 +1,7 @@
 {
   "name": "@detachhead/ts-helpers",
-  "version": "1.0.1",
-  "main": "main.js",
+  "version": "1.0.2",
+  "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "scripts": {
     "test": "jest",
