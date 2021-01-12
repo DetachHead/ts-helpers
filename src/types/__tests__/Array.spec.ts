@@ -1,7 +1,8 @@
-import {lengthGreaterThan} from '../types/Array'
+import {lengthGreaterThan} from '../Array'
+import {FixedSizeArray} from '../../utilityTypes'
 
-declare const foo: string[]
 test('lengthGreaterThan', () => {
+	const foo: string[] = []
 	// noinspection BadExpressionStatementJS
 	foo[0] // $ExpectType string | undefined
 	if (lengthGreaterThan(foo, 3)) {
@@ -14,4 +15,10 @@ test('lengthGreaterThan', () => {
 		// noinspection BadExpressionStatementJS
 		foo[4] // $ExpectType string | undefined
 	}
+})
+
+test('FixedSizeArray', () => {
+	const foo: FixedSizeArray<string,4> = ['','','','']
+	//@ts-expect-error it's a readonly array
+	foo.push('')
 })
