@@ -72,9 +72,6 @@
     "*.eslintrc.js"
   ],
   "exclude": [
-    "node_modules",
-    "**/__tests__/**/*",
-    "**/*.spec.ts",
-    "**/*.test.ts"
+    "dist"
   ]
 }
