@@ -33,3 +33,22 @@ export function lengthGreaterThan<T, L extends number>(arr: Readonly<T[]>, lengt
 export function arrayOfAll<T>() {
 	return <U extends T[]>(array: U & ([T] extends [U[number]] ? unknown : never)) => array
 }
+
+/**
+ * finds the first item in an array where the given callback doesn't return `null` or `undefined`
+ * @param arr the array of `T`s to check
+ * @param callback the function to run on `arr` that may return `null` or `undefined`
+ * @returns
+ * index 0: the result of the first `callback` that didn't return `undefined` or `null`
+ *
+ * index 1: the index in `arr` where that result occurred
+ */
+export async function findNotUndefined<T extends {}, R>(arr: T[], callback: (it: T) => R | void): Promise<[R, number] | undefined> {
+	for (let index = 0; index < arr.length; index++) {
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		const value = arr[index]!
+		const result = await callback(value)
+		if (result) return [result, index]
+	}
+	return
+}
