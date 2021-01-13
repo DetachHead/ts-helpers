@@ -7,7 +7,8 @@ module.exports = {
 	'extends': [
 		'eslint:recommended',
 		'plugin:@typescript-eslint/recommended',
-		'plugin:eslint-plugin-expect-type/recommended'
+		'plugin:eslint-plugin-expect-type/recommended',
+		'prettier'
 	],
 	'parser': '@typescript-eslint/parser',
 	'parserOptions': {
