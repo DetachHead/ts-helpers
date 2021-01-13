@@ -1,5 +1,5 @@
-import {lengthGreaterThan} from '../Array'
-import {FixedSizeArray} from '../../utilityTypes'
+import { lengthGreaterThan } from '../Array'
+import { FixedSizeArray } from '../../utilityTypes'
 
 test('lengthGreaterThan', () => {
 	const foo: string[] = []
@@ -18,7 +18,7 @@ test('lengthGreaterThan', () => {
 })
 
 test('FixedSizeArray', () => {
-	const foo: FixedSizeArray<string,4> = ['','','','']
+	const foo: FixedSizeArray<string, 4> = ['', '', '', '']
 	//@ts-expect-error it's a readonly array
 	foo.push('')
 })

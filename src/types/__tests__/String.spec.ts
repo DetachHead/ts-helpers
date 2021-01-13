@@ -1,4 +1,4 @@
-import {match} from '../String'
+import { match } from '../String'
 
 test('match', () => {
 	const foo = match('', /a/)
