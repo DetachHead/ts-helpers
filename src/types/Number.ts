@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import {Range} from '../utilityTypes'
+import { Range } from '../utilityTypes'
 
 /**
  * gets a random number in the given range from `Min` to `Max` (inclusive)
