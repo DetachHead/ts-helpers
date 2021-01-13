@@ -38,6 +38,6 @@ module.exports = {
 			'never'
 		],
 		'expect-type/expect': 'error',
-		'@typescript-eslint/ban-types': 'off'
+		'@typescript-eslint/ban-types': 'off',
 	}
 }
