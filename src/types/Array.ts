@@ -1,4 +1,4 @@
-import {FixedSizeArray} from '../utilityTypes'
+import { FixedSizeArray } from '../utilityTypes'
 
 /**
  * checks whether the given array's length is larger than the given number, and narrows the type of the array to that
@@ -43,7 +43,10 @@ export function arrayOfAll<T>() {
  *
  * index 1: the index in `arr` where that result occurred
  */
-export async function findNotUndefined<T extends {}, R>(arr: T[], callback: (it: T) => R | void): Promise<[R, number] | undefined> {
+export async function findNotUndefined<T extends {}, R>(
+	arr: T[],
+	callback: (it: T) => R | void
+): Promise<[R, number] | undefined> {
 	for (let index = 0; index < arr.length; index++) {
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		const value = arr[index]!
