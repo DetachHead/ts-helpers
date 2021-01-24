@@ -100,18 +100,23 @@ export function containsDuplicates(arr: unknown[]): boolean {
 	return new Set(arr).size !== arr.length
 }
 
+//TODO: remove undefined from return type of findDuplicates & removeDuplicates if noUncheckedIndexedAccess is disabled.
+// do something like this to check if the flag is set: `TupleOf<T | undefined extends unknown[][0]? undefined: never, L>`
+// but can't do it currently due to https://github.com/microsoft/TypeScript/issues/42471
+
 /**
  * @returns an array of any items that there were duplicates of in the given array (unique)
  * @example
  * duplicates([1,1,2,3,3,3]) // [1,3]
  */
-//TODO: track array length
-export function findDuplicates<T>(arr: T[]): T[] {
-	return removeDuplicates(arr.filter((item) => arr.filter((item2) => item === item2).length > 1))
+export function findDuplicates<T, L extends number>(arr: TupleOf<T, L>): TupleOf<T | undefined, L> {
+	return removeDuplicates(
+		arr.filter((item) => arr.filter((item2) => item === item2).length > 1)
+	) as TupleOf<T | undefined, L>
 }
 
 /** removes any duplicated items from an array */
 //TODO: track array length
-export function removeDuplicates<T>(arr: T[]): T[] {
-	return Array.from(new Set(arr))
+export function removeDuplicates<T, L extends number>(arr: T[]): TupleOf<T | undefined, L> {
+	return Array.from(new Set(arr)) as TupleOf<T | undefined, L>
 }
