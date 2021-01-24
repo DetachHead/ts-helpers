@@ -12,7 +12,10 @@ import { TupleOf } from 'utility-types'
  *      const c: string = foo[3] //Type 'string | undefined' is not assignable to type 'string'
  *  }
  */
-export function lengthGreaterOrEqual<T, L extends number>(arr: Readonly<T[]>, length: L): arr is TupleOf<T, L> & T[] {
+export function lengthGreaterOrEqual<T, L extends number>(
+	arr: Readonly<T[]>,
+	length: L
+): arr is TupleOf<T, L> & T[] {
 	return arr.length >= length
 }
 
