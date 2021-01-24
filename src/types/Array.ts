@@ -1,4 +1,20 @@
-import { FixedSizeArray } from '../utilityTypes'
+import { TupleOf } from 'utility-types'
+
+/**
+ * checks whether the given array's length is larger than **or equal to** the given number, and narrows the type of the
+ * array to that length. useful when using the `noUncheckedIndexedAccess` compiler option
+ * @example
+ *   declare const foo: string[]
+ *   const bar: string = foo[0] //Type 'string | undefined' is not assignable to type 'string'
+ *   if (lengthGreaterOrEqual(foo, 3)) {
+ *      const a: string = foo[0] //no error
+ *      const b: string = foo[2] //no error
+ *      const c: string = foo[3] //Type 'string | undefined' is not assignable to type 'string'
+ *  }
+ */
+export function lengthGreaterOrEqual<T, L extends number>(arr: Readonly<T[]>, length: L): arr is TupleOf<T, L> & T[] {
+	return arr.length >= length
+}
 
 /**
  * checks whether the given array's length is larger than the given number, and narrows the type of the array to that
@@ -8,12 +24,30 @@ import { FixedSizeArray } from '../utilityTypes'
  *   const bar: string = foo[0] //Type 'string | undefined' is not assignable to type 'string'
  *   if (lengthGreaterThan(foo, 3)) {
  *      const a: string = foo[0] //no error
- *      const b: string = foo[2] //no error
- *      const c: string = foo[3] //Type 'string | undefined' is not assignable to type 'string'
+ *      const b: string = foo[3] //no error
+ *      const c: string = foo[4] //Type 'string | undefined' is not assignable to type 'string'
  *  }
  */
-export function lengthGreaterThan<T, L extends number>(arr: Readonly<T[]>, length: L): arr is FixedSizeArray<T, L> {
-	return arr.length >= length
+export function lengthGreaterThan<T, L extends number>(
+	arr: Readonly<T[]>,
+	length: L
+): arr is [...TupleOf<T, L>, T] & T[] {
+	return arr.length > length
+}
+
+/**
+ * checks whether the given array's length is equal to the given number, and narrows the type of the array to that
+ * length. useful when using the `noUncheckedIndexedAccess` compiler option
+ * @example
+ *   declare const foo: string[]
+ *   const bar: string = foo[0] //Type 'string | undefined' is not assignable to type 'string'
+ *   if (lengthIs(foo, 3)) {
+ *      const a: string = foo[0] //no error
+ *      const c: string = foo[2] //Tuple type '[string, string, string]' of length '3' has no element at index '3'.
+ *  }
+ */
+export function lengthIs<T, L extends number>(arr: Readonly<T[]>, length: L): arr is TupleOf<T, L> {
+	return arr.length === length
 }
 
 /**
