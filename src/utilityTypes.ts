@@ -26,7 +26,8 @@ export type Enumerate<N extends number> = EnumerateInternal<[], N> extends (infe
  * type Foo = Range<2, 5> //2|3|4|5
  * @see https://stackoverflow.com/a/63918062
  */
-export type Range<FROM extends number, TO extends number> = Exclude<Enumerate<TO>, Enumerate<FROM>> | TO
+export type Range<FROM extends number, TO extends number> =
+	Exclude<Enumerate<TO>, Enumerate<FROM>> | TO
 
 /**
  * creates a stringified version of `T`
