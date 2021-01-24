@@ -116,7 +116,6 @@ export function findDuplicates<T, L extends number>(arr: TupleOf<T, L>): TupleOf
 }
 
 /** removes any duplicated items from an array */
-//TODO: track array length
 export function removeDuplicates<T, L extends number>(arr: T[]): TupleOf<T | undefined, L> {
 	return Array.from(new Set(arr)) as TupleOf<T | undefined, L>
 }
