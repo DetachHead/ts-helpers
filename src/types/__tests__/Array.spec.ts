@@ -1,11 +1,11 @@
-import { lengthGreaterThan } from '../Array'
-import { FixedSizeArray } from '../../utilityTypes'
+import { containsDuplicates, lengthGreaterOrEqual, lengthGreaterThan, lengthIs } from '../Array'
+import assert from 'assert'
 
-test('lengthGreaterThan', () => {
+test('lengthGreaterOrEqual', () => {
 	const foo: string[] = []
 	// noinspection BadExpressionStatementJS
 	foo[0] // $ExpectType string | undefined
-	if (lengthGreaterThan(foo, 3)) {
+	if (lengthGreaterOrEqual(foo, 3)) {
 		// noinspection BadExpressionStatementJS
 		foo[0] // $ExpectType string
 		// noinspection BadExpressionStatementJS
@@ -17,8 +17,18 @@ test('lengthGreaterThan', () => {
 	}
 })
 
-test('FixedSizeArray', () => {
-	const foo: FixedSizeArray<string, 4> = ['', '', '', '']
-	//@ts-expect-error it's a readonly array
-	foo.push('')
+test('lengthGreaterThan', () => {
+	const foo: string[] = []
+	// noinspection BadExpressionStatementJS
+	foo[0] // $ExpectType string | undefined
+	if (lengthGreaterThan(foo, 3)) {
+		// noinspection BadExpressionStatementJS
+		foo[0] // $ExpectType string
+		// noinspection BadExpressionStatementJS
+		foo[2] // $ExpectType string
+		// noinspection BadExpressionStatementJS
+		foo[3] // $ExpectType string
+		// noinspection BadExpressionStatementJS
+		foo[4] // $ExpectType string | undefined
+	}
 })
