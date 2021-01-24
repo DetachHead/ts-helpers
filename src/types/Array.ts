@@ -89,3 +89,10 @@ export async function findNotUndefined<T extends {}, R>(
 	}
 	return
 }
+
+/**
+ * checks whether an array contains any duplicates
+ */
+export function containsDuplicates(arr: unknown[]): boolean {
+	return new Set(arr).size !== arr.length
+}
