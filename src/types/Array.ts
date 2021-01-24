@@ -96,3 +96,19 @@ export async function findNotUndefined<T extends {}, R>(
 export function containsDuplicates(arr: unknown[]): boolean {
 	return new Set(arr).size !== arr.length
 }
+
+/**
+ * @returns an array of any items that there were duplicates of in the given array (unique)
+ * @example
+ * duplicates([1,1,2,3,3,3]) // [1,3]
+ */
+//TODO: track array length
+export function findDuplicates<T>(arr: T[]): T[] {
+	return removeDuplicates(arr.filter((item) => arr.filter((item2) => item === item2).length > 1))
+}
+
+/** removes any duplicated items from an array */
+//TODO: track array length
+export function removeDuplicates<T>(arr: T[]): T[] {
+	return Array.from(new Set(arr))
+}

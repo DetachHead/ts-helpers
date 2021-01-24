@@ -1,5 +1,14 @@
-import { containsDuplicates, lengthGreaterOrEqual, lengthGreaterThan, lengthIs } from '../Array'
-import assert from 'assert'
+import {
+	containsDuplicates,
+	findDuplicates,
+	lengthGreaterOrEqual,
+	lengthGreaterThan,
+	lengthIs,
+	removeDuplicates,
+} from '../Array'
+import { PowerAssert } from 'typed-nodejs-assert'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const assert: PowerAssert = require('power-assert')
 
 test('lengthGreaterOrEqual', () => {
 	const foo: string[] = []
@@ -48,7 +57,14 @@ test('lengthIs', () => {
 	}
 })
 
-describe('containsDuplicates', () => {
-	test('true', () => assert(containsDuplicates([1, 2, 3, 3])))
-	test('false', () => assert(!containsDuplicates(['asdf', 'sdfg', 'dfgh'])))
+describe('duplicate functions', () => {
+	describe('containsDuplicates', () => {
+		test('true', () => assert(containsDuplicates([1, 2, 3, 3])))
+		test('false', () => assert(!containsDuplicates(['asdf', 'sdfg', 'dfgh'])))
+	})
+
+	test('duplicates', () => assert.deepStrictEqual(findDuplicates([1, 1, 2, 3, 3, 3]), [1, 3]))
+
+	test('removeDuplicates', () =>
+		assert.deepStrictEqual(removeDuplicates([1, 1, 2, 3, 3, 3]), [1, 2, 3]))
 })
