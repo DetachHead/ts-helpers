@@ -107,7 +107,7 @@ export function containsDuplicates(arr: unknown[]): boolean {
 /**
  * @returns an array of any items that there were duplicates of in the given array (unique)
  * @example
- * duplicates([1,1,2,3,3,3]) // [1,3]
+ * findDuplicates([1,1,2,3,3,3]) // [1,3]
  */
 export function findDuplicates<T, L extends number>(arr: TupleOf<T, L>): TupleOf<T | undefined, L> {
 	return removeDuplicates(
