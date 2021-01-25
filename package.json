@@ -16,6 +16,10 @@
   "author": "detachhead",
   "license": "ISC",
   "description": "various typescript helper functions and utility types",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/DetachHead/ts-helpers.git"
+  },
   "dependencies": {
     "@types/lodash": "^4.14.167",
     "lodash": "^4.17.20",
