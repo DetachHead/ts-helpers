@@ -1,4 +1,27 @@
-import { Primitive } from 'utility-types'
+import { Primitive, TupleOf } from 'utility-types'
+
+/**
+ * the compiler sees this as `undefined` if `noUncheckedIndexedAccess` is enabled, and `never` if it's not.
+ * used by {@link NoUncheckedIndexedAccess}
+ */
+//TODO: figure out a way to do this without stuff existing at runtime
+const indexedAccessCheck = ([] as never[])[0]
+
+/**
+ * `true` if `noUncheckedIndexedAccess` is set, else `false`. useful when creating types that need to behave differently
+ * based on this compiler option
+ */
+export type NoUncheckedIndexedAccess = undefined extends typeof indexedAccessCheck ? true : false
+
+/**
+ * an array that can be of any length between 0 and `L`
+ * @example
+ * declare const foo: TupleOfUpTo<number, 3>
+ * foo[0] //number (or number|undefined if `noUncheckedIndexedAccess` is enabled)
+ * foo[3] //error: tuple of length '3' has no element at index '3'
+ */
+//TODO: figure out a more accurate way of doing this, as (T|undefined)[] isn't the exact same as T[] with noUncheckedIndexedAccess
+export type TupleOfUpTo<T, L extends number> = TupleOf<NoUncheckedIndexedAccess extends true ? T | undefined : T, L>
 
 type PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
 	? ((t: T, ...a: A) => void) extends (...x: infer X) => void
