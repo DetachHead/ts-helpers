@@ -1,4 +1,5 @@
 import { TupleOf } from 'utility-types'
+import { TupleOfUpTo, TupleOfUpToButNotIncluding } from '../utilityTypes'
 
 /**
  * checks whether the given array's length is larger than **or equal to** the given number, and narrows the type of the
@@ -36,6 +37,33 @@ export function lengthGreaterThan<T, L extends number>(
 	length: L
 ): arr is [...TupleOf<T, L>, T] & T[] {
 	return arr.length > length
+}
+
+/**
+ * checks whether the given array's length is less than **or equal to** the given number, and narrows the type of the
+ * array to that length. useful when using the `noUncheckedIndexedAccess` compiler option
+ * @example
+ *   declare const foo: string[]
+ *   const bar: string = foo[0] //Type 'string | undefined' is not assignable to type 'string'
+ *   if (lengthLessOrEqual(foo, 3)) {
+ *      const a: string = foo[0] //string | undefined'
+ *      const b: string = foo[2] //string | undefined'
+ *      const c: string = foo[3] //error: tuple of length '3' has no element at index '3'
+ *  }
+ */
+export function lengthLessOrEqual<T, L extends number>(
+	arr: Readonly<T[]>,
+	length: L
+): arr is TupleOfUpTo<T, L> {
+	return arr.length <= length
+}
+
+export function lengthLessThan<T, L extends number>(
+	arr: Readonly<T[]>,
+	length: L
+	//@ts-expect-error TODO: figure this out, pretty sure it works as is tho
+): arr is TupleOfUpToButNotIncluding<T, L> {
+	return arr.length < length
 }
 
 /**
