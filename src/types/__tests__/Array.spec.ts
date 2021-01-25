@@ -4,6 +4,8 @@ import {
 	lengthGreaterOrEqual,
 	lengthGreaterThan,
 	lengthIs,
+	lengthLessOrEqual,
+	lengthLessThan,
 	removeDuplicates,
 } from '../Array'
 import { PowerAssert } from 'typed-nodejs-assert'
@@ -39,6 +41,31 @@ test('lengthGreaterThan', () => {
 		foo[3] // $ExpectType string
 		// noinspection BadExpressionStatementJS
 		foo[4] // $ExpectType string | undefined
+	}
+})
+
+test('lengthLessOrEqual', () => {
+	const foo: string[] = []
+	if (lengthLessOrEqual(foo, 3)) {
+		foo
+		// noinspection BadExpressionStatementJS
+		foo[0] // $ExpectType string | undefined
+		// noinspection BadExpressionStatementJS
+		foo[2] // $ExpectType string | undefined
+		// noinspection BadExpressionStatementJS
+		//@ts-expect-error TS2493: Tuple type '[string, string, string]' of length '3' has no element at index '4'.
+		foo[4] //error: tuple of length '3' has no element at index '3'
+	}
+})
+
+test('lengthLessThan', () => {
+	const foo: string[] = []
+	if (lengthLessThan(foo, 3)) {
+		// noinspection BadExpressionStatementJS
+		foo[0] // $ExpectType string | undefined
+		//@ts-expect-error TS2339: Property '2' does not exist on type 'TupleOfUpToButNotIncluding '.
+		// noinspection BadExpressionStatementJS
+		foo[2]
 	}
 })
 
