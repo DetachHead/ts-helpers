@@ -44,6 +44,8 @@ test('lengthGreaterThan', () => {
 	}
 })
 
+//TODO: figure out how to cast it like `lengthGreaterThan` in the else branh on `lengthLessOrEqual` and `lengthLessThan`
+
 test('lengthLessOrEqual', () => {
 	const foo: string[] = []
 	if (lengthLessOrEqual(foo, 3)) {
