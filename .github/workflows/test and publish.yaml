@@ -9,7 +9,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 15.4
-      - run: npm ci && npm run postinstall
+      - run: npm ci
       - run: npm run build
       - run: npm run lint:check
       - run: npm run format:check
