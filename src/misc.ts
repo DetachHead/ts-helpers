@@ -1,3 +1,6 @@
+import { Stringable, ToString } from './utilityTypes'
+import { Primitive } from 'utility-types'
+
 /**
  * narrows the given value from type `Base` to type `Narrowed` without having to assign it to a new variable
  * @example
@@ -17,3 +20,12 @@ export function cast<Base, Narrowed extends Base>(_value: Base): asserts _value 
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export function unsafeCast<T>(_value: unknown): asserts _value is T {}
+
+/**
+ * converts the given `value` to a string, preserving its value at compiletime where possible
+ */
+export function toStringType<T extends Stringable>(
+	value: T
+): T extends Exclude<Primitive, symbol> ? ToString<T> : string {
+	return value.toString() as never
+}
