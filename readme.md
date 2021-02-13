@@ -9,7 +9,7 @@ various typescript helper functions and utility types
 ### value tracking
 this library includes many helper types and functions such as `add`, `subtract`, and `substring` which allow the values to be known at compile time
 
-![](./readme pics/functions.gif)
+![asdf](./readme%20pics/functions.gif)
 
 ### `noUncheckedIndexedAccess` support
 
