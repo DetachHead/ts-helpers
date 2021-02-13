@@ -20,7 +20,9 @@ export type NoUncheckedIndexedAccess = undefined extends typeof indexedAccessChe
  * foo[0] //number (or number|undefined if `noUncheckedIndexedAccess` is enabled)
  * foo[3] //error: tuple of length '3' has no element at index '3'
  */
-export type TupleOfUpTo<T, L extends number> = TupleOf<T, L> | (NoUncheckedIndexedAccess extends true ? [] : never)
+export type TupleOfUpTo<T, L extends number> =
+	| TupleOf<T, L>
+	| (NoUncheckedIndexedAccess extends true ? [] : never)
 
 /**
  * an array of length `L` - 1
@@ -31,8 +33,9 @@ export type TupleOfUpTo<T, L extends number> = TupleOf<T, L> | (NoUncheckedIndex
  */
 //never doesnt work for infers
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type TupleOfExcluding<T, L extends number> = TupleOf<T, L> extends [any, ...infer R] ? R : never
-
+export type TupleOfExcluding<T, L extends number> = TupleOf<T, L> extends [any, ...infer R]
+	? R
+	: never
 
 /**
  * an array that can be of any length between 0 and `L`, excluding `L`
@@ -42,7 +45,7 @@ export type TupleOfExcluding<T, L extends number> = TupleOf<T, L> extends [any, 
  * foo[2] //error: tuple of length '2' has no element at index '2'
  */
 export type TupleOfUpToButNotIncluding<T, L extends number> =
-	TupleOfExcluding<T, L>
+	| TupleOfExcluding<T, L>
 	| (NoUncheckedIndexedAccess extends true ? [] : never)
 
 type PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
@@ -72,7 +75,8 @@ export type Enumerate<N extends number> = EnumerateInternal<[], N> extends (infe
  * @see https://stackoverflow.com/a/63918062
  */
 export type Range<FROM extends number, TO extends number> =
-	Exclude<Enumerate<TO>, Enumerate<FROM>> | TO
+	| Exclude<Enumerate<TO>, Enumerate<FROM>>
+	| TO
 
 /**
  * creates a stringified version of `T`
@@ -124,20 +128,22 @@ export type Add<N1 extends number, N2 extends number> = [
  * type Foo = Subtract<5, 2> //3
  */
 export type Subtract<N1 extends number, N2 extends number> = TupleOf<never, N1> extends [
-		...TupleOf<never, N2>,
-		...infer R
-	]
+	...TupleOf<never, N2>,
+	...infer R
+]
 	? R['length']
 	: never
 
 //TODO: figure out how to do Multiply and Divide logarithmically like TupleOf so it doesn't fail on numbers > 40
 
-type MultiAdd<Number extends number,
+type MultiAdd<
+	Number extends number,
 	Accumulator extends number,
-	IterationsLeft extends number> = IterationsLeft extends 0
+	IterationsLeft extends number
+> = IterationsLeft extends 0
 	? Accumulator
 	: //@ts-expect-error ts is wrong
-	MultiAdd<Number, Add<Number, Accumulator>, Subtract<IterationsLeft, 1>>
+	  MultiAdd<Number, Add<Number, Accumulator>, Subtract<IterationsLeft, 1>>
 
 /**
  * multiplies `N1` by `N2`
@@ -154,21 +160,21 @@ type EQ<A, B> = A extends B ? (B extends A ? true : false) : false
 type AtTerminus<A extends number, B extends number> = A extends 0
 	? true
 	: B extends 0
-		? true
-		: false
+	? true
+	: false
 
 type LT<A extends number, B extends number> = AtTerminus<A, B> extends true
 	? EQ<A, B> extends true
 		? false
 		: A extends 0
-			? true
-			: false
+		? true
+		: false
 	: LT<Subtract<A, 1>, Subtract<B, 1>>
 
 type MultiSub<N extends number, D extends number, Q extends number> = LT<N, D> extends true
 	? Q
 	: //@ts-expect-error ts is wrong
-	MultiSub<Subtract<N, D>, D, Add<Q, 1>>
+	  MultiSub<Subtract<N, D>, D, Add<Q, 1>>
 
 /**
  * divides `N1` by `N2`
@@ -186,5 +192,6 @@ export type Divide<N1 extends number, N2 extends number> = MultiSub<N1, N2, 0>
  * type Foo = Modulo<7, 4> //3
  * @see https://itnext.io/implementing-arithmetic-within-typescripts-type-system-a1ef140a6f6f
  */
-export type Modulo<N1 extends number, N2 extends number> =
-	LT<N1, N2> extends true ? N1 : Modulo<Subtract<N1, N2>, N2>;
+export type Modulo<N1 extends number, N2 extends number> = LT<N1, N2> extends true
+	? N1
+	: Modulo<Subtract<N1, N2>, N2>
