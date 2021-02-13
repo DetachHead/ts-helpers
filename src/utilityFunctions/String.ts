@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { CharAt } from '../utilityTypes/String'
+import { CharAt, Substring } from '../utilityTypes/String'
 
 /**
  * replaces all occurrences of `find` in the given string with `replace`
@@ -23,4 +23,15 @@ export function match(str: string, regex: RegExp): (RegExpMatchArray & [string])
  */
 export function charAt<T extends string, I extends number>(string: T, index: I): CharAt<T, I> {
 	return string.charAt(index) as CharAt<T, I>
+}
+
+/**
+ * does {@link String.substring} but at compiletime
+ */
+export function substring<
+	String extends string,
+	StartIndex extends number,
+	EndIndex extends number
+>(string: String, start: StartIndex, end: EndIndex): Substring<String, StartIndex, EndIndex> {
+	return string.substring(start, end) as Substring<String, StartIndex, EndIndex>
 }
