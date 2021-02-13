@@ -1,6 +1,6 @@
 import { add, random, subtract, multiply, divide } from '../Number'
-import { TupleOf } from 'utility-types'
 import { PowerAssert } from 'typed-nodejs-assert'
+import { TupleOf } from '../../utilityTypes/Array'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const assert: PowerAssert = require('power-assert')
 

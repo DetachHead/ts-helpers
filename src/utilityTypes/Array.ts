@@ -1,5 +1,44 @@
-import { TupleOf } from 'utility-types'
 import { NoUncheckedIndexedAccess } from './misc'
+
+type _BuildPowersOf2LengthArrays<N extends number, R extends never[][]> = R[0][N] extends never
+	? R
+	: _BuildPowersOf2LengthArrays<N, [[...R[0], ...R[0]], ...R]>
+
+type _ConcatLargestUntilDone<
+	N extends number,
+	R extends never[][],
+	B extends never[]
+> = B['length'] extends N
+	? B
+	: [...R[0], ...B][N] extends never
+	? _ConcatLargestUntilDone<
+			N,
+			R extends [R[0], ...infer U] ? (U extends never[][] ? U : never) : never,
+			B
+	  >
+	: _ConcatLargestUntilDone<
+			N,
+			R extends [R[0], ...infer U] ? (U extends never[][] ? U : never) : never,
+			[...R[0], ...B]
+	  >
+
+type _Replace<R extends any[], T> = { [K in keyof R]: T }
+
+/**
+ * creates an array with a fixed length
+ * @example
+ * TupleOf<number, 4> //[number, number, number, number]
+ * @see https://github.com/microsoft/TypeScript/issues/26223#issuecomment-674514787
+ */
+export type TupleOf<T, N extends number> = number extends N
+	? T[]
+	: {
+			[K in N]: _BuildPowersOf2LengthArrays<K, [[never]]> extends infer U
+				? U extends never[][]
+					? _Replace<_ConcatLargestUntilDone<K, U, []>, T>
+					: never
+				: never
+	  }[N]
 
 /**
  * an array that can be of any length between 0 and `L`
