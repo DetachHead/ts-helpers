@@ -141,3 +141,13 @@ export function findDuplicates<T, L extends number>(arr: TupleOf<T, L>): TupleOf
 export function removeDuplicates<T, L extends number>(arr: T[]): TupleOfUpTo<T, L> {
 	return Array.from(new Set(arr)) as TupleOfUpTo<T, L>
 }
+
+/**
+ * concatenates two arrays while keeping track of their length
+ */
+export function concat<A1 extends readonly unknown[], A2 extends readonly unknown[]>(
+	array1: A1,
+	array2: A2
+): [...A1, ...A2] {
+	return array1.concat(array2) as [...A1, ...A2]
+}
