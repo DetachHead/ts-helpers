@@ -9,8 +9,7 @@
     "lint:fix": "npm run lint:check -- --fix",
     "format:check": "prettier --check src/**/*",
     "format:fix": "prettier --write src/**/*",
-    "build": "rimraf ./dist && tsc -p tsconfig.build.json",
-    "postinstall": "cd node_modules/utility-types && npm i && tsc --outDir dist/"
+    "build": "rimraf ./dist && tsc -p tsconfig.build.json"
   },
   "keywords": [],
   "author": "detachhead",
@@ -25,7 +24,7 @@
     "lodash": "^4.17.20",
     "ts-jest": "^26.4.4",
     "typescript": "^4.1.3",
-    "utility-types": "github:DetachHead/utility-types#ed16c9da0e0b461e592b4c046ff9a6d683a2e000"
+    "utility-types": "^3.10.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
