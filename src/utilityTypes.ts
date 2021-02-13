@@ -80,3 +80,111 @@ export type Range<FROM extends number, TO extends number> =
  * type Foo = ToString<1|2> //'1'|'2'
  */
 export type ToString<T extends Exclude<Primitive, symbol>> = `${T}`
+
+/**
+ * a URI that starts with the given `Protocol`
+ * @example
+ * const foo: UriString<'http'> = 'foo' //error
+ * const bar: UriString<'http'> = 'http://foo.com' //no error
+ */
+export type UriString<Protocol extends string = string> = `${Protocol}://${string}`
+
+/**
+ * a URL with either the http or https protocol.
+ * @example
+ * const foo: UrlString = 'foo://bar' //error
+ * const bar: UrlString = 'http://foo' //no error
+ */
+export type UrlString = UriString<'http' | 'https'>
+
+/**
+ * duplicates a string a given number of times
+ * @example
+ * type Foo = DuplicateString<'foo', 3> //'foofoofoo'
+ */
+export type DuplicateString<T extends string, N extends number> = N extends 1
+	? T
+	: `${T}${N extends 1 ? '' : DuplicateString<T, Subtract<N, 1>>}`
+
+//TODO: figure out a way to make Add and Subtract work with negative numbers
+
+/**
+ * adds two `number` types together
+ * @example
+ * type Foo = Add<2, 3> //5
+ */
+export type Add<N1 extends number, N2 extends number> = [
+	...TupleOf<never, N1>,
+	...TupleOf<never, N2>
+]['length']
+
+/**
+ * subtracts `N2` from `N1`
+ * @example
+ * type Foo = Subtract<5, 2> //3
+ */
+export type Subtract<N1 extends number, N2 extends number> = TupleOf<never, N1> extends [
+		...TupleOf<never, N2>,
+		...infer R
+	]
+	? R['length']
+	: never
+
+//TODO: figure out how to do Multiply and Divide logarithmically like TupleOf so it doesn't fail on numbers > 40
+
+type MultiAdd<Number extends number,
+	Accumulator extends number,
+	IterationsLeft extends number> = IterationsLeft extends 0
+	? Accumulator
+	: //@ts-expect-error ts is wrong
+	MultiAdd<Number, Add<Number, Accumulator>, Subtract<IterationsLeft, 1>>
+
+/**
+ * multiplies `N1` by `N2`
+ *
+ * **WARNING**: currently fails on big numbers
+ * @example
+ * type Foo = Multiply<2, 3> //6
+ * @see https://itnext.io/implementing-arithmetic-within-typescripts-type-system-a1ef140a6f6f
+ */
+export type Multiply<N1 extends number, N2 extends number> = MultiAdd<N1, 0, N2>
+
+type EQ<A, B> = A extends B ? (B extends A ? true : false) : false
+
+type AtTerminus<A extends number, B extends number> = A extends 0
+	? true
+	: B extends 0
+		? true
+		: false
+
+type LT<A extends number, B extends number> = AtTerminus<A, B> extends true
+	? EQ<A, B> extends true
+		? false
+		: A extends 0
+			? true
+			: false
+	: LT<Subtract<A, 1>, Subtract<B, 1>>
+
+type MultiSub<N extends number, D extends number, Q extends number> = LT<N, D> extends true
+	? Q
+	: //@ts-expect-error ts is wrong
+	MultiSub<Subtract<N, D>, D, Add<Q, 1>>
+
+/**
+ * divides `N1` by `N2`
+ *
+ * **WARNING**: currently fails on big numbers
+ * @example
+ * type Foo = Divide<6, 3> //2
+ * @see https://itnext.io/implementing-arithmetic-within-typescripts-type-system-a1ef140a6f6f
+ */
+export type Divide<N1 extends number, N2 extends number> = MultiSub<N1, N2, 0>
+
+/**
+ * gets the remainder of `Divide<N1, N2>`
+ * @example
+ * type Foo = Modulo<7, 4> //3
+ * @see https://itnext.io/implementing-arithmetic-within-typescripts-type-system-a1ef140a6f6f
+ */
+export type Modulo<N1 extends number, N2 extends number> =
+	LT<N1, N2> extends true ? N1 : Modulo<Subtract<N1, N2>, N2>;
