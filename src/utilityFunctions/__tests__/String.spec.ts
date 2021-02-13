@@ -1,4 +1,4 @@
-import { charAt, match } from '../String'
+import { charAt, match, substring } from '../String'
 import { PowerAssert } from 'typed-nodejs-assert'
 import { toStringType } from '../misc'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -28,4 +28,9 @@ describe('toStringType', () => {
 test('charAt', () => {
 	const value = charAt('asdf', 2) // $ExpectType "d"
 	assert(value === 'd')
+})
+
+test('substring', () => {
+	const value = substring('foobarbaz', 3, 6) //$ExpectType "bar"
+	assert(value === 'bar')
 })

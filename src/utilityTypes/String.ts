@@ -55,13 +55,29 @@ type _TrimStart<
 	  _TrimStart<String extends `${FirstChar<String>}${infer R}` ? R : never, Index, Add<Iterator, 1>>
 
 /**
- * trims the characters up to `Index` off the start of `String`
+ * trims the characters up to `Index` off the start of `String` (inclusive)
+ *
+ * **WARNING:** the compiler sometimes throws TS2321: Excessive stack depth, but it seems to still work as long as you
+ * suppress the error with @ts-expect-error
  * @example
  * type Foo = TrimStart<'foobar', 2> //'bar'
  */
 export type TrimStart<String extends string, Index extends number> = _TrimStart<String, Index, 0>
 
+/**
+ * trims the characters past `Index` off the end of `String` (exclusive)
+ * @example
+ * type Foo = TrimEnd<'foobar', 2> //'foo'
+ */
+export type TrimEnd<String extends string, Index extends number> = Substring<String, 0, Index>
+
+/**
+ * gets the characters of `String` between `StartIndex` (inclusive) and `EndIndex` (exclusive)
+ */
+export type Substring<String extends string, StartIndex extends number, EndIndex extends number> =
+	// @ts-expect-error see TrimStart documentation
+	TrimStart<String, StartIndex> extends `${infer R}${TrimStart<String, EndIndex>}` ? R : never
+
 export type CharAt<String extends string, Index extends number> =
-	//@ts-expect-error TS2321: Excessive stack depth comparing types '_TrimStart ' and 'string'.
-	//but it seems to still work anyway
+	// @ts-expect-error see TrimStart documentation
 	FirstChar<TrimStart<String, Index>>
