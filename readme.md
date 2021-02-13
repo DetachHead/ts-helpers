@@ -6,6 +6,11 @@ various typescript helper functions and utility types
 
 ## features
 
+### value tracking
+this library includes many helper types and functions such as `add`, `subtract`, and `substring` which allow the values to be known at compile time
+
+![](./readme pics/functions.gif)
+
 ### `noUncheckedIndexedAccess` support
 
 the `noUncheckedIndexedAccess` compiler flag is epic, but there's room for improvement. for example, the following
