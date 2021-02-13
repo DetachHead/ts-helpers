@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { CharAt } from '../utilityTypes'
+import { CharAt } from '../utilityTypes/String'
 
 /**
  * replaces all occurrences of `find` in the given string with `replace`

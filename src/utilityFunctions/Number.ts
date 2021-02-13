@@ -1,5 +1,7 @@
 import _ from 'lodash'
-import { Add, Divide, Modulo, Multiply, Range, Subtract } from '../utilityTypes'
+import { Add, Divide, Modulo, Multiply, Subtract } from '../utilityTypes/Number'
+import { RangeType } from '../utilityTypes/Number'
+
 /**
  * gets a random number in the given range from `Min` to `Max` (inclusive)
  * @returns anumber where the type is a union of the possible numbers
@@ -7,8 +9,8 @@ import { Add, Divide, Modulo, Multiply, Range, Subtract } from '../utilityTypes'
 export function random<Min extends number, Max extends number>(
 	min: Min,
 	max: Max
-): Range<Min, Max> {
-	return _.random(min, max) as Range<Min, Max>
+): RangeType<Min, Max> {
+	return _.random(min, max) as RangeType<Min, Max>
 }
 
 /**

@@ -1,5 +1,5 @@
 import { TupleOf } from 'utility-types'
-import { TupleOfUpTo, TupleOfUpToButNotIncluding } from '../utilityTypes'
+import { TupleOfUpTo, TupleOfUpToButNotIncluding } from '../utilityTypes/Array'
 
 /**
  * checks whether the given array's length is larger than **or equal to** the given number, and narrows the type of the
