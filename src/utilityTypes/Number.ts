@@ -1,5 +1,5 @@
-import { TupleOf } from 'utility-types'
 import { Equals } from './misc'
+import { TupleOf } from './Array'
 
 type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
 	? ((t: T, ...a: A) => void) extends (...x: infer X) => void
