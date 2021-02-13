@@ -1,4 +1,5 @@
 import {
+	concat,
 	containsDuplicates,
 	findDuplicates,
 	lengthGreaterOrEqual,
@@ -97,4 +98,11 @@ describe('duplicate functions', () => {
 
 	test('removeDuplicates', () =>
 		assert.deepStrictEqual(removeDuplicates([1, 1, 2, 3, 3, 3]), [1, 2, 3]))
+})
+
+test('concat', () => {
+	const array1 = [1, 2, 3] as const
+	const array2 = [1, 2, 3, 4] as const
+	// noinspection BadExpressionStatementJS
+	concat(array1, array2).length // $ExpectType 7
 })
