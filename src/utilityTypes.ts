@@ -115,6 +115,13 @@ export type DuplicateString<T extends string, N extends number> = N extends 1
 	? T
 	: `${T}${N extends 1 ? '' : DuplicateString<T, Subtract<N, 1>>}`
 
+/**
+ * anything that can be represented as a string (ie. has a {@link toString} method)
+ */
+export interface Stringable {
+	toString: () => string
+}
+
 //TODO: figure out a way to make Add and Subtract work with negative numbers
 
 /**
@@ -200,3 +207,32 @@ export type Divide<N1 extends number, N2 extends number> = _MultiSub<N1, N2, 0>
 export type Modulo<N1 extends number, N2 extends number> = _LT<N1, N2> extends true
 	? N1
 	: Modulo<Subtract<N1, N2>, N2>
+
+/**
+ * checks whether a number is positive or negative
+ */
+export type IsPositive<T extends number> = `${T}` extends `-${number}` ? false : true
+
+/**
+ * gets the first character in a string
+ */
+export type FirstChar<String extends string> = String extends `${infer R}${string}` ? R : never
+
+type _TrimStart<String extends string,
+	Index extends number,
+	Iterator extends number> = Iterator extends Index
+	? String
+	: //@ts-expect-error see documentation for Add type
+	_TrimStart<String extends `${FirstChar<String>}${infer R}` ? R : never, Index, Add<Iterator, 1>>
+
+/**
+ * trims the characters up to `Index` off the start of `String`
+ * @example
+ * type Foo = TrimStart<'foobar', 2> //'bar'
+ */
+export type TrimStart<String extends string, Index extends number> = _TrimStart<String, Index, 0>
+
+export type CharAt<String extends string, Index extends number> =
+	//@ts-expect-error TS2321: Excessive stack depth comparing types '_TrimStart ' and 'string'.
+	//but it seems to still work anyway
+	FirstChar<TrimStart<String, Index>>
