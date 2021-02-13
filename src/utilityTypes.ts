@@ -1,17 +1,22 @@
 import { Primitive, TupleOf } from 'utility-types'
 
 /**
+ * checks if two types are equal
+ */
+export type Equals<A, B> = A extends B ? (B extends A ? true : false) : false
+
+/**
  * the compiler sees this as `undefined` if `noUncheckedIndexedAccess` is enabled, and `never` if it's not.
  * used by {@link NoUncheckedIndexedAccess}
  */
 //TODO: figure out a way to do this without stuff existing at runtime
-const indexedAccessCheck = ([] as never[])[0]
+const _indexedAccessCheck = ([] as never[])[0]
 
 /**
  * `true` if `noUncheckedIndexedAccess` is set, else `false`. useful when creating types that need to behave differently
  * based on this compiler option
  */
-export type NoUncheckedIndexedAccess = undefined extends typeof indexedAccessCheck ? true : false
+export type NoUncheckedIndexedAccess = undefined extends typeof _indexedAccessCheck ? true : false
 
 /**
  * an array that can be of any length between 0 and `L`
@@ -48,15 +53,15 @@ export type TupleOfUpToButNotIncluding<T, L extends number> =
 	| TupleOfExcluding<T, L>
 	| (NoUncheckedIndexedAccess extends true ? [] : never)
 
-type PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
+type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
 	? ((t: T, ...a: A) => void) extends (...x: infer X) => void
 		? X
 		: never
 	: never
 
-type EnumerateInternal<A extends Array<unknown>, N extends number> = N extends A['length']
+type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['length']
 	? A
-	: EnumerateInternal<PrependNextNum<A>, N>
+	: _Enumerate<_PrependNextNum<A>, N>
 
 /**
  * creates a union type of numbers from 0 to generic `N`
@@ -65,7 +70,7 @@ type EnumerateInternal<A extends Array<unknown>, N extends number> = N extends A
  * type Foo = Enumerate<3> //0|1|2
  * @see https://stackoverflow.com/a/63918062
  */
-export type Enumerate<N extends number> = EnumerateInternal<[], N> extends (infer E)[] ? E : never
+export type Enumerate<N extends number> = _Enumerate<[], N> extends (infer E)[] ? E : never
 
 /**
  * creates a range type of numbers from generics `FROM` (inclusive) to `TO` (inclusive)
@@ -114,6 +119,10 @@ export type DuplicateString<T extends string, N extends number> = N extends 1
 
 /**
  * adds two `number` types together
+ *
+ * **WARNING:** for some reason the compiler sometimes thinks this isn't a valid number when passing it into other
+ * utility types. as far as i can tell this is a false positive, and the types still behave as expected if you suppress
+ * the error with @ts-expect-error
  * @example
  * type Foo = Add<2, 3> //5
  */
@@ -128,22 +137,20 @@ export type Add<N1 extends number, N2 extends number> = [
  * type Foo = Subtract<5, 2> //3
  */
 export type Subtract<N1 extends number, N2 extends number> = TupleOf<never, N1> extends [
-	...TupleOf<never, N2>,
-	...infer R
-]
+		...TupleOf<never, N2>,
+		...infer R
+	]
 	? R['length']
 	: never
 
 //TODO: figure out how to do Multiply and Divide logarithmically like TupleOf so it doesn't fail on numbers > 40
 
-type MultiAdd<
-	Number extends number,
+type _MultiAdd<Number extends number,
 	Accumulator extends number,
-	IterationsLeft extends number
-> = IterationsLeft extends 0
+	IterationsLeft extends number> = IterationsLeft extends 0
 	? Accumulator
-	: //@ts-expect-error ts is wrong
-	  MultiAdd<Number, Add<Number, Accumulator>, Subtract<IterationsLeft, 1>>
+	: //@ts-expect-error see documentation for Add type
+	_MultiAdd<Number, Add<Number, Accumulator>, Subtract<IterationsLeft, 1>>
 
 /**
  * multiplies `N1` by `N2`
@@ -153,28 +160,26 @@ type MultiAdd<
  * type Foo = Multiply<2, 3> //6
  * @see https://itnext.io/implementing-arithmetic-within-typescripts-type-system-a1ef140a6f6f
  */
-export type Multiply<N1 extends number, N2 extends number> = MultiAdd<N1, 0, N2>
+export type Multiply<N1 extends number, N2 extends number> = _MultiAdd<N1, 0, N2>
 
-type EQ<A, B> = A extends B ? (B extends A ? true : false) : false
-
-type AtTerminus<A extends number, B extends number> = A extends 0
+type _AtTerminus<A extends number, B extends number> = A extends 0
 	? true
 	: B extends 0
-	? true
-	: false
-
-type LT<A extends number, B extends number> = AtTerminus<A, B> extends true
-	? EQ<A, B> extends true
-		? false
-		: A extends 0
 		? true
 		: false
-	: LT<Subtract<A, 1>, Subtract<B, 1>>
 
-type MultiSub<N extends number, D extends number, Q extends number> = LT<N, D> extends true
+type _LT<A extends number, B extends number> = _AtTerminus<A, B> extends true
+	? Equals<A, B> extends true
+		? false
+		: A extends 0
+			? true
+			: false
+	: _LT<Subtract<A, 1>, Subtract<B, 1>>
+
+type _MultiSub<N extends number, D extends number, Q extends number> = _LT<N, D> extends true
 	? Q
-	: //@ts-expect-error ts is wrong
-	  MultiSub<Subtract<N, D>, D, Add<Q, 1>>
+	: //@ts-expect-error see documentation for Add type
+	_MultiSub<Subtract<N, D>, D, Add<Q, 1>>
 
 /**
  * divides `N1` by `N2`
@@ -184,7 +189,7 @@ type MultiSub<N extends number, D extends number, Q extends number> = LT<N, D> e
  * type Foo = Divide<6, 3> //2
  * @see https://itnext.io/implementing-arithmetic-within-typescripts-type-system-a1ef140a6f6f
  */
-export type Divide<N1 extends number, N2 extends number> = MultiSub<N1, N2, 0>
+export type Divide<N1 extends number, N2 extends number> = _MultiSub<N1, N2, 0>
 
 /**
  * gets the remainder of `Divide<N1, N2>`
@@ -192,6 +197,6 @@ export type Divide<N1 extends number, N2 extends number> = MultiSub<N1, N2, 0>
  * type Foo = Modulo<7, 4> //3
  * @see https://itnext.io/implementing-arithmetic-within-typescripts-type-system-a1ef140a6f6f
  */
-export type Modulo<N1 extends number, N2 extends number> = LT<N1, N2> extends true
+export type Modulo<N1 extends number, N2 extends number> = _LT<N1, N2> extends true
 	? N1
 	: Modulo<Subtract<N1, N2>, N2>
