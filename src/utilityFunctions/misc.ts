@@ -1,5 +1,5 @@
-import { Stringable, ToString } from './utilityTypes'
 import { Primitive } from 'utility-types'
+import { Stringable, ToString } from '../utilityTypes/String'
 
 /**
  * narrows the given value from type `Base` to type `Narrowed` without having to assign it to a new variable
@@ -29,3 +29,7 @@ export function toStringType<T extends Stringable>(
 ): T extends Exclude<Primitive, symbol> ? ToString<T> : string {
 	return value.toString() as never
 }
+
+// TODO: find a type testing library that doesnt suck
+// eslint-disable-next-line @typescript-eslint/no-empty-function,@typescript-eslint/no-unused-vars
+export function testType<T>(_value: T): void {}

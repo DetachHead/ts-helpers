@@ -1,6 +1,6 @@
 import { charAt, match } from '../String'
-import { toStringType } from '../../misc'
 import { PowerAssert } from 'typed-nodejs-assert'
+import { toStringType } from '../misc'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const assert: PowerAssert = require('power-assert')
 
