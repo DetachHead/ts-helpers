@@ -1,4 +1,4 @@
-import { charAt, match, substring } from '../String'
+import { charAt, join, match, substring } from '../String'
 import { PowerAssert } from 'typed-nodejs-assert'
 import { toStringType } from '../misc'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -33,4 +33,9 @@ test('charAt', () => {
 test('substring', () => {
 	const value = substring('foobarbaz', 3, 6) //$ExpectType "bar"
 	assert(value === 'bar')
+})
+
+test('join', () => {
+	const value = join([1, 2, 3] as const, ',') // $ExpectType "1,2,3"
+	assert(value === '1,2,3')
 })
