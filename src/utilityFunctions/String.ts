@@ -40,6 +40,9 @@ export function substring<
 	return string.substring(start, end) as Substring<String, StartIndex, EndIndex>
 }
 
+/**
+ * joins a string by the given `delimiter` at compiletime
+ */
 export function join<T extends List<Literal>, D extends string>(
 	items: T,
 	delimiter: D
