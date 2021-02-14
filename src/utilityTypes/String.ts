@@ -1,5 +1,5 @@
 import { Primitive } from 'utility-types'
-import { Add, Subtract } from './Number'
+import { Add, Increment, Subtract } from './Number'
 
 /**
  * creates a stringified version of `T`
@@ -51,8 +51,12 @@ type _TrimStart<
 	Iterator extends number
 > = Iterator extends Index
 	? String
-	: //@ts-expect-error see documentation for Add type
-	  _TrimStart<String extends `${FirstChar<String>}${infer R}` ? R : never, Index, Add<Iterator, 1>>
+	: _TrimStart<
+			String extends `${FirstChar<String>}${infer R}` ? R : never,
+			Index,
+			//@ts-expect-error see documentation for Increment type
+			Increment<Iterator>
+	  >
 
 /**
  * trims the characters up to `Index` off the start of `String` (inclusive)
