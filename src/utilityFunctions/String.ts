@@ -3,6 +3,7 @@ import { CharAt, Substring } from '../utilityTypes/String'
 import { List } from 'ts-toolbelt/out/List/List'
 import { Literal } from 'ts-toolbelt/out/String/_Internal'
 import { Join } from 'ts-toolbelt/out/String/Join'
+import { Split } from 'ts-toolbelt/out/String/Split'
 
 /**
  * replaces all occurrences of `find` in the given string with `replace`
@@ -44,4 +45,11 @@ export function join<T extends List<Literal>, D extends string>(
 	delimiter: D
 ): Join<T, D> {
 	return items.join(delimiter) as Join<T, D>
+}
+
+/**
+ * splits a string by the given `delimiter` at compiletime
+ */
+export function split<T extends string, D extends string>(string: T, delimiter: D): Split<T, D> {
+	return string.split(delimiter) as Split<T, D>
 }
