@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { CharAt, Substring } from '../utilityTypes/String'
+import { CharAt, Includes, IndexOf, Substring } from '../utilityTypes/String'
 import { List } from 'ts-toolbelt/out/List/List'
 import { Literal } from 'ts-toolbelt/out/String/_Internal'
 import { Join } from 'ts-toolbelt/out/String/Join'
@@ -55,4 +55,24 @@ export function join<T extends List<Literal>, D extends string>(
  */
 export function split<T extends string, D extends string>(string: T, delimiter: D): Split<T, D> {
 	return string.split(delimiter) as Split<T, D>
+}
+
+/**
+ * does {@link String.indexOf} but at compiletime
+ */
+export function indexOf<String extends string, Substring extends string>(
+	string: String,
+	substring: Substring
+): IndexOf<String, Substring> {
+	return string.indexOf(substring) as IndexOf<String, Substring>
+}
+
+/**
+ * does {@link String.includes} but at compiletime
+ */
+export function includes<String extends string, Substring extends string>(
+	string: String,
+	substring: Substring
+): Includes<String, Substring> {
+	return string.includes(substring) as Includes<String, Substring>
 }
