@@ -2,32 +2,32 @@ module.exports = {
 	'env': {
 		'node': true,
 		'es2021': true,
-		'jest': true
+		'jest': true,
 	},
 	'extends': [
 		'eslint:recommended',
 		'plugin:@typescript-eslint/recommended',
 		'plugin:eslint-plugin-expect-type/recommended',
-		'prettier'
+		'prettier',
 	],
 	'parser': '@typescript-eslint/parser',
 	'parserOptions': {
 		'ecmaVersion': 12,
 		'sourceType': 'module',
-		'project': './tsconfig.json'
+		'project': './tsconfig.json',
 	},
 	'plugins': [
 		'@typescript-eslint',
-		'eslint-plugin-expect-type'
+		'eslint-plugin-expect-type',
 	],
 	'rules': {
 		'indent': [
 			'error',
-			'tab'
+			'tab',
 		],
 		'linebreak-style': [
 			'error',
-			'unix'
+			'unix',
 		],
 		'quotes': [
 			'error',
@@ -36,9 +36,9 @@ module.exports = {
 		],
 		'semi': [
 			'error',
-			'never'
+			'never',
 		],
 		'expect-type/expect': 'error',
 		'@typescript-eslint/ban-types': 'off',
-	}
+	},
 }
