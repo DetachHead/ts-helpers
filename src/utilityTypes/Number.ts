@@ -68,7 +68,7 @@ type _MultiAdd<
 > = IterationsLeft extends 0
 	? Accumulator
 	: //@ts-expect-error see documentation for Add type
-	  _MultiAdd<Number, Add<Number, Accumulator>, Subtract<IterationsLeft, 1>>
+	  _MultiAdd<Number, Add<Number, Accumulator>, Decrement<IterationsLeft>>
 
 /**
  * multiplies `N1` by `N2`
@@ -96,8 +96,8 @@ type _LT<A extends number, B extends number> = _AtTerminus<A, B> extends true
 
 type _MultiSub<N extends number, D extends number, Q extends number> = _LT<N, D> extends true
 	? Q
-	: //@ts-expect-error see documentation for Add type
-	  _MultiSub<Subtract<N, D>, D, Add<Q, 1>>
+	: //@ts-expect-error see documentation for Increment type
+	  _MultiSub<Subtract<N, D>, D, Increment<Q>>
 
 /**
  * divides `N1` by `N2`
@@ -123,3 +123,15 @@ export type Modulo<N1 extends number, N2 extends number> = _LT<N1, N2> extends t
  * checks whether a number is positive or negative
  */
 export type IsPositive<T extends number> = `${T}` extends `-${number}` ? false : true
+
+/**
+ * adds 1 to `T`
+ *
+ * **WARNING:** for some reason the compiler sometimes thinks this isn't a valid number when passing it into other
+ * utility types. as far as i can tell this is a false positive, and the types still behave as expected if you suppress
+ * the error with @ts-expect-error
+ */
+export type Increment<T extends number> = Add<T, 1>
+
+/** subtracts 1 from `T` */
+export type Decrement<T extends number> = Subtract<T, 1>
