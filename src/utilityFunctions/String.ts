@@ -1,5 +1,8 @@
 import _ from 'lodash'
 import { CharAt, Substring } from '../utilityTypes/String'
+import { List } from 'ts-toolbelt/out/List/List'
+import { Literal } from 'ts-toolbelt/out/String/_Internal'
+import { Join } from 'ts-toolbelt/out/String/Join'
 
 /**
  * replaces all occurrences of `find` in the given string with `replace`
@@ -34,4 +37,11 @@ export function substring<
 	EndIndex extends number
 >(string: String, start: StartIndex, end: EndIndex): Substring<String, StartIndex, EndIndex> {
 	return string.substring(start, end) as Substring<String, StartIndex, EndIndex>
+}
+
+export function join<T extends List<Literal>, D extends string>(
+	items: T,
+	delimiter: D
+): Join<T, D> {
+	return items.join(delimiter) as Join<T, D>
 }
