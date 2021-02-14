@@ -1,4 +1,4 @@
-import { charAt, join, match, split, substring } from '../String'
+import { charAt, includes, indexOf, join, match, split, substring } from '../String'
 import { PowerAssert } from 'typed-nodejs-assert'
 import { toStringType } from '../misc'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -43,4 +43,26 @@ test('join', () => {
 test('split', () => {
 	const value = split('1,2,3', ',') // $ExpectType ["1", "2", "3"]
 	assert.deepStrictEqual(value, ['1', '2', '3'])
+})
+
+describe('indexOf', () => {
+	test('substring exists', () => {
+		const value = indexOf('foobarbaz', 'bar') // $ExpectType 3
+		assert(value === 3)
+	})
+	test("substring doesn't exist", () => {
+		const value = indexOf('foobarbaz', 'qux') // $ExpectType -1
+		assert(value === -1)
+	})
+})
+
+describe('includes', () => {
+	test('true', () => {
+		const value = includes('foobar', 'bar') // $ExpectType true
+		assert(value)
+	})
+	test('false', () => {
+		const value = includes('foobar', 'baz') // $ExpectType false
+		assert(!value)
+	})
 })

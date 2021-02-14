@@ -1,5 +1,6 @@
 import { Primitive } from 'utility-types'
 import { Add, Increment, Subtract } from './Number'
+import { Length } from 'ts-toolbelt/out/String/Length'
 
 /**
  * creates a stringified version of `T`
@@ -85,3 +86,39 @@ export type Substring<String extends string, StartIndex extends number, EndIndex
 export type CharAt<String extends string, Index extends number> =
 	// @ts-expect-error see TrimStart documentation
 	FirstChar<TrimStart<String, Index>>
+
+/**
+ * `true` if `String` contains `Substring`, else `false`
+ */
+export type Includes<
+	String extends string,
+	Substring extends string
+> = String extends `${string}${Substring}${string}` ? true : false
+
+type _IndexOf<
+	String extends string,
+	Substr extends string,
+	CurrentIndex extends number
+> = Substring<
+	String,
+	CurrentIndex,
+	// @ts-expect-error see Add documentation
+	Add<CurrentIndex, Length<Substr>>
+> extends Substr
+	? CurrentIndex
+	: _IndexOf<
+			String,
+			Substr,
+			// @ts-expect-error see Increment documentation
+			Increment<CurrentIndex>
+	  >
+
+/**
+ * gets the index of a `Substring` within a `String`. returns `-1` if it's not present
+ */
+export type IndexOf<String extends string, Substring extends string> = Includes<
+	String,
+	Substring
+> extends true
+	? _IndexOf<String, Substring, 0>
+	: -1
