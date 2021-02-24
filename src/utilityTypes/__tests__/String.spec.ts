@@ -24,5 +24,7 @@ test('Email', () => {
 test('IP', () => {
 	//@ts-expect-error invalid ip
 	testType<IP>('a.b.c.d')
+	//@ts-expect-error invalid ip (one too many)
+	testType<IP>('192.168.0.1.2')
 	testType<IP>('192.168.0.1')
 })
