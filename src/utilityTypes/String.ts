@@ -29,7 +29,7 @@ export type UrlString = UriString<'http' | 'https'>
 export type Domain = `${string}.${string}`
 
 /** an IP address */
-export type IP = `${number}.${number}.${number}.${number}`
+export type IP = `${bigint}.${bigint}.${bigint}.${bigint}` //use bigint instead of number to prevent additional dots
 
 /** an email address */
 export type Email = `${string}@${Domain}`
