@@ -15,7 +15,7 @@ export type ToString<T extends Exclude<Primitive, symbol>> = `${T}`
  * const foo: UriString<'http'> = 'foo' //error
  * const bar: UriString<'http'> = 'http://foo.com' //no error
  */
-export type UriString<Protocol extends string = string> = `${Protocol}://${string}`
+export type UriString<Protocol extends string = string> = `${Protocol}://${Domain | IP}${string}`
 
 /**
  * a URL with either the http or https protocol.
@@ -24,6 +24,15 @@ export type UriString<Protocol extends string = string> = `${Protocol}://${strin
  * const bar: UrlString = 'http://foo' //no error
  */
 export type UrlString = UriString<'http' | 'https'>
+
+/** a domain name */
+export type Domain = `${string}.${string}`
+
+/** an IP address */
+export type IP = `${number}.${number}.${number}.${number}`
+
+/** an email address */
+export type Email = `${string}@${Domain}`
 
 /**
  * duplicates a string a given number of times
