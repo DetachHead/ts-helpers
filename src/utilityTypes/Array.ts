@@ -1,25 +1,39 @@
 import { NoUncheckedIndexedAccess } from './misc'
 
-type _BuildPowersOf2LengthArrays<N extends number, R extends never[][]> = R[0][N] extends never
-	? R
-	: _BuildPowersOf2LengthArrays<N, [[...R[0], ...R[0]], ...R]>
+type _BuildPowersOf2LengthArrays<
+	Length extends number,
+	AccumulatedArray extends never[][]
+> = AccumulatedArray[0][Length] extends never
+	? AccumulatedArray
+	: _BuildPowersOf2LengthArrays<
+			Length,
+			[[...AccumulatedArray[0], ...AccumulatedArray[0]], ...AccumulatedArray]
+	  >
 
 type _ConcatLargestUntilDone<
-	N extends number,
-	R extends never[][],
-	B extends never[]
-> = B['length'] extends N
-	? B
-	: [...R[0], ...B][N] extends never
+	Length extends number,
+	AccumulatedArray extends never[][],
+	NextArray extends never[]
+> = NextArray['length'] extends Length
+	? NextArray
+	: [...AccumulatedArray[0], ...NextArray][Length] extends never
 	? _ConcatLargestUntilDone<
-			N,
-			R extends [R[0], ...infer U] ? (U extends never[][] ? U : never) : never,
-			B
+			Length,
+			AccumulatedArray extends [AccumulatedArray[0], ...infer U]
+				? U extends never[][]
+					? U
+					: never
+				: never,
+			NextArray
 	  >
 	: _ConcatLargestUntilDone<
-			N,
-			R extends [R[0], ...infer U] ? (U extends never[][] ? U : never) : never,
-			[...R[0], ...B]
+			Length,
+			AccumulatedArray extends [AccumulatedArray[0], ...infer U]
+				? U extends never[][]
+					? U
+					: never
+				: never,
+			[...AccumulatedArray[0], ...NextArray]
 	  >
 
 type _Replace<R extends any[], T> = { [K in keyof R]: T }
@@ -30,15 +44,19 @@ type _Replace<R extends any[], T> = { [K in keyof R]: T }
  * TupleOf<number, 4> //[number, number, number, number]
  * @see https://github.com/microsoft/TypeScript/issues/26223#issuecomment-674514787
  */
-export type TupleOf<T, N extends number> = number extends N
-	? T[]
+export type TupleOf<Type, Length extends number> = number extends Length
+	? Type[]
 	: {
-			[K in N]: _BuildPowersOf2LengthArrays<K, [[never]]> extends infer U
-				? U extends never[][]
-					? _Replace<_ConcatLargestUntilDone<K, U, []>, T>
+			//in case Length is a tuple
+			[LengthKey in Length]: _BuildPowersOf2LengthArrays<
+				LengthKey,
+				[[never]]
+			> extends infer TwoDimensionalArray
+				? TwoDimensionalArray extends never[][]
+					? _Replace<_ConcatLargestUntilDone<LengthKey, TwoDimensionalArray, []>, Type>
 					: never
 				: never
-	  }[N]
+	  }[Length]
 
 /**
  * an array that can be of any length between 0 and `L`
