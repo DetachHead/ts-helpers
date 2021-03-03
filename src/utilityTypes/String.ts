@@ -1,6 +1,7 @@
 import { Primitive } from 'utility-types'
 import { Add, Increment, Subtract } from './Number'
 import { Length } from 'ts-toolbelt/out/String/Length'
+import { IsNever } from 'tsdef'
 
 /**
  * creates a stringified version of `T`
@@ -33,6 +34,20 @@ export type IP = `${bigint}.${bigint}.${bigint}.${bigint}` //use bigint instead 
 
 /** an email address */
 export type Email = `${string}@${Domain}`
+
+/**
+ * the name of a file with an `Extension`.
+ * if `Extension` is not provided an empty string then it's treated as a file with no extension
+ *
+ * @example
+ * type File: FileName //string, anything goes
+ * type Image: FileName<'png'|'jpg'> // `${string}.png` | `${string}.jpg`
+ */
+export type FileName<Extension extends string = never> = `${string}${IsNever<
+	Extension,
+	'',
+	`.${Extension}`
+>}`
 
 /**
  * duplicates a string a given number of times

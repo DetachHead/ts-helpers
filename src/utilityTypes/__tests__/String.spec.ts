@@ -1,4 +1,4 @@
-import { Email, IP, UriString, UrlString } from '../String'
+import { Email, FileName, IP, UriString, UrlString } from '../String'
 import { testType } from '../../utilityFunctions/misc'
 
 test('UriString', () => {
@@ -27,4 +27,11 @@ test('IP', () => {
 	//@ts-expect-error invalid ip (one too many)
 	testType<IP>('192.168.0.1.2')
 	testType<IP>('192.168.0.1')
+})
+
+test('FileName', () => {
+	testType<FileName>('asdf')
+	testType<FileName<'png'>>('asdf.png')
+	//@ts-expect-error wrong filetype
+	testType<FileName<'png'>>('asdf.jpg')
 })
