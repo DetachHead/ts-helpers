@@ -1,6 +1,6 @@
 {
   "name": "@detachhead/ts-helpers",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "scripts": {
