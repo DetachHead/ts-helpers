@@ -146,3 +146,15 @@ export type IndexOf<String extends string, Substring extends string> = Includes<
 > extends true
 	? _IndexOf<String, Substring, 0>
 	: -1
+
+/**
+ * replaces the first instance of `Find` with `ReplaceWith`. the type equivalent of {@link String.prototype.replace}
+ *
+ * see [`String/Replace` from `ts-toolbelt`](https://millsp.github.io/ts-toolbelt/modules/string_replace.html)
+ * for a type that replaces all instances
+ */
+export type ReplaceOne<
+	String extends string,
+	Find extends string,
+	ReplaceWith extends string
+> = String extends `${infer Start}${Find}${infer End}` ? `${Start}${ReplaceWith}${End}` : String
