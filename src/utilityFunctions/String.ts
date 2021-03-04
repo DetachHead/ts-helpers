@@ -1,15 +1,35 @@
 import _ from 'lodash'
-import { CharAt, Includes, IndexOf, Substring } from '../utilityTypes/String'
+import { CharAt, Includes, IndexOf, ReplaceOne, Substring } from '../utilityTypes/String'
 import { List } from 'ts-toolbelt/out/List/List'
 import { Literal } from 'ts-toolbelt/out/String/_Internal'
 import { Join } from 'ts-toolbelt/out/String/Join'
 import { Split } from 'ts-toolbelt/out/String/Split'
+import { Replace } from 'ts-toolbelt/out/String/Replace'
+
+/**
+ * replaces the first occurrence of `find` with `replace`
+ */
+export function replaceOne<
+	String extends string,
+	Find extends string,
+	ReplaceWithString extends string
+>(
+	str: String,
+	find: Find,
+	replace: ReplaceWithString
+): ReplaceOne<String, Find, ReplaceWithString> {
+	return str.replace(find, replace) as never
+}
 
 /**
  * replaces all occurrences of `find` in the given string with `replace`
  */
-export function replaceAll(str: string, find: string, replace: string): string {
-	return str.replace(new RegExp(_.escapeRegExp(find), 'g'), replace)
+export function replaceAll<
+	String extends string,
+	Find extends string,
+	ReplaceWithString extends string
+>(str: String, find: Find, replace: ReplaceWithString): Replace<String, Find, ReplaceWithString> {
+	return str.replace(new RegExp(_.escapeRegExp(find), 'g'), replace) as never
 }
 
 /**
