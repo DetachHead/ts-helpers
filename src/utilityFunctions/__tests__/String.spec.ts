@@ -1,4 +1,14 @@
-import { charAt, includes, indexOf, join, match, split, substring } from '../String'
+import {
+	charAt,
+	includes,
+	indexOf,
+	join,
+	match,
+	replaceAll,
+	replaceOne,
+	split,
+	substring,
+} from '../String'
 import { PowerAssert } from 'typed-nodejs-assert'
 import { toStringType } from '../misc'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -65,4 +75,14 @@ describe('includes', () => {
 		const value = includes('foobar', 'baz') // $ExpectType false
 		assert(!value)
 	})
+})
+
+test('replaceOne', () => {
+	const value = replaceOne('foo,bar,baz', ',', '.') // $ExpectType "foo.bar,baz"
+	assert(value === 'foo.bar,baz')
+})
+
+test('replaceAll', () => {
+	const value = replaceAll('foo,bar,baz', ',', '.') // $ExpectType "foo.bar.baz"
+	assert(value === 'foo.bar.baz')
 })
