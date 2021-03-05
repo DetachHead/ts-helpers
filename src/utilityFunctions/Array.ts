@@ -92,6 +92,9 @@ export function lengthIs<T, L extends number>(arr: Readonly<T[]>, length: L): ar
  * @see https://stackoverflow.com/a/60132060
  */
 export function arrayOfAll<T>() {
+	// don't think it's possible to get the return type from this scope, as this wrapper function is a workaround to create
+	// types where the value needs to be checked against the generic
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	return <U extends T[]>(array: U & ([T] extends [U[number]] ? unknown : never)) => array
 }
 
