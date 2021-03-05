@@ -10,7 +10,7 @@ import {
 	substring,
 } from '../String'
 import { PowerAssert } from 'typed-nodejs-assert'
-import { toStringType } from '../misc'
+import { exactly, toStringType } from '../misc'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const assert: PowerAssert = require('power-assert')
 
@@ -85,4 +85,11 @@ test('replaceOne', () => {
 test('replaceAll', () => {
 	const value = replaceAll('foo,bar,baz', ',', '.') // $ExpectType "foo.bar.baz"
 	assert(value === 'foo.bar.baz')
+})
+
+test('exactly', () => {
+	const exactlyNumber = exactly<number>()
+	exactlyNumber(1 as number) // $ExpectType number
+	//@ts-expect-error type isn't exactly number
+	exactlyNumber(1) // $ExpectType never
 })
