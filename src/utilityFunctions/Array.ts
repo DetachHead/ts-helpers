@@ -84,9 +84,6 @@ export function lengthIs<T, L extends number>(arr: Readonly<T[]>, length: L): ar
  * creates a function that checks that the given array contains all elements in the union `T`
  * @example
  * type Colors = 'red' | 'blue' | 'pink';
- * const arrayOfAll = <T>() => <U extends T[]>(
- *  array: U & ([T] extends [U[number]] ? unknown : 'Invalid')
- * ) => array;
  * const arrayOfAllColors = arrayOfAll<Colors>();
  *
  * const missingColors = arrayOfAllColors(['red', 'blue']); // error
