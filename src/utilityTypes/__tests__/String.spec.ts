@@ -1,4 +1,13 @@
-import { Email, FileName, IP, UriString, UrlString } from '../String'
+import {
+	Email,
+	FileName,
+	IP,
+	LengthGreaterOrEqual,
+	LengthGreaterThan,
+	UriString,
+	UrlString,
+	CaseInsensitive,
+} from '../String'
 import { testType } from '../../utilityFunctions/misc'
 
 test('UriString', () => {
@@ -34,4 +43,27 @@ test('FileName', () => {
 	testType<FileName<'png'>>('asdf.png')
 	//@ts-expect-error wrong filetype
 	testType<FileName<'png'>>('asdf.jpg')
+})
+
+test('LengthGreaterOrEqual', () => {
+	testType<LengthGreaterOrEqual<'asdf', 4>>(true)
+	testType<LengthGreaterOrEqual<'asdf', 5>>(false)
+	testType<LengthGreaterOrEqual<'asdf', 3>>(true)
+})
+
+test('LengthGreaterThan', () => {
+	testType<LengthGreaterThan<'asdf', 4>>(false)
+	testType<LengthGreaterThan<'asdf', 5>>(false)
+	testType<LengthGreaterThan<'asdf', 3>>(true)
+})
+
+test('CaseInsensitive', () => {
+	testType<CaseInsensitive<'abc'>>('abc')
+	testType<CaseInsensitive<'abc'>>('AbC')
+	testType<CaseInsensitive<'abc'>>('aBC')
+	testType<CaseInsensitive<'abc'>>('ABC')
+	testType<CaseInsensitive<'abc'>>('aBc')
+	testType<CaseInsensitive<'abc'>>('Abc')
+	//@ts-expect-error wrong value
+	testType<CaseInsensitive<'abc'>>('ABd')
 })
