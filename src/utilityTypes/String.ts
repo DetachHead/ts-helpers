@@ -68,7 +68,12 @@ export interface Stringable {
 /**
  * gets the first character in a string
  */
-export type FirstChar<String extends string> = String extends `${infer R}${string}` ? R : never
+export type Head<String extends string> = String extends `${infer R}${string}` ? R : never
+
+/**
+ * removes the first character off the start of a string
+ */
+export type Tail<String extends string> = TrimStart<String, 1>
 
 type _TrimStart<
 	String extends string,
@@ -77,7 +82,7 @@ type _TrimStart<
 > = Iterator extends Index
 	? String
 	: _TrimStart<
-			String extends `${FirstChar<String>}${infer R}` ? R : never,
+			String extends `${Head<String>}${infer R}` ? R : never,
 			Index,
 			//@ts-expect-error see documentation for Increment type
 			Increment<Iterator>
@@ -109,7 +114,7 @@ export type Substring<String extends string, StartIndex extends number, EndIndex
 
 export type CharAt<String extends string, Index extends number> =
 	// @ts-expect-error see TrimStart documentation
-	FirstChar<TrimStart<String, Index>>
+	Head<TrimStart<String, Index>>
 
 /**
  * `true` if `String` contains `Substring`, else `false`
