@@ -1,5 +1,5 @@
 import { Primitive } from 'utility-types'
-import { Add, Increment, Subtract } from './Number'
+import { Add, Decrement, Increment, Subtract } from './Number'
 import { Length } from 'ts-toolbelt/out/String/Length'
 import { IsNever } from 'tsdef'
 
@@ -163,3 +163,33 @@ export type ReplaceOne<
 	Find extends string,
 	ReplaceWith extends string
 > = String extends `${infer Start}${Find}${infer End}` ? `${Start}${ReplaceWith}${End}` : String
+
+/**
+ * checks whether the length of type `String` is **greater than or equal to** the length of type `Length`
+ */
+export type LengthGreaterOrEqual<String extends string, Length extends number> = CharAt<
+	String,
+	Decrement<Length>
+> extends never
+	? false
+	: true
+
+/**
+ * checks whether the length of type `String` is **greater than** the length of type `Length`
+ */
+export type LengthGreaterThan<String extends string, Length extends number> = LengthGreaterOrEqual<
+	String,
+	//@ts-expect-error see Increment documentation
+	Increment<Length>
+>
+
+/**
+ * creates a union of every possible capitalization of the given string
+ *
+ * only works on short strings
+ * @example
+ * type Foo = CaseInsensitive<'abc'> //"abc" | "Abc" | "ABc" | "ABC" | "AbC" | "aBc" | "aBC" | "abC"
+ */
+export type CaseInsensitive<T extends string> = T extends ''
+	? ''
+	: `${Uppercase<Head<T>> | Lowercase<Head<T>>}${CaseInsensitive<Tail<T>>}`
