@@ -1,4 +1,5 @@
 import { NoUncheckedIndexedAccess } from './misc'
+import { Decrement } from './Number'
 
 type _BuildPowersOf2LengthArrays<
 	Length extends number,
@@ -77,11 +78,7 @@ export type TupleOfUpTo<T, L extends number> =
  * foo[1] //number
  * foo[2] //error: tuple of length '2' has no element at index '2'
  */
-//never doesnt work for infers
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type TupleOfExcluding<T, L extends number> = TupleOf<T, L> extends [any, ...infer R]
-	? R
-	: never
+export type TupleOfExcluding<T, L extends number> = TupleOf<T, Decrement<L>>
 
 /**
  * an array that can be of any length between 0 and `L`, excluding `L`
