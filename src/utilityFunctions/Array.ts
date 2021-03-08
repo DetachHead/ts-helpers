@@ -60,7 +60,6 @@ export function lengthLessOrEqual<T, L extends number>(
 export function lengthLessThan<T, L extends number>(
 	arr: Readonly<T[]>,
 	length: L
-	//@ts-expect-error TODO: figure this out, pretty sure it works as is tho
 ): arr is TupleOfUpToButNotIncluding<T, L> {
 	return arr.length < length
 }
