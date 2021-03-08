@@ -37,7 +37,7 @@ type _ConcatLargestUntilDone<
 			[...AccumulatedArray[0], ...NextArray]
 	  >
 
-type _Replace<R extends any[], T> = { [K in keyof R]: T }
+type _Replace<R extends unknown[], T> = { [K in keyof R]: T }
 
 /**
  * creates an array with a fixed length
