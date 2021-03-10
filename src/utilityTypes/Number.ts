@@ -78,7 +78,9 @@ type _MultiAdd<
  * type Foo = Multiply<2, 3> //6
  * @see https://itnext.io/implementing-arithmetic-within-typescripts-type-system-a1ef140a6f6f
  */
-export type Multiply<N1 extends number, N2 extends number> = _MultiAdd<N1, 0, N2>
+export type Multiply<N1 extends number, N2 extends number> = {
+	[K2 in N2]: { [K1 in N1]: _MultiAdd<K1, 0, N2> }[N1]
+}[N2]
 
 type _AtTerminus<A extends number, B extends number> = A extends 0
 	? true
