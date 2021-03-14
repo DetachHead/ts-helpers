@@ -116,7 +116,9 @@ type _MultiSub<
  * type Foo = Divide<6, 3> //2
  * @see https://itnext.io/implementing-arithmetic-within-typescripts-type-system-a1ef140a6f6f
  */
-export type Divide<N1 extends number, N2 extends number> = _MultiSub<N1, N2, 0>
+export type Divide<N1 extends number, N2 extends number> = {
+	[K2 in N2]: { [K1 in N1]: _MultiSub<K1, K2, 0> }[N1]
+}[N2]
 
 /**
  * gets the remainder of `Divide<N1, N2>`
