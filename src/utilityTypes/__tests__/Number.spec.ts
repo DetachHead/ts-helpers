@@ -1,4 +1,4 @@
-import { Add, Multiply, Subtract } from '../Number'
+import { Add, Divide, Multiply, Subtract } from '../Number'
 import { testType } from '../../utilityFunctions/misc'
 
 test('multiply', () => {
@@ -28,4 +28,13 @@ test('subtract', () => {
 	testType<Subtract<10 | 20, 2 | 3>>(17)
 	//@ts-expect-error not valid
 	testType<Subtract<10 | 20, 2 | 3>>(16)
+})
+
+test('divide', () => {
+	testType<Divide<6 | 12, 2 | 3>>(2)
+	testType<Divide<6 | 12, 2 | 3>>(3)
+	testType<Divide<6 | 12, 2 | 3>>(6)
+	testType<Divide<6 | 12, 2 | 3>>(4)
+	//@ts-expect-error not valid quotient
+	testType<Divide<6 | 12, 2 | 3>>(9)
 })
