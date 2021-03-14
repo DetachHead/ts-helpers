@@ -82,24 +82,31 @@ export type Multiply<N1 extends number, N2 extends number> = {
 	[K2 in N2]: { [K1 in N1]: _MultiAdd<K1, 0, N2> }[N1]
 }[N2]
 
-type _AtTerminus<A extends number, B extends number> = A extends 0
+type _AtTerminus<Dividee extends number, Divider extends number> = Dividee extends 0
 	? true
-	: B extends 0
+	: Divider extends 0
 	? true
 	: false
 
-type _LT<A extends number, B extends number> = _AtTerminus<A, B> extends true
-	? Equals<A, B> extends true
+type _LessThanTerminus<Dividee extends number, Divider extends number> = _AtTerminus<
+	Dividee,
+	Divider
+> extends true
+	? Equals<Dividee, Divider> extends true
 		? false
-		: A extends 0
+		: Dividee extends 0
 		? true
 		: false
-	: _LT<Subtract<A, 1>, Subtract<B, 1>>
+	: _LessThanTerminus<Decrement<Dividee>, Decrement<Divider>>
 
-type _MultiSub<N extends number, D extends number, Q extends number> = _LT<N, D> extends true
-	? Q
+type _MultiSub<
+	Dividee extends number,
+	Divider extends number,
+	QuotientAccumulator extends number
+> = _LessThanTerminus<Dividee, Divider> extends true
+	? QuotientAccumulator
 	: //@ts-expect-error see documentation for Increment type
-	  _MultiSub<Subtract<N, D>, D, Increment<Q>>
+	  _MultiSub<Subtract<Dividee, Divider>, Divider, Increment<QuotientAccumulator>>
 
 /**
  * divides `N1` by `N2`
@@ -117,7 +124,7 @@ export type Divide<N1 extends number, N2 extends number> = _MultiSub<N1, N2, 0>
  * type Foo = Modulo<7, 4> //3
  * @see https://itnext.io/implementing-arithmetic-within-typescripts-type-system-a1ef140a6f6f
  */
-export type Modulo<N1 extends number, N2 extends number> = _LT<N1, N2> extends true
+export type Modulo<N1 extends number, N2 extends number> = _LessThanTerminus<N1, N2> extends true
 	? N1
 	: Modulo<Subtract<N1, N2>, N2>
 
