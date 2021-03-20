@@ -1,4 +1,8 @@
 import { TupleOf, TupleOfUpTo, TupleOfUpToButNotIncluding } from '../utilityTypes/Array'
+import { add } from './Number'
+import { Decrement, Enumerate } from '../utilityTypes/Number'
+import { Writable } from 'utility-types'
+import { Keys } from 'ts-toolbelt/out/Any/Keys'
 
 /**
  * checks whether the given array's length is larger than **or equal to** the given number, and narrows the type of the
@@ -149,3 +153,35 @@ export function concat<A1 extends readonly unknown[], A2 extends readonly unknow
 ): [...A1, ...A2] {
 	return array1.concat(array2) as [...A1, ...A2]
 }
+
+//TODO: figure out how to get this working. currently broken cus of this i think
+//https://github.com/microsoft/TypeScript/issues/39713
+export function typedMap<
+	Length extends number,
+	Input extends Readonly<TupleOf<unknown, Length>>,
+	Output extends Readonly<TupleOf<unknown, Length>>
+>(
+	arr: Input,
+	callback: <Index extends Enumerate<Decrement<Length>>>(
+		value: Input[Index],
+		index: Index,
+		array: Input
+	) => Output[Index]
+): Output {
+	const result: Writable<Output> = []
+	for (const [key, value] of Object.entries(arr)) {
+		result.push(callback(key, value, arr))
+	}
+	return result
+}
+
+const asd = typedMap<3, [1, 2, 3], [3, 4, 5]>([1, 2, 3], (value, foo, bar) => add(value, 2))
+
+const x = add(([1, 2] as const)[0 as 0 | 1], 1)
+
+declare function foo<
+	Array extends readonly unknown[],
+	Index extends Enumerate<Decrement<Array['length']>>
+>(array: Array, index: Index): Array[Index]
+
+const asdf = foo([1, 2, 3] as const, 1 as const)
