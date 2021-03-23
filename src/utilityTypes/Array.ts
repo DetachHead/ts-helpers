@@ -1,5 +1,5 @@
 import { NoUncheckedIndexedAccess } from './misc'
-import { Decrement } from './Number'
+import { Decrement, Enumerate } from './Number'
 
 type _BuildPowersOf2LengthArrays<
 	Length extends number,
@@ -90,3 +90,8 @@ export type TupleOfExcluding<T, L extends number> = TupleOf<T, Decrement<L>>
 export type TupleOfUpToButNotIncluding<T, L extends number> =
 	| TupleOfExcluding<T, L>
 	| (NoUncheckedIndexedAccess extends true ? [] : never)
+
+/**
+ * like `keyof` but for array indexes, and uses numbers instead of strings
+ */
+export type Index<T extends unknown[]> = Enumerate<T['length']>
