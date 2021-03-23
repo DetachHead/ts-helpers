@@ -2,6 +2,7 @@ import {
 	concat,
 	containsDuplicates,
 	findDuplicates,
+	indexOf,
 	lengthGreaterOrEqual,
 	lengthGreaterThan,
 	lengthIs,
@@ -105,4 +106,30 @@ test('concat', () => {
 	const array2 = [1, 2, 3, 4] as const
 	// noinspection BadExpressionStatementJS
 	concat(array1, array2).length // $ExpectType 7
+})
+
+describe('indexOf', () => {
+	test('normal', () => {
+		const value = indexOf(['foo', 'bar', 'baz'], 'baz') // $ExpectType 2
+		assert(value === 2)
+	})
+	test('union', () => {
+		const value = indexOf(['foo', 'bar', 'baz'], 'baz' as 'foo' | 'baz')
+
+		//MY GOD WHY IS THERE NO GOOD WAY TO TEST TYPES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+		//possible value (just checking for no type error)
+		// noinspection BadExpressionStatementJS
+		value !== 0
+		//@ts-expect-error impossibru value
+		value !== 1
+		//the actual value
+		assert(value === 2)
+	})
+	test('string', () => {
+		const value = indexOf(['foo', 'bar', 'baz'] as string[], 'baz' as string)
+		//need to check that the type is number, another way since ExpectType shits itself on these types
+		// noinspection BadExpressionStatementJS
+		value === 100
+	})
 })

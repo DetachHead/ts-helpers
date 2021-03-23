@@ -1,5 +1,5 @@
 import { NoUncheckedIndexedAccess } from './misc'
-import { Decrement, Enumerate } from './Number'
+import { Decrement, Enumerate, Increment } from './Number'
 
 type _BuildPowersOf2LengthArrays<
 	Length extends number,
@@ -94,4 +94,35 @@ export type TupleOfUpToButNotIncluding<T, L extends number> =
 /**
  * like `keyof` but for array indexes, and uses numbers instead of strings
  */
-export type Index<T extends unknown[]> = Enumerate<T['length']>
+export type Index<T extends readonly unknown[]> = Enumerate<T['length']>
+
+type _IndexOf<
+	Array extends readonly unknown[],
+	Value extends Array[number],
+	CurrentIndex extends Index<Array>
+> =
+	| (CurrentIndex extends Array['length']
+			? never
+			: _IndexOf<
+					Array,
+					Value,
+					//@ts-expect-error see Increment documentation
+					Increment<CurrentIndex>
+			  >)
+	//@ts-expect-error compiler is wrong
+	| (Array[CurrentIndex] extends Value ? CurrentIndex : never)
+
+/**
+ * the type equivalent of {@link Array.prototype.indexOf}
+ */
+export type IndexOf<
+	Array extends readonly unknown[],
+	Value extends Array[number]
+> = number extends Array['length']
+	? number
+	: _IndexOf<
+			Array,
+			Value,
+			//@ts-expect-error compiler is wrong
+			0
+	  >
