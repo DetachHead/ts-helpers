@@ -5,6 +5,7 @@ import { Literal } from 'ts-toolbelt/out/String/_Internal'
 import { Join } from 'ts-toolbelt/out/String/Join'
 import { Split } from 'ts-toolbelt/out/String/Split'
 import { Replace } from 'ts-toolbelt/out/String/Replace'
+import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 
 /**
  * replaces the first occurrence of `find` with `replace`
@@ -64,7 +65,7 @@ export function substring<
  * joins a string by the given `delimiter` at compiletime
  */
 export function join<T extends List<Literal>, D extends string>(
-	items: T,
+	items: Narrow<T>,
 	delimiter: D
 ): Join<T, D> {
 	return items.join(delimiter) as Join<T, D>
