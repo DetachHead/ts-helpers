@@ -128,7 +128,7 @@ describe('indexOf', () => {
 	})
 	test('string', () => {
 		const value = indexOf(['foo', 'bar', 'baz'] as string[], 'baz' as string)
-		//need to check that the type is number, another way since ExpectType shits itself on these types
+		//need to check that the type is number this way instead since ExpectType shits itself on these types
 		// noinspection BadExpressionStatementJS
 		value === 100
 	})
