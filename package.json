@@ -1,8 +1,9 @@
 {
   "name": "@detachhead/ts-helpers",
   "version": "4.0.0",
-  "main": "dist/main.js",
-  "types": "dist/main.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "jest",
     "lint:check": "eslint src --ext .ts",
