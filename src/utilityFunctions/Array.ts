@@ -1,4 +1,5 @@
-import { TupleOf, TupleOfUpTo, TupleOfUpToButNotIncluding } from '../utilityTypes/Array'
+import { IndexOf, TupleOf, TupleOfUpTo, TupleOfUpToButNotIncluding } from '../utilityTypes/Array'
+import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 
 /**
  * checks whether the given array's length is larger than **or equal to** the given number, and narrows the type of the
@@ -148,4 +149,17 @@ export function concat<A1 extends readonly unknown[], A2 extends readonly unknow
 	array2: A2
 ): [...A1, ...A2] {
 	return array1.concat(array2) as [...A1, ...A2]
+}
+
+/**
+ * {@link Array.prototype.indexOf} but it uses {@link IndexOf} such that the result can be known at compiletime
+ */
+export function indexOf<Array extends readonly unknown[], Value extends Array[number]>(
+	array: Narrow<Array>,
+	value: Narrow<Value>
+): IndexOf<Array, Value> {
+	return array.indexOf(
+		//@ts-expect-error some wack error caused by the Narrow type, but it's the same type anyway so this is a false positive
+		value
+	) as never
 }
