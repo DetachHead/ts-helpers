@@ -12,7 +12,7 @@
         "@types/lodash": "^4.14.167",
         "lodash": "^4.17.20",
         "ts-jest": "^26.4.4",
-        "ts-toolbelt": "^9.3.11",
+        "ts-toolbelt": "^9.6.0",
         "tsdef": "^0.0.14",
         "typescript": "^4.1.3",
         "utility-types": "^3.10.0"
@@ -20,6 +20,7 @@
       "devDependencies": {
         "@types/jest": "^26.0.20",
         "@types/node": "^14.14.20",
+        "@types/power-assert": "^1.5.3",
         "@typescript-eslint/eslint-plugin": "^4.13.0",
         "@typescript-eslint/parser": "^4.13.0",
         "babel-preset-power-assert": "^3.0.0",
@@ -881,6 +882,12 @@
         "@babel/types": "^7.3.0"
       }
     },
+    "node_modules/@types/empower": {
+      "version": "1.2.30",
+      "resolved": "https://registry.npmjs.org/@types/empower/-/empower-1.2.30.tgz",
+      "integrity": "sha1-x8/BSzph5Ux0xnTB+8kbot8NE5I=",
+      "dev": true
+    },
     "node_modules/@types/graceful-fs": {
       "version": "4.1.5",
       "resolved": "https://registry.npmjs.org/@types/graceful-fs/-/graceful-fs-4.1.5.tgz",
@@ -939,6 +946,22 @@
       "version": "2.4.0",
       "resolved": "https://registry.npmjs.org/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz",
       "integrity": "sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA=="
+    },
+    "node_modules/@types/power-assert": {
+      "version": "1.5.3",
+      "resolved": "https://registry.npmjs.org/@types/power-assert/-/power-assert-1.5.3.tgz",
+      "integrity": "sha512-PzV9RX7RRUBYLxp52ipXo9dSvBnqVR09mcvGt3hXuzoJt0EUpPPv0X3btjCQqrhQ1xLbyt0dfPiGfRfrZB4G0A==",
+      "dev": true,
+      "dependencies": {
+        "@types/empower": "*",
+        "@types/power-assert-formatter": "*"
+      }
+    },
+    "node_modules/@types/power-assert-formatter": {
+      "version": "1.4.29",
+      "resolved": "https://registry.npmjs.org/@types/power-assert-formatter/-/power-assert-formatter-1.4.29.tgz",
+      "integrity": "sha512-K3kBfCD4xnx+W5xLVbkyiKUKHvkZBL3R2fS3/wSoFJORcXdzN3ir13zTok1wNnH+hbv8Wc+YTWJDyqEdNsEXzg==",
+      "dev": true
     },
     "node_modules/@types/prettier": {
       "version": "2.2.1",
@@ -7090,9 +7113,9 @@
       }
     },
     "node_modules/ts-toolbelt": {
-      "version": "9.3.11",
-      "resolved": "https://registry.npmjs.org/ts-toolbelt/-/ts-toolbelt-9.3.11.tgz",
-      "integrity": "sha512-tlEJ6/TYTwaszZSXyf1WUgJrskWC9QZPjBlWNOtHhfSxOvmQMzDvNidYrr/ixaCyDOkyp/orEZDUc2V9U4qZ2Q=="
+      "version": "9.6.0",
+      "resolved": "https://registry.npmjs.org/ts-toolbelt/-/ts-toolbelt-9.6.0.tgz",
+      "integrity": "sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w=="
     },
     "node_modules/tsdef": {
       "version": "0.0.14",
@@ -8314,6 +8337,12 @@
         "@babel/types": "^7.3.0"
       }
     },
+    "@types/empower": {
+      "version": "1.2.30",
+      "resolved": "https://registry.npmjs.org/@types/empower/-/empower-1.2.30.tgz",
+      "integrity": "sha1-x8/BSzph5Ux0xnTB+8kbot8NE5I=",
+      "dev": true
+    },
     "@types/graceful-fs": {
       "version": "4.1.5",
       "resolved": "https://registry.npmjs.org/@types/graceful-fs/-/graceful-fs-4.1.5.tgz",
@@ -8372,6 +8401,22 @@
       "version": "2.4.0",
       "resolved": "https://registry.npmjs.org/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz",
       "integrity": "sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA=="
+    },
+    "@types/power-assert": {
+      "version": "1.5.3",
+      "resolved": "https://registry.npmjs.org/@types/power-assert/-/power-assert-1.5.3.tgz",
+      "integrity": "sha512-PzV9RX7RRUBYLxp52ipXo9dSvBnqVR09mcvGt3hXuzoJt0EUpPPv0X3btjCQqrhQ1xLbyt0dfPiGfRfrZB4G0A==",
+      "dev": true,
+      "requires": {
+        "@types/empower": "*",
+        "@types/power-assert-formatter": "*"
+      }
+    },
+    "@types/power-assert-formatter": {
+      "version": "1.4.29",
+      "resolved": "https://registry.npmjs.org/@types/power-assert-formatter/-/power-assert-formatter-1.4.29.tgz",
+      "integrity": "sha512-K3kBfCD4xnx+W5xLVbkyiKUKHvkZBL3R2fS3/wSoFJORcXdzN3ir13zTok1wNnH+hbv8Wc+YTWJDyqEdNsEXzg==",
+      "dev": true
     },
     "@types/prettier": {
       "version": "2.2.1",
@@ -13080,9 +13125,9 @@
       }
     },
     "ts-toolbelt": {
-      "version": "9.3.11",
-      "resolved": "https://registry.npmjs.org/ts-toolbelt/-/ts-toolbelt-9.3.11.tgz",
-      "integrity": "sha512-tlEJ6/TYTwaszZSXyf1WUgJrskWC9QZPjBlWNOtHhfSxOvmQMzDvNidYrr/ixaCyDOkyp/orEZDUc2V9U4qZ2Q=="
+      "version": "9.6.0",
+      "resolved": "https://registry.npmjs.org/ts-toolbelt/-/ts-toolbelt-9.6.0.tgz",
+      "integrity": "sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w=="
     },
     "tsdef": {
       "version": "0.0.14",
