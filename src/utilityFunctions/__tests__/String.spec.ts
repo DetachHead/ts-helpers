@@ -46,7 +46,7 @@ test('substring', () => {
 })
 
 test('join', () => {
-	const value = join([1, 2, 3] as const, ',') // $ExpectType "1,2,3"
+	const value = join([1, 2, 3], ',') // $ExpectType "1,2,3"
 	assert(value === '1,2,3')
 })
 
