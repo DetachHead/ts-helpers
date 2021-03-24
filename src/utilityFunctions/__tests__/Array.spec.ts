@@ -2,6 +2,7 @@ import {
 	concat,
 	containsDuplicates,
 	findDuplicates,
+	flat,
 	indexOf,
 	lengthGreaterOrEqual,
 	lengthGreaterThan,
@@ -131,5 +132,25 @@ describe('indexOf', () => {
 		//need to check that the type is number this way instead since ExpectType shits itself on these types
 		// noinspection BadExpressionStatementJS
 		value === 100
+	})
+})
+
+describe('flat', () => {
+	test('default depth', () => {
+		const value = flat([
+			['foo', 'bar'],
+			['baz, qux', ['asdf']],
+		]) //$ExpectType ['foo', 'bar', 'baz, qux', ['asdf']]
+		assert.deepStrictEqual(value, ['foo', 'bar', 'baz, qux', ['asdf']])
+	})
+	test('deeper', () => {
+		const arrayToFlatten = [
+			['foo', 'bar'],
+			['baz, qux', ['asdf', ['asdf']]],
+		] as const
+		const flattenedDepth2 = flat(arrayToFlatten, 2) //$ExpectType ['foo', 'bar', 'baz, qux', ['asdf']]
+		assert.deepStrictEqual(flattenedDepth2, ['foo', 'bar', 'baz, qux', 'asdf', ['asdf']])
+		const flattenedDepth3 = flat(arrayToFlatten, 3) //$ExpectType  ["foo", "bar", "baz, qux", "asdf", "asdf"]
+		assert.notDeepStrictEqual(flattenedDepth3, ['foo', 'bar', 'baz, qux', 'asdf', ['asdf']])
 	})
 })
