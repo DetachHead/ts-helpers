@@ -110,8 +110,10 @@ type _IndexOf<
 					//@ts-expect-error see Increment documentation
 					Increment<CurrentIndex>
 			  >)
-	//@ts-expect-error compiler is wrong
-	| (Array[CurrentIndex] extends Value ? CurrentIndex : never)
+	| (//@ts-expect-error compiler is wrong
+	  Array[CurrentIndex] extends Value
+			? CurrentIndex
+			: never)
 
 /**
  * the type equivalent of {@link Array.prototype.indexOf}
