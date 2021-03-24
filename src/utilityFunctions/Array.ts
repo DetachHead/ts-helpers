@@ -1,5 +1,6 @@
 import { IndexOf, TupleOf, TupleOfUpTo, TupleOfUpToButNotIncluding } from '../utilityTypes/Array'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
+import { Flatten } from 'ts-toolbelt/out/List/Flatten'
 
 /**
  * checks whether the given array's length is larger than **or equal to** the given number, and narrows the type of the
@@ -162,4 +163,14 @@ export function indexOf<Array extends readonly unknown[], Value extends Array[nu
 		//@ts-expect-error some wack error caused by the Narrow type, but it's the same type anyway so this is a false positive
 		value
 	) as never
+}
+
+/**
+ * {@link Array.prototype.flat} but it uses {@link Flatten} such that the result can be known at compiletime
+ */
+export function flat<Array extends readonly unknown[], Depth extends number = 1>(
+	array: Narrow<Array>,
+	depth?: Depth
+): Flatten<Array, 1, Depth> {
+	return array.flat(depth) as never
 }
