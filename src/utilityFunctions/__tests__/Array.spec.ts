@@ -103,10 +103,8 @@ describe('duplicate functions', () => {
 })
 
 test('concat', () => {
-	const array1 = [1, 2, 3] as const
-	const array2 = [1, 2, 3, 4] as const
-	// noinspection BadExpressionStatementJS
-	concat(array1, array2).length // $ExpectType 7
+	const value = concat([1, 2, 3], [1, 2, 3, 4]) // $ExpectType [1, 2, 3, 1, 2, 3, 4]
+	assert.deepStrictEqual(value, [1, 2, 3, 1, 2, 3, 4])
 })
 
 describe('indexOf', () => {

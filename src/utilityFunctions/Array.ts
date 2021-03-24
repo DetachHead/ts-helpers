@@ -146,10 +146,13 @@ export function removeDuplicates<T, L extends number>(arr: T[]): TupleOfUpTo<T, 
  * concatenates two arrays while keeping track of their length
  */
 export function concat<A1 extends readonly unknown[], A2 extends readonly unknown[]>(
-	array1: A1,
-	array2: A2
+	array1: Narrow<A1>,
+	array2: Narrow<A2>
 ): [...A1, ...A2] {
-	return array1.concat(array2) as [...A1, ...A2]
+	return array1.concat(
+		//@ts-expect-error some wack error caused by the Narrow type, but it's the same type anyway so this is a false positive
+		array2
+	) as never
 }
 
 /**
