@@ -1,5 +1,6 @@
 import { NoUncheckedIndexedAccess } from './misc'
 import { Decrement, Enumerate, Increment } from './Number'
+import { Flatten } from 'ts-toolbelt/out/List/Flatten'
 
 type _BuildPowersOf2LengthArrays<
 	Length extends number,
@@ -126,3 +127,13 @@ export type IndexOf<
 			//@ts-expect-error compiler is wrong
 			0
 	  >
+
+/**
+ * creates a tuple type of alternating types
+ *
+ * @example
+ * type Foo = FlattenedTupleOf<[string, number], 3> //[string, number, string, number, string, number]
+ */
+export type FlattenedTupleOf<T extends unknown[], Length extends number> = Flatten<
+	TupleOf<T, Length>
+>
