@@ -121,6 +121,7 @@ describe('indexOf', () => {
 		// noinspection BadExpressionStatementJS
 		value !== 0
 		//@ts-expect-error impossibru value
+		// noinspection BadExpressionStatementJS
 		value !== 1
 		//the actual value
 		assert(value === 2)
