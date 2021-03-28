@@ -36,7 +36,7 @@ export function toStringType<T extends Stringable>(
 export function testType<T>(_value: T): void {}
 
 /**
- * creates a function that can be used to check that a type exactly equals another type. probably useless
+ * creates a function that can be used to check that a type exactly equals another type. sometimes useful for testing types
  * @example
  * const exactlyNumber = exactly<number>() //create the "type"
  * const foo = exactlyNumber(1 as number) //error
