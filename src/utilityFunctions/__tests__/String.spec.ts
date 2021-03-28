@@ -4,6 +4,7 @@ import {
 	indexOf,
 	join,
 	match,
+	padStart,
 	replaceAll,
 	replaceOne,
 	split,
@@ -92,4 +93,25 @@ test('exactly', () => {
 	exactlyNumber(1 as number) // $ExpectType number
 	//@ts-expect-error type isn't exactly number
 	exactlyNumber(1) // $ExpectType never
+})
+
+describe('padStart', () => {
+	test('padString cut off', () => {
+		const value = padStart('foo', 6, 'ab') // $ExpectType "abafoo"
+		assert(value === 'abafoo')
+	})
+	test('padString not cut off', () => {
+		const value = padStart('foo', 12, 'bar') // $ExpectType "barbarbarfoo"
+		assert(value === 'barbarbarfoo')
+	})
+	test('default pad', () => {
+		const value = padStart('foo', 5) // $ExpectType "  foo"
+		assert(value === '  foo')
+	})
+	test('string not known at compiletime', () => {
+		padStart('foo' as string, 6, 'ab') // $ExpectType string
+	})
+	test('padstring not known at compiletime', () => {
+		padStart('foo', 6, 'ab' as string) // $ExpectType string
+	})
 })

@@ -193,3 +193,38 @@ export type LengthGreaterThan<String extends string, Length extends number> = Le
 export type CaseInsensitive<T extends string> = T extends ''
 	? ''
 	: `${Uppercase<Head<T>> | Lowercase<Head<T>>}${CaseInsensitive<Tail<T>>}`
+
+type _DuplicateStringUntilLength<
+	String extends string,
+	Size extends number,
+	CurrentString extends string
+> = Length<CurrentString> extends Size
+	? CurrentString
+	: LengthGreaterThan<`${CurrentString}${String}`, Size> extends true
+	? TrimEnd<`${CurrentString}${String}`, Size>
+	: _DuplicateStringUntilLength<String, Size, `${CurrentString}${String}`>
+
+/**
+ * like {@link DuplicateString} except it duplicates until the exact provided `Size`, instead of a number of repetitions
+ *
+ * @example
+ * type Foo = DuplicateStringUntilLength<'abc', 8> //'abcabcab'
+ */
+export type DuplicateStringUntilLength<
+	String extends string,
+	Size extends number
+> = _DuplicateStringUntilLength<String, Size, String>
+
+/**
+ * the type equivalent of {@link String.prototype.padStart}
+ */
+export type PadStart<
+	String extends string,
+	Size extends number,
+	PadString extends string
+> = string extends String | PadString
+	? string
+	: `${
+			//@ts-expect-error excessive stack depth error, but it works fine on small strings
+			DuplicateStringUntilLength<PadString, Subtract<Size, Length<String>>>
+	  }${String}`
