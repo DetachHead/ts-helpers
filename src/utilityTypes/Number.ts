@@ -31,7 +31,7 @@ export type RangeType<FROM extends number, TO extends number> =
 	| Exclude<Enumerate<TO>, Enumerate<FROM>>
 	| TO
 
-//TODO: figure out a way to make Add and Subtract work with negative numbers
+// TODO: figure out a way to make Add and Subtract work with negative numbers
 
 /**
  * adds two `number` types together
@@ -59,7 +59,7 @@ export type Subtract<N1 extends number, N2 extends number> = TupleOf<never, N1> 
 	? R['length']
 	: never
 
-//TODO: figure out how to do Multiply and Divide logarithmically like TupleOf so it doesn't fail on numbers > 40
+// TODO: figure out how to do Multiply and Divide logarithmically like TupleOf so it doesn't fail on numbers > 40
 
 type _MultiAdd<
 	Number extends number,
@@ -67,7 +67,7 @@ type _MultiAdd<
 	IterationsLeft extends number
 > = IterationsLeft extends 0
 	? Accumulator
-	: //@ts-expect-error see documentation for Add type
+	: // @ts-expect-error see documentation for Add type
 	  _MultiAdd<Number, Add<Number, Accumulator>, Decrement<IterationsLeft>>
 
 /**
@@ -105,7 +105,7 @@ type _MultiSub<
 	QuotientAccumulator extends number
 > = _LessThanTerminus<Dividee, Divider> extends true
 	? QuotientAccumulator
-	: //@ts-expect-error see documentation for Increment type
+	: // @ts-expect-error see documentation for Increment type
 	  _MultiSub<Subtract<Dividee, Divider>, Divider, Increment<QuotientAccumulator>>
 
 /**

@@ -30,7 +30,7 @@ export type UrlString = UriString<'http' | 'https'>
 export type Domain = `${string}.${string}`
 
 /** an IP address */
-export type IP = `${bigint}.${bigint}.${bigint}.${bigint}` //use bigint instead of number to prevent additional dots
+export type IP = `${bigint}.${bigint}.${bigint}.${bigint}` // use bigint instead of number to prevent additional dots
 
 /** an email address */
 export type Email = `${string}@${Domain}`
@@ -84,7 +84,7 @@ type _TrimStart<
 	: _TrimStart<
 			String extends `${Head<String>}${infer R}` ? R : never,
 			Index,
-			//@ts-expect-error see documentation for Increment type
+			// @ts-expect-error see documentation for Increment type
 			Increment<Iterator>
 	  >
 
@@ -179,7 +179,7 @@ export type LengthGreaterOrEqual<String extends string, Length extends number> =
  */
 export type LengthGreaterThan<String extends string, Length extends number> = LengthGreaterOrEqual<
 	String,
-	//@ts-expect-error see Increment documentation
+	// @ts-expect-error see Increment documentation
 	Increment<Length>
 >
 
@@ -225,6 +225,6 @@ export type PadStart<
 > = string extends String | PadString
 	? string
 	: `${
-			//@ts-expect-error excessive stack depth error, but it works fine on small strings
+			// @ts-expect-error excessive stack depth error, but it works fine on small strings
 			DuplicateStringUntilLength<PadString, Subtract<Size, Length<String>>>
 	  }${String}`
