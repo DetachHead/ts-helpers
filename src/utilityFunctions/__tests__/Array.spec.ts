@@ -47,7 +47,7 @@ test('lengthGreaterThan', () => {
 	}
 })
 
-//TODO: figure out how to cast it like `lengthGreaterThan` in the else branh on `lengthLessOrEqual` and `lengthLessThan`
+// TODO: figure out how to cast it like `lengthGreaterThan` in the else branh on `lengthLessOrEqual` and `lengthLessThan`
 
 test('lengthLessOrEqual', () => {
 	const foo: string[] = []
@@ -58,9 +58,9 @@ test('lengthLessOrEqual', () => {
 		foo[0] // $ExpectType string | undefined
 		// noinspection BadExpressionStatementJS
 		foo[2] // $ExpectType string | undefined
-		//@ts-expect-error TS2493: Tuple type '[string, string, string]' of length '3' has no element at index '4'.
+		// @ts-expect-error TS2493: Tuple type '[string, string, string]' of length '3' has no element at index '4'.
 		// noinspection BadExpressionStatementJS
-		foo[4] //error: tuple of length '3' has no element at index '3'
+		foo[4] // error: tuple of length '3' has no element at index '3'
 	}
 })
 
@@ -69,7 +69,7 @@ test('lengthLessThan', () => {
 	if (lengthLessThan(foo, 3)) {
 		// noinspection BadExpressionStatementJS
 		foo[0] // $ExpectType string | undefined
-		//@ts-expect-error TS2339: Property '2' does not exist on type 'TupleOfUpToButNotIncluding '.
+		// @ts-expect-error TS2339: Property '2' does not exist on type 'TupleOfUpToButNotIncluding '.
 		// noinspection BadExpressionStatementJS
 		foo[2]
 	}
@@ -84,7 +84,7 @@ test('lengthIs', () => {
 		foo[0] // $ExpectType string
 		// noinspection BadExpressionStatementJS
 		foo[2] // $ExpectType string
-		//@ts-expect-error TS2493: Tuple type '[string, string, string]' of length '3' has no element at index '3'.
+		// @ts-expect-error TS2493: Tuple type '[string, string, string]' of length '3' has no element at index '3'.
 		// noinspection BadExpressionStatementJS
 		foo[3]
 	}
@@ -115,20 +115,20 @@ describe('indexOf', () => {
 	test('union', () => {
 		const value = indexOf(['foo', 'bar', 'baz'], 'baz' as 'foo' | 'baz')
 
-		//MY GOD WHY IS THERE NO GOOD WAY TO TEST TYPES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		// MY GOD WHY IS THERE NO GOOD WAY TO TEST TYPES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-		//possible value (just checking for no type error)
+		// possible value (just checking for no type error)
 		// noinspection BadExpressionStatementJS
 		value !== 0
-		//@ts-expect-error impossibru value
+		// @ts-expect-error impossibru value
 		// noinspection BadExpressionStatementJS
 		value !== 1
-		//the actual value
+		// the actual value
 		assert(value === 2)
 	})
 	test('string', () => {
 		const value = indexOf(['foo', 'bar', 'baz'] as string[], 'baz' as string)
-		//need to check that the type is number this way instead since ExpectType shits itself on these types
+		// need to check that the type is number this way instead since ExpectType shits itself on these types
 		// noinspection BadExpressionStatementJS
 		value === 100
 	})
@@ -139,7 +139,9 @@ describe('flat', () => {
 		const value = flat([
 			['foo', 'bar'],
 			['baz, qux', ['asdf']],
-		]) //$ExpectType ['foo', 'bar', 'baz, qux', ['asdf']]
+		])
+		// noinspection BadExpressionStatementJS ExpectType was failing to find the node so have to put it here
+		value // $ExpectType ["foo", "bar", "baz, qux", ["asdf"]]
 		assert.deepStrictEqual(value, ['foo', 'bar', 'baz, qux', ['asdf']])
 	})
 	test('deeper', () => {
@@ -147,9 +149,10 @@ describe('flat', () => {
 			['foo', 'bar'],
 			['baz, qux', ['asdf', ['asdf']]],
 		] as const
-		const flattenedDepth2 = flat(arrayToFlatten, 2) //$ExpectType ['foo', 'bar', 'baz, qux', ['asdf']]
+
+		const flattenedDepth2 = flat(arrayToFlatten, 2) // $ExpectType ["foo", "bar", "baz, qux", "asdf", readonly ["asdf"]]
 		assert.deepStrictEqual(flattenedDepth2, ['foo', 'bar', 'baz, qux', 'asdf', ['asdf']])
-		const flattenedDepth3 = flat(arrayToFlatten, 3) //$ExpectType  ["foo", "bar", "baz, qux", "asdf", "asdf"]
+		const flattenedDepth3 = flat(arrayToFlatten, 3) // $ExpectType ["foo", "bar", "baz, qux", "asdf", "asdf"]
 		assert.notDeepStrictEqual(flattenedDepth3, ['foo', 'bar', 'baz, qux', 'asdf', ['asdf']])
 	})
 })

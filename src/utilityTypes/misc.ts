@@ -7,7 +7,7 @@ export type Equals<A, B> = A extends B ? (B extends A ? true : false) : false
  * the compiler sees this as `undefined` if `noUncheckedIndexedAccess` is enabled, and `never` if it's not.
  * used by {@link NoUncheckedIndexedAccess}
  */
-//TODO: figure out a way to do this without stuff existing at runtime
+// TODO: figure out a way to do this without stuff existing at runtime
 const _indexedAccessCheck = ([] as never[])[0]
 
 /**
