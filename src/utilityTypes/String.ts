@@ -56,7 +56,7 @@ export type FileName<Extension extends string = never> = `${string}${IsNever<
  */
 export type DuplicateString<T extends string, N extends number> = N extends 1
 	? T
-	: `${T}${N extends 1 ? '' : DuplicateString<T, Subtract<N, 1>>}`
+	: `${T}${DuplicateString<T, Subtract<N, 1>>}`
 
 /**
  * anything that can be represented as a string (ie. has a {@link toString} method)
