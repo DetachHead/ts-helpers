@@ -49,7 +49,7 @@ type _Replace<R extends unknown[], T> = { [K in keyof R]: T }
 export type TupleOf<Type, Length extends number> = number extends Length
 	? Type[]
 	: {
-			//in case Length is a tuple
+			// in case Length is a tuple
 			[LengthKey in Length]: _BuildPowersOf2LengthArrays<
 				LengthKey,
 				[[never]]
@@ -67,7 +67,7 @@ export type TupleOf<Type, Length extends number> = number extends Length
  * foo[0] //number (or number|undefined if `noUncheckedIndexedAccess` is enabled)
  * foo[3] //error: tuple of length '3' has no element at index '3'
  */
-//TODO: make the length property return a range type of all the possible lengths without breaking its ability to work on huge numbers
+// TODO: make the length property return a range type of all the possible lengths without breaking its ability to work on huge numbers
 export type TupleOfUpTo<T, L extends number> =
 	| TupleOf<T, L>
 	| (NoUncheckedIndexedAccess extends true ? [] : never)
@@ -107,10 +107,10 @@ type _IndexOf<
 			: _IndexOf<
 					Array,
 					Value,
-					//@ts-expect-error see Increment documentation
+					// @ts-expect-error see Increment documentation
 					Increment<CurrentIndex>
 			  >)
-	| (//@ts-expect-error compiler is wrong
+	| (// @ts-expect-error compiler is wrong
 	  Array[CurrentIndex] extends Value
 			? CurrentIndex
 			: never)
@@ -126,7 +126,7 @@ export type IndexOf<
 	: _IndexOf<
 			Array,
 			Value,
-			//@ts-expect-error compiler is wrong
+			// @ts-expect-error compiler is wrong
 			0
 	  >
 

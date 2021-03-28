@@ -42,7 +42,7 @@ test('charAt', () => {
 })
 
 test('substring', () => {
-	const value = substring('foobarbaz', 3, 6) //$ExpectType "bar"
+	const value = substring('foobarbaz', 3, 6) // $ExpectType "bar"
 	assert(value === 'bar')
 })
 
@@ -91,7 +91,7 @@ test('replaceAll', () => {
 test('exactly', () => {
 	const exactlyNumber = exactly<number>()
 	exactlyNumber(1 as number) // $ExpectType number
-	//@ts-expect-error type isn't exactly number
+	// @ts-expect-error type isn't exactly number
 	exactlyNumber(1) // $ExpectType never
 })
 

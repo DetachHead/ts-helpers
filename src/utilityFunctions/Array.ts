@@ -150,7 +150,7 @@ export function concat<A1 extends readonly unknown[], A2 extends readonly unknow
 	array2: Narrow<A2>
 ): [...A1, ...A2] {
 	return array1.concat(
-		//@ts-expect-error some wack error caused by the Narrow type, but it's the same type anyway so this is a false positive
+		// @ts-expect-error some wack error caused by the Narrow type, but it's the same type anyway so this is a false positive
 		array2
 	) as never
 }
@@ -163,7 +163,7 @@ export function indexOf<Array extends readonly unknown[], Value extends Array[nu
 	value: Narrow<Value>
 ): IndexOf<Array, Value> {
 	return array.indexOf(
-		//@ts-expect-error some wack error caused by the Narrow type, but it's the same type anyway so this is a false positive
+		// @ts-expect-error some wack error caused by the Narrow type, but it's the same type anyway so this is a false positive
 		value
 	) as never
 }
