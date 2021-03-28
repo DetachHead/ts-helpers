@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { CharAt, Includes, IndexOf, ReplaceOne, Substring } from '../utilityTypes/String'
+import { CharAt, Includes, IndexOf, PadStart, ReplaceOne, Substring } from '../utilityTypes/String'
 import { List } from 'ts-toolbelt/out/List/List'
 import { Literal } from 'ts-toolbelt/out/String/_Internal'
 import { Join } from 'ts-toolbelt/out/String/Join'
@@ -96,4 +96,15 @@ export function includes<String extends string, Substring extends string>(
 	substring: Substring
 ): Includes<String, Substring> {
 	return string.includes(substring) as Includes<String, Substring>
+}
+
+/**
+ * does {@link String.padStart} at compiletime
+ */
+export function padStart<
+	String extends string,
+	Size extends number,
+	PadString extends string = ' '
+>(string: String, length: Size, padString?: PadString): PadStart<String, Size, PadString> {
+	return string.padStart(length, padString) as never
 }
