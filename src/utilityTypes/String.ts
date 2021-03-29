@@ -227,7 +227,12 @@ export type PadStart<
 	String extends string,
 	Size extends number,
 	PadString extends string
-> = string extends String | PadString
+	// need to make sure it's a string literal or union of string literal, to prevent invalid results such as `000${number}`
+	//
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+> = `${any}` extends String | PadString
+	? string
+	: number extends Size
 	? string
 	: `${
 			// @ts-expect-error excessive stack depth error, but it works fine on small strings
