@@ -39,8 +39,8 @@ export function subtract<N1 extends number, N2 extends number>(
 /**
  * multiplies two numbers at compiletime
  * @example
- * const foo = add(2, 3)
- * type Foo = typeof foo //5
+ * const foo = multiply(2, 3)
+ * type Foo = typeof multiply //6
  */
 export function multiply<N1 extends number, N2 extends number>(
 	num1: N1,
@@ -52,7 +52,7 @@ export function multiply<N1 extends number, N2 extends number>(
 /**
  * divides two numbers at compiletime
  * @example
- * const foo = add(2, 3)
+ * const foo = divide(10, 2)
  * type Foo = typeof foo //5
  */
 export function divide<N1 extends number, N2 extends number>(num1: N1, num2: N2): Divide<N1, N2> {
