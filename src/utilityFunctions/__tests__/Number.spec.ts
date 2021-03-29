@@ -1,4 +1,4 @@
-import { add, random, subtract, multiply, divide } from '../Number'
+import { add, random, subtract, multiply, divide, leadingZeros } from '../Number'
 import { PowerAssert } from 'typed-nodejs-assert'
 import { TupleOf } from '../../utilityTypes/Array'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -42,6 +42,24 @@ describe('arithmetic', () => {
 		test('normal numbers', () => {
 			const num = divide(10, 2) // $ExpectType 5
 			assert(num === 5)
+		})
+	})
+})
+
+describe('leadingZeros', () => {
+	test('values known at compiletime', () => {
+		const value = leadingZeros(12, 5) // $ExpectType "00012"
+		assert(value === '00012')
+	})
+	describe('values not known at compiletime', () => {
+		test('num', () => {
+			leadingZeros(12 as number, 5) // $ExpectType string
+		})
+		test('length', () => {
+			leadingZeros(12, 5 as number) // $ExpectType string
+		})
+		test('both', () => {
+			leadingZeros(12 as number, 5 as number) // $ExpectType string
 		})
 	})
 })
