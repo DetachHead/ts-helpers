@@ -1,5 +1,4 @@
-import { Primitive } from 'utility-types'
-import { Stringable, ToString } from '../utilityTypes/String'
+import { Stringable, TemplateLiteralStringable, ToString } from '../utilityTypes/String'
 import { Equals } from '../utilityTypes/misc'
 
 /**
@@ -27,7 +26,7 @@ export function unsafeCast<T>(_value: unknown): asserts _value is T {}
  */
 export function toStringType<T extends Stringable>(
 	value: T
-): T extends Exclude<Primitive, symbol> ? ToString<T> : string {
+): T extends TemplateLiteralStringable ? ToString<T> : string {
 	return value.toString() as never
 }
 
