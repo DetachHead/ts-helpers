@@ -4,11 +4,16 @@ import { Length } from 'ts-toolbelt/out/String/Length'
 import { IsNever } from 'tsdef'
 
 /**
+ * a type that can be converted to a string in a template literal type
+ */
+export type TemplateLiteralStringable = Exclude<Primitive, symbol>
+
+/**
  * creates a stringified version of `T`
  * @example
  * type Foo = ToString<1|2> //'1'|'2'
  */
-export type ToString<T extends Exclude<Primitive, symbol>> = `${T}`
+export type ToString<T extends TemplateLiteralStringable> = `${T}`
 
 /**
  * a URI that starts with the given `Protocol`
