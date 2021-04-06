@@ -26,7 +26,6 @@
     "ts-jest": "^26.4.4",
     "ts-toolbelt": "^9.6.0",
     "tsdef": "^0.0.14",
-    "typescript": "^4.3.0-dev.20210406",
     "utility-types": "^3.10.0"
   },
   "devDependencies": {
@@ -46,6 +45,7 @@
     "prettier": "2.2.1",
     "rimraf": "^3.0.2",
     "source-map-support": "^0.5.19",
-    "typed-nodejs-assert": "^1.1.0"
+    "typed-nodejs-assert": "^1.1.0",
+    "typescript": "^4.3.0-dev.20210406"
   }
 }
