@@ -95,9 +95,6 @@ type _TrimStart<
 
 /**
  * trims the characters up to `Index` off the start of `String` (inclusive)
- *
- * **WARNING:** the compiler sometimes throws TS2321: Excessive stack depth, but it seems to still work as long as you
- * suppress the error with @ts-expect-error
  * @example
  * type Foo = TrimStart<'foobar', 2> //'bar'
  */
@@ -113,13 +110,13 @@ export type TrimEnd<String extends string, Index extends number> = Substring<Str
 /**
  * gets the characters of `String` between `StartIndex` (inclusive) and `EndIndex` (exclusive)
  */
-export type Substring<String extends string, StartIndex extends number, EndIndex extends number> =
-	// @ts-expect-error see TrimStart documentation
-	TrimStart<String, StartIndex> extends `${infer R}${TrimStart<String, EndIndex>}` ? R : never
+export type Substring<
+	String extends string,
+	StartIndex extends number,
+	EndIndex extends number
+> = TrimStart<String, StartIndex> extends `${infer R}${TrimStart<String, EndIndex>}` ? R : never
 
-export type CharAt<String extends string, Index extends number> =
-	// @ts-expect-error see TrimStart documentation
-	Head<TrimStart<String, Index>>
+export type CharAt<String extends string, Index extends number> = Head<TrimStart<String, Index>>
 
 /**
  * `true` if `String` contains `Substring`, else `false`
@@ -234,7 +231,4 @@ export type PadStart<
 	? string
 	: number extends Size
 	? string
-	: `${
-			// @ts-expect-error excessive stack depth error, but it works fine on small strings
-			DuplicateStringUntilLength<PadString, Subtract<Size, Length<String>>>
-	  }${String}`
+	: `${DuplicateStringUntilLength<PadString, Subtract<Size, Length<String>>>}${String}`

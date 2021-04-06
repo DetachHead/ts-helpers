@@ -48,7 +48,7 @@ export function multiply<N1 extends number, N2 extends number>(
 	num1: N1,
 	num2: N2
 ): Multiply<N1, N2> {
-	return (num1 * num2) as Multiply<N1, N2>
+	return (num1 * num2) as never
 }
 
 /**
