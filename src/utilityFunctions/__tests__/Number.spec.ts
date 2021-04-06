@@ -28,8 +28,8 @@ describe('arithmetic', () => {
 			assert(num === 2)
 		})
 		test('big numbers', () => {
-			const num = subtract(10000, 3000) // $ExpectType 7000
-			assert(num === 7000)
+			const num = subtract(5000, 3000) // $ExpectType 2000
+			assert(num === 2000)
 		})
 	})
 	describe('multiply', () => {
