@@ -23,6 +23,7 @@
   "dependencies": {
     "@types/lodash": "^4.14.167",
     "lodash": "^4.17.20",
+    "ordinal": "^1.0.3",
     "ts-jest": "^26.4.4",
     "ts-toolbelt": "^9.6.0",
     "tsdef": "^0.0.14",
