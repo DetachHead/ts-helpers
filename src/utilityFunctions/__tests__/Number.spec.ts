@@ -1,4 +1,4 @@
-import { add, random, subtract, multiply, divide, leadingZeros } from '../Number'
+import { add, random, subtract, multiply, divide, leadingZeros, ordinalNumber } from '../Number'
 import { PowerAssert } from 'typed-nodejs-assert'
 import { TupleOf } from '../../utilityTypes/Array'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -53,13 +53,40 @@ describe('leadingZeros', () => {
 	})
 	describe('values not known at compiletime', () => {
 		test('num', () => {
-			leadingZeros(12 as number, 5) // $ExpectType string
+			leadingZeros(12 as number, 5) // $ExpectType `${number}`
 		})
 		test('length', () => {
-			leadingZeros(12, 5 as number) // $ExpectType string
+			leadingZeros(12, 5 as number) // $ExpectType `${number}`
 		})
 		test('both', () => {
-			leadingZeros(12 as number, 5 as number) // $ExpectType string
+			leadingZeros(12 as number, 5 as number) // $ExpectType `${number}`
 		})
+	})
+	test('negative numbers', () => {
+		const value = leadingZeros(-20, 4) // $ExpectType "-0020"
+		assert(value === '-0020')
+	})
+})
+
+describe('ordinal', () => {
+	it('1/2/3', () => {
+		assert(ordinalNumber(1) === '1st')
+		assert(ordinalNumber(12) === '12th')
+		assert(ordinalNumber(23) === '23rd')
+		assert(
+			// @ts-expect-error wrong value
+			ordinalNumber(3) !== '3th'
+		)
+	})
+	it('th', () => {
+		assert(ordinalNumber(24) === '24th')
+		assert(ordinalNumber(0) === '0th')
+		assert(
+			// @ts-expect-error wrong value
+			ordinalNumber(0) !== '1000nd'
+		)
+	})
+	it('value not known at compiletime', () => {
+		ordinalNumber(1 as number) // $ExpectType `${number}st` | `${number}nd` | `${number}rd` | `${number}th`
 	})
 })

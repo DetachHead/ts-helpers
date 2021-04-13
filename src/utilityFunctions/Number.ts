@@ -1,5 +1,14 @@
 import _ from 'lodash'
-import { Add, Divide, Modulo, Multiply, Subtract } from '../utilityTypes/Number'
+import ordinal from 'ordinal'
+import {
+	Add,
+	Divide,
+	LeadingZeros,
+	Modulo,
+	Multiply,
+	Ordinal,
+	Subtract,
+} from '../utilityTypes/Number'
 import { RangeType } from '../utilityTypes/Number'
 import { toStringType } from './misc'
 import { padStart } from './String'
@@ -68,10 +77,19 @@ export function modulo<N1 extends number, N2 extends number>(num1: N1, num2: N2)
 /**
  * adds leading zeros to the given `number` until it reaches the desired `length`
  * @example
- * const foo = leadingZereos(12, 5) //'00012'
+ * const foo = leadingZeros(12, 5) //'00012'
+ * const bar = leadingZeros(-12, 5) //'-00012'
  */
-// TODO: figure out why using the PadStart type doesn't work here
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function leadingZeros<Num extends number, Size extends number>(number: Num, length: Size) {
-	return padStart(toStringType(number), length, '0')
+export function leadingZeros<Num extends number, Size extends number>(
+	number: Num,
+	length: Size
+): LeadingZeros<Num, Size> {
+	return (number < 0
+		? `${padStart(toStringType(number * -1), length, '0')}`
+		: padStart(toStringType(number), length, '0')) as never
+}
+
+/** creates a stringified ordinal value for the given number, and at compile-time */
+export function ordinalNumber<T extends number>(num: T): Ordinal<T> {
+	return ordinal(num) as never
 }
