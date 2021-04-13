@@ -67,8 +67,12 @@ type _MultiAdd<
 	IterationsLeft extends number
 > = IterationsLeft extends 0
 	? Accumulator
-	: // @ts-expect-error see documentation for Add type
-	  _MultiAdd<Number, Add<Number, Accumulator>, Decrement<IterationsLeft>>
+	: _MultiAdd<
+			Number,
+			// @ts-expect-error see documentation for Add type
+			Add<Number, Accumulator>,
+			Decrement<IterationsLeft>
+	  >
 
 /**
  * multiplies `N1` by `N2`
@@ -105,8 +109,12 @@ type _MultiSub<
 	QuotientAccumulator extends number
 > = _LessThanTerminus<Dividee, Divider> extends true
 	? QuotientAccumulator
-	: // @ts-expect-error see documentation for Increment type
-	  _MultiSub<Subtract<Dividee, Divider>, Divider, Increment<QuotientAccumulator>>
+	: _MultiSub<
+			Subtract<Dividee, Divider>,
+			Divider,
+			// @ts-expect-error see documentation for Increment type
+			Increment<QuotientAccumulator>
+	  >
 
 /**
  * divides `N1` by `N2`
