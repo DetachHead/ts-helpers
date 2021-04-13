@@ -5,6 +5,7 @@ import {
 	Includes,
 	IndexOf,
 	PadStart,
+	Replace,
 	ReplaceOne,
 	StartsWith,
 	Substring,
@@ -13,7 +14,6 @@ import { List } from 'ts-toolbelt/out/List/List'
 import { Literal } from 'ts-toolbelt/out/String/_Internal'
 import { Join } from 'ts-toolbelt/out/String/Join'
 import { Split } from 'ts-toolbelt/out/String/Split'
-import { Replace } from 'ts-toolbelt/out/String/Replace'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 
 /**
