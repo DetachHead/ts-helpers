@@ -2,6 +2,7 @@ import { Primitive } from 'utility-types'
 import { Add, Decrement, Increment, Subtract } from './Number'
 import { Length } from 'ts-toolbelt/out/String/Length'
 import { IsNever } from 'tsdef'
+import { Cast } from 'ts-toolbelt/out/Any/Cast'
 
 /**
  * a type that can be converted to a string in a template literal type
@@ -154,11 +155,28 @@ export type IndexOf<String extends string, Substring extends string> = Includes<
 	? _IndexOf<String, Substring, 0>
 	: -1
 
+type _Replace<
+	String extends string,
+	Find extends TemplateLiteralStringable,
+	ReplaceWith extends TemplateLiteralStringable
+> = String extends `${infer BS}${Find}${infer AS}`
+	? Replace<`${BS}${ReplaceWith}${AS}`, Find, ReplaceWith>
+	: String
+
+/**
+ * replaces all instances of `Find` with `ReplaceWith`. the type equivalent of {@link String.prototype.replace}
+ *
+ * modified version of [`String/Replace` from `ts-toolbelt`](https://millsp.github.io/ts-toolbelt/modules/string_replace.html)
+ * that also allows `undefined` and `null` (ie. anything that template literal types allow)
+ */
+export declare type Replace<
+	String extends string,
+	Find extends TemplateLiteralStringable,
+	ReplaceWith extends TemplateLiteralStringable
+> = _Replace<String, Find, ReplaceWith> extends infer X ? Cast<X, string> : never
+
 /**
  * replaces the first instance of `Find` with `ReplaceWith`. the type equivalent of {@link String.prototype.replace}
- *
- * see [`String/Replace` from `ts-toolbelt`](https://millsp.github.io/ts-toolbelt/modules/string_replace.html)
- * for a type that replaces all instances
  */
 export type ReplaceOne<
 	String extends string,
