@@ -1,5 +1,6 @@
 import { Equals } from './misc'
 import { TupleOf } from './Array'
+import { PadStart, Tail, ToString } from './String'
 
 type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
 	? ((t: T, ...a: A) => void) extends (...x: infer X) => void
@@ -154,3 +155,36 @@ export type Increment<T extends number> = Add<T, 1>
 
 /** subtracts 1 from `T` */
 export type Decrement<T extends number> = Subtract<T, 1>
+
+/**
+ * adds leading zeros to a number until it reaches a specified length
+ *
+ * @example
+ * type Foo = LeadingZeros<12, 5> //'00012'
+ * type Bar = LeadingZeros<-12, 5> //'-00012'
+ */
+export type LeadingZeros<Num extends number, Length extends number> = number extends Num | Length
+	? ToString<number>
+	: IsPositive<Num> extends true
+	? PadStart<ToString<Num>, Length, '0'>
+	: `-${PadStart<Tail<ToString<Num>>, Length, '0'>}`
+
+/**
+ * creates a stringified ordinal value for the given number
+ * @example
+ * type First = Ordinal<1> //1st
+ * type Third = Ordinal<3> //3rd
+ */
+export type Ordinal<T extends number> = number extends T
+	? `${number}${'st' | 'nd' | 'rd' | 'th'}`
+	: {
+			[Num in T]: `${Num}${Modulo<Num, 20> extends infer Mod
+				? Mod extends 1
+					? 'st'
+					: Mod extends 2
+					? 'nd'
+					: Mod extends 3
+					? 'rd'
+					: 'th'
+				: never}`
+	  }[T]
