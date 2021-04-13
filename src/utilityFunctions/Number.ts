@@ -85,7 +85,7 @@ export function leadingZeros<Num extends number, Size extends number>(
 	length: Size
 ): LeadingZeros<Num, Size> {
 	return (number < 0
-		? `${padStart(toStringType(number * -1), length, '0')}`
+		? `-${padStart(toStringType(number * -1), length, '0')}`
 		: padStart(toStringType(number), length, '0')) as never
 }
 
