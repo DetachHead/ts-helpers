@@ -248,9 +248,11 @@ export type PadStart<
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 > = `${any}` extends String | PadString
 	? string
-	: number extends Size
-	? string
-	: `${DuplicateStringUntilLength<PadString, Subtract<Size, Length<String>>>}${String}`
+	: {
+			[Key in String]: number extends Size
+				? string
+				: `${DuplicateStringUntilLength<PadString, Subtract<Size, Length<Key>>>}${Key}`
+	  }[String]
 
 /**
  * `true` if `Full` starts with the given `CheckStart`, else `false`
