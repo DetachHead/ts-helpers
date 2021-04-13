@@ -231,3 +231,23 @@ export type PadStart<
 	: number extends Size
 	? string
 	: `${DuplicateStringUntilLength<PadString, Subtract<Size, Length<String>>>}${String}`
+
+/**
+ * `true` if `Full` starts with the given `CheckStart`, else `false`
+ */
+export type StartsWith<Full extends string, CheckStart extends string> = string extends
+	| Full
+	| CheckStart
+	? boolean
+	: Full extends `${CheckStart}${string}`
+	? true
+	: false
+
+/**
+ * `true` if `Full` ends with the given `CheckEnd`, else `false`
+ */
+export type EndsWith<Full extends string, CheckEnd extends string> = string extends Full | CheckEnd
+	? boolean
+	: Full extends `${string}${CheckEnd}`
+	? true
+	: false

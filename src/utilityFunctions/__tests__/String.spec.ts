@@ -1,5 +1,6 @@
 import {
 	charAt,
+	endsWith,
 	includes,
 	indexOf,
 	join,
@@ -8,6 +9,7 @@ import {
 	replaceAll,
 	replaceOne,
 	split,
+	startsWith,
 	substring,
 } from '../String'
 import { PowerAssert } from 'typed-nodejs-assert'
@@ -113,5 +115,37 @@ describe('padStart', () => {
 	})
 	test('padstring not known at compiletime', () => {
 		padStart('foo', 6, 'ab' as string) // $ExpectType string
+	})
+})
+
+describe('startsWith', () => {
+	test('true', () => {
+		const result = startsWith('foobar', 'foo') // $ExpectType true
+		assert(result)
+		startsWith('foobar' as `foo${string}`, 'foo') // $ExpectType true
+	})
+	test('false', () => {
+		const result = startsWith('foobar', 'baz') // $ExpectType false
+		assert(!result)
+	})
+	test('not known at compiletime', () => {
+		startsWith('foobar' as string, 'baz') // $ExpectType boolean
+		startsWith('foobar', 'baz' as string) // $ExpectType boolean
+	})
+})
+
+describe('endsWith', () => {
+	test('true', () => {
+		const result = endsWith('foobar', 'bar') // $ExpectType true
+		assert(result)
+		endsWith('foobar' as `${string}bar`, 'bar') // $ExpectType true
+	})
+	test('false', () => {
+		const result = endsWith('foobar', 'baz') // $ExpectType false
+		assert(!result)
+	})
+	test('not known at compiletime', () => {
+		endsWith('foobar' as string, 'baz') // $ExpectType boolean
+		endsWith('foobar', 'baz' as string) // $ExpectType boolean
 	})
 })
