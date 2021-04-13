@@ -38,8 +38,8 @@ export function testType<T>(_value: T): void {}
  * creates a function that can be used to check that a type exactly equals another type. sometimes useful for testing types
  * @example
  * const exactlyNumber = exactly<number>() //create the "type"
- * const foo = exactlyNumber(1 as number) //error
- * const bar = exactlyNumber(1) //no error
+ * const foo = exactlyNumber(1 as number) //no error
+ * const bar = exactlyNumber(1) //error
  * @see Equals
  */
 export function exactly<Expected>() {
