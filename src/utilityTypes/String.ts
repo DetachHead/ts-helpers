@@ -1,8 +1,10 @@
 import { Primitive } from 'utility-types'
-import { Add, Decrement, Increment, Subtract } from './Number'
+import { Add, Decrement, Enumerate, Increment, Subtract } from './Number'
 import { Length } from 'ts-toolbelt/out/String/Length'
 import { IsNever } from 'tsdef'
 import { Cast } from 'ts-toolbelt/out/Any/Cast'
+import { TupleOf } from './Array'
+import { Keys } from './Any'
 
 /**
  * a type that can be converted to a string in a template literal type
@@ -269,3 +271,50 @@ export type EndsWith<Full extends string, CheckEnd extends string> = string exte
 	: Full extends `${string}${CheckEnd}`
 	? true
 	: false
+
+type ReplaceValuesMap = [TemplateLiteralStringable, TemplateLiteralStringable][]
+
+type _ReplaceValuesWithMap<
+	Value extends string,
+	Map extends ReplaceValuesMap,
+	CurrentIndex extends number
+> = CurrentIndex extends Map['length']
+	? Value
+	: _ReplaceValuesWithMap<
+			Replace<Value, Map[CurrentIndex][0], Map[CurrentIndex][1]>,
+			Map,
+			// @ts-expect-error see Increment documentation
+			Increment<CurrentIndex>
+	  >
+
+/**
+ * replaces all instances in `Value` of the first string with the second string with each tuple in `Map`
+ *
+ * note: this type uses a 2d array and not an object because as far as i can tell there's no way to iterate over the
+ * keys in an object in the types realm
+ *
+ * @example
+ * type Foo = MapReplaceValues<'foobarbaz', [['foo', 'bar'], ['baz', 'qux']]> // "barbarqux"
+ */
+export type ReplaceValuesWithMap<
+	Value extends string,
+	Map extends ReplaceValuesMap
+> = _ReplaceValuesWithMap<Value, Map, 0>
+
+/**
+ * a stringified version of {@link Enumerate}
+ *
+ * the advantage of this one is that it works for much higher values, as it currently doesn't seem possible to do this
+ * with numbers
+ */
+export type EnumerateAsString<Num extends number> = Keys<TupleOf<never, Num>>
+
+/**
+ * a stringified version of {@link RangeType}
+ *
+ * the advantage of this one is that it works for much higher values, as it currently doesn't seem possible to do this
+ * with numbers
+ */
+export type RangeAsString<From extends number, To extends number> =
+	| Exclude<EnumerateAsString<To>, Enumerate<From>>
+	| To
