@@ -1,5 +1,14 @@
 import _ from 'lodash'
-import { CharAt, Includes, IndexOf, PadStart, ReplaceOne, Substring } from '../utilityTypes/String'
+import {
+	CharAt,
+	EndsWith,
+	Includes,
+	IndexOf,
+	PadStart,
+	ReplaceOne,
+	StartsWith,
+	Substring,
+} from '../utilityTypes/String'
 import { List } from 'ts-toolbelt/out/List/List'
 import { Literal } from 'ts-toolbelt/out/String/_Internal'
 import { Join } from 'ts-toolbelt/out/String/Join'
@@ -107,4 +116,24 @@ export function padStart<
 	PadString extends string = ' '
 >(string: String, length: Size, padString?: PadString): PadStart<String, Size, PadString> {
 	return string.padStart(length, padString) as never
+}
+
+/**
+ * {@link String.startsWith} at compile-time
+ */
+export function startsWith<Full extends string, CheckStart extends string>(
+	full: Full,
+	checkStart: CheckStart
+): StartsWith<Full, CheckStart> {
+	return full.startsWith(checkStart) as never
+}
+
+/**
+ * {@link String.endsWith} at compile-time
+ */
+export function endsWith<Full extends string, CheckEnd extends string>(
+	full: Full,
+	checkEnd: CheckEnd
+): EndsWith<Full, CheckEnd> {
+	return full.endsWith(checkEnd) as never
 }
