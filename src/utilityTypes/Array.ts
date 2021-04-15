@@ -1,5 +1,5 @@
 import { NoUncheckedIndexedAccess } from './misc'
-import { Decrement, Enumerate, Increment } from './Number'
+import { Decrement, Enumerate, Increment, IsGreaterThan } from './Number'
 import { Flatten } from 'ts-toolbelt/out/List/Flatten'
 
 type _BuildPowersOf2LengthArrays<
@@ -138,4 +138,9 @@ export type IndexOf<
  */
 export type FlattenedTupleOf<T extends unknown[], Length extends number> = Flatten<
 	TupleOf<T, Length>
+>
+
+export type LengthGreaterThan<Array extends unknown[], Length extends number> = IsGreaterThan<
+	Array['length'],
+	Length
 >
