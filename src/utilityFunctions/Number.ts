@@ -3,6 +3,7 @@ import ordinal from 'ordinal'
 import {
 	Add,
 	Divide,
+	IsGreaterThan,
 	LeadingZeros,
 	Modulo,
 	Multiply,
@@ -92,4 +93,11 @@ export function leadingZeros<Num extends number, Size extends number>(
 /** creates a stringified ordinal value for the given number, and at compile-time */
 export function ordinalNumber<T extends number>(num: T): Ordinal<T> {
 	return ordinal(num) as never
+}
+
+export function isGreaterThan<Num1 extends number, Num2 extends number>(
+	num1: Num1,
+	num2: Num2
+): IsGreaterThan<Num1, Num2> {
+	return (num1 > num2) as never
 }

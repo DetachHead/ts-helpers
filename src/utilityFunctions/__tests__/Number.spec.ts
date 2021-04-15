@@ -1,4 +1,13 @@
-import { add, random, subtract, multiply, divide, leadingZeros, ordinalNumber } from '../Number'
+import {
+	add,
+	random,
+	subtract,
+	multiply,
+	divide,
+	leadingZeros,
+	ordinalNumber,
+	isGreaterThan,
+} from '../Number'
 import { PowerAssert } from 'typed-nodejs-assert'
 import { TupleOf } from '../../utilityTypes/Array'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -88,5 +97,23 @@ describe('ordinal', () => {
 	})
 	it('value not known at compiletime', () => {
 		ordinalNumber(1 as number) // $ExpectType `${number}st` | `${number}nd` | `${number}rd` | `${number}th`
+	})
+})
+
+describe('comparison', () => {
+	describe('isGreaterThan', () => {
+		test('true', () => {
+			const value = isGreaterThan(5, 4) // $ExpectType true
+			assert(!value)
+		})
+		test('false', () => {
+			isGreaterThan(20, 5) // $ExpectType false
+			const value = isGreaterThan(6, 6) // $ExpectType false
+			assert(!value)
+		})
+		test('big numbers', () => {
+			isGreaterThan(5000, 4999) // $ExpectType true
+			isGreaterThan(5000, 5001) // $ExpectType false
+		})
 	})
 })

@@ -188,3 +188,11 @@ export type Ordinal<T extends number> = number extends T
 					: 'th'
 				: never}`
 	  }[T]
+
+/** `true` if `Num1` is greater than `Num2`, else `false` */
+export type IsGreaterThan<Num1 extends number, Num2 extends number> = TupleOf<never, Num1> extends [
+	...TupleOf<never, Num2>,
+	unknown
+]
+	? true
+	: false
