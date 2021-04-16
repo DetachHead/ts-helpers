@@ -93,6 +93,11 @@ export type TupleOfUpToButNotIncluding<T, L extends number> =
 	| (NoUncheckedIndexedAccess extends true ? [] : never)
 
 /**
+ * an array that has a size of at least `Length`
+ */
+export type TupleOfAtLeast<Type, Length extends number> = TupleOf<Type, Length> | Type[]
+
+/**
  * like `keyof` but for array indexes, and uses numbers instead of strings
  */
 export type Index<T extends readonly unknown[]> = Enumerate<T['length']>
