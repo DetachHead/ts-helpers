@@ -1,4 +1,10 @@
-import { IndexOf, TupleOf, TupleOfUpTo, TupleOfUpToButNotIncluding } from '../utilityTypes/Array'
+import {
+	IndexOf,
+	TupleOf,
+	TupleOfAtLeast,
+	TupleOfUpTo,
+	TupleOfUpToButNotIncluding,
+} from '../utilityTypes/Array'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import { Flatten } from 'ts-toolbelt/out/List/Flatten'
 
@@ -17,7 +23,7 @@ import { Flatten } from 'ts-toolbelt/out/List/Flatten'
 export function lengthGreaterOrEqual<T, L extends number>(
 	arr: Readonly<T[]>,
 	length: L
-): arr is TupleOf<T, L> & T[] {
+): arr is TupleOfAtLeast<T, L> {
 	return arr.length >= length
 }
 
