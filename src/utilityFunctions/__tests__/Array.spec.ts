@@ -2,16 +2,20 @@ import {
 	concat,
 	containsDuplicates,
 	findDuplicates,
+	findIndexWithHighestNumber,
 	flat,
 	indexOf,
+	indexOfLongestString,
 	lengthGreaterOrEqual,
 	lengthGreaterThan,
 	lengthIs,
 	lengthLessOrEqual,
 	lengthLessThan,
 	removeDuplicates,
+	splice,
 } from '../Array'
 import { PowerAssert } from 'typed-nodejs-assert'
+import { Throw } from 'throw-expression'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const assert: PowerAssert = require('power-assert')
 
@@ -155,4 +159,30 @@ describe('flat', () => {
 		const flattenedDepth3 = flat(arrayToFlatten, 3) // $ExpectType ["foo", "bar", "baz, qux", "asdf", "asdf"]
 		assert.notDeepStrictEqual(flattenedDepth3, ['foo', 'bar', 'baz, qux', 'asdf', ['asdf']])
 	})
+})
+
+describe('splice', () => {
+	const value = splice([1, 2, 3, 4, 5, 6], 2, 3) // $ExpectType [1, 2, 6]
+	assert.deepStrictEqual(value, [1, 2, 6])
+})
+
+describe('findIndexOfHighestNumber', () => {
+	test('returns number', () => {
+		const value = findIndexWithHighestNumber(
+			['a', 'foo', 'barbaz', 'qux'],
+			(string) => string.length
+		)
+		value // $ExpectType number
+		assert(value === 2)
+	})
+	test('empty array', () => {
+		const value = findIndexWithHighestNumber([], () => Throw('waaaaaat?'))
+		value // $ExpectType undefined
+		assert(value === undefined)
+	})
+})
+
+test('indexOfLongestString', () => {
+	const value = indexOfLongestString(['foo', 'barbaz', 'qux']) // $ExpectType 1
+	assert(value === 1)
 })

@@ -1,4 +1,4 @@
-import { Add, Divide, Multiply, Subtract } from '../Number'
+import { Add, Divide, IsGreaterThan, Multiply, Subtract } from '../Number'
 import { testType } from '../../utilityFunctions/misc'
 
 test('multiply', () => {
@@ -37,4 +37,20 @@ test('divide', () => {
 	testType<Divide<6 | 12, 2 | 3>>(4)
 	// @ts-expect-error not valid quotient
 	testType<Divide<6 | 12, 2 | 3>>(9)
+})
+
+describe('IsGreaterThan', () => {
+	test('false', () => {
+		testType<IsGreaterThan<6, 7>>(false)
+		testType<IsGreaterThan<6, 6>>(false)
+	})
+	test('true', () => {
+		testType<IsGreaterThan<7, 6>>(true)
+	})
+	test('big numbers', () => {
+		testType<IsGreaterThan<4999, 5000>>(false)
+		testType<IsGreaterThan<5001, 5000>>(true)
+		// @ts-expect-error wrong value
+		testType<IsGreaterThan<5000, 5000>>(true)
+	})
 })
