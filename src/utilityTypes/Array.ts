@@ -152,6 +152,7 @@ export type LengthGreaterThan<Array extends unknown[], Length extends number> = 
 	Length
 >
 
+/** removes `DeleteCount` values from `Array` starting at `StartIndex` */
 export type Splice<
 	Array extends unknown[],
 	StartIndex extends number,
