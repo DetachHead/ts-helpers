@@ -12,6 +12,7 @@ import {
 	lengthLessOrEqual,
 	lengthLessThan,
 	removeDuplicates,
+	sortByLongestStrings,
 	splice,
 } from '../Array'
 import { PowerAssert } from 'typed-nodejs-assert'
@@ -182,7 +183,17 @@ describe('findIndexOfHighestNumber', () => {
 	})
 })
 
-test('indexOfLongestString', () => {
-	const value = indexOfLongestString(['foo', 'barbaz', 'qux']) // $ExpectType 1
-	assert(value === 1)
+describe('indexOfLongestString', () => {
+	test('known at compiletime', () => {
+		const value = indexOfLongestString(['foo', 'barbaz', 'qux']) // $ExpectType 1
+		assert(value === 1)
+	})
+	test('not known at compiletime', () => {
+		indexOfLongestString(['foo', 'barbaz', 'qux'] as string[]) // $ExpectType number
+	})
+})
+
+test('sortByLongestStrings', () => {
+	const value = sortByLongestStrings(['foo', 'barbaz', 'foobarbaz', 'a', 'ab']) // $ExpectType ["foobarbaz", "barbaz", "foo", "ab", "a"]
+	assert.deepStrictEqual(value, ['foobarbaz', 'barbaz', 'foo', 'ab', 'a'])
 })
