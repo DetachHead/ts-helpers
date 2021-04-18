@@ -107,7 +107,7 @@ describe('comparison', () => {
 			assert(!value)
 		})
 		test('false', () => {
-			isGreaterThan(20, 5) // $ExpectType false
+			isGreaterThan(5, 20) // $ExpectType false
 			const value = isGreaterThan(6, 6) // $ExpectType false
 			assert(!value)
 		})
