@@ -162,7 +162,7 @@ describe('flat', () => {
 	})
 })
 
-describe('splice', () => {
+test('splice', () => {
 	const value = splice([1, 2, 3, 4, 5, 6], 2, 3) // $ExpectType [1, 2, 6]
 	assert.deepStrictEqual(value, [1, 2, 6])
 })
