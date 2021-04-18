@@ -166,6 +166,14 @@ export type Splice<
 	>
 ]
 
+/** removes the value at index `I` from `A` */
+export type RemoveIndex<Array extends unknown[], RemoveIndex extends Index<Array>> = Splice<
+	Array,
+	// @ts-expect-error false positive
+	RemoveIndex,
+	1
+>
+
 type _IndexOfLongestString<
 	Strings extends string[],
 	CurrentIndex extends number,
@@ -191,4 +199,22 @@ type _IndexOfLongestString<
  */
 export type IndexOfLongestString<Strings extends string[]> = Strings extends []
 	? undefined
+	: number extends Strings['length']
+	? number
 	: _IndexOfLongestString<Strings, 0, 0>
+
+/** sorts an array of strings by longest to shortest */
+export type SortLongestStrings<Array extends string[]> = Array extends TupleOfUpTo<string, 1>
+	? Array
+	: number extends Array['length']
+	? Array
+	: [
+			Array[IndexOfLongestString<Array>],
+			...SortLongestStrings<
+				RemoveIndex<
+					Array,
+					// @ts-expect-error stack depth error, but it's fine for short arrays
+					IndexOfLongestString<Array>
+				>
+			>
+	  ]

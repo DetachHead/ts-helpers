@@ -1,6 +1,7 @@
 import {
 	IndexOf,
 	IndexOfLongestString,
+	SortLongestStrings,
 	Splice,
 	TupleOf,
 	TupleOfAtLeast,
@@ -227,4 +228,12 @@ export function indexOfLongestString<Strings extends string[]>(
 	strings: Narrow<Strings>
 ): IndexOfLongestString<Strings> {
 	return findIndexWithHighestNumber(strings, (string) => string.length) as never
+}
+
+/** sorts an array of strings by longest to shortest */
+// TODO: option to sort by shortest to longest
+export function sortByLongestStrings<Strings extends string[]>(
+	strings: Narrow<Strings>
+): SortLongestStrings<Strings> {
+	return strings.sort((string) => string.length) as never
 }
