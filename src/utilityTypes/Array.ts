@@ -1,6 +1,8 @@
 import { NoUncheckedIndexedAccess } from './misc'
-import { Decrement, Enumerate, Increment, IsGreaterThan } from './Number'
+import { Add, Decrement, Enumerate, Increment, IsGreaterThan, Subtract } from './Number'
 import { Flatten } from 'ts-toolbelt/out/List/Flatten'
+import { Take } from 'ts-toolbelt/out/List/Take'
+import { Length } from 'ts-toolbelt/out/String/Length'
 
 type _BuildPowersOf2LengthArrays<
 	Length extends number,
@@ -149,3 +151,44 @@ export type LengthGreaterThan<Array extends unknown[], Length extends number> = 
 	Array['length'],
 	Length
 >
+
+export type Splice<
+	Array extends unknown[],
+	StartIndex extends number,
+	DeleteCount extends number = Subtract<Array['length'], StartIndex>
+> = [
+	...Take<Array, StartIndex>,
+	...Take<
+		Array,
+		// @ts-expect-error see add doco
+		Add<StartIndex, DeleteCount>,
+		'<-'
+	>
+]
+
+type _IndexOfLongestString<
+	Strings extends string[],
+	CurrentIndex extends number,
+	CurrentLongestIndex extends number
+> = Strings[CurrentIndex] extends undefined
+	? CurrentLongestIndex
+	: _IndexOfLongestString<
+			Strings,
+			// @ts-expect-error see increment doco
+			Increment<CurrentIndex>,
+			IsGreaterThan<
+				Length<Strings[CurrentIndex]>,
+				Length<Strings[CurrentLongestIndex]>
+			> extends true
+				? CurrentIndex
+				: CurrentLongestIndex
+	  >
+
+/**
+ * gets the index of the longest string type in an array of strings
+ * @example
+ * type Foo = IndexOfLongestString<['foo', 'barbaz', 'qux']> //1
+ */
+export type IndexOfLongestString<Strings extends string[]> = Strings extends []
+	? undefined
+	: _IndexOfLongestString<Strings, 0, 0>
