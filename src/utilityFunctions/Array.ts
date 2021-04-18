@@ -1,5 +1,7 @@
 import {
 	IndexOf,
+	IndexOfLongestString,
+	Splice,
 	TupleOf,
 	TupleOfAtLeast,
 	TupleOfUpTo,
@@ -182,4 +184,47 @@ export function flat<Array extends readonly unknown[], Depth extends number = 1>
 	depth?: Depth
 ): Flatten<Array, 1, Depth> {
 	return array.flat(depth) as never
+}
+
+export function splice<
+	Array extends unknown[],
+	StartIndex extends number,
+	DeleteCount extends number
+>(
+	array: Narrow<Array>,
+	startIndex: StartIndex,
+	deleteCount: DeleteCount
+): Splice<Array, StartIndex, DeleteCount> {
+	return array.splice(startIndex, deleteCount) as never
+}
+
+/**
+ * runs the given `predicate` on each value in the given `array`, and returns the index of the first value in the `array`
+ * that returned the highest number
+ * @param array the values to execute `predicate` on
+ * @param predicate the callback to execute on each value in the `array`
+ * @example
+ * const foo = findIndexWithHighestNumber(['foo', 'barbaz', 'qux'], value => value.length) //1
+ */
+export function findIndexWithHighestNumber<T extends unknown[]>(
+	array: Narrow<T>,
+	predicate: (value: T[number]) => number
+): T extends [] ? undefined : number {
+	if (lengthIs(array, 0)) return undefined as never
+	let highestNumber = 0
+	let result = 0
+	array.forEach((value, index) => {
+		const newNumber = predicate(value)
+		if (newNumber > highestNumber) {
+			highestNumber = newNumber
+			result = index
+		}
+	})
+	return result as never
+}
+
+export function indexOfLongestString<Strings extends string[]>(
+	strings: Narrow<Strings>
+): IndexOfLongestString<Strings> {
+	return findIndexWithHighestNumber(strings, (string) => string.length) as never
 }

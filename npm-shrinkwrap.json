@@ -34,6 +34,7 @@
         "prettier": "2.2.1",
         "rimraf": "^3.0.2",
         "source-map-support": "^0.5.19",
+        "throw-expression": "^1.0.2",
         "typed-nodejs-assert": "^1.1.0",
         "typescript": "^4.3.0-dev.20210406"
       }
@@ -7015,6 +7016,12 @@
       "resolved": "https://registry.npmjs.org/throat/-/throat-5.0.0.tgz",
       "integrity": "sha512-fcwX4mndzpLQKBS1DVYhGAcYaYt7vsHNIvQV+WXMvnow5cgjPphq5CaayLaGsjRdSCKZFNGt7/GYAuXaNOiYCA=="
     },
+    "node_modules/throw-expression": {
+      "version": "1.0.2",
+      "resolved": "https://registry.npmjs.org/throw-expression/-/throw-expression-1.0.2.tgz",
+      "integrity": "sha512-y8cHYZgp0Vj8bRMQSWAA7pfHj1JPift81tZM9i/rHQuJoYEv9kewjEpRu2wRRuXRaClFWWzWQFTG3Q9rDysyNQ==",
+      "dev": true
+    },
     "node_modules/tmpl": {
       "version": "1.0.4",
       "resolved": "https://registry.npmjs.org/tmpl/-/tmpl-1.0.4.tgz",
@@ -13096,6 +13103,12 @@
       "version": "5.0.0",
       "resolved": "https://registry.npmjs.org/throat/-/throat-5.0.0.tgz",
       "integrity": "sha512-fcwX4mndzpLQKBS1DVYhGAcYaYt7vsHNIvQV+WXMvnow5cgjPphq5CaayLaGsjRdSCKZFNGt7/GYAuXaNOiYCA=="
+    },
+    "throw-expression": {
+      "version": "1.0.2",
+      "resolved": "https://registry.npmjs.org/throw-expression/-/throw-expression-1.0.2.tgz",
+      "integrity": "sha512-y8cHYZgp0Vj8bRMQSWAA7pfHj1JPift81tZM9i/rHQuJoYEv9kewjEpRu2wRRuXRaClFWWzWQFTG3Q9rDysyNQ==",
+      "dev": true
     },
     "tmpl": {
       "version": "1.0.4",
