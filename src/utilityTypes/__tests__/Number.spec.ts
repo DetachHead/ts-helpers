@@ -1,4 +1,4 @@
-import { Add, Divide, IsGreaterThan, Multiply, Subtract } from '../Number'
+import { Add, Divide, HighestNumber, IsGreaterThan, Multiply, Subtract } from '../Number'
 import { testType } from '../../utilityFunctions/misc'
 
 test('multiply', () => {
@@ -53,4 +53,12 @@ describe('IsGreaterThan', () => {
 		// @ts-expect-error wrong value
 		testType<IsGreaterThan<5000, 5000>>(true)
 	})
+})
+
+test('HighestNumber', () => {
+	testType<HighestNumber<1 | 3 | 6 | 2>>(6)
+	testType<HighestNumber<1 | 3 | 6 | 2>>(
+		// @ts-expect-error wrong value
+		2
+	)
 })
