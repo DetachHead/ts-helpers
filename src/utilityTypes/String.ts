@@ -1,10 +1,11 @@
 import { Primitive } from 'utility-types'
-import { Add, Decrement, Enumerate, Increment, Subtract } from './Number'
+import { Add, Decrement, Increment, Subtract } from './Number'
 import { Length } from 'ts-toolbelt/out/String/Length'
 import { IsNever } from 'tsdef'
 import { Cast } from 'ts-toolbelt/out/Any/Cast'
-import { TupleOf } from './Array'
+import { IndexOfLongestString, TupleOf } from './Array'
 import { Keys } from './Any'
+import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
 
 /**
  * a type that can be converted to a string in a template literal type
@@ -318,5 +319,10 @@ export type EnumerateAsString<Num extends number> = Keys<TupleOf<never, Num>>
  * with numbers
  */
 export type RangeAsString<From extends number, To extends number> =
-	| Exclude<EnumerateAsString<To>, Enumerate<From>>
-	| To
+	| Exclude<EnumerateAsString<To>, EnumerateAsString<From>>
+	| ToString<To>
+
+/** gets the longest string in a union of strings */
+export type LongestString<Strings extends string> = ListOf<Strings>[IndexOfLongestString<
+	ListOf<Strings>
+>]

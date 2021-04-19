@@ -176,7 +176,7 @@ export type RemoveIndex<Array extends unknown[], RemoveIndex extends Index<Array
 >
 
 type _IndexOfLongestString<
-	Strings extends string[],
+	Strings extends readonly string[],
 	CurrentIndex extends number,
 	CurrentLongestIndex extends number
 > = Strings[CurrentIndex] extends undefined
@@ -198,7 +198,7 @@ type _IndexOfLongestString<
  * @example
  * type Foo = IndexOfLongestString<['foo', 'barbaz', 'qux']> //1
  */
-export type IndexOfLongestString<Strings extends string[]> = Strings extends []
+export type IndexOfLongestString<Strings extends readonly string[]> = Strings extends []
 	? undefined
 	: number extends Strings['length']
 	? number
