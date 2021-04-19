@@ -1,6 +1,7 @@
 import { Equals } from './misc'
-import { TupleOf } from './Array'
+import { IndexOfHighestNumber, TupleOf } from './Array'
 import { PadStart, Tail, ToString } from './String'
+import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
 
 type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
 	? ((t: T, ...a: A) => void) extends (...x: infer X) => void
@@ -197,3 +198,8 @@ export type IsGreaterThan<Num1 extends number, Num2 extends number> = TupleOf<ne
 ]
 	? true
 	: false
+
+/** gets the highest number in a union of numbers */
+export type HighestNumber<Numbers extends number> = ListOf<Numbers>[IndexOfHighestNumber<
+	ListOf<Numbers>
+>]
