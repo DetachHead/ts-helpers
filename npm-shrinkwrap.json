@@ -1,12 +1,12 @@
 {
   "name": "@detachhead/ts-helpers",
-  "version": "6.3.0",
+  "version": "6.4.0",
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
     "": {
       "name": "@detachhead/ts-helpers",
-      "version": "6.3.0",
+      "version": "6.4.0",
       "license": "ISC",
       "dependencies": {
         "@types/lodash": "^4.14.167",
