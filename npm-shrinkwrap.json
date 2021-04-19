@@ -10,6 +10,7 @@
       "license": "ISC",
       "dependencies": {
         "@types/lodash": "^4.14.167",
+        "date-fns": "^2.21.1",
         "lodash": "^4.17.20",
         "ordinal": "^1.0.3",
         "ts-jest": "^26.4.4",
@@ -2015,6 +2016,18 @@
       },
       "engines": {
         "node": ">=10"
+      }
+    },
+    "node_modules/date-fns": {
+      "version": "2.21.1",
+      "resolved": "https://registry.npmjs.org/date-fns/-/date-fns-2.21.1.tgz",
+      "integrity": "sha512-m1WR0xGiC6j6jNFAyW4Nvh4WxAi4JF4w9jRJwSI8nBmNcyZXPcP9VUQG+6gHQXAmqaGEKDKhOqAtENDC941UkA==",
+      "engines": {
+        "node": ">=0.11"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/date-fns"
       }
     },
     "node_modules/debug": {
@@ -9261,6 +9274,11 @@
         "whatwg-mimetype": "^2.3.0",
         "whatwg-url": "^8.0.0"
       }
+    },
+    "date-fns": {
+      "version": "2.21.1",
+      "resolved": "https://registry.npmjs.org/date-fns/-/date-fns-2.21.1.tgz",
+      "integrity": "sha512-m1WR0xGiC6j6jNFAyW4Nvh4WxAi4JF4w9jRJwSI8nBmNcyZXPcP9VUQG+6gHQXAmqaGEKDKhOqAtENDC941UkA=="
     },
     "debug": {
       "version": "4.3.1",
