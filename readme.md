@@ -36,3 +36,17 @@ there's also `lengthLessThan`, `lengthGreaterOrEqual`, etc.
 
 most of the array functions in this library keep track of the length, mostly thanks
 to [this `TupleOf` utility type](https://github.com/microsoft/TypeScript/issues/26223#issuecomment-674514787)
+
+### date formatter type
+
+this library contains a helper type and function for formatting dates using
+the [`date-fns`](https://date-fns.org/v2.21.1/docs/format) format.
+
+```ts
+const date = formatDate(new Date(), 'dd-MM-yyyy')
+
+assert(date === '01/01/2021') //compile error, wrong date format
+```
+
+you can use any date format that `date-fns` accepts, and the `FormatDate` utility type will generate a template literal
+type to match your desired date format.
