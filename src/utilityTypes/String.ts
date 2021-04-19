@@ -256,6 +256,21 @@ export type PadStart<
 	  }[String]
 
 /**
+ * takes a `String` and a `MatchString` (ideally a union) and returns the string in the union that `String` started with
+ * @example
+ * type Foo: MatchStart<'foo', 'bar' | 'foo' | 'baz'>
+ */
+export type MatchStart<String extends string, MatchString extends string> = string extends
+	| String
+	| MatchString
+	? string
+	: String extends `${MatchString}${infer End}`
+	? String extends `${infer Start}${End}`
+		? Start
+		: never
+	: never
+
+/**
  * `true` if `Full` starts with the given `CheckStart`, else `false`
  */
 export type StartsWith<Full extends string, CheckStart extends string> = string extends
