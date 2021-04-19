@@ -176,7 +176,7 @@ export type LeadingZeros<Num extends number, Length extends number> = number ext
  * type First = Ordinal<1> //1st
  * type Third = Ordinal<3> //3rd
  */
-export type Ordinal<T extends number> = number extends T
+export type Ordinal<T extends number = number> = number extends T
 	? `${number}${'st' | 'nd' | 'rd' | 'th'}`
 	: {
 			[Num in T]: `${Num}${Modulo<Num, 20> extends infer Mod
