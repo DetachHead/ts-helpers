@@ -188,6 +188,7 @@ export function flat<Array extends readonly unknown[], Depth extends number = 1>
 	return array.flat(depth) as never
 }
 
+/** removes `deleteCount` values from `array` starting at `startIndex` */
 export function splice<
 	Array extends unknown[],
 	StartIndex extends number,
