@@ -182,9 +182,9 @@ export declare type Replace<
  * replaces the first instance of `Find` with `ReplaceWith`. the type equivalent of {@link String.prototype.replace}
  */
 export type ReplaceOne<
-	String extends string,
-	Find extends string,
-	ReplaceWith extends string
+	String extends TemplateLiteralStringable,
+	Find extends TemplateLiteralStringable,
+	ReplaceWith extends TemplateLiteralStringable
 > = String extends `${infer Start}${Find}${infer End}` ? `${Start}${ReplaceWith}${End}` : String
 
 /**
