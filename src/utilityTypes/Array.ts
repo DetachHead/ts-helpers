@@ -219,3 +219,25 @@ export type SortLongestStrings<Array extends string[]> = Array extends TupleOfUp
 				>
 			>
 	  ]
+
+type _IndexOfHighestNumber<
+	Numbers extends readonly number[],
+	CurrentIndex extends number,
+	CurrentHighestNumberIndex extends number
+> = CurrentIndex extends Numbers['length']
+	? CurrentHighestNumberIndex
+	: _IndexOfHighestNumber<
+			Numbers,
+			// @ts-expect-error see Increment doco
+			Increment<CurrentIndex>,
+			IsGreaterThan<Numbers[CurrentIndex], CurrentHighestNumberIndex> extends true
+				? CurrentIndex
+				: CurrentHighestNumberIndex
+	  >
+
+/** gets the index of the largest number in an array type */
+export type IndexOfHighestNumber<Numbers extends readonly number[]> = _IndexOfHighestNumber<
+	Numbers,
+	0,
+	0
+>
