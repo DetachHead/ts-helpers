@@ -10,6 +10,7 @@ import {
 } from '../utilityTypes/Array'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import { Flatten } from 'ts-toolbelt/out/List/Flatten'
+import { orderBy } from 'lodash'
 
 /**
  * checks whether the given array's length is larger than **or equal to** the given number, and narrows the type of the
@@ -196,7 +197,7 @@ export function splice<
 	startIndex: StartIndex,
 	deleteCount: DeleteCount
 ): Splice<Array, StartIndex, DeleteCount> {
-	return array.splice(startIndex, deleteCount) as never
+	return array.filter((_, index) => index < startIndex || index > deleteCount + 1) as never
 }
 
 /**
@@ -235,5 +236,5 @@ export function indexOfLongestString<Strings extends string[]>(
 export function sortByLongestStrings<Strings extends string[]>(
 	strings: Narrow<Strings>
 ): SortLongestStrings<Strings> {
-	return strings.sort((string) => string.length) as never
+	return orderBy(strings, 'length', 'desc') as never
 }
