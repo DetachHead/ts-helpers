@@ -20,7 +20,7 @@ issue:
 
 ```ts
 if (foo.length > 2) {
-	const bar: string = foo[1] //error: string | undefined not assignable to string
+  const bar: string = foo[1] //error: string | undefined not assignable to string
 }
 ```
 
@@ -30,7 +30,7 @@ can be solved with `lengthGreaterThan`
 import { lengthGreaterThan } from '@detachhead/ts-helpers'
 
 if (lengthGreaterThan(foo, 2)) {
-	const bar: string = foo[1] //no error, foo is casted to [string, string]
+  const bar: string = foo[1] //no error, foo is casted to [string, string]
 }
 ```
 

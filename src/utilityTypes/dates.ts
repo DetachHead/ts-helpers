@@ -1,13 +1,13 @@
 import { Enumerate, LeadingZeros, Ordinal, RangeType } from './Number'
 import {
-	EnumerateAsString,
-	IndexOf,
-	LongestString,
-	MatchStart,
-	PadStart,
-	RangeAsString,
-	TrimEnd,
-	TrimStart,
+  EnumerateAsString,
+  IndexOf,
+  LongestString,
+  MatchStart,
+  PadStart,
+  RangeAsString,
+  TrimEnd,
+  TrimStart,
 } from './String'
 import { Length } from 'ts-toolbelt/out/String/Length'
 import { Head } from 'ts-toolbelt/out/List/Head'
