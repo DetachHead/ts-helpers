@@ -8,8 +8,8 @@
     "test": "jest",
     "lint:check": "eslint src --ext .ts",
     "lint:fix": "npm run lint:check -- --fix",
-    "format:check": "prettier --check src/**/*",
-    "format:fix": "prettier --write src/**/*",
+    "format:check": "prettier --check .",
+    "format:fix": "prettier --write .",
     "build": "rimraf ./dist && tsc -p tsconfig.build.json"
   },
   "keywords": [],
