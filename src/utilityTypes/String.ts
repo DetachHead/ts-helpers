@@ -1,11 +1,14 @@
 import { Primitive } from 'utility-types'
 import { Add, Decrement, Increment, Subtract } from './Number'
 import { Length } from 'ts-toolbelt/out/String/Length'
-import { IsNever } from 'tsdef'
+import { AnyKey, IsNever } from 'tsdef'
 import { Cast } from 'ts-toolbelt/out/Any/Cast'
 import { IndexOfLongestString, TupleOf } from './Array'
 import { Keys } from './Any'
 import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
+import { Join } from 'ts-toolbelt/out/String/Join'
+import { Head as ArrayHead } from 'ts-toolbelt/out/List/Head'
+import { Tail as ArrayTail } from 'ts-toolbelt/out/List/Tail'
 
 /**
  * a type that can be converted to a string in a template literal type
@@ -291,34 +294,43 @@ export type EndsWith<Full extends string, CheckEnd extends string> = string exte
   : false
 
 /** a map of values where the keys are to be replaced by the values in {@link ReplaceValuesWithMap} */
-type ReplaceValuesMap = [TemplateLiteralStringable, TemplateLiteralStringable][]
+type ReplaceValuesMap = Record<Exclude<AnyKey, symbol>, unknown>
 
-type _ReplaceValuesWithMap<
-  Value extends string,
-  Map extends ReplaceValuesMap,
-  CurrentIndex extends number
-> = CurrentIndex extends Map['length']
-  ? Value
-  : _ReplaceValuesWithMap<
-      Replace<Value, Map[CurrentIndex][0], Map[CurrentIndex][1]>,
-      Map,
-      // @ts-expect-error see Increment documentation
-      Increment<CurrentIndex>
-    >
+type _TokenizeString<Value extends string, Map extends ReplaceValuesMap> = '' extends Value
+  ? []
+  : LongestString<MatchStart<Value, Keys<Map>>> extends infer Token
+  ? Token extends string
+    ? [Token, ..._TokenizeString<TrimStart<Value, Length<Token>>, Map>]
+    : IndexOf<Value, Keys<Map>> extends infer NextTokenIndex
+    ? NextTokenIndex extends -1
+      ? [Value]
+      : [
+          TrimEnd<
+            Value,
+            // @ts-expect-error i think there's a bug in ts with inferred generics not narrowing properly
+            NextTokenIndex
+          >,
+          ..._TokenizeString<TrimStart<Value, IndexOf<Value, Keys<Map>>>, Map>
+        ]
+    : never
+  : never
+
+type _ReplaceValuesWithMap<Value extends string[], Map extends ReplaceValuesMap> = Value extends []
+  ? []
+  : // @ts-expect-error stack depth error but it's fine
+    [
+      ArrayHead<Value> extends Keys<Map> ? Map[ArrayHead<Value>] : ArrayHead<Value>,
+      ..._ReplaceValuesWithMap<ArrayTail<Value>, Map>
+    ]
 
 /**
  * replaces all instances in `Value` of the first string with the second string with each tuple in `Map`
- *
- * note: this type uses a 2d array and not an object because as far as i can tell there's no way to iterate over the
- * keys in an object in the types realm
- *
  * @example
- * type Foo = MapReplaceValues<'foobarbaz', [['foo', 'bar'], ['baz', 'qux']]> // "barbarqux"
+ * type Foo = MapReplaceValues<'foobarbaz', {foo: 'bar', baz: 'qux'}> // "barbarqux"
  */
-export type ReplaceValuesWithMap<
-  Value extends string,
-  Map extends ReplaceValuesMap
-> = _ReplaceValuesWithMap<Value, Map, 0>
+export type ReplaceValuesWithMap<Format extends string, Map extends ReplaceValuesMap> =
+  // @ts-expect-error stack depth error but it's fine
+  Join<_ReplaceValuesWithMap<_TokenizeString<Format, Map>, Map>>
 
 /**
  * a stringified version of {@link Enumerate}
