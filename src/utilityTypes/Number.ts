@@ -4,14 +4,14 @@ import { PadStart, Tail, ToString } from './String'
 import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
 
 type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
-	? ((t: T, ...a: A) => void) extends (...x: infer X) => void
-		? X
-		: never
-	: never
+  ? ((t: T, ...a: A) => void) extends (...x: infer X) => void
+    ? X
+    : never
+  : never
 
 type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['length']
-	? A
-	: _Enumerate<_PrependNextNum<A>, N>
+  ? A
+  : _Enumerate<_PrependNextNum<A>, N>
 
 /**
  * creates a union type of numbers from 0 to generic `N`
@@ -30,8 +30,8 @@ export type Enumerate<N extends number> = _Enumerate<[], N> extends (infer E)[] 
  * @see https://stackoverflow.com/a/63918062
  */
 export type RangeType<FROM extends number, TO extends number> =
-	| Exclude<Enumerate<TO>, Enumerate<FROM>>
-	| TO
+  | Exclude<Enumerate<TO>, Enumerate<FROM>>
+  | TO
 
 // TODO: figure out a way to make Add and Subtract work with negative numbers
 
@@ -45,8 +45,8 @@ export type RangeType<FROM extends number, TO extends number> =
  * type Foo = Add<2, 3> //5
  */
 export type Add<N1 extends number, N2 extends number> = [
-	...TupleOf<never, N1>,
-	...TupleOf<never, N2>
+  ...TupleOf<never, N1>,
+  ...TupleOf<never, N2>
 ]['length']
 
 /**
@@ -55,26 +55,26 @@ export type Add<N1 extends number, N2 extends number> = [
  * type Foo = Subtract<5, 2> //3
  */
 export type Subtract<N1 extends number, N2 extends number> = TupleOf<never, N1> extends [
-	...TupleOf<never, N2>,
-	...infer R
+  ...TupleOf<never, N2>,
+  ...infer R
 ]
-	? R['length']
-	: never
+  ? R['length']
+  : never
 
 // TODO: figure out how to do Multiply and Divide logarithmically like TupleOf so it doesn't fail on numbers > 40
 
 type _MultiAdd<
-	Number extends number,
-	Accumulator extends number,
-	IterationsLeft extends number
+  Number extends number,
+  Accumulator extends number,
+  IterationsLeft extends number
 > = IterationsLeft extends 0
-	? Accumulator
-	: _MultiAdd<
-			Number,
-			// @ts-expect-error see documentation for Add type
-			Add<Number, Accumulator>,
-			Decrement<IterationsLeft>
-	  >
+  ? Accumulator
+  : _MultiAdd<
+      Number,
+      // @ts-expect-error see documentation for Add type
+      Add<Number, Accumulator>,
+      Decrement<IterationsLeft>
+    >
 
 /**
  * multiplies `N1` by `N2`
@@ -85,38 +85,38 @@ type _MultiAdd<
  * @see https://itnext.io/implementing-arithmetic-within-typescripts-type-system-a1ef140a6f6f
  */
 export type Multiply<N1 extends number, N2 extends number> = {
-	[K2 in N2]: { [K1 in N1]: _MultiAdd<K1, 0, N2> }[N1]
+  [K2 in N2]: { [K1 in N1]: _MultiAdd<K1, 0, N2> }[N1]
 }[N2]
 
 type _AtTerminus<Dividee extends number, Divider extends number> = Dividee extends 0
-	? true
-	: Divider extends 0
-	? true
-	: false
+  ? true
+  : Divider extends 0
+  ? true
+  : false
 
 type _LessThanTerminus<Dividee extends number, Divider extends number> = _AtTerminus<
-	Dividee,
-	Divider
+  Dividee,
+  Divider
 > extends true
-	? Equals<Dividee, Divider> extends true
-		? false
-		: Dividee extends 0
-		? true
-		: false
-	: _LessThanTerminus<Decrement<Dividee>, Decrement<Divider>>
+  ? Equals<Dividee, Divider> extends true
+    ? false
+    : Dividee extends 0
+    ? true
+    : false
+  : _LessThanTerminus<Decrement<Dividee>, Decrement<Divider>>
 
 type _MultiSub<
-	Dividee extends number,
-	Divider extends number,
-	QuotientAccumulator extends number
+  Dividee extends number,
+  Divider extends number,
+  QuotientAccumulator extends number
 > = _LessThanTerminus<Dividee, Divider> extends true
-	? QuotientAccumulator
-	: _MultiSub<
-			Subtract<Dividee, Divider>,
-			Divider,
-			// @ts-expect-error see documentation for Increment type
-			Increment<QuotientAccumulator>
-	  >
+  ? QuotientAccumulator
+  : _MultiSub<
+      Subtract<Dividee, Divider>,
+      Divider,
+      // @ts-expect-error see documentation for Increment type
+      Increment<QuotientAccumulator>
+    >
 
 /**
  * divides `N1` by `N2`
@@ -127,7 +127,7 @@ type _MultiSub<
  * @see https://itnext.io/implementing-arithmetic-within-typescripts-type-system-a1ef140a6f6f
  */
 export type Divide<N1 extends number, N2 extends number> = {
-	[K2 in N2]: { [K1 in N1]: _MultiSub<K1, K2, 0> }[N1]
+  [K2 in N2]: { [K1 in N1]: _MultiSub<K1, K2, 0> }[N1]
 }[N2]
 
 /**
@@ -137,8 +137,8 @@ export type Divide<N1 extends number, N2 extends number> = {
  * @see https://itnext.io/implementing-arithmetic-within-typescripts-type-system-a1ef140a6f6f
  */
 export type Modulo<N1 extends number, N2 extends number> = _LessThanTerminus<N1, N2> extends true
-	? N1
-	: Modulo<Subtract<N1, N2>, N2>
+  ? N1
+  : Modulo<Subtract<N1, N2>, N2>
 
 /**
  * checks whether a number is positive or negative
@@ -165,10 +165,10 @@ export type Decrement<T extends number> = Subtract<T, 1>
  * type Bar = LeadingZeros<-12, 5> //'-00012'
  */
 export type LeadingZeros<Num extends number, Length extends number> = number extends Num | Length
-	? ToString<number>
-	: IsPositive<Num> extends true
-	? PadStart<ToString<Num>, Length, '0'>
-	: `-${PadStart<Tail<ToString<Num>>, Length, '0'>}`
+  ? ToString<number>
+  : IsPositive<Num> extends true
+  ? PadStart<ToString<Num>, Length, '0'>
+  : `-${PadStart<Tail<ToString<Num>>, Length, '0'>}`
 
 /**
  * creates a stringified ordinal value for the given number
@@ -177,29 +177,29 @@ export type LeadingZeros<Num extends number, Length extends number> = number ext
  * type Third = Ordinal<3> //3rd
  */
 export type Ordinal<T extends number = number> = number extends T
-	? `${number}${'st' | 'nd' | 'rd' | 'th'}`
-	: {
-			[Num in T]: `${Num}${Modulo<Num, 20> extends infer Mod
-				? Mod extends 1
-					? 'st'
-					: Mod extends 2
-					? 'nd'
-					: Mod extends 3
-					? 'rd'
-					: 'th'
-				: never}`
-	  }[T]
+  ? `${number}${'st' | 'nd' | 'rd' | 'th'}`
+  : {
+      [Num in T]: `${Num}${Modulo<Num, 20> extends infer Mod
+        ? Mod extends 1
+          ? 'st'
+          : Mod extends 2
+          ? 'nd'
+          : Mod extends 3
+          ? 'rd'
+          : 'th'
+        : never}`
+    }[T]
 
 /** `true` if `Num1` is greater than `Num2`, else `false` */
 export type IsGreaterThan<Num1 extends number, Num2 extends number> = TupleOf<never, Num1> extends [
-	never,
-	...TupleOf<never, Num2>,
-	...never[]
+  never,
+  ...TupleOf<never, Num2>,
+  ...never[]
 ]
-	? true
-	: false
+  ? true
+  : false
 
 /** gets the highest number in a union of numbers */
 export type HighestNumber<Numbers extends number> = ListOf<Numbers>[IndexOfHighestNumber<
-	ListOf<Numbers>
+  ListOf<Numbers>
 >]
