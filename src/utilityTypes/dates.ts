@@ -36,32 +36,32 @@ type ShortMonth = LeadingZeros<MonthNumber, 2>
 type OrdinalMonth = Ordinal<MonthNumber>
 
 type ShortNamedMonth =
-	| 'Jan'
-	| 'Feb'
-	| 'Mar'
-	| 'Apr'
-	| 'May'
-	| 'Jun'
-	| 'Jul'
-	| 'Aug'
-	| 'Sep'
-	| 'Oct'
-	| 'Nov'
-	| 'Dec'
+  | 'Jan'
+  | 'Feb'
+  | 'Mar'
+  | 'Apr'
+  | 'May'
+  | 'Jun'
+  | 'Jul'
+  | 'Aug'
+  | 'Sep'
+  | 'Oct'
+  | 'Nov'
+  | 'Dec'
 
 type LongNamedMonth =
-	| 'January'
-	| 'February'
-	| 'March'
-	| 'April'
-	| 'May'
-	| 'June'
-	| 'July'
-	| 'August'
-	| 'September'
-	| 'October'
-	| 'November'
-	| 'December'
+  | 'January'
+  | 'February'
+  | 'March'
+  | 'April'
+  | 'May'
+  | 'June'
+  | 'July'
+  | 'August'
+  | 'September'
+  | 'October'
+  | 'November'
+  | 'December'
 
 type InitialMonth = 'J' | 'F' | 'M' | 'A' | 'S' | 'O' | 'N' | 'D'
 
@@ -91,13 +91,13 @@ type BiggerDayOfYear = number
 type MediumDayOfWeek = 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun'
 
 type LongDayOfWeek =
-	| 'Monday'
-	| 'Tuesday'
-	| 'Wednesday'
-	| 'Thursday'
-	| 'Friday'
-	| 'Saturday'
-	| 'Sunday'
+  | 'Monday'
+  | 'Tuesday'
+  | 'Wednesday'
+  | 'Thursday'
+  | 'Friday'
+  | 'Saturday'
+  | 'Sunday'
 
 type InitialDayOfWeek = 'M' | 'T' | 'W' | 'F' | 'S'
 
@@ -174,12 +174,12 @@ type BiggerLocalizedDate = `${LongDayOfWeek}, ${LongNamedMonth} ${DayOfMonth}th,
 type ShortLocalizedTime = `${RangeType<1, 12>}:${MinuteOrSecond} ${AMorPM}`
 
 type ShortLocalizedTimeWithMilliseconds = `${RangeType<
-	1,
-	12
+  1,
+  12
 >}:${MinuteOrSecond}:${MinuteOrSecond} ${AMorPM}`
 
 type ShortLocalizedTimeWithMillisecondsAndTimezone = `${ShortLocalizedTimeWithMilliseconds} ${
-	string /* TODO: proper timezone types*/
+  string /* TODO: proper timezone types*/
 }`
 
 // TODO: fix these. TS2590: Expression produces a union type that is too complex to represent.
@@ -187,265 +187,265 @@ type ShortDateAndTime = string // `${ShortLocalizedDate} ${ShortLocalizedTime}`
 type OrdinalDateAndTimeWithMilliseconds = string // `${OrdinalLocalizedDate} ${ShortLocalizedTimeWithMilliseconds}`
 
 interface FormatMap {
-	// Era
-	GGGGG: 'A' | 'B'
-	GGGG: 'Anno Domini' | 'Before Christ'
-	GGG: ShortEra
-	GG: ShortEra
-	G: ShortEra
+  // Era
+  GGGGG: 'A' | 'B'
+  GGGG: 'Anno Domini' | 'Before Christ'
+  GGG: ShortEra
+  GG: ShortEra
+  G: ShortEra
 
-	// Calendar year:
-	yyyy: LongYear
-	yyy: MediumYear
-	yy: ShortYear
-	yo: OrdinalYear
-	y: number
+  // Calendar year:
+  yyyy: LongYear
+  yyy: MediumYear
+  yy: ShortYear
+  yo: OrdinalYear
+  y: number
 
-	// Local week-numbering year
-	YYYY: LongYear
-	YYY: MediumYear
-	YY: ShortYear
-	Yo: OrdinalYear
-	Y: number
+  // Local week-numbering year
+  YYYY: LongYear
+  YYY: MediumYear
+  YY: ShortYear
+  Yo: OrdinalYear
+  Y: number
 
-	// ISO week-numbering year
-	RRRR: LongYear
-	RRR: MediumYear
-	RR: LeadingZeros<number, 2>
-	R: number
+  // ISO week-numbering year
+  RRRR: LongYear
+  RRR: MediumYear
+  RR: LeadingZeros<number, 2>
+  R: number
 
-	// Extended year
-	uuuu: LongYear
-	uuu: MediumYear
-	uu: LeadingZeros<number, 2>
-	u: number
+  // Extended year
+  uuuu: LongYear
+  uuu: MediumYear
+  uu: LeadingZeros<number, 2>
+  u: number
 
-	// Quarter (stand-alone)
-	qqqq: `${OrdinalQuarter} quarter`
-	qqq: `Q${Quarter}`
-	qq: LeadingZeros<Quarter, 2>
-	q: Quarter
+  // Quarter (stand-alone)
+  qqqq: `${OrdinalQuarter} quarter`
+  qqq: `Q${Quarter}`
+  qq: LeadingZeros<Quarter, 2>
+  q: Quarter
 
-	// Quarter (formatting)
-	QQQQ: `${OrdinalQuarter} quarter`
-	QQQ: `Q${Quarter}`
-	QQ: LeadingZeros<Quarter, 2>
-	Q: Quarter
+  // Quarter (formatting)
+  QQQQ: `${OrdinalQuarter} quarter`
+  QQQ: `Q${Quarter}`
+  QQ: LeadingZeros<Quarter, 2>
+  Q: Quarter
 
-	// Month (formatting)
-	M: RangeType<1, 12>
-	Mo: OrdinalMonth
-	MM: ShortMonth
-	MMM: ShortNamedMonth
-	MMMM: LongNamedMonth
-	MMMMM: InitialMonth
+  // Month (formatting)
+  M: RangeType<1, 12>
+  Mo: OrdinalMonth
+  MM: ShortMonth
+  MMM: ShortNamedMonth
+  MMMM: LongNamedMonth
+  MMMMM: InitialMonth
 
-	// Month (stand-alone)
-	L: RangeType<1, 12>
-	Lo: OrdinalMonth
-	LL: ShortMonth
-	LLL: ShortNamedMonth
-	LLLL: LongNamedMonth
-	LLLLL: InitialMonth
+  // Month (stand-alone)
+  L: RangeType<1, 12>
+  Lo: OrdinalMonth
+  LL: ShortMonth
+  LLL: ShortNamedMonth
+  LLLL: LongNamedMonth
+  LLLLL: InitialMonth
 
-	// Local week of year
-	w: ShortWeekOfYear
-	wo: OrdinalWeekOfYear
-	ww: ShortWeekOfYear
+  // Local week of year
+  w: ShortWeekOfYear
+  wo: OrdinalWeekOfYear
+  ww: ShortWeekOfYear
 
-	// ISO week of year
-	I: ShortWeekOfYear
-	Io: OrdinalWeekOfYear
-	II: ShortWeekOfYear
+  // ISO week of year
+  I: ShortWeekOfYear
+  Io: OrdinalWeekOfYear
+  II: ShortWeekOfYear
 
-	// Day of month
-	d: DayOfMonth
-	do: OrdinalDayOfMonth
-	dd: ShortDayOfMonth
+  // Day of month
+  d: DayOfMonth
+  do: OrdinalDayOfMonth
+  dd: ShortDayOfMonth
 
-	// Day of year
-	D: DayOfYear
-	Do: OrdinalDayOfYear
-	DD: ShortDayOfYear
-	DDD: MediumDayOfYear
-	DDDD: BiggerDayOfYear
+  // Day of year
+  D: DayOfYear
+  Do: OrdinalDayOfYear
+  DD: ShortDayOfYear
+  DDD: MediumDayOfYear
+  DDDD: BiggerDayOfYear
 
-	// Day of week (formatting)
-	E: MediumDayOfWeek
-	EE: MediumDayOfWeek
-	EEE: MediumDayOfWeek
-	EEEE: LongDayOfWeek
-	EEEEE: InitialDayOfWeek
-	EEEEEE: ShortDayOfWeek
+  // Day of week (formatting)
+  E: MediumDayOfWeek
+  EE: MediumDayOfWeek
+  EEE: MediumDayOfWeek
+  EEEE: LongDayOfWeek
+  EEEEE: InitialDayOfWeek
+  EEEEEE: ShortDayOfWeek
 
-	// ISO day of week (formatting)
-	i: NumberedDayOfWeek
-	io: OrdinalDayOfWeek
-	ii: ShortNumberedDayOfWeek
-	iii: MediumDayOfWeek
-	iiii: LongDayOfWeek
-	iiiii: InitialDayOfWeek
-	iiiiii: ShortDayOfWeek
+  // ISO day of week (formatting)
+  i: NumberedDayOfWeek
+  io: OrdinalDayOfWeek
+  ii: ShortNumberedDayOfWeek
+  iii: MediumDayOfWeek
+  iiii: LongDayOfWeek
+  iiiii: InitialDayOfWeek
+  iiiiii: ShortDayOfWeek
 
-	// Local day of week (formatting)
-	e: NumberedDayOfWeek
-	eo: OrdinalDayOfWeek
-	ee: ShortNumberedDayOfWeek
-	eee: MediumDayOfWeek
-	eeee: LongDayOfWeek
-	eeeee: InitialDayOfWeek
-	eeeeee: ShortDayOfWeek
+  // Local day of week (formatting)
+  e: NumberedDayOfWeek
+  eo: OrdinalDayOfWeek
+  ee: ShortNumberedDayOfWeek
+  eee: MediumDayOfWeek
+  eeee: LongDayOfWeek
+  eeeee: InitialDayOfWeek
+  eeeeee: ShortDayOfWeek
 
-	// Local day of week (stand-alone)
-	c: NumberedDayOfWeek
-	co: OrdinalDayOfWeek
-	cc: ShortNumberedDayOfWeek
-	ccc: MediumDayOfWeek
-	cccc: LongDayOfWeek
-	ccccc: InitialDayOfWeek
-	cccccc: ShortDayOfWeek
+  // Local day of week (stand-alone)
+  c: NumberedDayOfWeek
+  co: OrdinalDayOfWeek
+  cc: ShortNumberedDayOfWeek
+  ccc: MediumDayOfWeek
+  cccc: LongDayOfWeek
+  ccccc: InitialDayOfWeek
+  cccccc: ShortDayOfWeek
 
-	// AM, PM
-	a: AMorPM
-	aa: AMorPM
-	aaa: Lowercase<AMorPM>
-	aaaa: PunctuatedAMorPM
-	aaaaa: InitialAMorPM
+  // AM, PM
+  a: AMorPM
+  aa: AMorPM
+  aaa: Lowercase<AMorPM>
+  aaaa: PunctuatedAMorPM
+  aaaaa: InitialAMorPM
 
-	// AM, PM, noon, midnight
-	b: AMorPM | NoonOrMidnight
-	bb: AMorPM | NoonOrMidnight
-	bbb: Lowercase<AMorPM> | NoonOrMidnight
-	bbbb: PunctuatedAMorPM | NoonOrMidnight
-	bbbbb: InitialAMorPM | NoonOrMidnight
+  // AM, PM, noon, midnight
+  b: AMorPM | NoonOrMidnight
+  bb: AMorPM | NoonOrMidnight
+  bbb: Lowercase<AMorPM> | NoonOrMidnight
+  bbbb: PunctuatedAMorPM | NoonOrMidnight
+  bbbbb: InitialAMorPM | NoonOrMidnight
 
-	// Flexible day period
-	B: FlexibleDayPeriod
-	BB: FlexibleDayPeriod
-	BBB: FlexibleDayPeriod
-	BBBB: FlexibleDayPeriod
-	BBBBB: FlexibleDayPeriod
+  // Flexible day period
+  B: FlexibleDayPeriod
+  BB: FlexibleDayPeriod
+  BBB: FlexibleDayPeriod
+  BBBB: FlexibleDayPeriod
+  BBBBB: FlexibleDayPeriod
 
-	// Hour [1-12]
-	h: Hour1to12
-	ho: OrdinalHour1to12
-	hh: ShortHour1to12
+  // Hour [1-12]
+  h: Hour1to12
+  ho: OrdinalHour1to12
+  hh: ShortHour1to12
 
-	// Hour [0-23]
-	H: Hour0to23
-	Ho: OrdinalHour0to23
-	HH: ShortHour0to23
+  // Hour [0-23]
+  H: Hour0to23
+  Ho: OrdinalHour0to23
+  HH: ShortHour0to23
 
-	// Hour [0-11]
-	K: Hour0to11
-	Ko: OrdinalHour0to11
-	KK: ShortHour0to11
+  // Hour [0-11]
+  K: Hour0to11
+  Ko: OrdinalHour0to11
+  KK: ShortHour0to11
 
-	// Hour [0-24]
-	k: Hour0to24
-	ko: OrdinalHour0to24
-	kk: ShortHour0to24
+  // Hour [0-24]
+  k: Hour0to24
+  ko: OrdinalHour0to24
+  kk: ShortHour0to24
 
-	// Minute
-	m: MinuteOrSecond
-	mo: OrdinalMinuteOrSecond
-	mm: ShortMinuteOrSecond
+  // Minute
+  m: MinuteOrSecond
+  mo: OrdinalMinuteOrSecond
+  mm: ShortMinuteOrSecond
 
-	// Second
-	s: MinuteOrSecond
-	so: OrdinalMinuteOrSecond
-	ss: ShortMinuteOrSecond
+  // Second
+  s: MinuteOrSecond
+  so: OrdinalMinuteOrSecond
+  ss: ShortMinuteOrSecond
 
-	// Fraction of second
-	S: TenthOfSecond
-	SS: HundredthOfSecond
-	SSS: ThousandthOfSecond
-	SSSS: TenThousandthOfSecond
+  // Fraction of second
+  S: TenthOfSecond
+  SS: HundredthOfSecond
+  SSS: ThousandthOfSecond
+  SSSS: TenThousandthOfSecond
 
-	// Timezone (ISO-8601 w/ Z)
-	X: TimezoneWithoutColon | 'Z'
-	XX: TimezoneWithoutColon | 'Z'
-	XXX: TimezoneWithColon | 'Z'
-	// TODO: figure out what this is:
-	XXXX: TimezoneWithoutColon | `+${number}` | 'Z'
-	XXXXX: TimezoneWithColon | `+${number}` | 'Z'
+  // Timezone (ISO-8601 w/ Z)
+  X: TimezoneWithoutColon | 'Z'
+  XX: TimezoneWithoutColon | 'Z'
+  XXX: TimezoneWithColon | 'Z'
+  // TODO: figure out what this is:
+  XXXX: TimezoneWithoutColon | `+${number}` | 'Z'
+  XXXXX: TimezoneWithColon | `+${number}` | 'Z'
 
-	// Timezone (ISO-8601 w/o Z)
-	x: TimezoneWithoutColon
-	xx: TimezoneWithoutColon
-	xxx: TimezoneWithColon
-	// TODO: figure out what this is:
-	xxxx: TimezoneWithoutColon | `+${number}`
-	xxxxx: TimezoneWithColon | `+${number}`
+  // Timezone (ISO-8601 w/o Z)
+  x: TimezoneWithoutColon
+  xx: TimezoneWithoutColon
+  xxx: TimezoneWithColon
+  // TODO: figure out what this is:
+  xxxx: TimezoneWithoutColon | `+${number}`
+  xxxxx: TimezoneWithColon | `+${number}`
 
-	// Timezone (GMT)
-	O: TimezoneGMT
-	OO: TimezoneGMT
-	OOO: TimezoneGMT
-	OOOO: TimezoneGMT
+  // Timezone (GMT)
+  O: TimezoneGMT
+  OO: TimezoneGMT
+  OOO: TimezoneGMT
+  OOOO: TimezoneGMT
 
-	// Timezone (specific non-locat.)
-	z: TimezoneGMT
-	zz: TimezoneGMT
-	zzz: TimezoneGMT
-	zzzz: TimezoneGMT
+  // Timezone (specific non-locat.)
+  z: TimezoneGMT
+  zz: TimezoneGMT
+  zzz: TimezoneGMT
+  zzzz: TimezoneGMT
 
-	// Seconds timestamp
-	t: number
-	tt: number
+  // Seconds timestamp
+  t: number
+  tt: number
 
-	// Millieconds timestamp
-	T: number
-	TT: number
+  // Millieconds timestamp
+  T: number
+  TT: number
 
-	// Long localized date
-	P: ShortLocalizedDate
-	PP: MediumLocalizedDate
-	PPP: OrdinalLocalizedDate
-	PPPP: BiggerLocalizedDate
+  // Long localized date
+  P: ShortLocalizedDate
+  PP: MediumLocalizedDate
+  PPP: OrdinalLocalizedDate
+  PPPP: BiggerLocalizedDate
 
-	// Long localized time
-	p: ShortLocalizedTime
-	pp: ShortLocalizedTimeWithMilliseconds
-	ppp: ShortLocalizedTimeWithMillisecondsAndTimezone
-	pppp: ShortLocalizedTimeWithMillisecondsAndTimezone
+  // Long localized time
+  p: ShortLocalizedTime
+  pp: ShortLocalizedTimeWithMilliseconds
+  ppp: ShortLocalizedTimeWithMillisecondsAndTimezone
+  pppp: ShortLocalizedTimeWithMillisecondsAndTimezone
 
-	// Combination of date and time
-	Pp: ShortDateAndTime
-	PPpp: OrdinalDateAndTimeWithMilliseconds
-	// TODO: figure out what PPPppp and PPPPpppp are
+  // Combination of date and time
+  Pp: ShortDateAndTime
+  PPpp: OrdinalDateAndTimeWithMilliseconds
+  // TODO: figure out what PPPppp and PPPPpppp are
 }
 
 type TokenizeFormatDate<Format extends string> = '' extends Format
-	? []
-	: LongestString<MatchStart<Format, Keys<FormatMap>>> extends infer Token
-	? Token extends string
-		? [Token, ...TokenizeFormatDate<TrimStart<Format, Length<Token>>>]
-		: IndexOf<Format, Keys<FormatMap>> extends infer NextTokenIndex
-		? NextTokenIndex extends -1
-			? [Format]
-			: [
-					TrimEnd<
-						Format,
-						// @ts-expect-error i think there's a bug in ts with inferred generics not narrowing properly
-						NextTokenIndex
-					>,
-					...TokenizeFormatDate<TrimStart<Format, IndexOf<Format, Keys<FormatMap>>>>
-			  ]
-		: never
-	: never
+  ? []
+  : LongestString<MatchStart<Format, Keys<FormatMap>>> extends infer Token
+  ? Token extends string
+    ? [Token, ...TokenizeFormatDate<TrimStart<Format, Length<Token>>>]
+    : IndexOf<Format, Keys<FormatMap>> extends infer NextTokenIndex
+    ? NextTokenIndex extends -1
+      ? [Format]
+      : [
+          TrimEnd<
+            Format,
+            // @ts-expect-error i think there's a bug in ts with inferred generics not narrowing properly
+            NextTokenIndex
+          >,
+          ...TokenizeFormatDate<TrimStart<Format, IndexOf<Format, Keys<FormatMap>>>>
+        ]
+    : never
+  : never
 
 type _FormattedDate<Format extends string[]> = Format extends []
-	? []
-	: // @ts-expect-error stack depth error but it's fine
-	  [
-			Head<Format> extends Keys<FormatMap> ? FormatMap[Head<Format>] : Head<Format>,
-			..._FormattedDate<Tail<Format>>
-	  ]
+  ? []
+  : // @ts-expect-error stack depth error but it's fine
+    [
+      Head<Format> extends Keys<FormatMap> ? FormatMap[Head<Format>] : Head<Format>,
+      ..._FormattedDate<Tail<Format>>
+    ]
 
 /**
  * creates a type for a formatted date string as per the [`date-fns` format](https://date-fns.org/v2.20.1/docs/format)
  */
 export type FormattedDate<Format extends string> =
-	// @ts-expect-error stack depth error but it's fine
-	Join<_FormattedDate<TokenizeFormatDate<Format>>>
+  // @ts-expect-error stack depth error but it's fine
+  Join<_FormattedDate<TokenizeFormatDate<Format>>>
