@@ -11,6 +11,7 @@ jobs:
           node-version: 15.4
       - run: npm ci
       - run: npm run build
+      - run: npm run format:check
       - run: npm run lint:check
       - run: npm run test
       - uses: actions/upload-artifact@v2
