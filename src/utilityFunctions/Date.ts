@@ -1,4 +1,4 @@
-import { FormattedDate } from '../utilityTypes/dates'
+import { FormattedDate } from '../utilityTypes/Date'
 import { format } from 'date-fns'
 
 /**
