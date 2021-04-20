@@ -6,5 +6,5 @@ import { format } from 'date-fns'
  * {@link FormattedDate} to generate a type for the given `formatString`
  */
 export function formatDate<T extends string>(date: Date, formatString: T): FormattedDate<T> {
-	return format(date, formatString) as never
+  return format(date, formatString) as never
 }
