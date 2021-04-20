@@ -1,14 +1,14 @@
 import _ from 'lodash'
 import ordinal from 'ordinal'
 import {
-	Add,
-	Divide,
-	IsGreaterThan,
-	LeadingZeros,
-	Modulo,
-	Multiply,
-	Ordinal,
-	Subtract,
+  Add,
+  Divide,
+  IsGreaterThan,
+  LeadingZeros,
+  Modulo,
+  Multiply,
+  Ordinal,
+  Subtract,
 } from '../utilityTypes/Number'
 import { RangeType } from '../utilityTypes/Number'
 import { toStringType } from './misc'
@@ -19,10 +19,10 @@ import { padStart } from './String'
  * @returns anumber where the type is a union of the possible numbers
  */
 export function random<Min extends number, Max extends number>(
-	min: Min,
-	max: Max
+  min: Min,
+  max: Max
 ): RangeType<Min, Max> {
-	return _.random(min, max) as RangeType<Min, Max>
+  return _.random(min, max) as RangeType<Min, Max>
 }
 
 /**
@@ -32,7 +32,7 @@ export function random<Min extends number, Max extends number>(
  * type Foo = typeof foo //5
  */
 export function add<N1 extends number, N2 extends number>(num1: N1, num2: N2): Add<N1, N2> {
-	return ((num1 + num2) as unknown) as Add<N1, N2>
+  return ((num1 + num2) as unknown) as Add<N1, N2>
 }
 
 /**
@@ -42,10 +42,10 @@ export function add<N1 extends number, N2 extends number>(num1: N1, num2: N2): A
  * type Foo = typeof foo //2
  */
 export function subtract<N1 extends number, N2 extends number>(
-	num1: N1,
-	num2: N2
+  num1: N1,
+  num2: N2
 ): Subtract<N1, N2> {
-	return (num1 - num2) as Subtract<N1, N2>
+  return (num1 - num2) as Subtract<N1, N2>
 }
 
 /**
@@ -55,10 +55,10 @@ export function subtract<N1 extends number, N2 extends number>(
  * type Foo = typeof multiply //6
  */
 export function multiply<N1 extends number, N2 extends number>(
-	num1: N1,
-	num2: N2
+  num1: N1,
+  num2: N2
 ): Multiply<N1, N2> {
-	return (num1 * num2) as never
+  return (num1 * num2) as never
 }
 
 /**
@@ -68,11 +68,11 @@ export function multiply<N1 extends number, N2 extends number>(
  * type Foo = typeof foo //5
  */
 export function divide<N1 extends number, N2 extends number>(num1: N1, num2: N2): Divide<N1, N2> {
-	return (num1 / num2) as Divide<N1, N2>
+  return (num1 / num2) as Divide<N1, N2>
 }
 
 export function modulo<N1 extends number, N2 extends number>(num1: N1, num2: N2): Modulo<N1, N2> {
-	return (num1 % num2) as Modulo<N1, N2>
+  return (num1 % num2) as Modulo<N1, N2>
 }
 
 /**
@@ -82,22 +82,22 @@ export function modulo<N1 extends number, N2 extends number>(num1: N1, num2: N2)
  * const bar = leadingZeros(-12, 5) //'-00012'
  */
 export function leadingZeros<Num extends number, Size extends number>(
-	number: Num,
-	length: Size
+  number: Num,
+  length: Size
 ): LeadingZeros<Num, Size> {
-	return (number < 0
-		? `-${padStart(toStringType(number * -1), length, '0')}`
-		: padStart(toStringType(number), length, '0')) as never
+  return (number < 0
+    ? `-${padStart(toStringType(number * -1), length, '0')}`
+    : padStart(toStringType(number), length, '0')) as never
 }
 
 /** creates a stringified ordinal value for the given number, and at compile-time */
 export function ordinalNumber<T extends number>(num: T): Ordinal<T> {
-	return ordinal(num) as never
+  return ordinal(num) as never
 }
 
 export function isGreaterThan<Num1 extends number, Num2 extends number>(
-	num1: Num1,
-	num2: Num2
+  num1: Num1,
+  num2: Num2
 ): IsGreaterThan<Num1, Num2> {
-	return (num1 > num2) as never
+  return (num1 > num2) as never
 }

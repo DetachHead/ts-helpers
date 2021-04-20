@@ -3,12 +3,10 @@ module.exports = {
   testEnvironment: 'node',
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))[^d]\\.ts$',
   globals: {
-    "ts-jest": {
+    'ts-jest': {
       babelConfig: {
-        presets: [
-          "power-assert"
-        ]
-      }
-    }
-  }
-};
+        presets: ['power-assert'],
+      },
+    },
+  },
+}
