@@ -4,9 +4,9 @@ import { PowerAssert } from 'typed-nodejs-assert'
 const assert: PowerAssert = require('power-assert')
 
 test('entries', () => {
-	const value = entries({ foo: 1, bar: 'baz' }) // $ExpectType ["foo" | "bar", string | number][]
-	assert.deepStrictEqual(value, [
-		['foo', 1],
-		['bar', 'baz'],
-	])
+  const value = entries({ foo: 1, bar: 'baz' }) // $ExpectType ["foo" | "bar", string | number][]
+  assert.deepStrictEqual(value, [
+    ['foo', 1],
+    ['bar', 'baz'],
+  ])
 })
