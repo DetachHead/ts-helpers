@@ -25,7 +25,6 @@
     "date-fns": "^2.21.1",
     "lodash": "^4.17.20",
     "ordinal": "^1.0.3",
-    "ts-jest": "^26.4.4",
     "ts-toolbelt": "^9.6.0",
     "tsdef": "^0.0.14",
     "utility-types": "^3.10.0"
@@ -47,6 +46,7 @@
     "rimraf": "^3.0.2",
     "source-map-support": "^0.5.19",
     "throw-expression": "^1.0.2",
+    "ts-jest": "^26.4.4",
     "typed-nodejs-assert": "^1.1.0",
     "typescript": "4.3.0-dev.20210406"
   }
