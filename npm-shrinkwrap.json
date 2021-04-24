@@ -36,7 +36,7 @@
         "source-map-support": "^0.5.19",
         "throw-expression": "^1.0.2",
         "typed-nodejs-assert": "^1.1.0",
-        "typescript": "^4.3.0-dev.20210406"
+        "typescript": "4.3.0-dev.20210406"
       }
     },
     "node_modules/@babel/code-frame": {
@@ -7946,9 +7946,9 @@
       }
     },
     "node_modules/typescript": {
-      "version": "4.3.0-dev.20210424",
-      "resolved": "https://registry.npmjs.org/typescript/-/typescript-4.3.0-dev.20210424.tgz",
-      "integrity": "sha512-PBQQhQwMQ27OFU18QjMEzLiVpZyMlCRkFjIkTaVBjUhA9GX8tflecjC8nROh0lNt+sJp9bNWBtpQWyyyLGymfw==",
+      "version": "4.3.0-dev.20210406",
+      "resolved": "https://registry.npmjs.org/typescript/-/typescript-4.3.0-dev.20210406.tgz",
+      "integrity": "sha512-GQ6DfMTuUsy9oWOjrzBNL/aLgVy6ef/vS1j0iILTaaAc0tojeMIs5LNQMVc0aclcuuKnzuv9jXrBcpc045JWgQ==",
       "dev": true,
       "bin": {
         "tsc": "bin/tsc",
@@ -14639,9 +14639,9 @@
       }
     },
     "typescript": {
-      "version": "4.3.0-dev.20210424",
-      "resolved": "https://registry.npmjs.org/typescript/-/typescript-4.3.0-dev.20210424.tgz",
-      "integrity": "sha512-PBQQhQwMQ27OFU18QjMEzLiVpZyMlCRkFjIkTaVBjUhA9GX8tflecjC8nROh0lNt+sJp9bNWBtpQWyyyLGymfw==",
+      "version": "4.3.0-dev.20210406",
+      "resolved": "https://registry.npmjs.org/typescript/-/typescript-4.3.0-dev.20210406.tgz",
+      "integrity": "sha512-GQ6DfMTuUsy9oWOjrzBNL/aLgVy6ef/vS1j0iILTaaAc0tojeMIs5LNQMVc0aclcuuKnzuv9jXrBcpc045JWgQ==",
       "dev": true
     },
     "union-value": {

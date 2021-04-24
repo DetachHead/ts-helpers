@@ -48,6 +48,6 @@
     "source-map-support": "^0.5.19",
     "throw-expression": "^1.0.2",
     "typed-nodejs-assert": "^1.1.0",
-    "typescript": "^4.3.0-dev.20210406"
+    "typescript": "4.3.0-dev.20210406"
   }
 }
