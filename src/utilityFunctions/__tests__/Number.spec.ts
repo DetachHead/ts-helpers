@@ -84,7 +84,7 @@ describe('ordinal', () => {
     assert(ordinalNumber(23) === '23rd')
     assert(
       // @ts-expect-error wrong value
-      ordinalNumber(3) !== '3th'
+      ordinalNumber(3) !== '3th',
     )
   })
   it('th', () => {
@@ -92,7 +92,7 @@ describe('ordinal', () => {
     assert(ordinalNumber(0) === '0th')
     assert(
       // @ts-expect-error wrong value
-      ordinalNumber(0) !== '1000nd'
+      ordinalNumber(0) !== '1000nd',
     )
   })
   it('value not known at compiletime', () => {

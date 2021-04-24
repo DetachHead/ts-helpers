@@ -25,7 +25,7 @@ export function unsafeCast<T>(_value: unknown): asserts _value is T {}
  * converts the given `value` to a string, preserving its value at compiletime where possible
  */
 export function toStringType<T extends Stringable>(
-  value: T
+  value: T,
 ): T extends TemplateLiteralStringable ? ToString<T> : string {
   return value.toString() as never
 }

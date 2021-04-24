@@ -171,7 +171,7 @@ describe('findIndexOfHighestNumber', () => {
   test('returns number', () => {
     const value = findIndexWithHighestNumber(
       ['a', 'foo', 'barbaz', 'qux'],
-      (string) => string.length
+      (string) => string.length,
     )
     // noinspection BadExpressionStatementJS
     value // $ExpectType number

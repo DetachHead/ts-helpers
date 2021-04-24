@@ -26,7 +26,7 @@ export function replaceOne<
 >(
   str: String,
   find: Find,
-  replace: ReplaceWithString
+  replace: ReplaceWithString,
 ): ReplaceOne<String, Find, ReplaceWithString> {
   return str.replace(find, replace) as never
 }
@@ -75,7 +75,7 @@ export function substring<
  */
 export function join<T extends List<Literal>, D extends string>(
   items: Narrow<T>,
-  delimiter: D
+  delimiter: D,
 ): Join<T, D> {
   return items.join(delimiter) as Join<T, D>
 }
@@ -92,7 +92,7 @@ export function split<T extends string, D extends string>(string: T, delimiter: 
  */
 export function indexOf<String extends string, Substring extends string>(
   string: String,
-  substring: Substring
+  substring: Substring,
 ): IndexOf<String, Substring> {
   return string.indexOf(substring) as IndexOf<String, Substring>
 }
@@ -102,7 +102,7 @@ export function indexOf<String extends string, Substring extends string>(
  */
 export function includes<String extends string, Substring extends string>(
   string: String,
-  substring: Substring
+  substring: Substring,
 ): Includes<String, Substring> {
   return string.includes(substring) as Includes<String, Substring>
 }
@@ -123,7 +123,7 @@ export function padStart<
  */
 export function startsWith<Full extends string, CheckStart extends string>(
   full: Full,
-  checkStart: CheckStart
+  checkStart: CheckStart,
 ): StartsWith<Full, CheckStart> {
   return full.startsWith(checkStart) as never
 }
@@ -133,7 +133,7 @@ export function startsWith<Full extends string, CheckStart extends string>(
  */
 export function endsWith<Full extends string, CheckEnd extends string>(
   full: Full,
-  checkEnd: CheckEnd
+  checkEnd: CheckEnd,
 ): EndsWith<Full, CheckEnd> {
   return full.endsWith(checkEnd) as never
 }
