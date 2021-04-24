@@ -15,3 +15,6 @@ export type EvaluateType<T> = T extends infer R ? R : never
 
 /** like ts-toolbelt's `Keys` except it doesn't include number (for objects where you know all of the keys) */
 export type Keys<T> = Exclude<TsToolbeltKeys<T>, number>
+
+/** compiletime version of {@link ObjectConstructor.entries} */
+export type Entries<T> = EvaluateType<[Keys<T>, T[Keys<T>]][]>
