@@ -290,6 +290,7 @@ export type EndsWith<Full extends string, CheckEnd extends string> = string exte
 	? true
 	: false
 
+/** a map of values where the keys are to be replaced by the values in {@link ReplaceValuesWithMap} */
 type ReplaceValuesMap = [TemplateLiteralStringable, TemplateLiteralStringable][]
 
 type _ReplaceValuesWithMap<
