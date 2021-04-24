@@ -26,7 +26,7 @@ import { orderBy } from 'lodash'
  */
 export function lengthGreaterOrEqual<T, L extends number>(
   arr: Readonly<T[]>,
-  length: L
+  length: L,
 ): arr is TupleOfAtLeast<T, L> {
   return arr.length >= length
 }
@@ -45,7 +45,7 @@ export function lengthGreaterOrEqual<T, L extends number>(
  */
 export function lengthGreaterThan<T, L extends number>(
   arr: Readonly<T[]>,
-  length: L
+  length: L,
 ): arr is [...TupleOf<T, L>, T] & T[] {
   return arr.length > length
 }
@@ -64,14 +64,14 @@ export function lengthGreaterThan<T, L extends number>(
  */
 export function lengthLessOrEqual<T, L extends number>(
   arr: Readonly<T[]>,
-  length: L
+  length: L,
 ): arr is TupleOfUpTo<T, L> {
   return arr.length <= length
 }
 
 export function lengthLessThan<T, L extends number>(
   arr: Readonly<T[]>,
-  length: L
+  length: L,
 ): arr is TupleOfUpToButNotIncluding<T, L> {
   return arr.length < length
 }
@@ -120,7 +120,7 @@ export function arrayOfAll<T>() {
  */
 export async function findNotUndefined<T extends {}, R>(
   arr: T[],
-  callback: (it: T) => R | void
+  callback: (it: T) => R | void,
 ): Promise<[R, number] | undefined> {
   for (let index = 0; index < arr.length; index++) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -157,11 +157,11 @@ export function removeDuplicates<T, L extends number>(arr: T[]): TupleOfUpTo<T, 
  */
 export function concat<A1 extends readonly unknown[], A2 extends readonly unknown[]>(
   array1: Narrow<A1>,
-  array2: Narrow<A2>
+  array2: Narrow<A2>,
 ): [...A1, ...A2] {
   return array1.concat(
     // @ts-expect-error some wack error caused by the Narrow type, but it's the same type anyway so this is a false positive
-    array2
+    array2,
   ) as never
 }
 
@@ -170,11 +170,11 @@ export function concat<A1 extends readonly unknown[], A2 extends readonly unknow
  */
 export function indexOf<Array extends readonly unknown[], Value extends Array[number]>(
   array: Narrow<Array>,
-  value: Narrow<Value>
+  value: Narrow<Value>,
 ): IndexOf<Array, Value> {
   return array.indexOf(
     // @ts-expect-error some wack error caused by the Narrow type, but it's the same type anyway so this is a false positive
-    value
+    value,
   ) as never
 }
 
@@ -183,7 +183,7 @@ export function indexOf<Array extends readonly unknown[], Value extends Array[nu
  */
 export function flat<Array extends readonly unknown[], Depth extends number = 1>(
   array: Narrow<Array>,
-  depth?: Depth
+  depth?: Depth,
 ): Flatten<Array, 1, Depth> {
   return array.flat(depth) as never
 }
@@ -196,7 +196,7 @@ export function splice<
 >(
   array: Narrow<Array>,
   startIndex: StartIndex,
-  deleteCount: DeleteCount
+  deleteCount: DeleteCount,
 ): Splice<Array, StartIndex, DeleteCount> {
   return array.filter((_, index) => index < startIndex || index > deleteCount + 1) as never
 }
@@ -211,7 +211,7 @@ export function splice<
  */
 export function findIndexWithHighestNumber<T extends unknown[]>(
   array: Narrow<T>,
-  predicate: (value: T[number]) => number
+  predicate: (value: T[number]) => number,
 ): T extends [] ? undefined : number {
   if (lengthIs(array, 0)) return undefined as never
   let highestNumber = 0
@@ -227,7 +227,7 @@ export function findIndexWithHighestNumber<T extends unknown[]>(
 }
 
 export function indexOfLongestString<Strings extends string[]>(
-  strings: Narrow<Strings>
+  strings: Narrow<Strings>,
 ): IndexOfLongestString<Strings> {
   return findIndexWithHighestNumber(strings, (string) => string.length) as never
 }
@@ -235,7 +235,7 @@ export function indexOfLongestString<Strings extends string[]>(
 /** sorts an array of strings by longest to shortest */
 // TODO: option to sort by shortest to longest
 export function sortByLongestStrings<Strings extends string[]>(
-  strings: Narrow<Strings>
+  strings: Narrow<Strings>,
 ): SortLongestStrings<Strings> {
   return orderBy(strings, 'length', 'desc') as never
 }

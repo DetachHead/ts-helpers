@@ -59,6 +59,6 @@ test('HighestNumber', () => {
   testType<HighestNumber<1 | 3 | 6 | 2>>(6)
   testType<HighestNumber<1 | 3 | 6 | 2>>(
     // @ts-expect-error wrong value
-    2
+    2,
   )
 })
