@@ -20,7 +20,7 @@ import { padStart } from './String'
  */
 export function random<Min extends number, Max extends number>(
   min: Min,
-  max: Max
+  max: Max,
 ): RangeType<Min, Max> {
   return _.random(min, max) as RangeType<Min, Max>
 }
@@ -43,7 +43,7 @@ export function add<N1 extends number, N2 extends number>(num1: N1, num2: N2): A
  */
 export function subtract<N1 extends number, N2 extends number>(
   num1: N1,
-  num2: N2
+  num2: N2,
 ): Subtract<N1, N2> {
   return (num1 - num2) as Subtract<N1, N2>
 }
@@ -56,7 +56,7 @@ export function subtract<N1 extends number, N2 extends number>(
  */
 export function multiply<N1 extends number, N2 extends number>(
   num1: N1,
-  num2: N2
+  num2: N2,
 ): Multiply<N1, N2> {
   return (num1 * num2) as never
 }
@@ -83,7 +83,7 @@ export function modulo<N1 extends number, N2 extends number>(num1: N1, num2: N2)
  */
 export function leadingZeros<Num extends number, Size extends number>(
   number: Num,
-  length: Size
+  length: Size,
 ): LeadingZeros<Num, Size> {
   return (number < 0
     ? `-${padStart(toStringType(number * -1), length, '0')}`
@@ -97,7 +97,7 @@ export function ordinalNumber<T extends number>(num: T): Ordinal<T> {
 
 export function isGreaterThan<Num1 extends number, Num2 extends number>(
   num1: Num1,
-  num2: Num2
+  num2: Num2,
 ): IsGreaterThan<Num1, Num2> {
   return (num1 > num2) as never
 }
