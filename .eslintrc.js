@@ -16,7 +16,7 @@ module.exports = {
     sourceType: 'module',
     project: './tsconfig.json',
   },
-  plugins: ['@typescript-eslint', 'eslint-plugin-expect-type', 'prettier'],
+  plugins: ['@typescript-eslint', 'eslint-plugin-expect-type'],
   rules: {
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single', { avoidEscape: true }],
