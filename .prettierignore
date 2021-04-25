@@ -4,3 +4,4 @@ package.json
 npm-shrinkwrap.json
 .pnp.cjs
 .yarn
+.vscode
