@@ -39,7 +39,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:7.13.16, @babel/core@npm:^7.1.0, @babel/core@npm:^7.7.5":
+"@babel/core@npm:7.13.16, @babel/core@npm:^7.1.0, @babel/core@npm:^7.13.16, @babel/core@npm:^7.7.5":
   version: 7.13.16
   resolution: "@babel/core@npm:7.13.16"
   dependencies:
@@ -150,7 +150,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-plugin-utils@npm:^7.0.0, @babel/helper-plugin-utils@npm:^7.10.4, @babel/helper-plugin-utils@npm:^7.12.13, @babel/helper-plugin-utils@npm:^7.8.0":
+"@babel/helper-plugin-utils@npm:^7.0.0, @babel/helper-plugin-utils@npm:^7.10.4, @babel/helper-plugin-utils@npm:^7.12.13, @babel/helper-plugin-utils@npm:^7.13.0, @babel/helper-plugin-utils@npm:^7.8.0":
   version: 7.13.0
   resolution: "@babel/helper-plugin-utils@npm:7.13.0"
   checksum: 24f7a44e94662a5dc8bd98ab12625ccd96b11e789ef3f9efd4f6f0eeaf01a13b051a148e709fb1c4e1cacdb536987ea75f4b78509567a0117246ea917195a86b
@@ -424,13 +424,16 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@detachhead/ts-helpers@workspace:."
   dependencies:
+    "@babel/core": ^7.13.16
+    "@babel/helper-plugin-utils": ^7.13.0
     "@types/jest": ^26.0.20
-    "@types/lodash": ^4.14.167
+    "@types/lodash": 4.14.167
     "@types/node": ^14.14.20
     "@types/power-assert": ^1.5.3
     "@typescript-eslint/eslint-plugin": ^4.13.0
     "@typescript-eslint/parser": ^4.13.0
     "@yarnpkg/pnpify": ^3.0.0-rc.3
+    babel-jest: ^26.6.3
     babel-preset-power-assert: ^3.0.0
     date-fns: ^2.21.1
     eslint: ^7.17.0
@@ -908,10 +911,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.14.167":
-  version: 4.14.168
-  resolution: "@types/lodash@npm:4.14.168"
-  checksum: 3326966ee089debde7a7d819e13b64991756e879945852c3357df14a7be837130f697c2cb451be9dd599eb7213fed0975bc9ca0f8f56b46fa73c46a83815b79c
+"@types/lodash@npm:4.14.167":
+  version: 4.14.167
+  resolution: "@types/lodash@npm:4.14.167"
+  checksum: 3ecc64834006cce3b7c83edb9c2fd490906e5a349ed0686fe2c0a6d8ecccacb21d2a69df654dc1088c7ec735795145759b5d0130ea0d41d9c4bc3751e8d72461
   languageName: node
   linkType: hard
 
