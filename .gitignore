@@ -1,4 +1,9 @@
-/node_modules/
 /.idea/
 /ts-helpers.iml
 /dist/
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions

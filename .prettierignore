@@ -2,3 +2,5 @@ node_modules
 dist
 package.json
 npm-shrinkwrap.json
+.pnp.cjs
+.yarn

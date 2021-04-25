@@ -7,10 +7,11 @@
   "scripts": {
     "test": "jest",
     "lint:check": "eslint src --ext .ts",
-    "lint:fix": "npm run lint:check -- --fix",
+    "lint:fix": "yarn run lint:check -- --fix",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
-    "build": "rimraf ./dist && tsc -p tsconfig.build.json"
+    "build": "rimraf ./dist && tsc -p tsconfig.build.json",
+    "regenerateSDKs": "yarn pnpify --sdk"
   },
   "keywords": [],
   "author": "detachhead",
@@ -35,6 +36,7 @@
     "@types/power-assert": "^1.5.3",
     "@typescript-eslint/eslint-plugin": "^4.13.0",
     "@typescript-eslint/parser": "^4.13.0",
+    "@yarnpkg/pnpify": "^3.0.0-rc.3",
     "babel-preset-power-assert": "^3.0.0",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
