@@ -38,7 +38,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/core", "npm:7.13.16"],
             ["@babel/helper-plugin-utils", "npm:7.13.0"],
             ["@types/jest", "npm:26.0.22"],
-            ["@types/lodash", "npm:4.14.167"],
+            ["@types/lodash", "npm:4.14.168"],
             ["@types/node", "npm:14.14.41"],
             ["@types/power-assert", "npm:1.5.3"],
             ["@typescript-eslint/eslint-plugin", "virtual:37d1e7e512cc8b41af458f57c48f363499a0c84bf3dc746d7a03169d9648b4fa6343df2725b3ceb0a2519cff7b652dc3ba0c07dab324589308bc72d3a1b4e925#npm:4.22.0"],

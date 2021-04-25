@@ -427,7 +427,7 @@ __metadata:
     "@babel/core": ^7.13.16
     "@babel/helper-plugin-utils": ^7.13.0
     "@types/jest": ^26.0.20
-    "@types/lodash": 4.14.167
+    "@types/lodash": ^4.14.167
     "@types/node": ^14.14.20
     "@types/power-assert": ^1.5.3
     "@typescript-eslint/eslint-plugin": ^4.13.0
@@ -911,7 +911,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:4.14.167":
+"@types/lodash@npm:^4.14.167":
   version: 4.14.167
   resolution: "@types/lodash@npm:4.14.167"
   checksum: 3ecc64834006cce3b7c83edb9c2fd490906e5a349ed0686fe2c0a6d8ecccacb21d2a69df654dc1088c7ec735795145759b5d0130ea0d41d9c4bc3751e8d72461
