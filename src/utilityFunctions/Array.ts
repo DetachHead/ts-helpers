@@ -11,6 +11,7 @@ import {
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import { Flatten } from 'ts-toolbelt/out/List/Flatten'
 import { orderBy } from 'lodash'
+import { isDefined } from 'ts-is-present'
 
 /**
  * checks whether the given array's length is larger than **or equal to** the given number, and narrows the type of the
@@ -238,4 +239,12 @@ export function sortByLongestStrings<Strings extends string[]>(
   strings: Narrow<Strings>,
 ): SortLongestStrings<Strings> {
   return orderBy(strings, 'length', 'desc') as never
+}
+
+/**
+ * removes any `undefined` values from `array` before maooiung over them and returning the mappved array with no
+ * undefined or null values
+ */
+export function mapNotUndefined<T, R>(array: (T | undefined)[], callback: (value: T) => R): R {
+  return array.filter(isDefined).map(callback) as never
 }

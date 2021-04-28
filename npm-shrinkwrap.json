@@ -13,6 +13,7 @@
         "date-fns": "^2.21.1",
         "lodash": "^4.17.20",
         "ordinal": "^1.0.3",
+        "ts-is-present": "^1.2.1",
         "ts-jest": "^26.4.4",
         "ts-toolbelt": "^9.6.0",
         "tsdef": "^0.0.14",
@@ -677,7 +678,6 @@
         "jest-resolve": "^26.6.2",
         "jest-util": "^26.6.2",
         "jest-worker": "^26.6.2",
-        "node-notifier": "^8.0.0",
         "slash": "^3.0.0",
         "source-map": "^0.6.0",
         "string-length": "^4.0.1",
@@ -2410,8 +2410,7 @@
         "esprima": "^4.0.1",
         "estraverse": "^4.2.0",
         "esutils": "^2.0.2",
-        "optionator": "^0.8.1",
-        "source-map": "~0.6.1"
+        "optionator": "^0.8.1"
       },
       "bin": {
         "escodegen": "bin/escodegen.js",
@@ -4237,7 +4236,6 @@
         "@types/node": "*",
         "anymatch": "^3.0.3",
         "fb-watchman": "^2.0.0",
-        "fsevents": "^2.1.2",
         "graceful-fs": "^4.2.4",
         "jest-regex-util": "^26.0.0",
         "jest-serializer": "^26.6.2",
@@ -4708,9 +4706,6 @@
       "resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-4.0.0.tgz",
       "integrity": "sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=",
       "dev": true,
-      "dependencies": {
-        "graceful-fs": "^4.1.6"
-      },
       "optionalDependencies": {
         "graceful-fs": "^4.1.6"
       }
@@ -7084,6 +7079,11 @@
       "resolved": "https://registry.npmjs.org/traverse/-/traverse-0.6.6.tgz",
       "integrity": "sha1-y99WD9e5r2MlAv7UD5GMFX6pcTc=",
       "dev": true
+    },
+    "node_modules/ts-is-present": {
+      "version": "1.2.1",
+      "resolved": "https://registry.npmjs.org/ts-is-present/-/ts-is-present-1.2.1.tgz",
+      "integrity": "sha512-EYHn58qVRd/VHGkHSNGQJAxPXhF9wRiphYXl04VznngqqKjcT2jfHvAMPuzh8sRKdvifXw+dq6/Q3hG+nr3DRA=="
     },
     "node_modules/ts-jest": {
       "version": "26.5.1",
@@ -13134,6 +13134,11 @@
       "resolved": "https://registry.npmjs.org/traverse/-/traverse-0.6.6.tgz",
       "integrity": "sha1-y99WD9e5r2MlAv7UD5GMFX6pcTc=",
       "dev": true
+    },
+    "ts-is-present": {
+      "version": "1.2.1",
+      "resolved": "https://registry.npmjs.org/ts-is-present/-/ts-is-present-1.2.1.tgz",
+      "integrity": "sha512-EYHn58qVRd/VHGkHSNGQJAxPXhF9wRiphYXl04VznngqqKjcT2jfHvAMPuzh8sRKdvifXw+dq6/Q3hG+nr3DRA=="
     },
     "ts-jest": {
       "version": "26.5.1",
