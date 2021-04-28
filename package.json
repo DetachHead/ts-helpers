@@ -25,6 +25,7 @@
     "date-fns": "^2.21.1",
     "lodash": "^4.17.20",
     "ordinal": "^1.0.3",
+    "ts-is-present": "^1.2.1",
     "ts-jest": "^26.4.4",
     "ts-toolbelt": "^9.6.0",
     "tsdef": "^0.0.14",
