@@ -3,6 +3,8 @@ import { Add, Decrement, Enumerate, Increment, IsGreaterThan, Subtract } from '.
 import { Flatten } from 'ts-toolbelt/out/List/Flatten'
 import { Take } from 'ts-toolbelt/out/List/Take'
 import { Length } from 'ts-toolbelt/out/String/Length'
+import { Head } from 'ts-toolbelt/out/List/Head'
+import { Tail } from 'ts-toolbelt/out/List/Tail'
 
 type _BuildPowersOf2LengthArrays<
   Length extends number,
@@ -241,3 +243,13 @@ export type IndexOfHighestNumber<Numbers extends readonly number[]> = _IndexOfHi
   0,
   0
 >
+
+/**
+ * removes types from `Array` that match type `Value`
+ * @example
+ * type Foo: RemoveValue<['foo', 'bar', 'baz'], 'bar'> //['foo', 'baz']
+ */
+export type RemoveValue<Array extends unknown[], Value> = Array extends []
+  ? []
+  : // @ts-expect-error stack depth error, but it's fine for short arrays
+    [...(Head<Array> extends Value ? [] : [Head<Array>]), ...RemoveValue<Tail<Array>, Value>]
