@@ -326,7 +326,7 @@ type _ReplaceValuesWithMap<Value extends string[], Map extends ReplaceValuesMap>
 /**
  * replaces all instances in `Value` of the first string with the second string with each tuple in `Map`
  * @example
- * type Foo = MapReplaceValues<'foobarbaz', {foo: 'bar', baz: 'qux'}> // "barbarqux"
+ * type Foo = ReplaceValuesWithMap<'foobarbaz', {foo: 'bar', baz: 'qux'}> // "barbarqux"
  */
 export type ReplaceValuesWithMap<Format extends string, Map extends ReplaceValuesMap> =
   // @ts-expect-error stack depth error but it's fine
