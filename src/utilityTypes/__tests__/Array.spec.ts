@@ -13,6 +13,11 @@ test('TupleOfUpTo', () => {
 })
 
 test('SplitByUnion', () => {
-  type Foo = SplitByUnion<'foo.bar,baz', '.' | ','> // $ExpectType "foo" | "bar" | "baz"
-  testType<Foo>('foo')
+  testType<SplitByUnion<'foo.bar,baz', '.' | ','>>('foo')
+  testType<SplitByUnion<'foo.bar,baz', '.' | ','>>('bar')
+  testType<SplitByUnion<'foo.bar,baz', '.' | ','>>('baz')
+  testType<SplitByUnion<'foo.bar,baz', '.' | ','>>(
+    // @ts-expect-error invalid value
+    'qux',
+  )
 })
