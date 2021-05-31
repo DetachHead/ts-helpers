@@ -203,3 +203,10 @@ export type IsGreaterThan<Num1 extends number, Num2 extends number> = TupleOf<ne
 export type HighestNumber<Numbers extends number> = ListOf<Numbers>[IndexOfHighestNumber<
   ListOf<Numbers>
 >]
+
+type _NumberToBinary<T extends number> = T extends 0
+  ? ''
+  : `${_NumberToBinary<Divide<T, 2>> extends 0 ? '' : _NumberToBinary<Divide<T, 2>>}${Modulo<T, 2>}`
+
+/** converts a number to a string representing its binary value */
+export type NumberToBinary<T extends number> = T extends 0 ? '0' : _NumberToBinary<T>
