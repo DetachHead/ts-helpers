@@ -377,3 +377,13 @@ export type SplitByUnion<T extends string, SplitBy extends string> = T extends `
     ? _SplitByUnion<T, SplitBy> | SplitByUnion<Rest, SplitBy>
     : never
   : T
+
+/**
+ * splits a string into an array of strings with a specified length
+ * @example
+ * type Foo = SplitByLength<'foobarbaz', 3> //['foo', 'bar', 'baz']
+ */
+export type SplitByLength<T extends string, Len extends number> = [
+  TrimEnd<T, Len>,
+  ...(Length<T> extends Len ? [] : SplitByLength<TrimStart<T, Len>, Len>)
+]
