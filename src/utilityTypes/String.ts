@@ -354,3 +354,26 @@ export type RangeAsString<From extends number, To extends number> =
 export type LongestString<Strings extends string> = ListOf<Strings>[IndexOfLongestString<
   ListOf<Strings>
 >]
+
+type _SplitByUnion<
+  T extends string,
+  SplitBy extends string
+> = T extends `${infer Char}${infer Rest}`
+  ? Char extends SplitBy
+    ? ''
+    : `${Char}${_SplitByUnion<Rest, SplitBy>}`
+  : T
+
+/**
+ * like `Split` from `ts-toolbelt` but works properly with unions
+ * @example
+ * type Foo = SplitByUnion<'foo,bar.baz', '.' | ','> //'foo'|'bar'|'baz'
+ */
+export type SplitByUnion<T extends string, SplitBy extends string> = T extends `${_SplitByUnion<
+  T,
+  SplitBy
+>}${infer Char}${infer Rest}`
+  ? Char extends SplitBy
+    ? _SplitByUnion<T, SplitBy> | SplitByUnion<Rest, SplitBy>
+    : never
+  : T
