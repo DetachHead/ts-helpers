@@ -1,5 +1,5 @@
 import { TupleOfUpTo } from '../Array'
-import { SplitByUnion } from '../String'
+import { SplitByLength, SplitByUnion } from '../String'
 import { testType } from '../../utilityFunctions/misc'
 
 test('TupleOfUpTo', () => {
@@ -20,4 +20,9 @@ test('SplitByUnion', () => {
     // @ts-expect-error invalid value
     'qux',
   )
+})
+
+test('SplitByLength', () => {
+  type Foo = SplitByLength<'foobarbaz', 3> // $ExpectType ["foo", "bar", "baz"]
+  testType<Foo>(['foo', 'bar', 'baz'])
 })
