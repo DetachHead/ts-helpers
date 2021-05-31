@@ -169,7 +169,7 @@ export type Splice<
   >
 ]
 
-/** removes the value at index `I` from `A` */
+/** removes the value at index `RemoveIndex` from `Array` */
 export type RemoveIndex<Array extends unknown[], RemoveIndex extends Index<Array>> = Splice<
   Array,
   // @ts-expect-error false positive
