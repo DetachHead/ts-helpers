@@ -253,3 +253,24 @@ export type RemoveValue<Array extends unknown[], Value> = Array extends []
   ? []
   : // @ts-expect-error stack depth error, but it's fine for short arrays
     [...(Head<Array> extends Value ? [] : [Head<Array>]), ...RemoveValue<Tail<Array>, Value>]
+
+/**
+ * compiletime version of {@link Array.slice}
+ */
+export type Slice<
+  Array extends unknown[],
+  Start extends number,
+  End extends number = Array['length']
+> = number extends Array['length']
+  ? Array
+  : number extends Start
+  ? Array[never][]
+  : number extends End
+  ? Array[never][]
+  : Array extends [
+      ...TupleOf<unknown, Start>,
+      ...infer Result,
+      ...TupleOf<unknown, Subtract<Array['length'], End>>
+    ]
+  ? Result
+  : never

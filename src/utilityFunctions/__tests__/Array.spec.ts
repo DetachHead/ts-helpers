@@ -12,11 +12,13 @@ import {
   lengthLessOrEqual,
   lengthLessThan,
   removeDuplicates,
+  slice,
   sortByLongestStrings,
   splice,
 } from '../Array'
 import { PowerAssert } from 'typed-nodejs-assert'
 import { Throw } from 'throw-expression'
+import { exactly } from '../misc'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const assert: PowerAssert = require('power-assert')
 
@@ -198,4 +200,26 @@ describe('indexOfLongestString', () => {
 test('sortByLongestStrings', () => {
   const value = sortByLongestStrings(['foo', 'barbaz', 'foobarbaz', 'a', 'ab']) // $ExpectType ["foobarbaz", "barbaz", "foo", "ab", "a"]
   assert.deepStrictEqual(value, ['foobarbaz', 'barbaz', 'foo', 'ab', 'a'])
+})
+
+describe('slice', () => {
+  test('no end', () => {
+    const value = slice([1, 2, 3, 4, 5, 6], 3) // $ExpectType [4, 5, 6]
+    assert.deepStrictEqual(value, [4, 5, 6])
+  })
+  test('start and end', () => {
+    const value = slice([1, 2, 3, 4, 5, 6], 2, 4) // $ExpectType [3, 4]
+    assert.deepStrictEqual(value, [3, 4])
+  })
+  describe('not known at compiletime', () => {
+    test('array', () => {
+      const value = slice([1, 2, 3, 4, 5, 6] as number[], 2, 4) // $ExpectType number[]
+      assert.deepStrictEqual(value, [3, 4])
+    })
+    test('start', () => {
+      const value = slice([1, 2, 3, 4, 5, 6], 2 as number, 4)
+      // can't use ExpectType due to unreliabvle positioning of items in unions
+      exactly<(1 | 2 | 3 | 4 | 5 | 6)[]>()(value)
+    })
+  })
 })

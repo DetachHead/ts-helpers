@@ -1,6 +1,7 @@
 import {
   IndexOf,
   IndexOfLongestString,
+  Slice,
   SortLongestStrings,
   Splice,
   TupleOf,
@@ -247,4 +248,15 @@ export function sortByLongestStrings<Strings extends string[]>(
  */
 export function mapNotUndefined<T, R>(array: (T | undefined)[], callback: (value: T) => R): R {
   return array.filter(isDefined).map(callback) as never
+}
+
+/**
+ * {@link Array.slice} using {@link Slice} so the result can be known at compiletime
+ */
+export function slice<
+  Array extends unknown[],
+  Start extends number,
+  End extends number = Array['length']
+>(array: Narrow<Array>, start: Start, end?: End): Slice<Array, Start, End> {
+  return array.slice(start, end) as never
 }
