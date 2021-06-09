@@ -8,6 +8,8 @@ import {
   Modulo,
   Multiply,
   Ordinal,
+  Power,
+  Square,
   Subtract,
 } from '../utilityTypes/Number'
 import { RangeType } from '../utilityTypes/Number'
@@ -73,6 +75,19 @@ export function divide<N1 extends number, N2 extends number>(num1: N1, num2: N2)
 
 export function modulo<N1 extends number, N2 extends number>(num1: N1, num2: N2): Modulo<N1, N2> {
   return (num1 % num2) as Modulo<N1, N2>
+}
+
+/** raises the value of `Num` to the power of the `PowerOf` parameter, at compiletime. */
+export function power<Num extends number, PowerOf extends number>(
+  num: Num,
+  powerOf: PowerOf,
+): Power<Num, PowerOf> {
+  return (num ** powerOf) as never
+}
+
+/** raises the value of `num` to the power of 2, at compiletime. */
+export function square<T extends number>(num: T): Square<T> {
+  return power(num, 2)
 }
 
 /**
