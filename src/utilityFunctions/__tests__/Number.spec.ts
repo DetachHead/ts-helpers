@@ -7,6 +7,7 @@ import {
   leadingZeros,
   ordinalNumber,
   isGreaterThan,
+  power,
 } from '../Number'
 import { PowerAssert } from 'typed-nodejs-assert'
 import { TupleOf } from '../../utilityTypes/Array'
@@ -51,6 +52,22 @@ describe('arithmetic', () => {
     test('normal numbers', () => {
       const num = divide(10, 2) // $ExpectType 5
       assert(num === 5)
+    })
+  })
+  describe('power', () => {
+    test('value known at compiletime', () => {
+      const value = power(7, 4) // $ExpectType 2401
+      assert(value === 2401)
+    })
+    describe('value not known at compiletime', () => {
+      test('num', () => {
+        const value = power(2 as number, 4) // $ExpectType number
+        assert(value === 16)
+      })
+      test('power', () => {
+        const value = power(4, 8 as number) // $ExpectType number
+        assert(value === 65536)
+      })
     })
   })
 })
