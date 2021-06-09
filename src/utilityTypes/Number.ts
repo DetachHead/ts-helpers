@@ -141,6 +141,22 @@ export type Modulo<N1 extends number, N2 extends number> = _LessThanTerminus<N1,
   : Modulo<Subtract<N1, N2>, N2>
 
 /**
+ * raises the value of `Num` to the power of the `PowerOf` parameter.
+ */
+export type Power<Num extends number, PowerOf extends number> = number extends PowerOf
+  ? number
+  : PowerOf extends 0
+  ? 1
+  : PowerOf extends 1
+  ? Num
+  : Multiply<Power<Num, Decrement<PowerOf>>, Num>
+
+/**
+ * raises the value of `Num` to the power of 2
+ */
+export type Square<Num extends number> = Power<Num, 2>
+
+/**
  * checks whether a number is positive or negative
  */
 export type IsPositive<T extends number> = `${T}` extends `-${number}` ? false : true
