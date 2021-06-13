@@ -1,5 +1,6 @@
 import {
   Add,
+  BinaryToNumber,
   Divide,
   HighestNumber,
   IsGreaterThan,
@@ -82,5 +83,19 @@ describe('NumberToBinary', () => {
   test('number type', () => {
     // just allow any string with numbers in it
     testType<NumberToBinary<number>>('1010101')
+  })
+})
+
+describe('BinaryToNumber', () => {
+  test('specific value', () => {
+    testType<BinaryToNumber<'10101'>>(21)
+    testType<BinaryToNumber<'11111'>>(
+      // @ts-expect-error wrong value
+      30,
+    )
+  })
+  test('number type', () => {
+    // just allow any number
+    testType<BinaryToNumber<`${bigint}`>>(1 as number)
   })
 })
