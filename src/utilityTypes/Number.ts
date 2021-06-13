@@ -1,7 +1,8 @@
 import { Equals } from './misc'
 import { IndexOfHighestNumber, TupleOf } from './Array'
-import { PadStart, Tail, ToString } from './String'
+import { PadStart, Tail, ToString, TrimEnd, TrimStart } from './String'
 import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
+import { Length } from 'ts-toolbelt/out/String/Length'
 
 type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
   ? ((t: T, ...a: A) => void) extends (...x: infer X) => void
@@ -222,6 +223,12 @@ export type HighestNumber<Numbers extends number> = ListOf<Numbers>[IndexOfHighe
   ListOf<Numbers>
 >]
 
+/**
+ * a binary value in string format. obviously this type isn't perfect as it still allows for numbers that aren't 0 or 1
+ * but it's better than nothing
+ */
+type StringifiedBinary = `${bigint}`
+
 type _NumberToBinary<T extends number> = T extends 0
   ? ''
   : `${_NumberToBinary<Divide<T, 2>> extends 0 ? '' : _NumberToBinary<Divide<T, 2>>}${Modulo<T, 2>}`
@@ -232,3 +239,43 @@ export type NumberToBinary<T extends number> = number extends T
   : T extends 0
   ? '0'
   : _NumberToBinary<T>
+
+type _StringToDigit<T extends StringifiedBinary> = T extends '0'
+  ? 0
+  : T extends '1'
+  ? 1
+  : T extends '2'
+  ? 2
+  : T extends '3'
+  ? 3
+  : T extends '4'
+  ? 4
+  : T extends '5'
+  ? 5
+  : T extends '6'
+  ? 6
+  : T extends '7'
+  ? 7
+  : T extends '8'
+  ? 8
+  : T extends '9'
+  ? 9
+  : never
+
+export type _BinaryToNumber<T extends StringifiedBinary, Multiplier extends number> = Add<
+  // @ts-expect-error compiler thinks it's not a number but it is
+  Multiply<_StringToDigit<TrimStart<T, Decrement<Length<T>>>>, Multiplier>,
+  T extends '0' | '1'
+    ? 0
+    : _BinaryToNumber<
+        // @ts-expect-error fails to correctly infer template literal type for StringifiedBinary
+        TrimEnd<T, Decrement<Length<T>>>,
+        Multiply<Multiplier, 2>
+      >
+>
+
+/** converts a string representing a binary value to its number */
+// TODO: try and fix the issue where it doesn't work past 5 bits lol
+export type BinaryToNumber<T extends StringifiedBinary> = StringifiedBinary extends T
+  ? number
+  : _BinaryToNumber<T, 1>
