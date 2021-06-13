@@ -227,4 +227,8 @@ type _NumberToBinary<T extends number> = T extends 0
   : `${_NumberToBinary<Divide<T, 2>> extends 0 ? '' : _NumberToBinary<Divide<T, 2>>}${Modulo<T, 2>}`
 
 /** converts a number to a string representing its binary value */
-export type NumberToBinary<T extends number> = T extends 0 ? '0' : _NumberToBinary<T>
+export type NumberToBinary<T extends number> = number extends T
+  ? StringifiedBinary
+  : T extends 0
+  ? '0'
+  : _NumberToBinary<T>
