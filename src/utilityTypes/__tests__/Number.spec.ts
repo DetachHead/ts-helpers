@@ -1,4 +1,12 @@
-import { Add, Divide, HighestNumber, IsGreaterThan, Multiply, Subtract } from '../Number'
+import {
+  Add,
+  Divide,
+  HighestNumber,
+  IsGreaterThan,
+  Multiply,
+  NumberToBinary,
+  Subtract,
+} from '../Number'
 import { testType } from '../../utilityFunctions/misc'
 
 test('multiply', () => {
@@ -61,4 +69,18 @@ test('HighestNumber', () => {
     // @ts-expect-error wrong value
     2,
   )
+})
+
+describe('NumberToBinary', () => {
+  test('specific value', () => {
+    testType<NumberToBinary<12>>('1100')
+    testType<NumberToBinary<12>>(
+      // @ts-expect-error wrong value
+      '101010',
+    )
+  })
+  test('number type', () => {
+    // just allow any string with numbers in it
+    testType<NumberToBinary<number>>('1010101')
+  })
 })
