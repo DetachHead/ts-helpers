@@ -129,9 +129,11 @@ type _MultiSub<
  * type Foo = Divide<6, 3> //2
  * @see https://itnext.io/implementing-arithmetic-within-typescripts-type-system-a1ef140a6f6f
  */
-export type Divide<N1 extends number, N2 extends number> = {
-  [K2 in N2]: { [K1 in N1]: _MultiSub<K1, K2, 0> }[N1]
-}[N2]
+export type Divide<N1 extends number, N2 extends number> = number extends N1 | N2
+  ? number
+  : {
+      [K2 in N2]: { [K1 in N1]: _MultiSub<K1, K2, 0> }[N1]
+    }[N2]
 
 /**
  * gets the remainder of `Divide<N1, N2>`
@@ -231,7 +233,8 @@ type StringifiedBinary = `${bigint}`
 
 type _NumberToBinary<T extends number> = T extends 0
   ? ''
-  : `${_NumberToBinary<Divide<T, 2>> extends 0 ? '' : _NumberToBinary<Divide<T, 2>>}${Modulo<T, 2>}`
+  : // @ts-expect-error stack depth
+    `${_NumberToBinary<Divide<T, 2>> extends 0 ? '' : _NumberToBinary<Divide<T, 2>>}${Modulo<T, 2>}`
 
 /** converts a number to a string representing its binary value */
 export type NumberToBinary<T extends number> = number extends T
