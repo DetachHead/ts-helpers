@@ -55,6 +55,10 @@ describe('arithmetic', () => {
       const num = divide(10, 2) // $ExpectType 5
       assert(num === 5)
     })
+    test('value not known at compile-time', () => {
+      const num = divide(10 as number, 2) // $ExpectType number
+      assert(num === 5)
+    })
   })
   describe('power', () => {
     test('value known at compiletime', () => {
