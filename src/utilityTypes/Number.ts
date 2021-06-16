@@ -279,3 +279,13 @@ export type _BinaryToNumber<T extends StringifiedBinary, Multiplier extends numb
 export type BinaryToNumber<T extends StringifiedBinary> = StringifiedBinary extends T
   ? number
   : _BinaryToNumber<T, 1>
+
+/** shifts the bits of `Num` left by the given `Count` */
+export type LeftShift<Num extends number, Count extends number> =
+  // @ts-expect-error stack depth
+  Multiply<Num, Power<2, Count>>
+
+/** shifts the bits of `Num` right by the given `Count` */
+export type RightShift<Num extends number, Count extends number> =
+  // @ts-expect-error stack depth
+  Divide<Num, Power<2, Count>>
