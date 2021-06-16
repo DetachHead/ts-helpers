@@ -8,6 +8,8 @@ import {
   ordinalNumber,
   isGreaterThan,
   power,
+  leftShift,
+  rightShift,
 } from '../Number'
 import { PowerAssert } from 'typed-nodejs-assert'
 import { TupleOf } from '../../utilityTypes/Array'
@@ -131,6 +133,27 @@ describe('comparison', () => {
     test('big numbers', () => {
       isGreaterThan(5000, 4999) // $ExpectType true
       isGreaterThan(5000, 5001) // $ExpectType false
+    })
+  })
+})
+
+describe('bitwise operations', () => {
+  describe('leftShift', () => {
+    test('known at compile-time', () => {
+      const value = leftShift(5, 3) // $ExpectType 40
+      assert(value === 40)
+    })
+    test('not known at compile-time', () => {
+      leftShift(5 as number, 3) // $ExpectType number
+    })
+  })
+  describe('rightShift', () => {
+    test('known at compile-time', () => {
+      const value = rightShift(5, 2) // $ExpectType 1
+      assert(value === 1)
+    })
+    test('not known at compile-time', () => {
+      leftShift(5 as number, 2) // $ExpectType number
     })
   })
 })

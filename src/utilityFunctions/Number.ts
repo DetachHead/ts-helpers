@@ -5,10 +5,12 @@ import {
   Divide,
   IsGreaterThan,
   LeadingZeros,
+  LeftShift,
   Modulo,
   Multiply,
   Ordinal,
   Power,
+  RightShift,
   Square,
   Subtract,
 } from '../utilityTypes/Number'
@@ -115,4 +117,20 @@ export function isGreaterThan<Num1 extends number, Num2 extends number>(
   num2: Num2,
 ): IsGreaterThan<Num1, Num2> {
   return (num1 > num2) as never
+}
+
+/** shifts the bits of `Num` left by the given `Count`, and at compile-time */
+export function leftShift<Num extends number, Count extends number>(
+  num: Num,
+  count: Count,
+): LeftShift<Num, Count> {
+  return (num << count) as never
+}
+
+/** shifts the bits of `Num` right by the given `Count`, and at compile-time */
+export function rightShift<Num extends number, Count extends number>(
+  num: Num,
+  count: Count,
+): RightShift<Num, Count> {
+  return (num >> count) as never
 }
