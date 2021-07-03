@@ -12,8 +12,7 @@ import {
   startsWith,
   substring,
 } from '../String'
-import { exactly, failCI, toStringType } from '../misc'
-import isCI from 'is-ci'
+import { toStringType } from '../misc'
 import { PowerAssert } from 'typed-nodejs-assert'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const assert: PowerAssert = require('power-assert')
@@ -91,13 +90,6 @@ test('replaceAll', () => {
   assert(value === 'foo.bar.baz')
 })
 
-test('exactly', () => {
-  const exactlyNumber = exactly<number>()
-  exactlyNumber(1 as number) // $ExpectType number
-  // @ts-expect-error type isn't exactly number
-  exactlyNumber(1) // $ExpectType never
-})
-
 describe('padStart', () => {
   test('padString cut off', () => {
     const value = padStart('foo', 6, 'ab') // $ExpectType "abafoo"
@@ -149,10 +141,4 @@ describe('endsWith', () => {
     endsWith('foobar' as string, 'baz') // $ExpectType boolean
     endsWith('foobar', 'baz' as string) // $ExpectType boolean
   })
-})
-
-test('failCI', () => {
-  console.log(isCI)
-  if (isCI) assert.throws(failCI)
-  else assert.doesNotThrow(failCI)
 })
