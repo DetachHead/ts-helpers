@@ -12,8 +12,9 @@ import {
   startsWith,
   substring,
 } from '../String'
+import { exactly, failCI, toStringType } from '../misc'
+import isCI from 'is-ci'
 import { PowerAssert } from 'typed-nodejs-assert'
-import { exactly, toStringType } from '../misc'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const assert: PowerAssert = require('power-assert')
 
@@ -148,4 +149,10 @@ describe('endsWith', () => {
     endsWith('foobar' as string, 'baz') // $ExpectType boolean
     endsWith('foobar', 'baz' as string) // $ExpectType boolean
   })
+})
+
+test('failCI', () => {
+  console.log(isCI)
+  if (isCI) assert.throws(failCI)
+  else assert.doesNotThrow(failCI)
 })
