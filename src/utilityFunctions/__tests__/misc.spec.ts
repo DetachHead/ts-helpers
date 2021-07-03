@@ -12,7 +12,7 @@ test('exactly', () => {
 })
 
 test('failCI', () => {
-  console.log(isCI)
+  console.log({ isCI })
   if (isCI) assert.throws(failCI)
   else assert.doesNotThrow(failCI)
 })
