@@ -1,5 +1,6 @@
 import { Stringable, TemplateLiteralStringable, ToString } from '../utilityTypes/String'
 import { Equals } from '../utilityTypes/misc'
+import isCI from 'is-ci'
 
 /**
  * narrows the given value from type `Base` to type `Narrowed` without having to assign it to a new variable
@@ -48,4 +49,9 @@ export function exactly<Expected>() {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   return <Actual>(value: Actual & (Equals<Expected, Actual> extends true ? unknown : never)) =>
     value
+}
+
+/** throws an error if running in CI. useful if you want to remind yourself to fix something later */
+export function failCI(message?: string) {
+  if (isCI) throw new Error(message)
 }
