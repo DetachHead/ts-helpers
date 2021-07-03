@@ -1,6 +1,7 @@
 import { Stringable, TemplateLiteralStringable, ToString } from '../utilityTypes/String'
 import { Equals } from '../utilityTypes/misc'
 import isCI from 'is-ci'
+import { hasPropertyPredicate } from './Any'
 
 /**
  * narrows the given value from type `Base` to type `Narrowed` without having to assign it to a new variable
@@ -54,4 +55,8 @@ export function exactly<Expected>() {
 /** throws an error if running in CI. useful if you want to remind yourself to fix something later */
 export function failCI(message?: string) {
   if (isCI) throw new Error(message)
+}
+
+export function isErrnoException(error: unknown): error is NodeJS.ErrnoException {
+  return hasPropertyPredicate<NodeJS.ErrnoException>(error, 'code')
 }
