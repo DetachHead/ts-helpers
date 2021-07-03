@@ -24,5 +24,6 @@ module.exports = {
     'expect-type/expect': 'error',
     '@typescript-eslint/ban-types': 'off',
     'spaced-comment': 'error',
+    '@typescript-eslint/no-throw-literal': 'error',
   },
 }
