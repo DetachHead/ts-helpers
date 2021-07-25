@@ -4,7 +4,7 @@
 import { Entries } from '../utilityTypes/Any'
 
 export function hasPropertyPredicate<T>(object: unknown, propertyName: keyof T): object is T {
-  return Object.prototype.hasOwnProperty.call(object, propertyName)
+    return Object.prototype.hasOwnProperty.call(object, propertyName)
 }
 
 /**
@@ -15,5 +15,5 @@ export function hasPropertyPredicate<T>(object: unknown, propertyName: keyof T):
  * @see https://github.com/Microsoft/TypeScript/issues/12870
  */
 export function entries<T>(object: T): Entries<T> {
-  return Object.entries(object) as never
+    return Object.entries(object) as never
 }

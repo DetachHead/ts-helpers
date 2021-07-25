@@ -7,40 +7,40 @@ import { Head } from 'ts-toolbelt/out/List/Head'
 import { Tail } from 'ts-toolbelt/out/List/Tail'
 
 type _BuildPowersOf2LengthArrays<
-  Length extends number,
-  AccumulatedArray extends never[][]
+    Length extends number,
+    AccumulatedArray extends never[][]
 > = AccumulatedArray[0][Length] extends never
-  ? AccumulatedArray
-  : _BuildPowersOf2LengthArrays<
-      Length,
-      [[...AccumulatedArray[0], ...AccumulatedArray[0]], ...AccumulatedArray]
-    >
+    ? AccumulatedArray
+    : _BuildPowersOf2LengthArrays<
+          Length,
+          [[...AccumulatedArray[0], ...AccumulatedArray[0]], ...AccumulatedArray]
+      >
 
 type _ConcatLargestUntilDone<
-  Length extends number,
-  AccumulatedArray extends never[][],
-  NextArray extends never[]
+    Length extends number,
+    AccumulatedArray extends never[][],
+    NextArray extends never[]
 > = NextArray['length'] extends Length
-  ? NextArray
-  : [...AccumulatedArray[0], ...NextArray][Length] extends never
-  ? _ConcatLargestUntilDone<
-      Length,
-      AccumulatedArray extends [AccumulatedArray[0], ...infer U]
-        ? U extends never[][]
-          ? U
-          : never
-        : never,
-      NextArray
-    >
-  : _ConcatLargestUntilDone<
-      Length,
-      AccumulatedArray extends [AccumulatedArray[0], ...infer U]
-        ? U extends never[][]
-          ? U
-          : never
-        : never,
-      [...AccumulatedArray[0], ...NextArray]
-    >
+    ? NextArray
+    : [...AccumulatedArray[0], ...NextArray][Length] extends never
+    ? _ConcatLargestUntilDone<
+          Length,
+          AccumulatedArray extends [AccumulatedArray[0], ...infer U]
+              ? U extends never[][]
+                  ? U
+                  : never
+              : never,
+          NextArray
+      >
+    : _ConcatLargestUntilDone<
+          Length,
+          AccumulatedArray extends [AccumulatedArray[0], ...infer U]
+              ? U extends never[][]
+                  ? U
+                  : never
+              : never,
+          [...AccumulatedArray[0], ...NextArray]
+      >
 
 type _Replace<R extends unknown[], T> = { [K in keyof R]: T }
 
@@ -51,18 +51,18 @@ type _Replace<R extends unknown[], T> = { [K in keyof R]: T }
  * @see https://github.com/microsoft/TypeScript/issues/26223#issuecomment-674514787
  */
 export type TupleOf<Type, Length extends number> = number extends Length
-  ? Type[]
-  : {
-      // in case Length is a tuple
-      [LengthKey in Length]: _BuildPowersOf2LengthArrays<
-        LengthKey,
-        [[never]]
-      > extends infer TwoDimensionalArray
-        ? TwoDimensionalArray extends never[][]
-          ? _Replace<_ConcatLargestUntilDone<LengthKey, TwoDimensionalArray, []>, Type>
-          : never
-        : never
-    }[Length]
+    ? Type[]
+    : {
+          // in case Length is a tuple
+          [LengthKey in Length]: _BuildPowersOf2LengthArrays<
+              LengthKey,
+              [[never]]
+          > extends infer TwoDimensionalArray
+              ? TwoDimensionalArray extends never[][]
+                  ? _Replace<_ConcatLargestUntilDone<LengthKey, TwoDimensionalArray, []>, Type>
+                  : never
+              : never
+      }[Length]
 
 /**
  * an array that can be of any length between 0 and `L`
@@ -73,8 +73,8 @@ export type TupleOf<Type, Length extends number> = number extends Length
  */
 // TODO: make the length property return a range type of all the possible lengths without breaking its ability to work on huge numbers
 export type TupleOfUpTo<T, L extends number> =
-  | TupleOf<T, L>
-  | (NoUncheckedIndexedAccess extends true ? [] : never)
+    | TupleOf<T, L>
+    | (NoUncheckedIndexedAccess extends true ? [] : never)
 
 /**
  * an array of length `L` - 1
@@ -93,8 +93,8 @@ export type TupleOfExcluding<T, L extends number> = TupleOf<T, Decrement<L>>
  * foo[2] //error: tuple of length '2' has no element at index '2'
  */
 export type TupleOfUpToButNotIncluding<T, L extends number> =
-  | TupleOfExcluding<T, L>
-  | (NoUncheckedIndexedAccess extends true ? [] : never)
+    | TupleOfExcluding<T, L>
+    | (NoUncheckedIndexedAccess extends true ? [] : never)
 
 /**
  * an array that has a size of at least `Length`
@@ -107,37 +107,37 @@ export type TupleOfAtLeast<Type, Length extends number> = TupleOf<Type, Length> 
 export type Index<T extends readonly unknown[]> = Enumerate<T['length']>
 
 type _IndexOf<
-  Array extends readonly unknown[],
-  Value extends Array[number],
-  CurrentIndex extends Index<Array>
+    Array extends readonly unknown[],
+    Value extends Array[number],
+    CurrentIndex extends Index<Array>
 > =
-  | (CurrentIndex extends Array['length']
-      ? never
-      : _IndexOf<
-          Array,
-          Value,
-          // @ts-expect-error see Increment documentation
-          Increment<CurrentIndex>
-        >)
-  | (// @ts-expect-error compiler is wrong
-    Array[CurrentIndex] extends Value
-      ? CurrentIndex
-      : never)
+    | (CurrentIndex extends Array['length']
+          ? never
+          : _IndexOf<
+                Array,
+                Value,
+                // @ts-expect-error see Increment documentation
+                Increment<CurrentIndex>
+            >)
+    | (// @ts-expect-error compiler is wrong
+      Array[CurrentIndex] extends Value
+          ? CurrentIndex
+          : never)
 
 /**
  * the type equivalent of {@link Array.prototype.indexOf}
  */
 export type IndexOf<
-  Array extends readonly unknown[],
-  Value extends Array[number]
+    Array extends readonly unknown[],
+    Value extends Array[number]
 > = number extends Array['length']
-  ? number
-  : _IndexOf<
-      Array,
-      Value,
-      // @ts-expect-error compiler is wrong
-      0
-    >
+    ? number
+    : _IndexOf<
+          Array,
+          Value,
+          // @ts-expect-error compiler is wrong
+          0
+      >
 
 /**
  * creates a tuple type of alternating types
@@ -146,54 +146,54 @@ export type IndexOf<
  * type Foo = FlattenedTupleOf<[string, number], 3> //[string, number, string, number, string, number]
  */
 export type FlattenedTupleOf<T extends unknown[], Length extends number> = Flatten<
-  TupleOf<T, Length>
+    TupleOf<T, Length>
 >
 
 export type LengthGreaterThan<Array extends unknown[], Length extends number> = IsGreaterThan<
-  Array['length'],
-  Length
+    Array['length'],
+    Length
 >
 
 /** removes `DeleteCount` values from `Array` starting at `StartIndex` */
 export type Splice<
-  Array extends unknown[],
-  StartIndex extends number,
-  DeleteCount extends number = Subtract<Array['length'], StartIndex>
+    Array extends unknown[],
+    StartIndex extends number,
+    DeleteCount extends number = Subtract<Array['length'], StartIndex>
 > = [
-  ...Take<Array, StartIndex>,
-  ...Take<
-    Array,
-    // @ts-expect-error see add doco
-    Add<StartIndex, DeleteCount>,
-    '<-'
-  >
+    ...Take<Array, StartIndex>,
+    ...Take<
+        Array,
+        // @ts-expect-error see add doco
+        Add<StartIndex, DeleteCount>,
+        '<-'
+    >
 ]
 
 /** removes the value at index `RemoveIndex` from `Array` */
 export type RemoveIndex<Array extends unknown[], RemoveIndex extends Index<Array>> = Splice<
-  Array,
-  // @ts-expect-error false positive
-  RemoveIndex,
-  1
+    Array,
+    // @ts-expect-error false positive
+    RemoveIndex,
+    1
 >
 
 type _IndexOfLongestString<
-  Strings extends readonly string[],
-  CurrentIndex extends number,
-  CurrentLongestIndex extends number
+    Strings extends readonly string[],
+    CurrentIndex extends number,
+    CurrentLongestIndex extends number
 > = Strings[CurrentIndex] extends undefined
-  ? CurrentLongestIndex
-  : _IndexOfLongestString<
-      Strings,
-      // @ts-expect-error see increment doco
-      Increment<CurrentIndex>,
-      IsGreaterThan<
-        Length<Strings[CurrentIndex]>,
-        Length<Strings[CurrentLongestIndex]>
-      > extends true
-        ? CurrentIndex
-        : CurrentLongestIndex
-    >
+    ? CurrentLongestIndex
+    : _IndexOfLongestString<
+          Strings,
+          // @ts-expect-error see increment doco
+          Increment<CurrentIndex>,
+          IsGreaterThan<
+              Length<Strings[CurrentIndex]>,
+              Length<Strings[CurrentLongestIndex]>
+          > extends true
+              ? CurrentIndex
+              : CurrentLongestIndex
+      >
 
 /**
  * gets the index of the longest string type in an array of strings
@@ -201,47 +201,47 @@ type _IndexOfLongestString<
  * type Foo = IndexOfLongestString<['foo', 'barbaz', 'qux']> //1
  */
 export type IndexOfLongestString<Strings extends readonly string[]> = Strings extends []
-  ? undefined
-  : number extends Strings['length']
-  ? number
-  : _IndexOfLongestString<Strings, 0, 0>
+    ? undefined
+    : number extends Strings['length']
+    ? number
+    : _IndexOfLongestString<Strings, 0, 0>
 
 /** sorts an array of strings by longest to shortest */
 export type SortLongestStrings<Array extends string[]> = Array extends TupleOfUpTo<string, 1>
-  ? Array
-  : number extends Array['length']
-  ? Array
-  : [
-      Array[IndexOfLongestString<Array>],
-      ...SortLongestStrings<
-        RemoveIndex<
-          Array,
-          // @ts-expect-error stack depth error, but it's fine for short arrays
-          IndexOfLongestString<Array>
-        >
-      >
-    ]
+    ? Array
+    : number extends Array['length']
+    ? Array
+    : [
+          Array[IndexOfLongestString<Array>],
+          ...SortLongestStrings<
+              RemoveIndex<
+                  Array,
+                  // @ts-expect-error stack depth error, but it's fine for short arrays
+                  IndexOfLongestString<Array>
+              >
+          >
+      ]
 
 type _IndexOfHighestNumber<
-  Numbers extends readonly number[],
-  CurrentIndex extends number,
-  CurrentHighestNumberIndex extends number
+    Numbers extends readonly number[],
+    CurrentIndex extends number,
+    CurrentHighestNumberIndex extends number
 > = CurrentIndex extends Numbers['length']
-  ? CurrentHighestNumberIndex
-  : _IndexOfHighestNumber<
-      Numbers,
-      // @ts-expect-error see Increment doco
-      Increment<CurrentIndex>,
-      IsGreaterThan<Numbers[CurrentIndex], CurrentHighestNumberIndex> extends true
-        ? CurrentIndex
-        : CurrentHighestNumberIndex
-    >
+    ? CurrentHighestNumberIndex
+    : _IndexOfHighestNumber<
+          Numbers,
+          // @ts-expect-error see Increment doco
+          Increment<CurrentIndex>,
+          IsGreaterThan<Numbers[CurrentIndex], CurrentHighestNumberIndex> extends true
+              ? CurrentIndex
+              : CurrentHighestNumberIndex
+      >
 
 /** gets the index of the largest number in an array type */
 export type IndexOfHighestNumber<Numbers extends readonly number[]> = _IndexOfHighestNumber<
-  Numbers,
-  0,
-  0
+    Numbers,
+    0,
+    0
 >
 
 /**
@@ -250,27 +250,27 @@ export type IndexOfHighestNumber<Numbers extends readonly number[]> = _IndexOfHi
  * type Foo: RemoveValue<['foo', 'bar', 'baz'], 'bar'> //['foo', 'baz']
  */
 export type RemoveValue<Array extends unknown[], Value> = Array extends []
-  ? []
-  : // @ts-expect-error stack depth error, but it's fine for short arrays
-    [...(Head<Array> extends Value ? [] : [Head<Array>]), ...RemoveValue<Tail<Array>, Value>]
+    ? []
+    : // @ts-expect-error stack depth error, but it's fine for short arrays
+      [...(Head<Array> extends Value ? [] : [Head<Array>]), ...RemoveValue<Tail<Array>, Value>]
 
 /**
  * compiletime version of {@link Array.slice}
  */
 export type Slice<
-  Array extends unknown[],
-  Start extends number,
-  End extends number = Array['length']
+    Array extends unknown[],
+    Start extends number,
+    End extends number = Array['length']
 > = number extends Array['length']
-  ? Array
-  : number extends Start
-  ? Array[never][]
-  : number extends End
-  ? Array[never][]
-  : Array extends [
-      ...TupleOf<unknown, Start>,
-      ...infer Result,
-      ...TupleOf<unknown, Subtract<Array['length'], End>>
-    ]
-  ? Result
-  : never
+    ? Array
+    : number extends Start
+    ? Array[never][]
+    : number extends End
+    ? Array[never][]
+    : Array extends [
+          ...TupleOf<unknown, Start>,
+          ...infer Result,
+          ...TupleOf<unknown, Subtract<Array['length'], End>>
+      ]
+    ? Result
+    : never
