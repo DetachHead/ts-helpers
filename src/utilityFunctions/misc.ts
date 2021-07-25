@@ -27,9 +27,9 @@ export function unsafeCast<T>(_value: unknown): asserts _value is T {}
  * converts the given `value` to a string, preserving its value at compiletime where possible
  */
 export function toStringType<T extends Stringable>(
-  value: T,
+    value: T,
 ): T extends TemplateLiteralStringable ? ToString<T> : string {
-  return value.toString() as never
+    return value.toString() as never
 }
 
 // TODO: find a type testing library that doesnt suck
@@ -45,18 +45,18 @@ export function testType<T>(_value: T): void {}
  * @see Equals
  */
 export function exactly<Expected>() {
-  // don't think it's possible to get the return type from this scope, as this wrapper function is a workaround to create
-  // types where the value needs to be checked against the generic ()
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  return <Actual>(value: Actual & (Equals<Expected, Actual> extends true ? unknown : never)) =>
-    value
+    // don't think it's possible to get the return type from this scope, as this wrapper function is a workaround to create
+    // types where the value needs to be checked against the generic ()
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    return <Actual>(value: Actual & (Equals<Expected, Actual> extends true ? unknown : never)) =>
+        value
 }
 
 /** throws an error if running in CI. useful if you want to remind yourself to fix something later */
 export function failCI(message?: string) {
-  if (isCI) throw new Error(message)
+    if (isCI) throw new Error(message)
 }
 
 export function isErrnoException(error: unknown): error is NodeJS.ErrnoException {
-  return hasPropertyPredicate<NodeJS.ErrnoException>(error, 'code')
+    return hasPropertyPredicate<NodeJS.ErrnoException>(error, 'code')
 }

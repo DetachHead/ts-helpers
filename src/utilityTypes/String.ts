@@ -56,9 +56,9 @@ export type Email = `${string}@${Domain}`
  * type Image: FileName<'png'|'jpg'> // `${string}.png` | `${string}.jpg`
  */
 export type FileName<Extension extends string = never> = `${string}${IsNever<
-  Extension,
-  '',
-  `.${Extension}`
+    Extension,
+    '',
+    `.${Extension}`
 >}`
 
 /**
@@ -67,14 +67,14 @@ export type FileName<Extension extends string = never> = `${string}${IsNever<
  * type Foo = DuplicateString<'foo', 3> //'foofoofoo'
  */
 export type DuplicateString<T extends string, N extends number> = N extends 1
-  ? T
-  : `${T}${DuplicateString<T, Subtract<N, 1>>}`
+    ? T
+    : `${T}${DuplicateString<T, Subtract<N, 1>>}`
 
 /**
  * anything that can be represented as a string (ie. has a {@link toString} method)
  */
 export interface Stringable {
-  toString: () => string
+    toString: () => string
 }
 
 /**
@@ -88,17 +88,17 @@ export type Head<String extends string> = String extends `${infer R}${string}` ?
 export type Tail<String extends string> = TrimStart<String, 1>
 
 type _TrimStart<
-  String extends string,
-  Index extends number,
-  Iterator extends number
+    String extends string,
+    Index extends number,
+    Iterator extends number
 > = Iterator extends Index
-  ? String
-  : _TrimStart<
-      String extends `${Head<String>}${infer R}` ? R : never,
-      Index,
-      // @ts-expect-error see documentation for Increment type
-      Increment<Iterator>
-    >
+    ? String
+    : _TrimStart<
+          String extends `${Head<String>}${infer R}` ? R : never,
+          Index,
+          // @ts-expect-error see documentation for Increment type
+          Increment<Iterator>
+      >
 
 /**
  * trims the characters up to `Index` off the start of `String` (inclusive)
@@ -118,9 +118,9 @@ export type TrimEnd<String extends string, Index extends number> = Substring<Str
  * gets the characters of `String` between `StartIndex` (inclusive) and `EndIndex` (exclusive)
  */
 export type Substring<
-  String extends string,
-  StartIndex extends number,
-  EndIndex extends number
+    String extends string,
+    StartIndex extends number,
+    EndIndex extends number
 > = TrimStart<String, StartIndex> extends `${infer R}${TrimStart<String, EndIndex>}` ? R : never
 
 export type CharAt<String extends string, Index extends number> = Head<TrimStart<String, Index>>
@@ -129,45 +129,45 @@ export type CharAt<String extends string, Index extends number> = Head<TrimStart
  * `true` if `String` contains `Substring`, else `false`
  */
 export type Includes<
-  String extends string,
-  Substring extends string
+    String extends string,
+    Substring extends string
 > = String extends `${string}${Substring}${string}` ? true : false
 
 type _IndexOf<
-  String extends string,
-  Substr extends string,
-  CurrentIndex extends number
+    String extends string,
+    Substr extends string,
+    CurrentIndex extends number
 > = Substring<
-  String,
-  CurrentIndex,
-  // @ts-expect-error see Add documentation
-  Add<CurrentIndex, Length<Substr>>
+    String,
+    CurrentIndex,
+    // @ts-expect-error see Add documentation
+    Add<CurrentIndex, Length<Substr>>
 > extends Substr
-  ? CurrentIndex
-  : _IndexOf<
-      String,
-      Substr,
-      // @ts-expect-error see Increment documentation
-      Increment<CurrentIndex>
-    >
+    ? CurrentIndex
+    : _IndexOf<
+          String,
+          Substr,
+          // @ts-expect-error see Increment documentation
+          Increment<CurrentIndex>
+      >
 
 /**
  * gets the index of a `Substring` within a `String`. returns `-1` if it's not present
  */
 export type IndexOf<String extends string, Substring extends string> = Includes<
-  String,
-  Substring
+    String,
+    Substring
 > extends true
-  ? _IndexOf<String, Substring, 0>
-  : -1
+    ? _IndexOf<String, Substring, 0>
+    : -1
 
 type _Replace<
-  String extends string,
-  Find extends TemplateLiteralStringable,
-  ReplaceWith extends TemplateLiteralStringable
+    String extends string,
+    Find extends TemplateLiteralStringable,
+    ReplaceWith extends TemplateLiteralStringable
 > = String extends `${infer BS}${Find}${infer AS}`
-  ? Replace<`${BS}${ReplaceWith}${AS}`, Find, ReplaceWith>
-  : String
+    ? Replace<`${BS}${ReplaceWith}${AS}`, Find, ReplaceWith>
+    : String
 
 /**
  * replaces all instances of `Find` with `ReplaceWith`. the type equivalent of {@link String.prototype.replace}
@@ -176,37 +176,37 @@ type _Replace<
  * that also allows `undefined` and `null` (ie. anything that template literal types allow)
  */
 export declare type Replace<
-  String extends string,
-  Find extends TemplateLiteralStringable,
-  ReplaceWith extends TemplateLiteralStringable
+    String extends string,
+    Find extends TemplateLiteralStringable,
+    ReplaceWith extends TemplateLiteralStringable
 > = _Replace<String, Find, ReplaceWith> extends infer X ? Cast<X, string> : never
 
 /**
  * replaces the first instance of `Find` with `ReplaceWith`. the type equivalent of {@link String.prototype.replace}
  */
 export type ReplaceOne<
-  String extends TemplateLiteralStringable,
-  Find extends TemplateLiteralStringable,
-  ReplaceWith extends TemplateLiteralStringable
+    String extends TemplateLiteralStringable,
+    Find extends TemplateLiteralStringable,
+    ReplaceWith extends TemplateLiteralStringable
 > = String extends `${infer Start}${Find}${infer End}` ? `${Start}${ReplaceWith}${End}` : String
 
 /**
  * checks whether the length of type `String` is **greater than or equal to** the length of type `Length`
  */
 export type LengthGreaterOrEqual<String extends string, Length extends number> = CharAt<
-  String,
-  Decrement<Length>
+    String,
+    Decrement<Length>
 > extends never
-  ? false
-  : true
+    ? false
+    : true
 
 /**
  * checks whether the length of type `String` is **greater than** the length of type `Length`
  */
 export type LengthGreaterThan<String extends string, Length extends number> = LengthGreaterOrEqual<
-  String,
-  // @ts-expect-error see Increment documentation
-  Increment<Length>
+    String,
+    // @ts-expect-error see Increment documentation
+    Increment<Length>
 >
 
 /**
@@ -217,18 +217,18 @@ export type LengthGreaterThan<String extends string, Length extends number> = Le
  * type Foo = CaseInsensitive<'abc'> //"abc" | "Abc" | "ABc" | "ABC" | "AbC" | "aBc" | "aBC" | "abC"
  */
 export type CaseInsensitive<T extends string> = T extends ''
-  ? ''
-  : `${Uppercase<Head<T>> | Lowercase<Head<T>>}${CaseInsensitive<Tail<T>>}`
+    ? ''
+    : `${Uppercase<Head<T>> | Lowercase<Head<T>>}${CaseInsensitive<Tail<T>>}`
 
 type _DuplicateStringUntilLength<
-  String extends string,
-  Size extends number,
-  CurrentString extends string
+    String extends string,
+    Size extends number,
+    CurrentString extends string
 > = Length<CurrentString> extends Size
-  ? CurrentString
-  : LengthGreaterThan<`${CurrentString}${String}`, Size> extends true
-  ? TrimEnd<`${CurrentString}${String}`, Size>
-  : _DuplicateStringUntilLength<String, Size, `${CurrentString}${String}`>
+    ? CurrentString
+    : LengthGreaterThan<`${CurrentString}${String}`, Size> extends true
+    ? TrimEnd<`${CurrentString}${String}`, Size>
+    : _DuplicateStringUntilLength<String, Size, `${CurrentString}${String}`>
 
 /**
  * like {@link DuplicateString} except it duplicates until the exact provided `Size`, instead of a number of repetitions
@@ -237,26 +237,26 @@ type _DuplicateStringUntilLength<
  * type Foo = DuplicateStringUntilLength<'abc', 8> //'abcabcab'
  */
 export type DuplicateStringUntilLength<
-  String extends string,
-  Size extends number
+    String extends string,
+    Size extends number
 > = _DuplicateStringUntilLength<String, Size, String>
 
 /**
  * the type equivalent of {@link String.prototype.padStart}
  */
 export type PadStart<
-  String extends string,
-  Size extends number,
-  PadString extends string
-  // need to make sure it's a string literal or union of string literal, to prevent invalid results such as `000${number}`
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    String extends string,
+    Size extends number,
+    PadString extends string
+    // need to make sure it's a string literal or union of string literal, to prevent invalid results such as `000${number}`
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
 > = `${any}` extends String | PadString
-  ? string
-  : {
-      [Key in String]: number extends Size
-        ? string
-        : `${DuplicateStringUntilLength<PadString, Subtract<Size, Length<Key>>>}${Key}`
-    }[String]
+    ? string
+    : {
+          [Key in String]: number extends Size
+              ? string
+              : `${DuplicateStringUntilLength<PadString, Subtract<Size, Length<Key>>>}${Key}`
+      }[String]
 
 /**
  * takes a `String` and a `MatchString` (ideally a union) and returns the string in the union that `String` started with
@@ -264,64 +264,64 @@ export type PadStart<
  * type Foo: MatchStart<'foo', 'bar' | 'foo' | 'baz'>
  */
 export type MatchStart<String extends string, MatchString extends string> = string extends
-  | String
-  | MatchString
-  ? string
-  : String extends `${MatchString}${infer End}`
-  ? String extends `${infer Start}${End}`
-    ? Start
+    | String
+    | MatchString
+    ? string
+    : String extends `${MatchString}${infer End}`
+    ? String extends `${infer Start}${End}`
+        ? Start
+        : never
     : never
-  : never
 
 /**
  * `true` if `Full` starts with the given `CheckStart`, else `false`
  */
 export type StartsWith<Full extends string, CheckStart extends string> = string extends
-  | Full
-  | CheckStart
-  ? boolean
-  : Full extends `${CheckStart}${string}`
-  ? true
-  : false
+    | Full
+    | CheckStart
+    ? boolean
+    : Full extends `${CheckStart}${string}`
+    ? true
+    : false
 
 /**
  * `true` if `Full` ends with the given `CheckEnd`, else `false`
  */
 export type EndsWith<Full extends string, CheckEnd extends string> = string extends Full | CheckEnd
-  ? boolean
-  : Full extends `${string}${CheckEnd}`
-  ? true
-  : false
+    ? boolean
+    : Full extends `${string}${CheckEnd}`
+    ? true
+    : false
 
 /** a map of values where the keys are to be replaced by the values in {@link ReplaceValuesWithMap} */
 type ReplaceValuesMap = Record<Exclude<AnyKey, symbol>, unknown>
 
 type _TokenizeString<Value extends string, Map extends ReplaceValuesMap> = '' extends Value
-  ? []
-  : LongestString<MatchStart<Value, Keys<Map>>> extends infer Token
-  ? Token extends string
-    ? [Token, ..._TokenizeString<TrimStart<Value, Length<Token>>, Map>]
-    : IndexOf<Value, Keys<Map>> extends infer NextTokenIndex
-    ? NextTokenIndex extends -1
-      ? [Value]
-      : [
-          TrimEnd<
-            Value,
-            // @ts-expect-error i think there's a bug in ts with inferred generics not narrowing properly
-            NextTokenIndex
-          >,
-          ..._TokenizeString<TrimStart<Value, IndexOf<Value, Keys<Map>>>, Map>
-        ]
+    ? []
+    : LongestString<MatchStart<Value, Keys<Map>>> extends infer Token
+    ? Token extends string
+        ? [Token, ..._TokenizeString<TrimStart<Value, Length<Token>>, Map>]
+        : IndexOf<Value, Keys<Map>> extends infer NextTokenIndex
+        ? NextTokenIndex extends -1
+            ? [Value]
+            : [
+                  TrimEnd<
+                      Value,
+                      // @ts-expect-error i think there's a bug in ts with inferred generics not narrowing properly
+                      NextTokenIndex
+                  >,
+                  ..._TokenizeString<TrimStart<Value, IndexOf<Value, Keys<Map>>>, Map>
+              ]
+        : never
     : never
-  : never
 
 type _ReplaceValuesWithMap<Value extends string[], Map extends ReplaceValuesMap> = Value extends []
-  ? []
-  : // @ts-expect-error stack depth error but it's fine
-    [
-      ArrayHead<Value> extends Keys<Map> ? Map[ArrayHead<Value>] : ArrayHead<Value>,
-      ..._ReplaceValuesWithMap<ArrayTail<Value>, Map>
-    ]
+    ? []
+    : // @ts-expect-error stack depth error but it's fine
+      [
+          ArrayHead<Value> extends Keys<Map> ? Map[ArrayHead<Value>] : ArrayHead<Value>,
+          ..._ReplaceValuesWithMap<ArrayTail<Value>, Map>
+      ]
 
 /**
  * replaces all instances in `Value` of the first string with the second string with each tuple in `Map`
@@ -329,8 +329,8 @@ type _ReplaceValuesWithMap<Value extends string[], Map extends ReplaceValuesMap>
  * type Foo = ReplaceValuesWithMap<'foobarbaz', {foo: 'bar', baz: 'qux'}> // "barbarqux"
  */
 export type ReplaceValuesWithMap<Format extends string, Map extends ReplaceValuesMap> =
-  // @ts-expect-error stack depth error but it's fine
-  Join<_ReplaceValuesWithMap<_TokenizeString<Format, Map>, Map>>
+    // @ts-expect-error stack depth error but it's fine
+    Join<_ReplaceValuesWithMap<_TokenizeString<Format, Map>, Map>>
 
 /**
  * a stringified version of {@link Enumerate}
@@ -347,22 +347,22 @@ export type EnumerateAsString<Num extends number> = Keys<TupleOf<never, Num>>
  * with numbers
  */
 export type RangeAsString<From extends number, To extends number> =
-  | Exclude<EnumerateAsString<To>, EnumerateAsString<From>>
-  | ToString<To>
+    | Exclude<EnumerateAsString<To>, EnumerateAsString<From>>
+    | ToString<To>
 
 /** gets the longest string in a union of strings */
 export type LongestString<Strings extends string> = ListOf<Strings>[IndexOfLongestString<
-  ListOf<Strings>
+    ListOf<Strings>
 >]
 
 type _SplitByUnion<
-  T extends string,
-  SplitBy extends string
+    T extends string,
+    SplitBy extends string
 > = T extends `${infer Char}${infer Rest}`
-  ? Char extends SplitBy
-    ? ''
-    : `${Char}${_SplitByUnion<Rest, SplitBy>}`
-  : T
+    ? Char extends SplitBy
+        ? ''
+        : `${Char}${_SplitByUnion<Rest, SplitBy>}`
+    : T
 
 /**
  * like `Split` from `ts-toolbelt` but works properly with unions
@@ -370,13 +370,13 @@ type _SplitByUnion<
  * type Foo = SplitByUnion<'foo,bar.baz', '.' | ','> //'foo'|'bar'|'baz'
  */
 export type SplitByUnion<T extends string, SplitBy extends string> = T extends `${_SplitByUnion<
-  T,
-  SplitBy
+    T,
+    SplitBy
 >}${infer Char}${infer Rest}`
-  ? Char extends SplitBy
-    ? _SplitByUnion<T, SplitBy> | SplitByUnion<Rest, SplitBy>
-    : never
-  : T
+    ? Char extends SplitBy
+        ? _SplitByUnion<T, SplitBy> | SplitByUnion<Rest, SplitBy>
+        : never
+    : T
 
 /**
  * splits a string into an array of strings with a specified length
@@ -384,6 +384,6 @@ export type SplitByUnion<T extends string, SplitBy extends string> = T extends `
  * type Foo = SplitByLength<'foobarbaz', 3> //['foo', 'bar', 'baz']
  */
 export type SplitByLength<T extends string, Len extends number> = [
-  TrimEnd<T, Len>,
-  ...(Length<T> extends Len ? [] : SplitByLength<TrimStart<T, Len>, Len>)
+    TrimEnd<T, Len>,
+    ...(Length<T> extends Len ? [] : SplitByLength<TrimStart<T, Len>, Len>)
 ]
