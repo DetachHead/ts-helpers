@@ -4,12 +4,11 @@ import {
     findDuplicates,
     findIndexWithHighestNumber,
     flat,
+    forEach,
     indexOf,
     indexOfLongestString,
-    lengthGreaterOrEqual,
     lengthGreaterThan,
     lengthIs,
-    lengthLessOrEqual,
     lengthLessThan,
     removeDuplicates,
     slice,
@@ -19,7 +18,8 @@ import {
 import { PowerAssert } from 'typed-nodejs-assert'
 import { Throw } from 'throw-expression'
 import { exactly } from '../misc'
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+import { subtract } from '../Number'
+// eslint-disable-next-line @typescript-eslint/no-var-requires-- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
 
 test('lengthGreaterOrEqual', () => {
@@ -220,6 +220,24 @@ describe('slice', () => {
             const value = slice([1, 2, 3, 4, 5, 6], 2 as number, 4)
             // can't use ExpectType due to unreliabvle positioning of items in unions
             exactly<(1 | 2 | 3 | 4 | 5 | 6)[]>()(value)
+        })
+    })
+})
+
+describe('forEach', () => {
+    const values = [1, 2, 3, 4, 5] as const
+    test('next/previous', () => {
+        forEach(values, (_, index, prev, next) => {
+            assert(values[index - 1] === prev())
+            assert(values[index + 1] === next())
+        })
+    })
+    test('no undefined when index access with known index', () => {
+        forEach(values, (_, index) => {
+            if (index !== 0) {
+                const value = values[subtract(index, 1)] // $ExpectType 1 | 2 | 3 | 4
+                assert([1, 2, 3, 4].includes(value))
+            }
         })
     })
 })
