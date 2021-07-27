@@ -244,3 +244,35 @@ export const slice = <
     start: Start,
     end?: End,
 ): Slice<Array, Start, End> => array.slice(start, end) as never
+
+/**
+ * {@link Array.prototype.forEach} on steroids™.
+ * * preserves the length if known at compiletime, allowing you to use the index to access other items in the array when
+ * the `noUncheckedIndexedAccess` compiler flag is enabled without it being possibly `undefined`
+ * * `previous` and `next` functions are available in the callback to allow for easy access of the previous and next item
+ * @example
+ * const numbers = [1,2,3,4]
+ * forEach(numbers, (num, index, prev, next) => {
+ *     if (index !== 0)
+ *         const foo = prev() // 1 | 2 | 3
+ * }
+ * @param items
+ * @param callback
+ */
+export const forEach = <T extends ReadonlyArray<unknown>>(
+    items: Narrow<T>,
+    callback: (
+        value: T[number],
+        index: Enumerate<T['length']>,
+        previous: () => T[number],
+        next: () => T[number],
+    ) => void,
+): void => {
+    let currentIndex = -1
+    const previous = () => items[currentIndex - 1]
+    const next = () => items[currentIndex + 1]
+    items.forEach((item, index) => {
+        currentIndex++
+        callback(item, index as never, previous, next)
+    })
+}
