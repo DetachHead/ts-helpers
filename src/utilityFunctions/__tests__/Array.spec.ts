@@ -242,4 +242,10 @@ describe('forEach', () => {
             }
         })
     })
+    test('not known at compiletime', () => {
+        forEach(values as readonly number[], (_, __, prev, next) => {
+            prev() // $ExpectType number
+            next() // $ExpectType number
+        })
+    })
 })
