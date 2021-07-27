@@ -56,4 +56,5 @@ export const failCI = (message?: string): void => {
     if (isCI) throw new Error(message)
 }
 
-export const isErrnoException = (error: unknown): error is NodeJS.ErrnoException => hasPropertyPredicate<NodeJS.ErrnoException>(error, 'code')
+export const isErrnoException = (error: unknown): error is NodeJS.ErrnoException =>
+    hasPropertyPredicate<NodeJS.ErrnoException>(error, 'code')
