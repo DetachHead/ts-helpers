@@ -1,7 +1,7 @@
 import isCI from 'is-ci'
 import { exactly, failCI } from '../misc'
 import { PowerAssert } from 'typed-nodejs-assert'
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-var-requires -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
 
 test('exactly', () => {

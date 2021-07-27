@@ -14,6 +14,7 @@ import { Flatten } from 'ts-toolbelt/out/List/Flatten'
 import { orderBy } from 'lodash'
 import { isDefined } from 'ts-is-present'
 import { Enumerate } from '../utilityTypes/Number'
+import { Keys } from '../utilityTypes/Any'
 
 /**
  * checks whether the given array's length is larger than **or equal to** the given number, and narrows the type of the
@@ -101,9 +102,7 @@ export const lengthIs = <T, L extends number>(
  * @see https://stackoverflow.com/a/60132060
  */
 export const arrayOfAll = <T>() => {
-    // don't think it's possible to get the return type from this scope, as this wrapper function is a workaround to create
-    // types where the value needs to be checked against the generic
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- don't think it's possible to get the return type from this scope, as this wrapper function is a workaround to create types where the value needs to be checked against the generic
     return <U extends T[]>(array: U & ([T] extends [U[number]] ? unknown : never)) => array
 }
 
@@ -116,13 +115,13 @@ export const arrayOfAll = <T>() => {
  *
  * index 1: the index in `arr` where that result occurred
  */
-export const findNotUndefined = async <T extends {}, R>(
-    arr: T[],
-    callback: (it: T) => R | void,
+export const findNotUndefined = async <T extends {}[], R>(
+    arr: T,
+    callback: (it: T[number]) => R | void,
 ): Promise<[R, number] | undefined> => {
-    for (let index = 0; index < arr.length; index++) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const value = arr[index]!
+    // hack so the compiler knows index is within the range of arr
+    for (let index: Keys<T> = 0 as never; index < arr.length; (index as number)++) {
+        const value = arr[index]
         const result = await callback(value)
         if (result) return [result, index]
     }
