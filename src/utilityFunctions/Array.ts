@@ -13,6 +13,7 @@ import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import { Flatten } from 'ts-toolbelt/out/List/Flatten'
 import { orderBy } from 'lodash'
 import { isDefined } from 'ts-is-present'
+import { Enumerate } from '../utilityTypes/Number'
 
 /**
  * checks whether the given array's length is larger than **or equal to** the given number, and narrows the type of the
@@ -26,12 +27,10 @@ import { isDefined } from 'ts-is-present'
  *      const c: string = foo[3] //Type 'string | undefined' is not assignable to type 'string'
  *  }
  */
-export function lengthGreaterOrEqual<T, L extends number>(
+export const lengthGreaterOrEqual = <T, L extends number>(
     arr: Readonly<T[]>,
     length: L,
-): arr is TupleOfAtLeast<T, L> {
-    return arr.length >= length
-}
+): arr is TupleOfAtLeast<T, L> => arr.length >= length
 
 /**
  * checks whether the given array's length is larger than the given number, and narrows the type of the array to that
@@ -45,10 +44,10 @@ export function lengthGreaterOrEqual<T, L extends number>(
  *      const c: string = foo[4] //Type 'string | undefined' is not assignable to type 'string'
  *  }
  */
-export function lengthGreaterThan<T, L extends number>(
+export const lengthGreaterThan = <T, L extends number>(
     arr: Readonly<T[]>,
     length: L,
-): arr is [...TupleOf<T, L>, T] & T[] {
+): arr is [...TupleOf<T, L>, T] & T[] => {
     return arr.length > length
 }
 
@@ -64,19 +63,15 @@ export function lengthGreaterThan<T, L extends number>(
  *      const c: string = foo[3] //error: tuple of length '3' has no element at index '3'
  *  }
  */
-export function lengthLessOrEqual<T, L extends number>(
+export const lengthLessOrEqual = <T, L extends number>(
     arr: Readonly<T[]>,
     length: L,
-): arr is TupleOfUpTo<T, L> {
-    return arr.length <= length
-}
+): arr is TupleOfUpTo<T, L> => arr.length <= length
 
-export function lengthLessThan<T, L extends number>(
+export const lengthLessThan = <T, L extends number>(
     arr: Readonly<T[]>,
     length: L,
-): arr is TupleOfUpToButNotIncluding<T, L> {
-    return arr.length < length
-}
+): arr is TupleOfUpToButNotIncluding<T, L> => arr.length < length
 
 /**
  * checks whether the given array's length is equal to the given number, and narrows the type of the array to that
@@ -89,9 +84,10 @@ export function lengthLessThan<T, L extends number>(
  *      const c: string = foo[2] //Tuple type '[string, string, string]' of length '3' has no element at index '3'.
  *  }
  */
-export function lengthIs<T, L extends number>(arr: Readonly<T[]>, length: L): arr is TupleOf<T, L> {
-    return arr.length === length
-}
+export const lengthIs = <T, L extends number>(
+    arr: Readonly<T[]>,
+    length: L,
+): arr is TupleOf<T, L> => arr.length === length
 
 /**
  * creates a function that checks that the given array contains all elements in the union `T`
@@ -104,7 +100,7 @@ export function lengthIs<T, L extends number>(arr: Readonly<T[]>, length: L): ar
  * const extraColors = arrayOfAllColors(['red', 'blue', 'pink', 'bad']); // error
  * @see https://stackoverflow.com/a/60132060
  */
-export function arrayOfAll<T>() {
+export const arrayOfAll = <T>() => {
     // don't think it's possible to get the return type from this scope, as this wrapper function is a workaround to create
     // types where the value needs to be checked against the generic
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -120,10 +116,10 @@ export function arrayOfAll<T>() {
  *
  * index 1: the index in `arr` where that result occurred
  */
-export async function findNotUndefined<T extends {}, R>(
+export const findNotUndefined = async <T extends {}, R>(
     arr: T[],
     callback: (it: T) => R | void,
-): Promise<[R, number] | undefined> {
+): Promise<[R, number] | undefined> => {
     for (let index = 0; index < arr.length; index++) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const value = arr[index]!
@@ -136,62 +132,54 @@ export async function findNotUndefined<T extends {}, R>(
 /**
  * checks whether an array contains any duplicates
  */
-export function containsDuplicates(arr: unknown[]): boolean {
-    return new Set(arr).size !== arr.length
-}
+export const containsDuplicates = (arr: unknown[]): boolean => new Set(arr).size !== arr.length
+
+/** removes any duplicated items from an array */
+export const removeDuplicates = <T, L extends number>(arr: T[]): TupleOfUpTo<T, L> =>
+    Array.from(new Set(arr)) as TupleOfUpTo<T, L>
 
 /**
  * @returns an array of any items that there were duplicates of in the given array (unique)
  * @example
  * findDuplicates([1,1,2,3,3,3]) // [1,3]
  */
-export function findDuplicates<T, L extends number>(arr: TupleOf<T, L>): TupleOfUpTo<T, L> {
-    return removeDuplicates(arr.filter((item) => arr.filter((item2) => item === item2).length > 1))
-}
-
-/** removes any duplicated items from an array */
-export function removeDuplicates<T, L extends number>(arr: T[]): TupleOfUpTo<T, L> {
-    return Array.from(new Set(arr)) as TupleOfUpTo<T, L>
-}
+export const findDuplicates = <T, L extends number>(arr: TupleOf<T, L>): TupleOfUpTo<T, L> =>
+    removeDuplicates(arr.filter((item) => arr.filter((item2) => item === item2).length > 1))
 
 /**
  * concatenates two arrays while keeping track of their length
  */
-export function concat<A1 extends readonly unknown[], A2 extends readonly unknown[]>(
+export const concat = <A1 extends readonly unknown[], A2 extends readonly unknown[]>(
     array1: Narrow<A1>,
     array2: Narrow<A2>,
-): [...A1, ...A2] {
-    return array1.concat(
+): [...A1, ...A2] =>
+    array1.concat(
         // @ts-expect-error some wack error caused by the Narrow type, but it's the same type anyway so this is a false positive
         array2,
     ) as never
-}
 
 /**
  * {@link Array.prototype.indexOf} but it uses {@link IndexOf} such that the result can be known at compiletime
  */
-export function indexOf<Array extends readonly unknown[], Value extends Array[number]>(
+export const indexOf = <Array extends readonly unknown[], Value extends Array[number]>(
     array: Narrow<Array>,
     value: Narrow<Value>,
-): IndexOf<Array, Value> {
-    return array.indexOf(
+): IndexOf<Array, Value> =>
+    array.indexOf(
         // @ts-expect-error some wack error caused by the Narrow type, but it's the same type anyway so this is a false positive
         value,
     ) as never
-}
 
 /**
  * {@link Array.prototype.flat} but it uses {@link Flatten} such that the result can be known at compiletime
  */
-export function flat<Array extends readonly unknown[], Depth extends number = 1>(
+export const flat = <Array extends readonly unknown[], Depth extends number = 1>(
     array: Narrow<Array>,
     depth?: Depth,
-): Flatten<Array, 1, Depth> {
-    return array.flat(depth) as never
-}
+): Flatten<Array, 1, Depth> => array.flat(depth) as never
 
 /** removes `deleteCount` values from `array` starting at `startIndex` */
-export function splice<
+export const splice = <
     Array extends unknown[],
     StartIndex extends number,
     DeleteCount extends number
@@ -199,9 +187,8 @@ export function splice<
     array: Narrow<Array>,
     startIndex: StartIndex,
     deleteCount: DeleteCount,
-): Splice<Array, StartIndex, DeleteCount> {
-    return array.filter((_, index) => index < startIndex || index > deleteCount + 1) as never
-}
+): Splice<Array, StartIndex, DeleteCount> =>
+    array.filter((_, index) => index < startIndex || index > deleteCount + 1) as never
 
 /**
  * runs the given `predicate` on each value in the given `array`, and returns the index of the first value in the `array`
@@ -211,10 +198,10 @@ export function splice<
  * @example
  * const foo = findIndexWithHighestNumber(['foo', 'barbaz', 'qux'], value => value.length) //1
  */
-export function findIndexWithHighestNumber<T extends unknown[]>(
+export const findIndexWithHighestNumber = <T extends unknown[]>(
     array: Narrow<T>,
     predicate: (value: T[number]) => number,
-): T extends [] ? undefined : number {
+): T extends [] ? undefined : number => {
     if (lengthIs(array, 0)) return undefined as never
     let highestNumber = 0
     let result = 0
@@ -228,35 +215,32 @@ export function findIndexWithHighestNumber<T extends unknown[]>(
     return result as never
 }
 
-export function indexOfLongestString<Strings extends string[]>(
+export const indexOfLongestString = <Strings extends string[]>(
     strings: Narrow<Strings>,
-): IndexOfLongestString<Strings> {
-    return findIndexWithHighestNumber(strings, (string) => string.length) as never
-}
+): IndexOfLongestString<Strings> =>
+    findIndexWithHighestNumber(strings, (string) => string.length) as never
 
 /** sorts an array of strings by longest to shortest */
-// TODO: option to sort by shortest to longest
-export function sortByLongestStrings<Strings extends string[]>(
+export const sortByLongestStrings = <Strings extends string[]>(
     strings: Narrow<Strings>,
-): SortLongestStrings<Strings> {
-    return orderBy(strings, 'length', 'desc') as never
-}
+): SortLongestStrings<Strings> => orderBy(strings, 'length', 'desc') as never
 
 /**
  * removes any `undefined` values from `array` before maooiung over them and returning the mappved array with no
  * undefined or null values
  */
-export function mapNotUndefined<T, R>(array: (T | undefined)[], callback: (value: T) => R): R {
-    return array.filter(isDefined).map(callback) as never
-}
+export const mapNotUndefined = <T, R>(array: (T | undefined)[], callback: (value: T) => R): R =>
+    array.filter(isDefined).map(callback) as never
 
 /**
  * {@link Array.slice} using {@link Slice} so the result can be known at compiletime
  */
-export function slice<
+export const slice = <
     Array extends unknown[],
     Start extends number,
     End extends number = Array['length']
->(array: Narrow<Array>, start: Start, end?: End): Slice<Array, Start, End> {
-    return array.slice(start, end) as never
-}
+>(
+    array: Narrow<Array>,
+    start: Start,
+    end?: End,
+): Slice<Array, Start, End> => array.slice(start, end) as never

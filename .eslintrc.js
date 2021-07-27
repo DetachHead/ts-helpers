@@ -9,6 +9,7 @@ module.exports = {
         'plugin:@typescript-eslint/recommended',
         'plugin:eslint-plugin-expect-type/recommended',
         'prettier',
+        'plugin:eslint-comments/recommended',
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -16,7 +17,7 @@ module.exports = {
         sourceType: 'module',
         project: './tsconfig.json',
     },
-    plugins: ['@typescript-eslint', 'eslint-plugin-expect-type'],
+    plugins: ['eslint-plugin-prefer-arrow', '@typescript-eslint', 'eslint-plugin-expect-type'],
     rules: {
         'linebreak-style': ['error', 'unix'],
         quotes: ['error', 'single', { avoidEscape: true }],
@@ -25,5 +26,18 @@ module.exports = {
         '@typescript-eslint/ban-types': 'off',
         'spaced-comment': 'error',
         '@typescript-eslint/no-throw-literal': 'error',
+        'eslint-comments/no-unused-disable': 'error',
+        'eslint-comments/require-description': 'error',
+        eqeqeq: 'error',
+        'prefer-arrow/prefer-arrow-functions': [
+            'error',
+            {
+                classPropertiesAllowed: true,
+            },
+        ],
+        '@typescript-eslint/no-invalid-this': 'error',
+        'require-await': 'error',
+        '@typescript-eslint/no-floating-promises': ['error', { ignoreIIFE: true }],
+        'no-return-await': 'error',
     },
 }
