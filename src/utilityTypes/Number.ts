@@ -21,7 +21,11 @@ type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['lengt
  * type Foo = Enumerate<3> //0|1|2
  * @see https://stackoverflow.com/a/63918062
  */
-export type Enumerate<N extends number> = _Enumerate<[], N> extends (infer E)[] ? E : never
+export type Enumerate<N extends number> = number extends N
+    ? number
+    : _Enumerate<[], N> extends (infer E)[]
+    ? E
+    : never
 
 /**
  * creates a range type of numbers from generics `FROM` (inclusive) to `TO` (inclusive)
