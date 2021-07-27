@@ -7,8 +7,10 @@ import {
     forEach,
     indexOf,
     indexOfLongestString,
+    lengthGreaterOrEqual,
     lengthGreaterThan,
     lengthIs,
+    lengthLessOrEqual,
     lengthLessThan,
     removeDuplicates,
     slice,
@@ -19,7 +21,7 @@ import { PowerAssert } from 'typed-nodejs-assert'
 import { Throw } from 'throw-expression'
 import { exactly } from '../misc'
 import { subtract } from '../Number'
-// eslint-disable-next-line @typescript-eslint/no-var-requires-- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
+// eslint-disable-next-line @typescript-eslint/no-var-requires -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
 
 test('lengthGreaterOrEqual', () => {

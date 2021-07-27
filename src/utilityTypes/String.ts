@@ -248,8 +248,7 @@ export type PadStart<
     String extends string,
     Size extends number,
     PadString extends string
-    // need to make sure it's a string literal or union of string literal, to prevent invalid results such as `000${number}`
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- need to make sure it's a string literal or union of string literal, to prevent invalid results such as `000${number}`
 > = `${any}` extends String | PadString
     ? string
     : {
