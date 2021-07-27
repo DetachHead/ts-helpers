@@ -3,9 +3,8 @@
  */
 import { Entries } from '../utilityTypes/Any'
 
-export function hasPropertyPredicate<T>(object: unknown, propertyName: keyof T): object is T {
-    return Object.prototype.hasOwnProperty.call(object, propertyName)
-}
+export const hasPropertyPredicate = <T>(object: unknown, propertyName: keyof T): object is T =>
+    Object.prototype.hasOwnProperty.call(object, propertyName)
 
 /**
  * Object.entries but preserves the key types
@@ -14,6 +13,4 @@ export function hasPropertyPredicate<T>(object: unknown, propertyName: keyof T):
  * treating all keys as `string[]` causes
  * @see https://github.com/Microsoft/TypeScript/issues/12870
  */
-export function entries<T>(object: T): Entries<T> {
-    return Object.entries(object) as never
-}
+export const entries = <T>(object: T): Entries<T> => Object.entries(object) as never

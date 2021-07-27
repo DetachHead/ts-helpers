@@ -10,8 +10,7 @@ import { hasPropertyPredicate } from './Any'
  * cast<number, 1|2>(foo)
  * type Bar = typeof foo //1|2
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export function cast<Base, Narrowed extends Base>(_value: Base): asserts _value is Narrowed {}
+export const cast = <Base, Narrowed extends Base>(_value: Base): asserts _value is Narrowed => {}
 
 /**
  * unsafely casts the given value to type `T` without having to assign it to a new variable.
@@ -20,21 +19,18 @@ export function cast<Base, Narrowed extends Base>(_value: Base): asserts _value 
  * cast<number, 1|2>(foo)
  * type Bar = typeof foo //1|2
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export function unsafeCast<T>(_value: unknown): asserts _value is T {}
+export const unsafeCast = <T>(_value: unknown): asserts _value is T => {}
 
 /**
  * converts the given `value` to a string, preserving its value at compiletime where possible
  */
-export function toStringType<T extends Stringable>(
+export const toStringType = <T extends Stringable>(
     value: T,
-): T extends TemplateLiteralStringable ? ToString<T> : string {
-    return value.toString() as never
-}
+): T extends TemplateLiteralStringable ? ToString<T> : string => (value.toString() as never)
 
 // TODO: find a type testing library that doesnt suck
 // eslint-disable-next-line @typescript-eslint/no-empty-function,@typescript-eslint/no-unused-vars
-export function testType<T>(_value: T): void {}
+export const testType = <T>(_value: T): void => {}
 
 /**
  * creates a function that can be used to check that a type exactly equals another type. sometimes useful for testing types
@@ -44,7 +40,7 @@ export function testType<T>(_value: T): void {}
  * const bar = exactlyNumber(1) //error
  * @see Equals
  */
-export function exactly<Expected>() {
+export const exactly = <Expected>() => {
     // don't think it's possible to get the return type from this scope, as this wrapper function is a workaround to create
     // types where the value needs to be checked against the generic ()
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -53,10 +49,8 @@ export function exactly<Expected>() {
 }
 
 /** throws an error if running in CI. useful if you want to remind yourself to fix something later */
-export function failCI(message?: string) {
+export const failCI = (message?: string) => {
     if (isCI) throw new Error(message)
 }
 
-export function isErrnoException(error: unknown): error is NodeJS.ErrnoException {
-    return hasPropertyPredicate<NodeJS.ErrnoException>(error, 'code')
-}
+export const isErrnoException = (error: unknown): error is NodeJS.ErrnoException => hasPropertyPredicate<NodeJS.ErrnoException>(error, 'code')
