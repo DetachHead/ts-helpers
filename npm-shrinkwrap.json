@@ -41,7 +41,7 @@
         "ts-is-present": "^1.2.1",
         "ts-jest": "^26.4.4",
         "typed-nodejs-assert": "^1.1.0",
-        "typescript": "^4.4.0-beta"
+        "typescript": "^4.4.0-dev.20210727"
       }
     },
     "node_modules/@babel/code-frame": {
@@ -7811,9 +7811,9 @@
       }
     },
     "node_modules/typescript": {
-      "version": "4.4.0-beta",
-      "resolved": "https://registry.npmjs.org/typescript/-/typescript-4.4.0-beta.tgz",
-      "integrity": "sha512-qMxA8NzN3igwX8Mii7MXGNW+YeFAkUKyKg+x4F1CCFsO36LqISf1EXXSOLDuRIdGjdVvV53grRxfHjOW65YfMA==",
+      "version": "4.4.0-dev.20210727",
+      "resolved": "https://registry.npmjs.org/typescript/-/typescript-4.4.0-dev.20210727.tgz",
+      "integrity": "sha512-RG4uLCYW/FzU5cffTTwssbd7j8Cv7FPJ3zjF7jnAqvm2rXVyrDCmoipIJ0a0XLQ35TJEZyfMwReeeA6ibagolA==",
       "dev": true,
       "bin": {
         "tsc": "bin/tsc",
@@ -14411,9 +14411,9 @@
       }
     },
     "typescript": {
-      "version": "4.4.0-beta",
-      "resolved": "https://registry.npmjs.org/typescript/-/typescript-4.4.0-beta.tgz",
-      "integrity": "sha512-qMxA8NzN3igwX8Mii7MXGNW+YeFAkUKyKg+x4F1CCFsO36LqISf1EXXSOLDuRIdGjdVvV53grRxfHjOW65YfMA==",
+      "version": "4.4.0-dev.20210727",
+      "resolved": "https://registry.npmjs.org/typescript/-/typescript-4.4.0-dev.20210727.tgz",
+      "integrity": "sha512-RG4uLCYW/FzU5cffTTwssbd7j8Cv7FPJ3zjF7jnAqvm2rXVyrDCmoipIJ0a0XLQ35TJEZyfMwReeeA6ibagolA==",
       "dev": true
     },
     "union-value": {
