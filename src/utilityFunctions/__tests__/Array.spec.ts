@@ -12,6 +12,7 @@ import {
     lengthIs,
     lengthLessOrEqual,
     lengthLessThan,
+    map,
     removeDuplicates,
     slice,
     sortByLongestStrings,
@@ -244,8 +245,58 @@ describe('forEach', () => {
     })
     test('not known at compiletime', () => {
         forEach(values as readonly number[], (_, __, prev, next) => {
-            prev() // $ExpectType number
-            next() // $ExpectType number
+            prev() // $ExpectType number | undefined
+            next() // $ExpectType number | undefined
+        })
+    })
+})
+
+describe('map', () => {
+    const values = [1, 2, 3, 4, 5] as const
+    test('next/previous', () => {
+        // $ExpectType (1 | 2 | 3 | 4 | undefined)[]
+        const result = map(values, (_, index, prev, next) => {
+            assert(values[index - 1] === prev())
+            assert(values[index + 1] === next())
+            return prev()
+        })
+        assert.deepStrictEqual(result, [undefined, 1, 2, 3, 4])
+    })
+    test('no undefined in result when index accesses are within range', () => {
+        // $ExpectType (1 | 2 | 3 | 4 | 5)[]
+        const result = map(values, (value, index) => {
+            if (index === 0) {
+                let asdf = index
+                const foo = values[index]
+                asdf = 0
+            } else {
+                // expect-type doesn't work on return statements so we need to set a variable first
+                // noinspection UnnecessaryLocalVariableJS
+                let result = values[subtract(index, 1)] // $ExpectType 1 | 2 | 3 | 4
+                result = 9
+                return result
+            }
+        })
+        assert.deepStrictEqual(result, [1, 1, 2, 3, 4])
+    })
+    test('undefined in result when index access is outside range', () => {
+        // $ExpectType (1 | 2 | 3 | 4 | 5)[]
+        const result = map(values, (value, index) => {
+            if (index !== 0) {
+                // expect-type doesn't work on return statements so we need to set a variable first
+                // noinspection UnnecessaryLocalVariableJS
+                const result = values[subtract(index, 1)] // $ExpectType 1 | 2 | 3 | 4
+                return result
+            } else {
+                return value
+            }
+        })
+        assert.deepStrictEqual(result, [1, 1, 2, 3, 4])
+    })
+    test('not known at compiletime', () => {
+        map(values as readonly number[], (_, __, prev, next) => {
+            prev() // $ExpectType number | undefined
+            next() // $ExpectType number | undefined
         })
     })
 })

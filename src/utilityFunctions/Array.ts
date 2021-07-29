@@ -1,4 +1,5 @@
 import {
+    Index,
     IndexOf,
     IndexOfLongestString,
     Slice,
@@ -13,8 +14,9 @@ import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import { Flatten } from 'ts-toolbelt/out/List/Flatten'
 import { orderBy } from 'lodash'
 import { isDefined } from 'ts-is-present'
-import { Enumerate } from '../utilityTypes/Number'
+import { Decrement, Increment } from '../utilityTypes/Number'
 import { Keys } from '../utilityTypes/Any'
+import { add, subtract } from './Number'
 
 /**
  * checks whether the given array's length is larger than **or equal to** the given number, and narrows the type of the
@@ -244,6 +246,58 @@ export const slice = <
     end?: End,
 ): Slice<Array, Start, End> => array.slice(start, end) as never
 
+type PreviousNavigator<Arr extends ReadonlyArray<unknown>, I extends Index<Arr>> = () =>
+    | (0 extends I ? undefined : never)
+    | (I extends 0 ? never : Arr[Decrement<I>])
+type NextNavigator<
+    Arr extends ReadonlyArray<unknown>,
+    I extends Index<Arr>
+> = () => Arr['length'] extends I
+    ? I extends Arr['length']
+        ? undefined
+        :
+              | undefined
+              // @ts-expect-error
+              | Arr[Increment<I>]
+    : // @ts-expect-error
+      Arr[Increment<I>]
+
+type LoopCallback<Arr extends ReadonlyArray<unknown>, CallbackResult> = <
+    CurrentIndex extends Index<Arr>
+>(
+    value: // @ts-expect-error
+    Arr[CurrentIndex],
+    index: CurrentIndex,
+    previous: PreviousNavigator<Arr, CurrentIndex>,
+    next: NextNavigator<Arr, CurrentIndex>,
+) => CallbackResult
+
+/**
+ * generic function for wrapping callbacks that iterate over an array with `next` and `previous` functions as well as
+ * improved type safety on indexed access.
+ *
+ * see {@link forEach} and {@link map}
+ */
+const loopWrapper = <Arr extends ReadonlyArray<unknown>, CallbackResult, LoopResult>(
+    items: Arr,
+    loopFunction: (
+        this: Arr,
+        callbackfn: (value: Arr[number], index: number) => CallbackResult,
+    ) => LoopResult,
+    callback: LoopCallback<Arr, CallbackResult>,
+): LoopResult => {
+    let currentIndex = -1
+    const previous = () => items[subtract(currentIndex, 1)]
+    const next = () => items[add(currentIndex, 1)]
+    return loopFunction.call(
+        items as Arr, // using the Narrow type on items messes up the type so we need to cast it back to T
+        (item, index) => {
+            currentIndex++
+            return callback(item, index as never, previous, next)
+        },
+    )
+}
+
 /**
  * {@link Array.prototype.forEach} on steroids™.
  * * preserves the length if known at compiletime, allowing you to use the index to access other items in the array when
@@ -260,18 +314,25 @@ export const slice = <
  */
 export const forEach = <T extends ReadonlyArray<unknown>>(
     items: Narrow<T>,
-    callback: (
-        value: T[number],
-        index: Enumerate<T['length']>,
-        previous: () => T[number],
-        next: () => T[number],
-    ) => void,
-): void => {
-    let currentIndex = -1
-    const previous = () => items[currentIndex - 1]
-    const next = () => items[currentIndex + 1]
-    items.forEach((item, index) => {
-        currentIndex++
-        callback(item, index as never, previous, next)
-    })
-}
+    callback: LoopCallback<T, void>,
+): void => loopWrapper<T, void, void>(items, Array.prototype.forEach, callback)
+
+/**
+ * {@link Array.prototype.map} on steroids™.
+ * * preserves the length if known at compiletime, allowing you to use the index to access other items in the array when
+ * the `noUncheckedIndexedAccess` compiler flag is enabled without it being possibly `undefined`
+ * * `previous` and `next` functions are available in the callback to allow for easy access of the previous and next item
+ * @example
+ * const numbers = [1,2,3,4]
+ * map(numbers, (num, index, prev, next) => {
+ *     if (index !== 0)
+ *         return prev() // 1 | 2 | 3
+ * } // [undefined, 1, 2, 3]
+ * @param items
+ * @param callback
+ */
+export const map = <Arr extends ReadonlyArray<unknown>, CallbackResult>(
+    items: Narrow<Arr>,
+    callback: LoopCallback<Arr, CallbackResult>,
+): CallbackResult[] =>
+    loopWrapper<Arr, CallbackResult, CallbackResult[]>(items, Array.prototype.map, callback)

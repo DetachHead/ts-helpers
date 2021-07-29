@@ -4,11 +4,7 @@ import { PadStart, Tail, ToString, TrimEnd, TrimStart } from './String'
 import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
 import { Length } from 'ts-toolbelt/out/String/Length'
 
-type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
-    ? ((t: T, ...a: A) => void) extends (...x: infer X) => void
-        ? X
-        : never
-    : never
+type _PrependNextNum<A extends Array<unknown>> = [...A, A['length']]
 
 type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['length']
     ? A
