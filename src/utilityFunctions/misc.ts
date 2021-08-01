@@ -38,18 +38,45 @@ export const testType = <T>(_value: T): void => {
 }
 
 /**
- * creates a function that can be used to check that a type exactly equals another type. sometimes useful for testing types
- * @example
- * const exactlyNumber = exactly<number>() //create the "type"
- * const foo = exactlyNumber(1 as number) //no error
- * const bar = exactlyNumber(1) //error
+ * Used to check that two types are an exact match. Useful for testing types<br/>
+ * Comes in two forms:
+ *  - type form: `exactly<T1, T2>()`
+ *  - value form: `exactly<Type>()(value)`<br/>
+ *
+ * Correctly checks `any` and `never`.
+ *
  * @see Equals
  */
-export const exactly = <Expected>() => {
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- don't think it's possible to get the return type from this scope, as this wrapper function is a workaround to create types where the value needs to be checked against the generic
-    return <Actual>(value: Actual & (Equals<Expected, Actual> extends true ? unknown : never)) =>
-        value
-}
+export const exactly: {
+    /**
+     * ### Value form<br/>
+     * @param Expected: The expected type.<br/>
+     * @param Actual: The actual type, DO NOT specify this parameter<br/>
+     * @param value: The value that will be checked.<br/>
+     * @param _this_parameter_will_be_expected_if_the_types_dont_match: An unused parameter to bound the types, DO NOT specify this parameter<br/>
+     *
+     * This is implemented as a higher order function to allow partial inference on the Expected type.
+     *
+     * @example
+     * let a: 1 | 2 = 1;<br/>
+     * exactly<number>()(a);  // error as `number` is not an exact match of `1 | 2`<br/>
+     * exactly<number>()(a as number);  // no error<br/>
+     * exactly<1 | 2>()(a);  // no error<br/>
+     */
+    <Expected>(): <Actual>(value: Actual, ..._this_parameter_will_be_expected_if_the_types_dont_match: Equals<Expected, Actual> extends true ? [] : [never]) => Actual
+    /**
+     * ### Type form<br/>
+     * @param Expected: The expected type.<br/>
+     * @param Actual: The actual type, often `typeof x`.<br/>
+     * @param _Bound: Used to bind the two types together, DO NOT specify this parameter.<br/>
+     *
+     * @example
+     * type Foo = 1 | 2;<br/>
+     * exactly<1, Foo>();  // error as `1 | 2` is not an exact match of `1`<br/>
+     * exactly<1 | 2, Foo>();  // no error<br/>
+     */
+    <Expected extends Equals<Expected, Actual> extends true ? Actual : never, Actual extends _Bound, _Bound = Expected>(): void
+} = () => <Actual>(a?: Actual, ..._b: [never?]) => a
 
 /** throws an error if running in CI. useful if you want to remind yourself to fix something later */
 export const failCI = (message?: string): void => {
