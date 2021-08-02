@@ -1,5 +1,5 @@
 import { Primitive } from 'utility-types'
-import { Add, Decrement, Increment, Subtract } from './Number'
+import { Add, Decrement, Increment, IsGreaterThan, IsLessOrEqual, Subtract } from './Number'
 import { Length } from 'ts-toolbelt/out/String/Length'
 import { AnyKey, IsNever } from 'tsdef'
 import { Cast } from 'ts-toolbelt/out/Any/Cast'
@@ -386,3 +386,16 @@ export type SplitByLength<T extends string, Len extends number> = [
     TrimEnd<T, Len>,
     ...(Length<T> extends Len ? [] : SplitByLength<TrimStart<T, Len>, Len>)
 ]
+
+/**
+ * truncates a string to the specified `MaxLength`, concatenating an `Ellipsis` if the string is too long
+ */
+export type Truncate<
+    Str extends string,
+    MaxLength extends number,
+    Ellipsis extends string = '…'
+> = IsGreaterThan<Length<Ellipsis>, MaxLength> extends true
+    ? never
+    : IsLessOrEqual<Length<Str>, MaxLength> extends true
+    ? Str
+    : `${Substring<Str, 0, Subtract<MaxLength, Length<Ellipsis>>>}${Ellipsis}`
