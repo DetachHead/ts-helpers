@@ -145,6 +145,13 @@ export const endsWith = <Full extends string, CheckEnd extends string>(
 
 const defaultEllipsis = '…'
 
+/**
+ * truncates a string to the specified `maxLength`, concatenating an `ellipsis` if the string is too long.
+ * values are preserved at compiletime where possible
+ * @example
+ * const foo = truncate('foobarbaz', 4) // 'foo…'
+ * const bar = truncate('foobarbaz', 4, '--') // 'fo--'
+ */
 export const truncate: {
     <
         Str extends string,
