@@ -31,8 +31,10 @@ export const unsafeCast = <T>(_value: unknown): asserts _value is T => {
 export const toStringType = <T extends Stringable>(
     value: T,
 ): T extends TemplateLiteralStringable ? ToString<T> : string => value.toString() as never
-
-// TODO: find a type testing library that doesnt suck
+/**
+ * @deprecated use `exactly` instead for testing types
+ * @see exactly
+ */
 export const testType = <T>(_value: T): void => {
     // do nothing
 }
