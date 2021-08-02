@@ -11,8 +11,9 @@ import {
     split,
     startsWith,
     substring,
+    truncate,
 } from '../String'
-import { toStringType } from '../misc'
+import { exactly, toStringType } from '../misc'
 import { PowerAssert } from 'typed-nodejs-assert'
 // eslint-disable-next-line @typescript-eslint/no-var-requires -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
@@ -141,4 +142,9 @@ describe('endsWith', () => {
         endsWith('foobar' as string, 'baz') // $ExpectType boolean
         endsWith('foobar', 'baz' as string) // $ExpectType boolean
     })
+})
+
+describe('truncate', () => {
+    test('default ellipsis', () => exactly<'foo…'>()(truncate('foobarbaz', 4)))
+    test('custom ellipsis', () => exactly<'foo--'>()(truncate('foobarbaz', 5, '--')))
 })

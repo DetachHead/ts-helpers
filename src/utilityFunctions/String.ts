@@ -9,12 +9,15 @@ import {
     ReplaceOne,
     StartsWith,
     Substring,
+    Truncate,
 } from '../utilityTypes/String'
 import { List } from 'ts-toolbelt/out/List/List'
 import { Literal } from 'ts-toolbelt/out/String/_Internal'
 import { Join } from 'ts-toolbelt/out/String/Join'
 import { Split } from 'ts-toolbelt/out/String/Split'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
+import { Throw } from 'throw-expression'
+import { OptionalParameterFromGeneric } from '../utilityTypes/misc'
 
 /**
  * replaces the first occurrence of `find` with `replace`
@@ -140,3 +143,22 @@ export const endsWith = <Full extends string, CheckEnd extends string>(
     full: Full,
     checkEnd: CheckEnd,
 ): EndsWith<Full, CheckEnd> => full.endsWith(checkEnd) as never
+
+export const truncate = <
+    Str extends string,
+    MaxLength extends number,
+    Ellipsis extends string = '…'
+>(
+    string: Str,
+    maxLength: MaxLength,
+    ...optionalEllipsis: OptionalParameterFromGeneric<Ellipsis, '…'>
+): Truncate<Str, MaxLength, Ellipsis> => {
+    const ellipsis = optionalEllipsis[0] ?? '…'
+    return (ellipsis.length > maxLength
+        ? Throw(
+              `can't truncate string: "${string}" with "${ellipsis}" because it's longer than the max length: ${maxLength}`,
+          )
+        : string.length < maxLength
+        ? string
+        : `${string.substring(0, maxLength - ellipsis.length)}${ellipsis}`) as never
+}
