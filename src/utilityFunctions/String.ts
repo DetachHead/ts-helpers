@@ -73,6 +73,16 @@ export const substring = <
     string.substring(start, end) as Substring<String, StartIndex, EndIndex>
 
 /**
+ * concatenates strings while keeping their values known at compiletime
+ * @example
+ * const foo = concatenate('foo', 'bar', 'baz') //'foobarbaz'
+ */
+export const concatenate = <T extends string[]>(...strings: T): Join<T, ''> =>
+    // Narrow often causes false positives when the function is called, and we don't need it to narrow the type here
+    // because of rest parameters. instead, cast it when calling join which does rely on Narrow to work
+    join(strings as Narrow<T>, '')
+
+/**
  * joins a string by the given `delimiter` at compiletime
  */
 export const join = <T extends List<Literal>, D extends string>(
