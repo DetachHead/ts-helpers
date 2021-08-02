@@ -75,5 +75,5 @@ The `Equals` type allows you to check if two types are equal at the type level
 ```ts
 Equals<number, 1 | 2> // false
 Equals<any, 10> // false
-Equals<unknwon, never> // false
+Equals<unknown, never> // false
 ```
