@@ -297,22 +297,19 @@ type ReplaceValuesMap = Record<Exclude<AnyKey, symbol>, unknown>
 
 type _TokenizeString<Value extends string, Map extends ReplaceValuesMap> = '' extends Value
     ? []
-    : LongestString<MatchStart<Value, Keys<Map>>> extends infer Token
+    : LongestString<MatchStart<Value, 'adsfsdfg'>> extends infer Token
     ? Token extends string
-        ? [Token, ..._TokenizeString<TrimStart<Value, Length<Token>>, Map>]
-        : IndexOf<Value, Keys<Map>> extends infer NextTokenIndex
-        ? NextTokenIndex extends -1
-            ? [Value]
-            : [
-                  TrimEnd<
-                      Value,
-                      // @ts-expect-error i think there's a bug in ts with inferred generics not narrowing properly
-                      NextTokenIndex
-                  >,
-                  ..._TokenizeString<TrimStart<Value, IndexOf<Value, Keys<Map>>>, Map>
-              ]
-        : never
+        ? [Token]
+        : ['afds', ..._TokenizeString<TrimStart<Value, IndexOf<Value, 'asdf'>>, Map>]
     : never
+// i was abble to cut this type down to just this and the error still wasn't appearing. anything else i removed caused the error to come back
+// type _TokenizeString<Value extends string, Map extends ReplaceValuesMap> = '' extends Value
+//     ? []
+//     : LongestString<MatchStart<Value, 'adsfsdfg'>> extends infer Token
+//         ? Token extends string
+//             ? [Token]
+//             : ['afds', ..._TokenizeString<TrimStart<Value, IndexOf<Value, 'asdf'>>, Map>]
+//         : never
 
 type _ReplaceValuesWithMap<Value extends string[], Map extends ReplaceValuesMap> = Value extends []
     ? []
@@ -322,6 +319,9 @@ type _ReplaceValuesWithMap<Value extends string[], Map extends ReplaceValuesMap>
           ..._ReplaceValuesWithMap<ArrayTail<Value>, Map>
       ]
 
+// uncomment this, then the error on the variable assignment below magically comes back
+// const foo: Join<['asdf']> = '' // error
+
 /**
  * replaces all instances in `Value` of the first string with the second string with each tuple in `Map`
  * @example
@@ -330,6 +330,8 @@ type _ReplaceValuesWithMap<Value extends string[], Map extends ReplaceValuesMap>
 export type ReplaceValuesWithMap<Format extends string, Map extends ReplaceValuesMap> =
     // @ts-expect-error stack depth error but it's fine
     Join<_ReplaceValuesWithMap<_TokenizeString<Format, Map>, Map>>
+
+const bar: Join<['asdf']> = '' // no error
 
 /**
  * a stringified version of {@link Enumerate}
