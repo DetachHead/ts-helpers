@@ -19,3 +19,37 @@ const _indexedAccessCheck = ([] as never[])[0]
  * based on this compiler option
  */
 export type NoUncheckedIndexedAccess = undefined extends typeof _indexedAccessCheck ? true : false
+
+/**
+ * allows you to specify that a function parameter is optional but only if a generic type extends the specified
+ * `Extends` type.
+ *
+ * requires you to define the parameter as a rest parameter (ie. `...value`), however the length of the rest type only
+ * goes up to 1, so it behaves the same as a normal optional parameter (`value?`).
+ * @example
+ * function getValue<T = undefined>(value?: T): T {
+ *     // Type 'T | undefined' is not assignable to type 'T'.
+ *     //  'T' could be instantiated with an arbitrary type which could be unrelated to 'T | undefined'.(2322)
+ *     return value
+ * }
+ *
+ * //this is annoying, because you obviously want the function to be called like this:
+ * getValue()
+ * getValue<number>(2)
+ * getValue<undefined>()
+ *
+ * //but don't want it to be called like this:
+ * getValue<number>() //invalid, but no compile error (that's why you get the compile error when returtning the value)
+ *
+ * //so with this type, you can rewrite the function like so:
+ * function getValue<T = undefined>(...value: OptionalParameterFromGeneric<T, undefined>): T {
+ *     // you can now (probably) safely cast the value to suppress the compile error
+ *     return value[0] as T
+ * }
+
+ //now you get a compile error when calling the function like this:
+ getValue<number>()
+ */
+export type OptionalParameterFromGeneric<Type, Extends> = Type extends Extends
+    ? [] | [Type]
+    : [Type]
