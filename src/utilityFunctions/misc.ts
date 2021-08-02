@@ -2,6 +2,8 @@ import { Stringable, TemplateLiteralStringable, ToString } from '../utilityTypes
 import { Equals } from '../utilityTypes/misc'
 import isCI from 'is-ci'
 import { hasPropertyPredicate } from './Any'
+import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
+import assert from 'assert'
 
 /**
  * narrows the given value from type `Base` to type `Narrowed` without having to assign it to a new variable
@@ -42,9 +44,10 @@ export const testType = <T>(_value: T): void => {
 export const exactly: {
     /**
      * Used to check that two types are an exact match. Useful for testing types.<br/>
-     * Comes in two forms:
-     * - type form: `exactly<T1, T2>()`
-     * - value form: `exactly<Type>()(value)`<br/>
+     * Comes in three forms:
+     * - type form: `exactly<ExpectedType, ActualType>()`
+     * - mixed form: `exactly<Type>()(value)`<br/>
+     * - value form: `exactly(expectedValue, actualValue)`<br/>
      * Correctly checks `any` and `never`.
      * @see Equals
      * # Value Form
@@ -83,9 +86,10 @@ export const exactly: {
 
     /**
      * Used to check that two types are an exact match. Useful for testing types<br/>
-     * Comes in two forms:
-     * - type form: `exactly<T1, T2>()`
-     * - value form: `exactly<Type>()(value)`<br/>
+     * Comes in three forms:
+     * - type form: `exactly<ExpectedType, ActualType>()`
+     * - mixed form: `exactly<Type>()(value)`<br/>
+     * - value form: `exactly(expectedValue, actualValue)`<br/>
      * Correctly checks `any` and `never`.
      * # Type form
      * ## generics
@@ -104,7 +108,46 @@ export const exactly: {
         Actual extends _Bound,
         _Bound = Expected
     >(): unknown
-} = (() => (value: unknown) => value) as never // can't be bothered trying to create a function signature that works with both overloads
+    /**
+     * Used to check that two types are an exact match. Useful for testing types<br/>
+     * Comes in three forms:
+     * - type form: `exactly<ExpectedType, ActualType>()`
+     * - mixed form: `exactly<Type>()(value)`<br/>
+     * - value form: `exactly(expectedValue, actualValue)`<br/>
+     * Correctly checks `any` and `never`.
+     * # value form
+     * checks that the values match at runtime as well!
+     * ## generics
+     * - **`_Expected`:**  The expected type. ***DO NOT*** specify this parameter, it should be inferred from the value
+     * you provide.
+     * - **`_Actual`:**  The actual type. ***DO NOT*** specify this parameter, it should be inferred from the valuu you
+     * provide.
+     * - **`_Bound`:** Used to bind the two types together, ***DO NOT*** specify this parameter.<br/>
+     * @param expected the expected value. its type gets automatically narrowed using the {@link Narrow} type
+     * @param actual the actual value. its type gets automatically narrowed using the {@link Narrow} type
+     * @example
+     * type Foo = 1 | 2;
+     * exactly<1, Foo>();  // error as `1 | 2` is not an exact match of `1`
+     * exactly<1 | 2, Foo>();  // no error
+     */
+    <
+        _Expected extends Equals<_Expected, _Actual> extends true ? _Actual : never,
+        _Actual extends _Bound,
+        _Bound = _Expected
+    >(
+        expected: Narrow<_Expected>,
+        actual: Narrow<_Actual>,
+    ): unknown
+} = ((...values: [unknown, unknown] | []) => {
+    if (values.length === 2) {
+        const [expected, actual] = values
+        if (typeof values === 'object') assert.deepStrictEqual(expected, actual)
+        else assert.strictEqual(expected, actual)
+        return undefined
+    } else {
+        return (value: unknown) => value
+    }
+}) as never
 
 /** throws an error if running in CI. useful if you want to remind yourself to fix something later */
 export const failCI = (message?: string): void => {

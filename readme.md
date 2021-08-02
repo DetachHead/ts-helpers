@@ -58,8 +58,13 @@ type to match your desired date format.
 With the `exactly` function you can test if types or values are an exact match to a type
 
 ```ts
-// values
-let a: 1 | 2 = 1
+const a: 1 | 2 = 1
+//values (also does a runtime assertion on the values)
+exactly(1 as number, a) // error as `1 | 2` is not an exact match of `number`
+exactly(1 as number, a as number) // no error
+exactly(1 as 1 | 2, a) // no error
+
+// mixed
 exactly<number>()(a) // error as `1 | 2` is not an exact match of `number`
 exactly<number>()(a as number) // no error
 exactly<1 | 2>()(a) // no error
