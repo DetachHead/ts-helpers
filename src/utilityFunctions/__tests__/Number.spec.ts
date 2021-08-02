@@ -10,9 +10,13 @@ import {
     power,
     leftShift,
     rightShift,
+    isGreaterOrEqual,
+    isLessThan,
+    isLessOrEqual,
 } from '../Number'
 import { PowerAssert } from 'typed-nodejs-assert'
 import { TupleOf } from '../../utilityTypes/Array'
+import { exactly } from '../misc'
 // eslint-disable-next-line @typescript-eslint/no-var-requires -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
 
@@ -124,19 +128,75 @@ describe('ordinal', () => {
 })
 
 describe('comparison', () => {
+    const assertTypeIsTrue = exactly<true>()
+    const assertTypeIsFalse = exactly<false>()
+    const assertTypeIsExactlyBoolean = exactly<boolean>()
     describe('isGreaterThan', () => {
-        test('true', () => {
-            const value = isGreaterThan(5, 4) // $ExpectType true
-            assert(value)
+        describe('greater', () => {
+            test('true', () => assert(assertTypeIsTrue(isGreaterThan(5, 4))))
+            test('false', () => assert(!assertTypeIsFalse(isGreaterThan(5, 20))))
         })
-        test('false', () => {
-            isGreaterThan(5, 20) // $ExpectType false
-            const value = isGreaterThan(6, 6) // $ExpectType false
-            assert(!value)
+        test('equal returns false', () => assert(!assertTypeIsFalse(isGreaterThan(6, 6))))
+        describe('big numbers', () => {
+            test('true', () => assert(assertTypeIsTrue(isGreaterThan(5000, 4999))))
+            test('false', () => assert(!assertTypeIsFalse(isGreaterThan(5000, 5001))))
         })
-        test('big numbers', () => {
-            isGreaterThan(5000, 4999) // $ExpectType true
-            isGreaterThan(5000, 5001) // $ExpectType false
+        describe('distributive', () => {
+            test('first num', () =>
+                assertTypeIsExactlyBoolean(isGreaterThan(5 as 2 | 3 | 4 | 5 | 6, 4)))
+            test('second num', () =>
+                assertTypeIsExactlyBoolean(isGreaterThan(5, 4 as 2 | 3 | 4 | 5 | 6)))
+        })
+    })
+    describe('isGreaterOrEqual', () => {
+        describe('greater', () => {
+            test('true', () => assert(assertTypeIsTrue(isGreaterOrEqual(5, 4))))
+            test('false', () => assert(!assertTypeIsFalse(isGreaterOrEqual(5, 20))))
+        })
+        test('equal returns true', () => assert(assertTypeIsTrue(isGreaterOrEqual(6, 6))))
+        describe('big numbers', () => {
+            test('true', () => assert(assertTypeIsTrue(isGreaterOrEqual(5000, 4999))))
+            test('false', () => assert(!assertTypeIsFalse(isGreaterOrEqual(5000, 5001))))
+        })
+        describe('distributive', () => {
+            test('first num', () =>
+                assertTypeIsExactlyBoolean(isGreaterOrEqual(5 as 2 | 3 | 4 | 5 | 6, 4)))
+            test('second num', () =>
+                assertTypeIsExactlyBoolean(isGreaterOrEqual(5, 4 as 2 | 3 | 4 | 5 | 6)))
+        })
+    })
+    describe('isLessThan', () => {
+        describe('less', () => {
+            test('true', () => assert(!assertTypeIsTrue(isLessThan(5, 20))))
+            test('false', () => assert(!assertTypeIsFalse(isLessThan(5, 4))))
+        })
+        test('equal returns false', () => assert(!assertTypeIsFalse(isLessThan(6, 6))))
+        describe('big numbers', () => {
+            test('true', () => assert(assertTypeIsTrue(isLessThan(5000, 5001))))
+            test('false', () => assert(!assertTypeIsFalse(isLessThan(5000, 4999))))
+        })
+        describe('distributive', () => {
+            test('first num', () =>
+                assertTypeIsExactlyBoolean(isLessThan(5 as 2 | 3 | 4 | 5 | 6, 4)))
+            test('second num', () =>
+                assertTypeIsExactlyBoolean(isLessThan(5, 4 as 2 | 3 | 4 | 5 | 6)))
+        })
+    })
+    describe('isLessOrEqual', () => {
+        describe('less', () => {
+            test('true', () => assert(!assertTypeIsTrue(isLessOrEqual(5, 20))))
+            test('false', () => assert(!assertTypeIsFalse(isLessOrEqual(5, 4))))
+        })
+        test('equal returns true', () => assert(assertTypeIsTrue(isLessOrEqual(6, 6))))
+        describe('big numbers', () => {
+            test('true', () => assert(assertTypeIsTrue(isLessOrEqual(5000, 5001))))
+            test('false', () => assert(!assertTypeIsFalse(isLessOrEqual(5000, 4999))))
+        })
+        describe('distributive', () => {
+            test('first num', () =>
+                assertTypeIsExactlyBoolean(isLessOrEqual(5 as 2 | 3 | 4 | 5 | 6, 4)))
+            test('second num', () =>
+                assertTypeIsExactlyBoolean(isLessOrEqual(5, 4 as 2 | 3 | 4 | 5 | 6)))
         })
     })
 })
