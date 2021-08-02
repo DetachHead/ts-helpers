@@ -63,7 +63,16 @@ export const exactly: {
      * exactly<number>()(a as number);  // no error<br/>
      * exactly<1 | 2>()(a);  // no error<br/>
      */
-    <Expected>(): <Actual>(value: Actual, ..._this_parameter_will_be_expected_if_the_types_dont_match: Equals<Expected, Actual> extends true ? [] : [never]) => Actual
+    <Expected>(): <Actual>(
+        value: Actual,
+        ..._this_parameter_will_be_expected_if_the_types_dont_match: Equals<
+            Expected,
+            Actual
+        > extends true
+            ? []
+            : [never]
+    ) => Actual
+
     /**
      * ### Type form<br/>
      * @param Expected: The expected type.<br/>
@@ -75,8 +84,14 @@ export const exactly: {
      * exactly<1, Foo>();  // error as `1 | 2` is not an exact match of `1`<br/>
      * exactly<1 | 2, Foo>();  // no error<br/>
      */
-    <Expected extends Equals<Expected, Actual> extends true ? Actual : never, Actual extends _Bound, _Bound = Expected>(): void
-} = () => <Actual>(a?: Actual, ..._b: [never?]) => a
+    // return type is unknown instead of void because technically at runtime this still returns the curried function
+    // from the value overload. seems safer to say it's unknown instead of void when it's not actually returning void
+    <
+        Expected extends Equals<Expected, Actual> extends true ? Actual : never,
+        Actual extends _Bound,
+        _Bound = Expected
+    >(): unknown
+} = (() => (value: unknown) => value) as never // can't be bothered trying to create a function signature that works with both overloads
 
 /** throws an error if running in CI. useful if you want to remind yourself to fix something later */
 export const failCI = (message?: string): void => {

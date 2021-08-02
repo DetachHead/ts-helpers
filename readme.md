@@ -60,17 +60,18 @@ With the `exactly` function you can test if types or values are an exact match t
 ```ts
 // values
 let a: 1 | 2 = 1
-exactly<number>()(a);  // error as `1 | 2` is not an exact match of `number`
-exactly<number>()(a as number);  // no error
-exactly<1 | 2>()(a);  // no error
+exactly<number>()(a) // error as `1 | 2` is not an exact match of `number`
+exactly<number>()(a as number) // no error
+exactly<1 | 2>()(a) // no error
 
 // types
-type Foo = 1 | 2;
-exactly<1, Foo>();  // error as `1 | 2` is not an exact match of `1`
-exactly<1 | 2, Foo>();  // no error
+type Foo = 1 | 2
+exactly<1, Foo>() // error as `1 | 2` is not an exact match of `1`
+exactly<1 | 2, Foo>() // no error
 ```
 
 The `Equals` type allows you to check if two types are equal at the type level
+
 ```ts
 Equals<number, 1 | 2> // false
 Equals<any, 10> // false
