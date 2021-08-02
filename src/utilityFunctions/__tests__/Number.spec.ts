@@ -167,7 +167,7 @@ describe('comparison', () => {
     })
     describe('isLessThan', () => {
         describe('less', () => {
-            test('true', () => assert(!assertTypeIsTrue(isLessThan(5, 20))))
+            test('true', () => assert(assertTypeIsTrue(isLessThan(5, 20))))
             test('false', () => assert(!assertTypeIsFalse(isLessThan(5, 4))))
         })
         test('equal returns false', () => assert(!assertTypeIsFalse(isLessThan(6, 6))))
@@ -184,7 +184,7 @@ describe('comparison', () => {
     })
     describe('isLessOrEqual', () => {
         describe('less', () => {
-            test('true', () => assert(!assertTypeIsTrue(isLessOrEqual(5, 20))))
+            test('true', () => assert(assertTypeIsTrue(isLessOrEqual(5, 20))))
             test('false', () => assert(!assertTypeIsFalse(isLessOrEqual(5, 4))))
         })
         test('equal returns true', () => assert(assertTypeIsTrue(isLessOrEqual(6, 6))))
