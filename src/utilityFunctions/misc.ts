@@ -37,52 +37,63 @@ export const testType = <T>(_value: T): void => {
     // do nothing
 }
 
-/**
- * Used to check that two types are an exact match. Useful for testing types<br/>
- * Comes in two forms:
- *  - type form: `exactly<T1, T2>()`
- *  - value form: `exactly<Type>()(value)`<br/>
- *
- * Correctly checks `any` and `never`.
- *
- * @see Equals
- */
 export const exactly: {
     /**
-     * ### Value form<br/>
-     * @param Expected: The expected type.<br/>
-     * @param Actual: The actual type, DO NOT specify this parameter<br/>
-     * @param value: The value that will be checked.<br/>
-     * @param _this_parameter_will_be_expected_if_the_types_dont_match: An unused parameter to bound the types, DO NOT specify this parameter<br/>
+     * Used to check that two types are an exact match. Useful for testing types.<br/>
+     * Comes in two forms:
+     * - type form: `exactly<T1, T2>()`
+     * - value form: `exactly<Type>()(value)`<br/>
+     * Correctly checks `any` and `never`.
+     * @see Equals
+     * # Value Form
+     * ## `exactly` function
+     * ### generics
      *
+     * - **`Expected`:** The expected type.<br/>
+     *
+     * ## curried function
      * This is implemented as a higher order function to allow partial inference on the Expected type.
+     * ### generics
+     * - **`_Actual`:** The actual type, ***DO NOT*** specify this parameter. it's inferred when you provide the `value`
+     * parameter<br/>
      *
+     * ### parameters
+     *
+     * * **`value`:** The value that will be checked.
+     * * **`_this_parameter_will_be_expected_if_the_types_dont_match`:** An unused parameter used to cause a compile error
+     * when the `Expected` and `Actual` types don't match. ***DO NOT*** specify this parameter if prompted to, as it
+     * means your types don't match.<br/>
      * @example
-     * let a: 1 | 2 = 1;<br/>
-     * exactly<number>()(a);  // error as `number` is not an exact match of `1 | 2`<br/>
-     * exactly<number>()(a as number);  // no error<br/>
-     * exactly<1 | 2>()(a);  // no error<br/>
+     * let a: 1 | 2 = 1;
+     * exactly<number>()(a); // error as `number` is not an exact match of `1 | 2`
+     * exactly<number>()(a as number); // no error
+     * exactly<1 | 2>()(a); // no error
      */
-    <Expected>(): <Actual>(
-        value: Actual,
+    <Expected>(): <_Actual>(
+        value: _Actual,
         ..._this_parameter_will_be_expected_if_the_types_dont_match: Equals<
             Expected,
-            Actual
+            _Actual
         > extends true
             ? []
             : [never]
-    ) => Actual
+    ) => _Actual
 
     /**
-     * ### Type form<br/>
-     * @param Expected: The expected type.<br/>
-     * @param Actual: The actual type, often `typeof x`.<br/>
-     * @param _Bound: Used to bind the two types together, DO NOT specify this parameter.<br/>
-     *
+     * Used to check that two types are an exact match. Useful for testing types<br/>
+     * Comes in two forms:
+     * - type form: `exactly<T1, T2>()`
+     * - value form: `exactly<Type>()(value)`<br/>
+     * Correctly checks `any` and `never`.
+     * # Type form
+     * ## generics
+     * - **`Expected`:**  The expected type.
+     * - **`Actual`:**  The actual type
+     * - **`_Bound`:** Used to bind the two types together, ***DO NOT*** specify this parameter.<br/>
      * @example
-     * type Foo = 1 | 2;<br/>
-     * exactly<1, Foo>();  // error as `1 | 2` is not an exact match of `1`<br/>
-     * exactly<1 | 2, Foo>();  // no error<br/>
+     * type Foo = 1 | 2;
+     * exactly<1, Foo>();  // error as `1 | 2` is not an exact match of `1`
+     * exactly<1 | 2, Foo>();  // no error
      */
     // return type is unknown instead of void because technically at runtime this still returns the curried function
     // from the value overload. seems safer to say it's unknown instead of void when it's not actually returning void
