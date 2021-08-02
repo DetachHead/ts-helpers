@@ -3,6 +3,7 @@ import { IndexOfHighestNumber, TupleOf } from './Array'
 import { PadStart, Tail, ToString, TrimEnd, TrimStart } from './String'
 import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
 import { Length } from 'ts-toolbelt/out/String/Length'
+import { Not, Or } from './Boolean'
 
 type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
     ? ((t: T, ...a: A) => void) extends (...x: infer X) => void
@@ -216,13 +217,27 @@ export type Ordinal<T extends number = number> = number extends T
       }[T]
 
 /** `true` if `Num1` is greater than `Num2`, else `false` */
-export type IsGreaterThan<Num1 extends number, Num2 extends number> = TupleOf<never, Num1> extends [
-    never,
-    ...TupleOf<never, Num2>,
-    ...never[]
-]
-    ? true
-    : false
+export type IsGreaterThan<Num1s extends number, Num2s extends number> = {
+    [Num1 in Num1s]: {
+        [Num2 in Num2s]: TupleOf<never, Num1> extends [never, ...TupleOf<never, Num2>, ...never[]]
+            ? true
+            : false
+    }[Num2s]
+}[Num1s]
+
+export type IsGreaterOrEqual<Num1s extends number, Num2s extends number> = {
+    [Num1 in Num1s]: {
+        [Num2 in Num2s]: Or<IsGreaterThan<Num1, Num2> | Equals<Num1, Num2>>
+    }[Num2s]
+}[Num1s]
+
+export type IsLessThan<Num1s extends number, Num2s extends number> = {
+    [Num1 in Num1s]: {
+        [Num2 in Num2s]: Not<IsGreaterOrEqual<Num1, Num2>>
+    }[Num2s]
+}[Num1s]
+
+export type IsLessOrEqual<Num1 extends number, Num2 extends number> = Not<IsGreaterThan<Num1, Num2>>
 
 /** gets the highest number in a union of numbers */
 export type HighestNumber<Numbers extends number> = ListOf<Numbers>[IndexOfHighestNumber<

@@ -3,7 +3,10 @@ import ordinal from 'ordinal'
 import {
     Add,
     Divide,
+    IsGreaterOrEqual,
     IsGreaterThan,
+    IsLessOrEqual,
+    IsLessThan,
     LeadingZeros,
     LeftShift,
     Modulo,
@@ -100,6 +103,20 @@ export const isGreaterThan = <Num1 extends number, Num2 extends number>(
     num1: Num1,
     num2: Num2,
 ): IsGreaterThan<Num1, Num2> => (num1 > num2) as never
+
+export const isGreaterOrEqual = <Num1 extends number, Num2 extends number>(
+    num1: Num1,
+    num2: Num2,
+): IsGreaterOrEqual<Num1, Num2> => (num1 >= num2) as never
+
+export const isLessThan = <Num1 extends number, Num2 extends number>(
+    num1: Num1,
+    num2: Num2,
+): IsLessThan<Num1, Num2> => (num1 < num2) as never
+export const isLessOrEqual = <Num1 extends number, Num2 extends number>(
+    num1: Num1,
+    num2: Num2,
+): IsLessOrEqual<Num1, Num2> => (num1 <= num2) as never
 
 /** shifts the bits of `Num` left by the given `Count`, and at compile-time */
 export const leftShift = <Num extends number, Count extends number>(
