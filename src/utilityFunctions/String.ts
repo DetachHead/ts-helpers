@@ -17,7 +17,6 @@ import { Join } from 'ts-toolbelt/out/String/Join'
 import { Split } from 'ts-toolbelt/out/String/Split'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import { Throw } from 'throw-expression'
-import { OptionalParameterFromGeneric } from '../utilityTypes/misc'
 
 /**
  * replaces the first occurrence of `find` with `replace`
@@ -144,16 +143,30 @@ export const endsWith = <Full extends string, CheckEnd extends string>(
     checkEnd: CheckEnd,
 ): EndsWith<Full, CheckEnd> => full.endsWith(checkEnd) as never
 
-export const truncate = <
-    Str extends string,
-    MaxLength extends number,
-    Ellipsis extends string = '…'
->(
+const defaultEllipsis = '…'
+
+export const truncate: {
+    <
+        Str extends string,
+        MaxLength extends number,
+        Ellipsis extends string = typeof defaultEllipsis
+    >(
+        string: Str,
+        maxLength: MaxLength,
+        ellipsis: Ellipsis,
+    ): Truncate<Str, MaxLength, Ellipsis>
+    <Str extends string, MaxLength extends number>(string: Str, maxLength: MaxLength): Truncate<
+        Str,
+        MaxLength
+    >
+} = <Str extends string, MaxLength extends number, Ellipsis extends string>(
     string: Str,
     maxLength: MaxLength,
-    ...optionalEllipsis: OptionalParameterFromGeneric<Ellipsis, '…'>
-): Truncate<Str, MaxLength, Ellipsis> => {
-    const ellipsis = optionalEllipsis[0] ?? '…'
+    optionalEllipsis?: Ellipsis,
+): typeof defaultEllipsis extends Ellipsis
+    ? Truncate<Str, MaxLength>
+    : Truncate<Str, MaxLength, Ellipsis> => {
+    const ellipsis = optionalEllipsis ?? defaultEllipsis
     return (ellipsis.length > maxLength
         ? Throw(
               `can't truncate string: "${string}" with "${ellipsis}" because it's longer than the max length: ${maxLength}`,
