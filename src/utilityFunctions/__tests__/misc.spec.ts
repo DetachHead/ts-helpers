@@ -4,8 +4,7 @@ import { PowerAssert } from 'typed-nodejs-assert'
 // eslint-disable-next-line @typescript-eslint/no-var-requires -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
 
-test('exactly', () => {
-    // test data
+describe('exactly', () => {
     const ten = 10
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this test is for the any type
     const any = undefined as any
@@ -14,60 +13,130 @@ test('exactly', () => {
     const oneAndTwo = 1 as 1 | 2
     const x1AndY2 = { x: 1, y: 2 } as const
 
-    // test simple types
-    exactly<number, typeof ten>()
-    exactly<10, typeof ten>()
+    describe('values', () => {
+        test('it returns the value', () => assert(exactly<1>()(1) === 1))
+        describe('simple types', () => {
+            test('pass', () => {
+                exactly<number>()(ten as number)
+                exactly<10>()(ten)
+            })
+            test('fail', () => {
+                // @ts-expect-error doesn't match
+                exactly<number>()(ten)
+            })
+        })
+        describe('any and never', () => {
+            test('fail', () => {
+                // @ts-expect-error doesn't match
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this test is for the any type
+                exactly<any>()(never)
+                // @ts-expect-error doesn't match
+                exactly<never>()(any)
+            })
+            describe('any', () => {
+                /* eslint-disable @typescript-eslint/no-explicit-any -- testing the any type */
+                test('pass', () => {
+                    exactly<any>()(any)
+                })
+                test('fail', () => {
+                    // @ts-expect-error doesn't match
+                    exactly<any>()(number)
+                    // @ts-expect-error doesn't match
+                    exactly<number>()(any)
+                })
+                /* eslint-enable @typescript-eslint/no-explicit-any -- testing the any type */
+            })
+            describe('never', () => {
+                test('pass', () => {
+                    exactly<never>()(never)
+                })
+                test('fail', () => {
+                    // @ts-expect-error doesn't match
+                    exactly<never>()(number)
+                    // @ts-expect-error doesn't match
+                    exactly<number>()(never)
+                })
+            })
+        })
+        describe('unions, intersections and Readonly', () => {
+            test('pass', () => {
+                exactly<1 | 2>()(oneAndTwo)
+                exactly<2 | 1>()(oneAndTwo)
+                exactly<Readonly<{ x: 1 } & { y: 2 }>>()(x1AndY2)
+            })
+            test('fail', () => {
+                // @ts-expect-error doesn't match
+                exactly<1 | 2>()(1)
+                // @ts-expect-error doesn't match
+                exactly<1>()(oneAndTwo)
+                // @ts-expect-error doesn't match
+                exactly<1 | 2>()(1 as 2 | 3)
+                // @ts-expect-error doesn't match
+                exactly<{ x: 1 } & { y: 2 }>()(x1AndY2)
+            })
+        })
+    })
 
-    exactly<number>()(ten)
-    exactly<number>()(ten as number)
-    exactly<10>()(ten)
-
-    // test never
-    exactly<number, never>()
-    exactly<never, number>()
-
-    // @ts-expect-error number != never
-    exactly<number, typeof never>()
-    // @ts-expect-error never != number
-    exactly<never>()(number)
-    // @ts-expect-error number != never
-    exactly<number>()(never)
-
-    // test any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this test is for the any type
-    exactly<any, number>()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this test is for the any type
-    exactly<number, any>()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this test is for the any type
-    exactly<any, any>()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this test is for the any type
-    exactly<any>()(number)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this test is for the any type
-    exactly<number>()(any)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this test is for the any type
-    exactly<any>()(any)
-
-    // test any and never
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this test is for the any type
-    exactly<any, never>()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this test is for the any type
-    exactly<never, any>()
-
-    // test unions, intersections and ReadOnly
-    exactly<1 | 2, typeof oneAndTwo>()
-    // @ts-expect-error 1 | 2 != 1
-    exactly<1 | 2, 1>()
-    exactly<1 | 2>()(oneAndTwo)
-    // @ts-expect-error 1 | 2 != 1
-    exactly<1 | 2>()(1)
-
-    exactly<Readonly<{ x: 1 } & { y: 2 }>, typeof x1AndY2>()
-    // @ts-expect-error { x: 1 } & { y: 2 } != ReadOnly<{ x: 1 } & { y: 2 }>
-    exactly<{ x: 1 } & { y: 2 }, typeof x1AndY2>()
-
-    exactly<Readonly<{ x: 1 } & { y: 2 }>>()(x1AndY2)
-    // @ts-expect-error { x: 1 } & { y: 2 } != ReadOnly<{ x: 1 } & { y: 2 }>
-    exactly<{ x: 1 } & { y: 2 }>()(x1AndY2)
+    describe('types', () => {
+        describe('simple types', () => {
+            test('matches', () => {
+                exactly<10, typeof ten>()
+            })
+            test("doesn't match", () => {
+                // @ts-expect-error doesn't match
+                exactly<number, typeof ten>()
+            })
+        })
+        describe('any and never', () => {
+            /* eslint-disable @typescript-eslint/no-explicit-any -- testing the any type */
+            test('fail', () => {
+                // @ts-expect-error doesn't match
+                exactly<any, never>()
+                // @ts-expect-error doesn't match
+                exactly<never, any>()
+            })
+            describe('any', () => {
+                test('pass', () => {
+                    exactly<any, any>()
+                })
+                test('fail', () => {
+                    // @ts-expect-error doesn't match
+                    exactly<any, number>()
+                    // @ts-expect-error doesn't match
+                    exactly<number, any>()
+                })
+            })
+            /* eslint-enable @typescript-eslint/no-explicit-any -- testing the any type */
+            describe('never', () => {
+                test('pass', () => {
+                    exactly<never, never>()
+                })
+                test('fail', () => {
+                    // @ts-expect-error doesn't match
+                    exactly<number, never>()
+                    // @ts-expect-error doesn't match
+                    exactly<never, number>()
+                })
+            })
+        })
+        describe('unions, intersections and Readonly', () => {
+            test('pass', () => {
+                exactly<1 | 2, 1 | 2>()
+                exactly<2 | 1, 1 | 2>()
+                exactly<Readonly<{ x: 1 } & { y: 2 }>, typeof x1AndY2>()
+            })
+            test('fail', () => {
+                // @ts-expect-error doesn't match
+                exactly<1 | 2, 1>()
+                // @ts-expect-error doesn't match
+                exactly<1, 1 | 2>()
+                // @ts-expect-error doesn't match
+                exactly<1 | 2, 2 | 3>()
+                // @ts-expect-error doesn't match
+                exactly<{ x: 1 } & { y: 2 }, typeof x1AndY2>()
+            })
+        })
+    })
 })
 
 test('failCI', () => {
