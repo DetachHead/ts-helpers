@@ -70,7 +70,8 @@
         /* other options that weren't in the template */
         "noPropertyAccessFromIndexSignature": true,
         "noImplicitOverride": true,
-        "exactOptionalPropertyTypes": true
+        "exactOptionalPropertyTypes": true,
+        "allowUnreachableCode": false
     },
     "include": ["src", "*.eslintrc.js"]
 }
