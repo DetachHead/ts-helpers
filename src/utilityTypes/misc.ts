@@ -1,5 +1,7 @@
 /**
  * Checks if two types are equal at the type level.
+ *
+ * correctly checks `any` and `never`
  */
 export type Equals<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2
     ? true
