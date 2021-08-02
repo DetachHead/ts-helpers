@@ -15,9 +15,9 @@ describe('formatDate', () => {
     test('time', () => {
         const date = set(new Date(), { hours: 10, minutes: 11 })
         const value = formatDate(date, 'hh:mm a')
-        assert(value === '10:11 AM')
         // @ts-expect-error incorrect time format
         // noinspection BadExpressionStatementJS
         value === '10:11AM'
+        assert(value === '10:11 AM')
     })
 })
