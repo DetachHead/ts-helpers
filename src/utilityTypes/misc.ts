@@ -1,9 +1,9 @@
 /**
  * Checks if two types are equal at the type level.
  */
-export type Equals<A, B> =
-    (<T>() => T extends A ? 1 : 2) extends
-    (<T>() => T extends B ? 1 : 2) ? true : false;
+export type Equals<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2
+    ? true
+    : false
 
 /**
  * the compiler sees this as `undefined` if `noUncheckedIndexedAccess` is enabled, and `never` if it's not.
