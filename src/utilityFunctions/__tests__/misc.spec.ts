@@ -12,7 +12,7 @@ describe('exactly', () => {
     const oneOrTwo = 1 as 1 | 2
     const x1AndY2 = { x: 1, y: 2 } as const
 
-    describe('values', () => {
+    describe('mixed', () => {
         test('it returns the value', () => assert(exactly<1>()(1) === 1))
         describe('simple types', () => {
             test('pass', () => {
@@ -133,6 +133,76 @@ describe('exactly', () => {
                 exactly<1 | 2, 2 | 3>()
                 // @ts-expect-error doesn't match
                 exactly<{ x: 1 } & { y: 2 }, typeof x1AndY2>()
+            })
+        })
+    })
+    describe('values', () => {
+        describe('simple types', () => {
+            test('matches', () => {
+                exactly(10, 10)
+            })
+            test("doesn't match", () => {
+                assert.throws(() =>
+                    // @ts-expect-error doesn't match
+                    exactly(number, 10),
+                )
+            })
+        })
+        describe('any and never', () => {
+            test('fail', () => {
+                // @ts-expect-error doesn't match
+                exactly(any, never)
+                // @ts-expect-error doesn't match
+                exactly(never, any)
+            })
+            describe('any', () => {
+                test('pass', () => {
+                    exactly(any, any)
+                })
+                test('fail', () => {
+                    assert.throws(() =>
+                        // @ts-expect-error doesn't match
+                        exactly(any, number),
+                    )
+                    assert.throws(() =>
+                        // @ts-expect-error doesn't match
+                        exactly(number, any),
+                    )
+                })
+            })
+            describe('never', () => {
+                test('pass', () => {
+                    exactly(never, never)
+                })
+                test('fail', () => {
+                    assert.throws(() =>
+                        // @ts-expect-error doesn't match
+                        exactly(number, never),
+                    )
+                    assert.throws(() =>
+                        // @ts-expect-error doesn't match
+                        exactly(never, number),
+                    )
+                })
+            })
+        })
+        describe('unions, intersections and Readonly', () => {
+            test('pass', () => {
+                exactly(oneOrTwo, oneOrTwo)
+                exactly(oneOrTwo as 2 | 1, oneOrTwo)
+                exactly(x1AndY2 as Readonly<{ x: 1 } & { y: 2 }>, x1AndY2)
+            })
+            test('fail', () => {
+                // @ts-expect-error doesn't match
+                exactly(oneOrTwo, 1),
+                    // @ts-expect-error doesn't match
+                    exactly(1, oneOrTwo)
+                assert.throws(() =>
+                    // @ts-expect-error doesn't match
+                    exactly(oneOrTwo, 2 as 1 | 2 | 3),
+                )
+                // @ts-expect-error doesn't match
+                exactly(x1AndY2 as { x: 1 } & { y: 2 }, x1AndY2)
             })
         })
     })
