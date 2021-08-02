@@ -10,7 +10,7 @@ describe('exactly', () => {
     const any = undefined as any
     const never = undefined as never
     const number = 1 as number
-    const oneAndTwo = 1 as 1 | 2
+    const oneOrTwo = 1 as 1 | 2
     const x1AndY2 = { x: 1, y: 2 } as const
 
     describe('values', () => {
@@ -60,15 +60,15 @@ describe('exactly', () => {
         })
         describe('unions, intersections and Readonly', () => {
             test('pass', () => {
-                exactly<1 | 2>()(oneAndTwo)
-                exactly<2 | 1>()(oneAndTwo)
+                exactly<1 | 2>()(oneOrTwo)
+                exactly<2 | 1>()(oneOrTwo)
                 exactly<Readonly<{ x: 1 } & { y: 2 }>>()(x1AndY2)
             })
             test('fail', () => {
                 // @ts-expect-error doesn't match
                 exactly<1 | 2>()(1)
                 // @ts-expect-error doesn't match
-                exactly<1>()(oneAndTwo)
+                exactly<1>()(oneOrTwo)
                 // @ts-expect-error doesn't match
                 exactly<1 | 2>()(1 as 2 | 3)
                 // @ts-expect-error doesn't match
