@@ -142,10 +142,12 @@ describe('comparison', () => {
             test('false', () => assert(!assertTypeIsFalse(isGreaterThan(5000, 5001))))
         })
         describe('distributive', () => {
-            test('first num', () =>
-                assertTypeIsExactlyBoolean(isGreaterThan(5 as 2 | 3 | 4 | 5 | 6, 4)))
-            test('second num', () =>
-                assertTypeIsExactlyBoolean(isGreaterThan(5, 4 as 2 | 3 | 4 | 5 | 6)))
+            test('first num', () => {
+                assertTypeIsExactlyBoolean(isGreaterThan(5 as 2 | 3 | 4 | 5 | 6, 4))
+            })
+            test('second num', () => {
+                assertTypeIsExactlyBoolean(isGreaterThan(5, 4 as 2 | 3 | 4 | 5 | 6))
+            })
         })
     })
     describe('isGreaterOrEqual', () => {
@@ -159,10 +161,12 @@ describe('comparison', () => {
             test('false', () => assert(!assertTypeIsFalse(isGreaterOrEqual(5000, 5001))))
         })
         describe('distributive', () => {
-            test('first num', () =>
-                assertTypeIsExactlyBoolean(isGreaterOrEqual(5 as 2 | 3 | 4 | 5 | 6, 4)))
-            test('second num', () =>
-                assertTypeIsExactlyBoolean(isGreaterOrEqual(5, 4 as 2 | 3 | 4 | 5 | 6)))
+            test('first num', () => {
+                assertTypeIsExactlyBoolean(isGreaterOrEqual(5 as 2 | 3 | 4 | 5 | 6, 4))
+            })
+            test('second num', () => {
+                assertTypeIsExactlyBoolean(isGreaterOrEqual(5, 4 as 2 | 3 | 4 | 5 | 6))
+            })
         })
     })
     describe('isLessThan', () => {
@@ -176,10 +180,12 @@ describe('comparison', () => {
             test('false', () => assert(!assertTypeIsFalse(isLessThan(5000, 4999))))
         })
         describe('distributive', () => {
-            test('first num', () =>
-                assertTypeIsExactlyBoolean(isLessThan(5 as 2 | 3 | 4 | 5 | 6, 4)))
-            test('second num', () =>
-                assertTypeIsExactlyBoolean(isLessThan(5, 4 as 2 | 3 | 4 | 5 | 6)))
+            test('first num', () => {
+                assertTypeIsExactlyBoolean(isLessThan(5 as 2 | 3 | 4 | 5 | 6, 4))
+            })
+            test('second num', () => {
+                assertTypeIsExactlyBoolean(isLessThan(5, 4 as 2 | 3 | 4 | 5 | 6))
+            })
         })
     })
     describe('isLessOrEqual', () => {
@@ -193,10 +199,12 @@ describe('comparison', () => {
             test('false', () => assert(!assertTypeIsFalse(isLessOrEqual(5000, 4999))))
         })
         describe('distributive', () => {
-            test('first num', () =>
-                assertTypeIsExactlyBoolean(isLessOrEqual(5 as 2 | 3 | 4 | 5 | 6, 4)))
-            test('second num', () =>
-                assertTypeIsExactlyBoolean(isLessOrEqual(5, 4 as 2 | 3 | 4 | 5 | 6)))
+            test('first num', () => {
+                assertTypeIsExactlyBoolean(isLessOrEqual(5 as 2 | 3 | 4 | 5 | 6, 4))
+            })
+            test('second num', () => {
+                assertTypeIsExactlyBoolean(isLessOrEqual(5, 4 as 2 | 3 | 4 | 5 | 6))
+            })
         })
     })
 })
