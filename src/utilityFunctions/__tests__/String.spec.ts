@@ -145,6 +145,7 @@ describe('endsWith', () => {
 })
 
 describe('truncate', () => {
-    test('default ellipsis', () => exactly<'foo…'>()(truncate('foobarbaz', 4)))
-    test('custom ellipsis', () => exactly<'foo--'>()(truncate('foobarbaz', 5, '--')))
+    test('default ellipsis', () => exactly('foo…', truncate('foobarbaz', 4)))
+    test('custom ellipsis', () => exactly('foo--', truncate('foobarbaz', 5, '--')))
+    test('value not known at compiletime', () => exactly<string>()(truncate('foobar' as string, 4)))
 })
