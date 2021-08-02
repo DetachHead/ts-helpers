@@ -41,7 +41,7 @@
         "ts-is-present": "^1.2.1",
         "ts-jest": "^26.4.4",
         "typed-nodejs-assert": "^1.1.0",
-        "typescript": "^4.4.0-dev.20210727"
+        "typescript": "4.4.0-dev.20210727"
       }
     },
     "node_modules/@babel/code-frame": {
