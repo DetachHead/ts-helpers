@@ -5,7 +5,6 @@ import { PowerAssert } from 'typed-nodejs-assert'
 const assert: PowerAssert = require('power-assert')
 
 describe('exactly', () => {
-    const ten = 10
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this test is for the any type
     const any = undefined as any
     const never = undefined as never
@@ -17,8 +16,8 @@ describe('exactly', () => {
         test('it returns the value', () => assert(exactly<1>()(1) === 1))
         describe('simple types', () => {
             test('pass', () => {
-                exactly<number>()(ten as number)
-                exactly<10>()(ten)
+                exactly<number>()(10 as number)
+                exactly<10>()(10)
             })
             test('fail', () => {
                 // @ts-expect-error doesn't match
@@ -80,7 +79,7 @@ describe('exactly', () => {
     describe('types', () => {
         describe('simple types', () => {
             test('matches', () => {
-                exactly<10, typeof ten>()
+                exactly<10, 10>()
             })
             test("doesn't match", () => {
                 // @ts-expect-error doesn't match
