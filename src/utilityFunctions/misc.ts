@@ -127,9 +127,9 @@ export const exactly: {
      * @param expected the expected value. its type gets automatically narrowed using the {@link Narrow} type
      * @param actual the actual value. its type gets automatically narrowed using the {@link Narrow} type
      * @example
-     * type Foo = 1 | 2;
-     * exactly<1, Foo>();  // error as `1 | 2` is not an exact match of `1`
-     * exactly<1 | 2, Foo>();  // no error
+     * declare const foo: 1 | 2;
+     * exactly(foo, 1);  // error as `1 | 2` is not an exact match of `1`
+     * exactly(foo, 1 as 1 | 2);  // no error
      */
     <
         _Expected extends Equals<_Expected, _Actual> extends true ? _Actual : never,
