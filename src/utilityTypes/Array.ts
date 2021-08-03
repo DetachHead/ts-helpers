@@ -263,9 +263,7 @@ export type Slice<
     End extends number = Array['length']
 > = number extends Array['length']
     ? Array
-    : number extends Start
-    ? Array[never][]
-    : number extends End
+    : number extends Start | End
     ? Array[never][]
     : Array extends [
           ...TupleOf<unknown, Start>,
