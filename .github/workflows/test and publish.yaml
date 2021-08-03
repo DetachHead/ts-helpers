@@ -49,17 +49,20 @@ jobs:
                   tag: canary
 
             # these steps only run on master:
-            - name: publish
+            - id: version-was-changed
               if: github.ref == 'refs/heads/master'
+              run: echo ::set-output name=VERSION_INFO::$(npm view $(node -p "require(\"./package.json\").name")@=${{ steps.current-version.outputs.CURRENT_VERSION }})
+            - name: publish
+              if: github.ref == 'refs/heads/master' && steps.version-was-changed.outputs.VERSION_INFO == ''
               uses: JS-DevTools/npm-publish@v1
               with:
                   token: ${{ secrets.NPM_TOKEN }}
                   access: public
             - run: echo ::set-output name=PACKAGE::$(npm pack)
               id: package
-              if: github.ref == 'refs/heads/master'
+              if: github.ref == 'refs/heads/master' && steps.version-was-changed.outputs.VERSION_INFO == ''
             - uses: marvinpinto/action-automatic-releases@v1.2.1
-              if: github.ref == 'refs/heads/master'
+              if: github.ref == 'refs/heads/master' && steps.version-was-changed.outputs.VERSION_INFO == ''
               with:
                   repo_token: ${{ secrets.GITHUB_TOKEN }}
                   prerelease: false
