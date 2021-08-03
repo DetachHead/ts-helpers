@@ -71,7 +71,8 @@
         "noPropertyAccessFromIndexSignature": true,
         "noImplicitOverride": true,
         "exactOptionalPropertyTypes": true,
-        "allowUnreachableCode": false
+        "allowUnreachableCode": false,
+        "stripInternal": true
     },
     "include": ["src", "*.eslintrc.js"]
 }
