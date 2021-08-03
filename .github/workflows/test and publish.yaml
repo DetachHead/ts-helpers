@@ -29,14 +29,19 @@ jobs:
             - uses: actions/setup-node@v1
               with:
                   node-version: 15.4
+            - run: echo ::set-output name=CURRENT_VERSION::$(node -p "require(\"./package.json\").version")
+              id: current-version
+            - if: github.ref == 'refs/heads/master'
+              run: echo ::set-output name=VERSION_INFO::$(npm view $(node -p "require(\"./package.json\").name")@=${{ steps.current-version.outputs.CURRENT_VERSION }})
+              id: version-was-changed
             - uses: actions/download-artifact@v2
+              # need to publish if the branch isn't master, or it is master and the version in package.json hasn't been published yet
+              if: github.ref != 'refs/heads/master' || steps.version-was-changed.outputs.VERSION_INFO == ''
               with:
                   name: build
                   path: dist
-            - run: echo ::set-output name=CURRENT_VERSION::$(node -p "require(\"./package.json\").version")
-              id: current-version
 
-            # these steps run on all branches except master
+            # publish canary version on every push to every branch except master
             - name: canary version
               if: github.ref != 'refs/heads/master'
               run: npm version ${{ steps.current-version.outputs.CURRENT_VERSION }}-$GITHUB_SHA --git-tag-version false
@@ -48,10 +53,7 @@ jobs:
                   access: public
                   tag: canary
 
-            # these steps only run on master:
-            - id: version-was-changed
-              if: github.ref == 'refs/heads/master'
-              run: echo ::set-output name=VERSION_INFO::$(npm view $(node -p "require(\"./package.json\").name")@=${{ steps.current-version.outputs.CURRENT_VERSION }})
+            # publish & github release if master, and the version in package.json was changed
             - name: publish
               if: github.ref == 'refs/heads/master' && steps.version-was-changed.outputs.VERSION_INFO == ''
               uses: JS-DevTools/npm-publish@v1
