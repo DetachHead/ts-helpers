@@ -53,3 +53,22 @@ export type NoUncheckedIndexedAccess = undefined extends typeof _indexedAccessCh
 export type OptionalParameterFromGeneric<Type, Extends> = Type extends Extends
     ? [] | [Type]
     : [Type]
+
+/**
+ * a type to be used as a bound on a generic to document that its generics must be inferred and not explicitly
+ * specified. basically the opposite of [`NoInfer`](https://millsp.github.io/ts-toolbelt/modules/function_noinfer.html)
+ *
+ * this works by specifying an unused generic parameter along with the other generic(s) in your function, making it
+ * difficult for the caller to specify the generics
+ *
+ * **WARNING:** this does **not** make it impossible to specify said generics. the caller can still bypass this by
+ * simply passing `never` or `any`, or even the `OnlyInfer` type itself. treat this as a documentation tool for how your
+ * function is supposed to be used.
+ * @example
+ * const foo = < T, _ extends OnlyInfer>(value: T) => {}
+ * foo(1) //no error
+ * foo<number>(1) // error
+ */
+export type OnlyInfer = '__do not specify any of the generics here, as they have been marked as `OnlyInfer`' & {
+    _: never
+}
