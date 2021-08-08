@@ -65,7 +65,7 @@ export type OptionalParameterFromGeneric<Type, Extends> = Type extends Extends
  * simply passing `never` or `any`, or even the `OnlyInfer` type itself. treat this as a documentation tool for how your
  * function is supposed to be used.
  * @example
- * const foo = < T, _ extends OnlyInfer>(value: T) => {}
+ * const foo = <T, _ extends OnlyInfer>(value: T) => {}
  * foo(1) //no error
  * foo<number>(1) // error
  */
