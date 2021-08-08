@@ -74,6 +74,10 @@ describe('exactly', () => {
                 exactly<{ x: 1 } & { y: 2 }>()(x1AndY2)
             })
         })
+        test("can't specify Actual generic", () => {
+            // @ts-expect-error see the OnlyInfer type
+            exactly<number>()<number>(10 as number)
+        })
     })
 
     describe('types', () => {
@@ -204,6 +208,10 @@ describe('exactly', () => {
                 // @ts-expect-error doesn't match
                 exactly(x1AndY2 as { x: 1 } & { y: 2 }, x1AndY2)
             })
+        })
+        test("can't specify the generics", () => {
+            // @ts-expect-error see the OnlyInfer type
+            exactly<1 | 2, 1 | 2>(oneOrTwo, oneOrTwo)
         })
     })
 })

@@ -1,5 +1,5 @@
 import { Stringable, TemplateLiteralStringable, ToString } from '../utilityTypes/String'
-import { Equals } from '../utilityTypes/misc'
+import { Equals, OnlyInfer } from '../utilityTypes/misc'
 import isCI from 'is-ci'
 import { hasPropertyPredicate } from './Any'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
@@ -58,11 +58,7 @@ export const exactly: {
      * - **`Expected`:** The expected type.<br/>
      *
      * ## curried function
-     * This is implemented as a higher order function to allow partial inference on the Expected type.
-     * ### generics
-     * - **`_Actual`:** The actual type, ***DO NOT*** specify this parameter. it's inferred when you provide the `value`
-     * parameter<br/>
-     *
+     * This is implemented as a higher order function to allow partial inference on the Expected type.     *
      * ### parameters
      *
      * * **`value`:** The value that will be checked.
@@ -75,15 +71,15 @@ export const exactly: {
      * exactly<number>()(a as number); // no error
      * exactly<1 | 2>()(a); // no error
      */
-    <Expected>(): <_Actual>(
-        value: _Actual,
+    <Expected>(): <_ extends OnlyInfer, Actual>(
+        value: Actual,
         ..._this_parameter_will_be_expected_if_the_types_dont_match: Equals<
             Expected,
-            _Actual
+            Actual
         > extends true
             ? []
             : [never]
-    ) => _Actual
+    ) => Actual
 
     /**
      * Used to check that two types are an exact match. Useful for testing types<br/>
@@ -118,12 +114,6 @@ export const exactly: {
      * Correctly checks `any` and `never`.
      * # value form
      * checks that the values match at runtime as well!
-     * ## generics
-     * - **`_Expected`:**  The expected type. ***DO NOT*** specify this parameter, it should be inferred from the value
-     * you provide.
-     * - **`_Actual`:**  The actual type. ***DO NOT*** specify this parameter, it should be inferred from the valuu you
-     * provide.
-     * - **`_Bound`:** Used to bind the two types together, ***DO NOT*** specify this parameter.<br/>
      * @param expected the expected value. its type gets automatically narrowed using the {@link Narrow} type
      * @param actual the actual value. its type gets automatically narrowed using the {@link Narrow} type
      * @example
@@ -132,12 +122,13 @@ export const exactly: {
      * exactly(foo, 1 as 1 | 2);  // no error
      */
     <
-        _Expected extends Equals<_Expected, _Actual> extends true ? _Actual : never,
-        _Actual extends _Bound,
-        _Bound = _Expected
+        _ extends OnlyInfer,
+        Expected extends Equals<Expected, Actual> extends true ? Actual : never,
+        Actual extends Bound,
+        Bound = Expected
     >(
-        expected: Narrow<_Expected>,
-        actual: Narrow<_Actual>,
+        expected: Narrow<Expected>,
+        actual: Narrow<Actual>,
     ): unknown
 } = ((...values: [unknown, unknown] | []) => {
     if (values.length === 2) {
