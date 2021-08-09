@@ -46,9 +46,9 @@ export type NoUncheckedIndexedAccess = undefined extends typeof _indexedAccessCh
  *     // you can now (probably) safely cast the value to suppress the compile error
  *     return value[0] as T
  * }
-
- //now you get a compile error when calling the function like this:
- getValue<number>()
+ *
+ * //now you get a compile error when calling the function like this:
+ * getValue<number>()
  */
 export type OptionalParameterFromGeneric<Type, Extends> = Type extends Extends
     ? [] | [Type]
