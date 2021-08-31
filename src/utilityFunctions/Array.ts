@@ -105,24 +105,46 @@ export const arrayOfAll = <T>() => {
     return <U extends T[]>(array: U & ([T] extends [U[number]] ? unknown : never)): U => array
 }
 
+type FindResult<T> =
+    | {
+          /** the result of the first `callback` that didn't return `undefined` or `null` */
+          result: T
+          /** the index in the array where that result occurred */
+          index: number
+      }
+    | undefined
+
 /**
  * finds the first item in an array where the given callback doesn't return `null` or `undefined`
  * @param arr the array of `T`s to check
  * @param callback the function to run on `arr` that may return `null` or `undefined`
- * @returns
- * index 0: the result of the first `callback` that didn't return `undefined` or `null`
- *
- * index 1: the index in `arr` where that result occurred
  */
-export const findNotUndefined = async <T extends {}[], R>(
+export const findNotUndefinedAsync = async <T extends {}[], R>(
     arr: T,
-    callback: (it: T[number]) => R | void,
-): Promise<[R, number] | undefined> => {
+    callback: (it: T[number]) => Promise<R> | void,
+): Promise<FindResult<R>> => {
     // hack so the compiler knows index is within the range of arr
     for (let index: Keys<T> = 0 as never; index < arr.length; (index as number)++) {
         const value = arr[index]
         const result = await callback(value)
-        if (result) return [result, index]
+        if (result) return { result, index }
+    }
+    return
+}
+/**
+ * finds the first item in an array where the given callback doesn't return `null` or `undefined`
+ * @param arr the array of `T`s to check
+ * @param callback the function to run on `arr` that may return `null` or `undefined`
+ */
+export const findNotUndefined = <T extends {}[], R>(
+    arr: T,
+    callback: (it: T[number]) => R | void,
+): FindResult<R> => {
+    // hack so the compiler knows index is within the range of arr
+    for (let index: Keys<T> = 0 as never; index < arr.length; (index as number)++) {
+        const value = arr[index]
+        const result = callback(value)
+        if (result) return { result, index }
     }
     return
 }
