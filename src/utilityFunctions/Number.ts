@@ -16,8 +16,8 @@ import {
     RightShift,
     Square,
     Subtract,
+    RangeType,
 } from '../utilityTypes/Number'
-import { RangeType } from '../utilityTypes/Number'
 import { toStringType } from './misc'
 import { padStart } from './String'
 

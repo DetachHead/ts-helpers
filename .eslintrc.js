@@ -10,6 +10,7 @@ module.exports = {
         'plugin:eslint-plugin-expect-type/recommended',
         'prettier',
         'plugin:eslint-comments/recommended',
+        'plugin:import/recommended',
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -42,5 +43,11 @@ module.exports = {
         '@typescript-eslint/no-unused-vars': 'off', // OnlyInfer type uses an unused generic
         '@typescript-eslint/explicit-module-boundary-types': 'error',
         '@typescript-eslint/no-explicit-any': 'error',
+        'import/no-extraneous-dependencies': [
+            'error',
+            { devDependencies: ['**/*.test.ts', '**/*.spec.ts'] },
+        ],
+        'import/no-unresolved': 'off', // false positives, typescript handles this anyway
+        'import/no-duplicates': 'error',
     },
 }
