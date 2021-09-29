@@ -4,6 +4,7 @@ import isCI from 'is-ci'
 import { hasPropertyPredicate } from './Any'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import assert from 'assert'
+import { Throw } from 'throw-expression'
 
 /**
  * narrows the given value from type `Base` to type `Narrowed` without having to assign it to a new variable
@@ -148,3 +149,10 @@ export const failCI = (message?: string): void => {
 
 export const isErrnoException = (error: unknown): error is NodeJS.ErrnoException =>
     hasPropertyPredicate<NodeJS.ErrnoException>(error, 'code')
+
+/**
+ * throws an error stating that the operation is not yet implemented. useful for shutting up the type checker
+ * during development
+ */
+export const TODO = (reason = 'no reason provided'): never =>
+    Throw(`operation not implemented (TODO): ${reason}`)

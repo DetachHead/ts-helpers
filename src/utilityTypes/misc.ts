@@ -72,3 +72,12 @@ export type OptionalParameterFromGeneric<Type, Extends> = Type extends Extends
 export type OnlyInfer = '__do not specify any of the generics here, as they have been marked as `OnlyInfer`' & {
     _: never
 }
+
+/**
+ * creates an "error type" stating that the operation is not yet implemented. useful for shutting up the type checker
+ * during development
+ */
+export type TODO<Reason extends string = 'no reason provided'> = {
+    '_type not implemented (TODO)': never
+    _reason: Reason
+}
