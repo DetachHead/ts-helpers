@@ -1,9 +1,28 @@
 /**
+ * "normalizes" types to be compared using {@link Equals}
+ * - converts intersections of object types to normal object types
+ *   (ie. converts `{foo: number} & {bar: number}` to `{foo: number, bar: number}`).
+ *   see [this comment](https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-421529650)
+ * - removes empty object types (`{}`) from intersections (which [actually means any non-nullish
+ *   value](https://github.com/typescript-eslint/typescript-eslint/issues/2063#issuecomment-675156492)) - see
+ *   [this comment](https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-778623742)
+ */
+type EqualsWrapped<T> = T extends infer R & {}
+    ? {
+          [P in keyof R]: R[P]
+      }
+    : never
+
+/**
  * Checks if two types are equal at the type level.
  *
  * correctly checks `any` and `never`
+ *
+ * @see https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-931205995
  */
-export type Equals<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2
+export type Equals<A, B> = (<T>() => T extends EqualsWrapped<A> ? 1 : 2) extends <
+    T
+>() => T extends EqualsWrapped<B> ? 1 : 2
     ? true
     : false
 
