@@ -1,4 +1,5 @@
 import {
+    castArray,
     concat,
     containsDuplicates,
     findDuplicates,
@@ -247,5 +248,14 @@ describe('forEach', () => {
             prev() // $ExpectType number
             next() // $ExpectType number
         })
+    })
+})
+
+describe('castArray', () => {
+    test('already an array', () => {
+        exactly([1, 2, 3], castArray([1, 2, 3]))
+    })
+    test('not an array', () => {
+        exactly([1], castArray(1))
     })
 })
