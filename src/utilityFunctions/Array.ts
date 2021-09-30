@@ -1,4 +1,5 @@
 import {
+    CastArray,
     IndexOf,
     IndexOfLongestString,
     Slice,
@@ -11,7 +12,7 @@ import {
 } from '../utilityTypes/Array'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import { Flatten } from 'ts-toolbelt/out/List/Flatten'
-import { orderBy } from 'lodash'
+import _ from 'lodash'
 import { isDefined } from 'ts-is-present'
 import { Enumerate } from '../utilityTypes/Number'
 import { Keys } from '../utilityTypes/Any'
@@ -243,7 +244,7 @@ export const indexOfLongestString = <Strings extends string[]>(
 /** sorts an array of strings by longest to shortest */
 export const sortByLongestStrings = <Strings extends string[]>(
     strings: Narrow<Strings>,
-): SortLongestStrings<Strings> => orderBy(strings, 'length', 'desc') as never
+): SortLongestStrings<Strings> => _.orderBy(strings, 'length', 'desc') as never
 
 /**
  * removes any `undefined` values from `array` before maooiung over them and returning the mappved array with no
@@ -296,3 +297,10 @@ export const forEach = <T extends ReadonlyArray<unknown>>(
         callback(item, index as never, previous, next)
     })
 }
+
+/** {@link _.castArray} but the type is known at compiletime */
+export const castArray = <T>(value: Narrow<T>): CastArray<T> =>
+    _.castArray(
+        // @ts-expect-error false positive due to narrow type
+        value,
+    ) as never
