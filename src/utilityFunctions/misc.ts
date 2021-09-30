@@ -52,7 +52,7 @@ export const exactly: {
      * - value form: `exactly(expectedValue, actualValue)`<br/>
      * Correctly checks `any` and `never`.
      * @see Equals
-     * # Value Form
+     * # Mixed Form
      * ## `exactly` function
      * ### generics
      *
