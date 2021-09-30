@@ -272,3 +272,6 @@ export type Slice<
       ]
     ? Result
     : never
+
+/** compiletime version of {@link  _.castArray} */
+export type CastArray<T> = T extends unknown[] ? T : [T]
