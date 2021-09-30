@@ -62,6 +62,7 @@ describe('exactly', () => {
                 exactly<1 | 2>()(oneOrTwo)
                 exactly<2 | 1>()(oneOrTwo)
                 exactly<Readonly<{ x: 1 } & { y: 2 }>>()(x1AndY2)
+                exactly<Readonly<{ x: 1; y: 2 }>>()(x1AndY2)
             })
             test('fail', () => {
                 // @ts-expect-error doesn't match
@@ -127,6 +128,14 @@ describe('exactly', () => {
                 exactly<1 | 2, 1 | 2>()
                 exactly<2 | 1, 1 | 2>()
                 exactly<Readonly<{ x: 1 } & { y: 2 }>, typeof x1AndY2>()
+                exactly<{ x: 1 } & { y: 2 }, { x: 1; y: 2 }>()
+                exactly<{ x: 1; y: 2 }, { x: 1; y: 2 } & {}>()
+
+                // https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-778623742
+                exactly<number & {}, number>()
+                exactly<1 | (number & {}), number>()
+                exactly<undefined & {}, never>()
+                exactly<{}, {}>()
             })
             test('fail', () => {
                 // @ts-expect-error doesn't match
@@ -137,7 +146,40 @@ describe('exactly', () => {
                 exactly<1 | 2, 2 | 3>()
                 // @ts-expect-error doesn't match
                 exactly<{ x: 1 } & { y: 2 }, typeof x1AndY2>()
+                // @ts-expect-error doesn't match
+                exactly<{ x: 1 } & { y: 2 }, { x: 1; y: 2 } & { z: 2 }>()
+                // @ts-expect-error doesn't match - making sure EqualsWrapped doesn't cause false negatives
+                exactly<{}, never>()
             })
+        })
+        describe('functions', () => {
+            // https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-568233987
+            describe('overloads', () => {
+                test('pass', () => {
+                    exactly<
+                        { (x: 0, y: null): void; (x: number, y: null): void },
+                        { (x: number, y: null): void; (x: 0, y: null): void }
+                    >()
+                })
+                test('fail', () => {
+                    exactly<
+                        // @ts-expect-error doesn't match
+                        { (x: 0, y: null): void; (x: number, y: null): void },
+                        { (x: number, y: null): void; (x: 0, y: undefined): void }
+                    >()
+                })
+            })
+            test('intersections', () => {
+                type Function1 = (x: 0, y: null) => void
+                type Function2 = (x: number, y: string) => void
+
+                exactly<Function1 & Function2, Function2 & Function1>()
+            })
+        })
+        describe('arrays/tuples', () => {
+            // @ts-expect-error doesn't match
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- testing the any type
+            exactly<[any, number], [number, any]>()
         })
     })
     describe('values', () => {
