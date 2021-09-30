@@ -198,9 +198,9 @@ describe('exactly', () => {
             })
             test('fail', () => {
                 // @ts-expect-error doesn't match
-                exactly(oneOrTwo, 1),
-                    // @ts-expect-error doesn't match
-                    exactly(1, oneOrTwo)
+                exactly(oneOrTwo, 1)
+                // @ts-expect-error doesn't match
+                exactly(1, oneOrTwo)
                 assert.throws(() =>
                     // @ts-expect-error doesn't match
                     exactly(oneOrTwo, 2 as 1 | 2 | 3),
