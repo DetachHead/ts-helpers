@@ -7,8 +7,10 @@ import {
     UriString,
     UrlString,
     CaseInsensitive,
+    ReplaceValuesWithMap,
+    IndexOf,
 } from '../String'
-import { testType } from '../../utilityFunctions/misc'
+import { exactly, testType } from '../../utilityFunctions/misc'
 
 test('UriString', () => {
     // @ts-expect-error TS2345: Argument of type '"asdf"' is not assignable to parameter of type '`${string}://${string}`'.
@@ -67,3 +69,31 @@ test('CaseInsensitive', () => {
     // @ts-expect-error wrong value
     testType<CaseInsensitive<'abc'>>('ABd')
 })
+
+describe('ReplaceValuesWithMap', () => {
+    test('normal string', () => {
+        exactly<'barbarqux', ReplaceValuesWithMap<'foobarbaz', { foo: 'bar'; baz: 'qux' }>>()
+    })
+    describe('escaping', () => {
+        test('escaped string', () => {
+            exactly<
+                'barbazquuz',
+                ReplaceValuesWithMap<"foo'baz'quux", { foo: 'bar'; baz: 'qux'; quux: 'quuz' }, "'">
+            >()
+        })
+        test('unescaped', () => {
+            exactly<
+                "barbazquuz'escape'",
+                ReplaceValuesWithMap<
+                    "foo'baz'quux/'escape/'",
+                    { foo: 'bar'; baz: 'qux'; quux: 'quuz' },
+                    "'",
+                    '/'
+                >
+            >()
+        })
+    })
+})
+
+// @ts-expect-error what in the fuck is this nightmare i've created... for some reason using unescaped test fails if you comment out this unrelated type
+type _ = IndexOf<"whatthefuck''", "''">

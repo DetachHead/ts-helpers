@@ -20,4 +20,13 @@ describe('formatDate', () => {
         // noinspection BadExpressionStatementJS
         value === '10:11AM'
     })
+    describe('escaping', () => {
+        test('escaped pattern', () => {
+            const value = formatDate(new Date('2020-01-01'), "dd/mm 'T'")
+            assert(value === '01/01 T')
+            // // @ts-expect-error the expected error isn't appearing in ts >= 4.3.5 due to https://github.com/microsoft/TypeScript/issues/45201
+            // noinspection BadExpressionStatementJS
+            value === '01/01 AM'
+        })
+    })
 })

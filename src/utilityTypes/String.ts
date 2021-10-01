@@ -295,41 +295,90 @@ export type EndsWith<Full extends string, CheckEnd extends string> = string exte
 /** a map of values where the keys are to be replaced by the values in {@link ReplaceValuesWithMap} */
 type ReplaceValuesMap = Record<Exclude<AnyKey, symbol>, unknown>
 
-type _TokenizeString<Value extends string, Map extends ReplaceValuesMap> = '' extends Value
+type ReplaceValuesWithMapToken = { replaceable: boolean; value: string }
+
+type _TokenizeString<
+    Value extends string,
+    Map extends ReplaceValuesMap,
+    EscapeIn extends string,
+    Unescape extends string
+> = '' extends Value
     ? []
-    : LongestString<MatchStart<Value, Keys<Map>>> extends infer Token
-    ? Token extends string
-        ? [Token, ..._TokenizeString<TrimStart<Value, Length<Token>>, Map>]
-        : IndexOf<Value, Keys<Map>> extends infer NextTokenIndex
+    : Value extends `${Unescape}${EscapeIn}${infer Rest}`
+    ? [{ value: EscapeIn; replaceable: false }, ..._TokenizeString<Rest, Map, EscapeIn, Unescape>]
+    : Value extends `${EscapeIn}${infer EscapedValue}${EscapeIn}${infer Rest}`
+    ? [
+          { value: EscapedValue; replaceable: false },
+          ..._TokenizeString<Rest, Map, EscapeIn, Unescape>
+      ]
+    : LongestString<MatchStart<Value, Keys<Map>>> extends infer ValueToReplace
+    ? ValueToReplace extends string
+        ? [
+              { value: ValueToReplace; replaceable: true },
+              ..._TokenizeString<TrimStart<Value, Length<ValueToReplace>>, Map, EscapeIn, Unescape>
+          ]
+        : IndexOf<
+              Value,
+              Keys<Map> | `${Unescape}${EscapeIn}` | `${EscapeIn}${string}${EscapeIn}`
+          > extends infer NextTokenIndex
         ? NextTokenIndex extends -1
-            ? [Value]
+            ? [{ value: Value; replaceable: false }]
             : [
-                  TrimEnd<
-                      Value,
-                      // @ts-expect-error i think there's a bug in ts with inferred generics not narrowing properly
-                      NextTokenIndex
-                  >,
-                  ..._TokenizeString<TrimStart<Value, IndexOf<Value, Keys<Map>>>, Map>
+                  {
+                      value: TrimEnd<
+                          Value,
+                          // @ts-expect-error i think there's a bug in ts with inferred generics not narrowing properly
+                          NextTokenIndex
+                      >
+                      replaceable: false
+                  },
+                  ..._TokenizeString<
+                      TrimStart<
+                          Value,
+                          // @ts-expect-error see comment above
+                          NextTokenIndex
+                      >,
+                      Map,
+                      EscapeIn,
+                      Unescape
+                  >
               ]
         : never
     : never
 
-type _ReplaceValuesWithMap<Value extends string[], Map extends ReplaceValuesMap> = Value extends []
+type _ReplaceValuesWithMap<
+    Tokens extends ReplaceValuesWithMapToken[],
+    Map extends ReplaceValuesMap
+> = Tokens extends []
     ? []
     : // @ts-expect-error stack depth error but it's fine
       [
-          ArrayHead<Value> extends Keys<Map> ? Map[ArrayHead<Value>] : ArrayHead<Value>,
-          ..._ReplaceValuesWithMap<ArrayTail<Value>, Map>
+          ArrayHead<Tokens>['replaceable'] extends false
+              ? ArrayHead<Tokens>['value']
+              : ArrayHead<Tokens>['value'] extends Keys<Map>
+              ? Map[ArrayHead<Tokens>['value']]
+              : ArrayHead<Tokens>['value'],
+          ..._ReplaceValuesWithMap<ArrayTail<Tokens>, Map>
       ]
 
 /**
- * replaces all instances in `Value` of the first string with the second string with each tuple in `Map`
+ * replaces all instances in `Value` of the first string with the second string with each tuple in `Map`.
+ *
+ * **generics:**
+ * - `Value` - the string to replace values in
+ * - `Map` - an object where instances of the keys within `Value` to replace and the values
+ * - `EscapeIn` - a string that disables replacing for any section of `Value` within it. see examples below
+ * - `Unescape` - a string that un-escapes the `EscapeIn` value if placed before it - see examples below
  * @example
  * type Foo = ReplaceValuesWithMap<'foobarbaz', {foo: 'bar', baz: 'qux'}> // "barbarqux"
+ * type Bar = ReplaceValuesWithMap<"foo'baz'quux", {foo: 'bar', baz: 'qux', quux: 'quuz'}> // "barbazquuz"
  */
-export type ReplaceValuesWithMap<Format extends string, Map extends ReplaceValuesMap> =
-    // @ts-expect-error stack depth error but it's fine
-    Join<_ReplaceValuesWithMap<_TokenizeString<Format, Map>, Map>>
+export type ReplaceValuesWithMap<
+    Value extends string,
+    Map extends ReplaceValuesMap,
+    EscapeIn extends string = never,
+    Unescape extends string = never
+> = Join<_ReplaceValuesWithMap<_TokenizeString<Value, Map, EscapeIn, Unescape>, Map>>
 
 /**
  * a stringified version of {@link Enumerate}

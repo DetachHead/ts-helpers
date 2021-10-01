@@ -405,5 +405,6 @@ export type FormattedDate<Format extends string> = ReplaceValuesWithMap<
         Pp: ShortDateAndTime
         PPpp: OrdinalDateAndTimeWithMilliseconds
         // TODO: figure out what PPPppp and PPPPpppp are
-    }
+    },
+    "'" // escape any characters wrapped in quotes
 >
