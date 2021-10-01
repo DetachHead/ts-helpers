@@ -5,6 +5,7 @@ import { hasPropertyPredicate } from './Any'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import assert from 'assert'
 import { Throw } from 'throw-expression'
+import { NoInfer } from 'ts-toolbelt/out/Function/NoInfer'
 
 /**
  * narrows the given value from type `Base` to type `Narrowed` without having to assign it to a new variable
@@ -36,12 +37,12 @@ export const toStringType = <T extends Stringable>(
 ): T extends TemplateLiteralStringable ? ToString<T> : string => value.toString() as never
 
 /**
- * @deprecated use `exactly` instead for testing types
- * @see exactly
+ * asserts that a value matches the given type
+ *
+ * **WARNING**: for most type-testing scenarios, you probably want to use {@link exactly} instead, as it does an exact
+ * match whereas this function only verifies that the value `extends` the given type
  */
-export const testType = <T>(_value: T): void => {
-    // do nothing
-}
+export const assertType = <T = never>(_value: NoInfer<T>): void => undefined
 
 export const exactly: {
     /**

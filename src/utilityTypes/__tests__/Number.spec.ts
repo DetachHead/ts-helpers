@@ -8,65 +8,65 @@ import {
     NumberToBinary,
     Subtract,
 } from '../Number'
-import { testType } from '../../utilityFunctions/misc'
+import { assertType } from '../../utilityFunctions/misc'
 
 test('multiply', () => {
-    testType<Multiply<2 | 3, 5 | 2>>(4)
-    testType<Multiply<2 | 3, 5 | 2>>(6)
-    testType<Multiply<2 | 3, 5 | 2>>(10)
-    testType<Multiply<2 | 3, 5 | 2>>(15)
+    assertType<Multiply<2 | 3, 5 | 2>>(4)
+    assertType<Multiply<2 | 3, 5 | 2>>(6)
+    assertType<Multiply<2 | 3, 5 | 2>>(10)
+    assertType<Multiply<2 | 3, 5 | 2>>(15)
     // @ts-expect-error not valid product
-    testType<Multiply<2 | 3, 5 | 2>>(11)
+    assertType<Multiply<2 | 3, 5 | 2>>(11)
     // @ts-expect-error not valid product
-    testType<Multiply<2 | 3, 5 | 2>>(8)
+    assertType<Multiply<2 | 3, 5 | 2>>(8)
 })
 
 test('add', () => {
-    testType<Add<2 | 5, 10 | 20>>(12)
-    testType<Add<2 | 5, 10 | 20>>(15)
-    testType<Add<2 | 5, 10 | 20>>(22)
-    testType<Add<2 | 5, 10 | 20>>(25)
+    assertType<Add<2 | 5, 10 | 20>>(12)
+    assertType<Add<2 | 5, 10 | 20>>(15)
+    assertType<Add<2 | 5, 10 | 20>>(22)
+    assertType<Add<2 | 5, 10 | 20>>(25)
     // @ts-expect-error not valid sum
-    testType<Add<2 | 5, 10 | 20>>(20)
+    assertType<Add<2 | 5, 10 | 20>>(20)
 })
 
 test('subtract', () => {
-    testType<Subtract<10 | 20, 2 | 3>>(8)
-    testType<Subtract<10 | 20, 2 | 3>>(18)
-    testType<Subtract<10 | 20, 2 | 3>>(7)
-    testType<Subtract<10 | 20, 2 | 3>>(17)
+    assertType<Subtract<10 | 20, 2 | 3>>(8)
+    assertType<Subtract<10 | 20, 2 | 3>>(18)
+    assertType<Subtract<10 | 20, 2 | 3>>(7)
+    assertType<Subtract<10 | 20, 2 | 3>>(17)
     // @ts-expect-error not valid
-    testType<Subtract<10 | 20, 2 | 3>>(16)
+    assertType<Subtract<10 | 20, 2 | 3>>(16)
 })
 
 test('divide', () => {
-    testType<Divide<6 | 12, 2 | 3>>(2)
-    testType<Divide<6 | 12, 2 | 3>>(3)
-    testType<Divide<6 | 12, 2 | 3>>(6)
-    testType<Divide<6 | 12, 2 | 3>>(4)
+    assertType<Divide<6 | 12, 2 | 3>>(2)
+    assertType<Divide<6 | 12, 2 | 3>>(3)
+    assertType<Divide<6 | 12, 2 | 3>>(6)
+    assertType<Divide<6 | 12, 2 | 3>>(4)
     // @ts-expect-error not valid quotient
-    testType<Divide<6 | 12, 2 | 3>>(9)
+    assertType<Divide<6 | 12, 2 | 3>>(9)
 })
 
 describe('IsGreaterThan', () => {
     test('false', () => {
-        testType<IsGreaterThan<6, 7>>(false)
-        testType<IsGreaterThan<6, 6>>(false)
+        assertType<IsGreaterThan<6, 7>>(false)
+        assertType<IsGreaterThan<6, 6>>(false)
     })
     test('true', () => {
-        testType<IsGreaterThan<7, 6>>(true)
+        assertType<IsGreaterThan<7, 6>>(true)
     })
     test('big numbers', () => {
-        testType<IsGreaterThan<4999, 5000>>(false)
-        testType<IsGreaterThan<5001, 5000>>(true)
+        assertType<IsGreaterThan<4999, 5000>>(false)
+        assertType<IsGreaterThan<5001, 5000>>(true)
         // @ts-expect-error wrong value
-        testType<IsGreaterThan<5000, 5000>>(true)
+        assertType<IsGreaterThan<5000, 5000>>(true)
     })
 })
 
 test('HighestNumber', () => {
-    testType<HighestNumber<1 | 3 | 6 | 2>>(6)
-    testType<HighestNumber<1 | 3 | 6 | 2>>(
+    assertType<HighestNumber<1 | 3 | 6 | 2>>(6)
+    assertType<HighestNumber<1 | 3 | 6 | 2>>(
         // @ts-expect-error wrong value
         2,
     )
@@ -74,28 +74,28 @@ test('HighestNumber', () => {
 
 describe('NumberToBinary', () => {
     test('specific value', () => {
-        testType<NumberToBinary<12>>('1100')
-        testType<NumberToBinary<12>>(
+        assertType<NumberToBinary<12>>('1100')
+        assertType<NumberToBinary<12>>(
             // @ts-expect-error wrong value
             '101010',
         )
     })
     test('number type', () => {
         // just allow any string with numbers in it
-        testType<NumberToBinary<number>>('1010101')
+        assertType<NumberToBinary<number>>('1010101')
     })
 })
 
 describe('BinaryToNumber', () => {
     test('specific value', () => {
-        testType<BinaryToNumber<'10101'>>(21)
-        testType<BinaryToNumber<'11111'>>(
+        assertType<BinaryToNumber<'10101'>>(21)
+        assertType<BinaryToNumber<'11111'>>(
             // @ts-expect-error wrong value
             30,
         )
     })
     test('number type', () => {
         // just allow any number
-        testType<BinaryToNumber<`${bigint}`>>(1 as number)
+        assertType<BinaryToNumber<`${bigint}`>>(1 as number)
     })
 })

@@ -1,6 +1,6 @@
 import { TupleOfUpTo } from '../Array'
 import { SplitByLength, SplitByUnion } from '../String'
-import { testType } from '../../utilityFunctions/misc'
+import { assertType } from '../../utilityFunctions/misc'
 
 test('TupleOfUpTo', () => {
     // TODO: figure out how to test with `noUncheckedIndexedAccess` on and off
@@ -13,10 +13,10 @@ test('TupleOfUpTo', () => {
 })
 
 test('SplitByUnion', () => {
-    testType<SplitByUnion<'foo.bar,baz', '.' | ','>>('foo')
-    testType<SplitByUnion<'foo.bar,baz', '.' | ','>>('bar')
-    testType<SplitByUnion<'foo.bar,baz', '.' | ','>>('baz')
-    testType<SplitByUnion<'foo.bar,baz', '.' | ','>>(
+    assertType<SplitByUnion<'foo.bar,baz', '.' | ','>>('foo')
+    assertType<SplitByUnion<'foo.bar,baz', '.' | ','>>('bar')
+    assertType<SplitByUnion<'foo.bar,baz', '.' | ','>>('baz')
+    assertType<SplitByUnion<'foo.bar,baz', '.' | ','>>(
         // @ts-expect-error invalid value
         'qux',
     )
@@ -24,5 +24,5 @@ test('SplitByUnion', () => {
 
 test('SplitByLength', () => {
     type Foo = SplitByLength<'foobarbaz', 3> // $ExpectType ["foo", "bar", "baz"]
-    testType<Foo>(['foo', 'bar', 'baz'])
+    assertType<Foo>(['foo', 'bar', 'baz'])
 })
