@@ -120,30 +120,11 @@ test('concat', () => {
 })
 
 describe('indexOf', () => {
-    test('normal', () => {
-        const value = indexOf(['foo', 'bar', 'baz'], 'baz') // $ExpectType 2
-        assert(value === 2)
-    })
-    test('union', () => {
-        const value = indexOf(['foo', 'bar', 'baz'], 'baz' as 'foo' | 'baz')
-
-        // MY GOD WHY IS THERE NO GOOD WAY TO TEST TYPES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        // possible value (just checking for no type error)
-        // noinspection BadExpressionStatementJS
-        value !== 0
-        // @ts-expect-error impossibru value
-        // noinspection BadExpressionStatementJS
-        value !== 1
-        // the actual value
-        assert(value === 2)
-    })
-    test('string', () => {
-        const value = indexOf(['foo', 'bar', 'baz'] as string[], 'baz' as string)
-        // need to check that the type is number this way instead since ExpectType shits itself on these types
-        // noinspection BadExpressionStatementJS
-        value === 100
-    })
+    test('normal', () => exactly(2, indexOf(['foo', 'bar', 'baz'], 'baz')))
+    test('union', () => exactly(2 as 0 | 2, indexOf(['foo', 'bar', 'baz'], 'baz' as 'foo' | 'baz')))
+    test('string', () =>
+        exactly(2 as number, indexOf(['foo', 'bar', 'baz'] as string[], 'baz' as string)))
+    test('stack depth', () => exactly<500>()(indexOf({} as [...TupleOf<'hi', 500>, 'bye'], 'bye')))
 })
 
 describe('flat', () => {
