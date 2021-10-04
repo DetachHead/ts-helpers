@@ -65,14 +65,16 @@ export type FileName<Extension extends string = never> = `${string}${IsNever<
     `.${Extension}`
 >}`
 
+type DuplicateStringTailRec<T extends string, N extends number, Result extends string> = N extends 0
+    ? Result
+    : DuplicateStringTailRec<T, Decrement<N>, `${Result}${T}`>
+
 /**
  * duplicates a string a given number of times
  * @example
  * type Foo = DuplicateString<'foo', 3> //'foofoofoo'
  */
-export type DuplicateString<T extends string, N extends number> = N extends 1
-    ? T
-    : `${T}${DuplicateString<T, Subtract<N, 1>>}`
+export type DuplicateString<T extends string, N extends number> = DuplicateStringTailRec<T, N, ''>
 
 /**
  * anything that can be represented as a string (ie. has a {@link toString} method)
