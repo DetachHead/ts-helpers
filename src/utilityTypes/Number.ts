@@ -46,7 +46,7 @@ export type RangeType<FROM extends number, TO extends number> =
  *
  * **WARNING:** for some reason the compiler sometimes thinks this isn't a valid number when passing it into other
  * utility types. as far as i can tell this is a false positive, and the types still behave as expected if you suppress
- * the error with @ts-expect-error
+ * the error with @ts-expect-error. see [this issue](https://github.com/microsoft/TypeScript/issues/46176)
  * @example
  * type Foo = Add<2, 3> //5
  */
