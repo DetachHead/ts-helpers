@@ -6,9 +6,9 @@ import { Cast } from 'ts-toolbelt/out/Any/Cast'
 import { IndexOfLongestString, TupleOf } from './Array'
 import { Keys } from './Any'
 import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
-import { Join } from 'ts-toolbelt/out/String/Join'
 import { Head as ArrayHead } from 'ts-toolbelt/out/List/Head'
 import { Tail as ArrayTail } from 'ts-toolbelt/out/List/Tail'
+import { Literal } from 'ts-toolbelt/out/String/_Internal'
 
 /**
  * a type that can be converted to a string in a template literal type
@@ -125,9 +125,17 @@ export type Substring<
     String extends string,
     StartIndex extends number,
     EndIndex extends number
-> = TrimStart<String, StartIndex> extends `${infer R}${TrimStart<String, EndIndex>}` ? R : never
+> = TrimStart<String, StartIndex> extends `${infer R}${
+    // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46171
+    TrimStart<String, EndIndex>
+}`
+    ? R
+    : never
 
-export type CharAt<String extends string, Index extends number> = Head<TrimStart<String, Index>>
+export type CharAt<String extends string, Index extends number> = Head<
+    // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46171
+    TrimStart<String, Index>
+>
 
 /**
  * `true` if `String` contains `Substring`, else `false`
@@ -258,7 +266,10 @@ export type PadStart<
     : {
           [Key in String]: number extends Size
               ? string
-              : `${DuplicateStringUntilLength<PadString, Subtract<Size, Length<Key>>>}${Key}`
+              : `${
+                    // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46171
+                    DuplicateStringUntilLength<PadString, Subtract<Size, Length<Key>>>
+                }${Key}`
       }[String]
 
 /**
@@ -296,35 +307,86 @@ export type EndsWith<Full extends string, CheckEnd extends string> = string exte
     ? true
     : false
 
+type _Join<T extends ReadonlyArray<unknown>, D extends string, Result extends string> = T extends []
+    ? Result
+    : T extends [Literal]
+    ? `${Result}${T[0]}`
+    : T extends [Literal, ...infer R]
+    ? _Join<R, D, `${Result}${T[0]}${D}`>
+    : string
+
+/**
+ * Concat many literals together
+ *
+ * like `ts-toolbelt`'s `Join` but tail-recursive, to allow for a higher stack depth in ts 4.5
+ * @param T to concat
+ * @param D to delimit
+ * @see https://github.com/millsp/ts-toolbelt/issues/255
+ */
+// TODO: remove this once https://github.com/millsp/ts-toolbelt/issues/255 is merged
+export type Join<T extends ReadonlyArray<Literal>, D extends string = ''> = _Join<
+    T,
+    D,
+    ''
+> extends infer X
+    ? Cast<X, string>
+    : never
+
 /** a map of values where the keys are to be replaced by the values in {@link ReplaceValuesWithMap} */
 type ReplaceValuesMap = Record<Exclude<AnyKey, symbol>, unknown>
 
-type _TokenizeString<Value extends string, Map extends ReplaceValuesMap> = '' extends Value
-    ? []
+type _TokenizeString<
+    Value extends string,
+    Map extends ReplaceValuesMap,
+    Tokens extends string[]
+> = '' extends Value
+    ? Tokens
     : LongestString<MatchStart<Value, Keys<Map>>> extends infer Token
     ? Token extends string
-        ? [Token, ..._TokenizeString<TrimStart<Value, Length<Token>>, Map>]
+        ? _TokenizeString<
+              // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46171
+              TrimStart<Value, Length<Token>>,
+              Map,
+              [...Tokens, Token]
+          >
         : IndexOf<Value, Keys<Map>> extends infer NextTokenIndex
         ? NextTokenIndex extends -1
-            ? [Value]
-            : [
-                  TrimEnd<
-                      Value,
-                      // @ts-expect-error i think there's a bug in ts with inferred generics not narrowing properly
-                      NextTokenIndex
-                  >,
-                  ..._TokenizeString<TrimStart<Value, IndexOf<Value, Keys<Map>>>, Map>
-              ]
+            ? [...Tokens, Value]
+            : _TokenizeString<
+                  // @ts-expect-error see above
+                  TrimStart<Value, IndexOf<Value, Keys<Map>>>,
+                  Map,
+                  [
+                      ...Tokens,
+                      TrimEnd<
+                          Value,
+                          // @ts-expect-error https://github.com/microsoft/TypeScript/issues/43736
+                          NextTokenIndex
+                      >,
+                  ]
+              >
         : never
     : never
 
-type _ReplaceValuesWithMap<Value extends string[], Map extends ReplaceValuesMap> = Value extends []
-    ? []
-    : // @ts-expect-error stack depth error but it's fine
-      [
-          ArrayHead<Value> extends Keys<Map> ? Map[ArrayHead<Value>] : ArrayHead<Value>,
-          ..._ReplaceValuesWithMap<ArrayTail<Value>, Map>
-      ]
+type _ReplaceValuesWithMap<
+    InputTokens extends string[],
+    Map extends ReplaceValuesMap,
+    OutputTokens extends string[]
+> = string[] extends InputTokens
+    ? InputTokens
+    : InputTokens extends []
+    ? OutputTokens
+    : _ReplaceValuesWithMap<
+          ArrayTail<InputTokens>,
+          Map,
+          // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46171
+          [
+              ...OutputTokens,
+              ArrayHead<InputTokens> extends Keys<Map>
+                  ? Map[ArrayHead<InputTokens>]
+                  : ArrayHead<InputTokens>,
+          ]
+      >
 
 /**
  * replaces all instances in `Value` of the first string with the second string with each tuple in `Map`
@@ -332,8 +394,8 @@ type _ReplaceValuesWithMap<Value extends string[], Map extends ReplaceValuesMap>
  * type Foo = ReplaceValuesWithMap<'foobarbaz', {foo: 'bar', baz: 'qux'}> // "barbarqux"
  */
 export type ReplaceValuesWithMap<Format extends string, Map extends ReplaceValuesMap> =
-    // @ts-expect-error stack depth error but it's fine
-    Join<_ReplaceValuesWithMap<_TokenizeString<Format, Map>, Map>>
+    // @ts-expect-error stack depth error due to generic failing to narrow https://github.com/microsoft/TypeScript/issues/46171
+    Join<_ReplaceValuesWithMap<_TokenizeString<Format, Map, []>, Map, []>>
 
 /**
  * a stringified version of {@link Enumerate}
@@ -358,38 +420,63 @@ export type LongestString<Strings extends string> = ListOf<Strings>[IndexOfLonge
     ListOf<Strings>
 >]
 
-type _SplitByUnion<
-    T extends string,
-    SplitBy extends string
-> = T extends `${infer Char}${infer Rest}`
-    ? Char extends SplitBy
-        ? ''
-        : `${Char}${_SplitByUnion<Rest, SplitBy>}`
-    : T
+type SplitByUnionTailRec<
+    Value extends string,
+    SplitBy extends string,
+    CurrentResult extends string
+> = Value extends ''
+    ? never
+    : IndexOf<Value, SplitBy> extends -1
+    ? CurrentResult | Value
+    : IndexOf<Value, SplitBy> extends 0
+    ? SplitByUnionTailRec<
+          // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46171
+          TrimStart<Value, Length<SplitBy>>,
+          SplitBy,
+          CurrentResult
+      >
+    : SplitByUnionTailRec<
+          // @ts-expect-error see above
+          TrimStart<Value, Add<Length<SplitBy>, IndexOf<Value, SplitBy>>>,
+          SplitBy,
+          | CurrentResult
+          | TrimEnd<
+                Value,
+                // @ts-expect-error see above
+                IndexOf<Value, SplitBy>
+            >
+      >
 
 /**
  * like `Split` from `ts-toolbelt` but works properly with unions
  * @example
  * type Foo = SplitByUnion<'foo,bar.baz', '.' | ','> //'foo'|'bar'|'baz'
  */
-export type SplitByUnion<T extends string, SplitBy extends string> = T extends `${_SplitByUnion<
-    T,
-    SplitBy
->}${infer Char}${infer Rest}`
-    ? Char extends SplitBy
-        ? _SplitByUnion<T, SplitBy> | SplitByUnion<Rest, SplitBy>
-        : never
-    : T
+export type SplitByUnion<Value extends string, SplitBy extends string> = SplitByUnionTailRec<
+    Value,
+    SplitBy,
+    never
+>
+
+type SplitByLengthTailRec<
+    T extends string,
+    Len extends number,
+    Result extends string[]
+> = Length<T> extends Len
+    ? [...Result, T]
+    : SplitByLengthTailRec<
+          // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46171
+          TrimStart<T, Len>,
+          Len,
+          [...Result, TrimEnd<T, Len>]
+      >
 
 /**
  * splits a string into an array of strings with a specified length
  * @example
  * type Foo = SplitByLength<'foobarbaz', 3> //['foo', 'bar', 'baz']
  */
-export type SplitByLength<T extends string, Len extends number> = [
-    TrimEnd<T, Len>,
-    ...(Length<T> extends Len ? [] : SplitByLength<TrimStart<T, Len>, Len>)
-]
+export type SplitByLength<T extends string, Len extends number> = SplitByLengthTailRec<T, Len, []>
 
 /**
  * truncates a string to the specified `MaxLength`, concatenating an `Ellipsis` if the string is too long
