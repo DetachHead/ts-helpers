@@ -10,8 +10,19 @@ import { Keys as TsToolbeltKeys } from 'ts-toolbelt/out/Any/Keys'
  * //with EvaluateType:
  * type Entries<T> = EvaluateType<[Keys<T>, T[Keys<T>]][]>
  * declare const foo: Entries<{ foo: number, bar: string }> //hovering over foo will show `[("foo" | "bar"), (string | number)][]`
+ * @see https://stackoverflow.com/a/57683652
  */
-export type EvaluateType<T> = T extends infer R ? R : never
+export type EvaluateType<T> = T extends infer O ? { [K in keyof O]: O[K] } : never
+
+/**
+ * {@link EvaluateType} but works recursively on objects
+ * @see https://stackoverflow.com/a/57683652
+ */
+export type EvaluateTypeRecursively<T> = T extends object
+    ? T extends infer O
+        ? { [K in keyof O]: EvaluateTypeRecursively<O[K]> }
+        : never
+    : T
 
 /** like ts-toolbelt's `Keys` except it doesn't include number (for objects where you know all of the keys) */
 export type Keys<T> = Exclude<TsToolbeltKeys<T>, number>
