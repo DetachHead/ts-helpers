@@ -5,6 +5,8 @@ import { Take } from 'ts-toolbelt/out/List/Take'
 import { Length } from 'ts-toolbelt/out/String/Length'
 import { Head } from 'ts-toolbelt/out/List/Head'
 import { Tail } from 'ts-toolbelt/out/List/Tail'
+import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
+import { Keys } from './Any'
 
 type _BuildPowersOf2LengthArrays<
     Length extends number,
@@ -115,18 +117,17 @@ type _IndexOf<
     Value extends Array[number],
     CurrentIndex extends Index<Array>
 > =
-    | (CurrentIndex extends Array['length']
-          ? never
-          : _IndexOf<
-                Array,
-                Value,
-                // @ts-expect-error see Increment documentation
-                Increment<CurrentIndex>
-            >)
-    | (// @ts-expect-error compiler is wrong
-      Array[CurrentIndex] extends Value
-          ? CurrentIndex
-          : never)
+    // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46176
+    Array[CurrentIndex] extends Value
+        ? CurrentIndex
+        : CurrentIndex extends Array['length']
+        ? -1
+        : _IndexOf<
+              Array,
+              Value,
+              // @ts-expect-error see Increment documentation
+              Increment<CurrentIndex>
+          >
 
 /**
  * the type equivalent of {@link Array.prototype.indexOf}
@@ -136,12 +137,14 @@ export type IndexOf<
     Value extends Array[number]
 > = number extends Array['length']
     ? number
-    : _IndexOf<
-          Array,
-          Value,
-          // @ts-expect-error compiler is wrong
-          0
-      >
+    : {
+          [Key in Keys<ListOf<Value>>]: _IndexOf<
+              Array,
+              ListOf<Value>[Key],
+              // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46176
+              0
+          >
+      }[Keys<ListOf<Value>>]
 
 /**
  * creates a tuple type of alternating types
