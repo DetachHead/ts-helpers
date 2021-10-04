@@ -13,3 +13,11 @@ export type Not<Types extends boolean> = {
  *
  */
 export type Or<T extends boolean> = true extends T ? true : false
+
+/**
+ * `true` if `Subtype` extends `Supertype`, else `false
+ *
+ * like `ts-toolbelt`'s `Extends` but doesn't have special functionality for `never`
+ * (ie. this one behaves exactly like a regular `extends` check ina  conditional type)
+ */
+export type Extends<Subtype, Supertype> = Subtype extends Supertype ? true : false
