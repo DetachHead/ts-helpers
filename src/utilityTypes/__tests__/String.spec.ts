@@ -11,6 +11,7 @@ import {
     ReplaceValuesWithMap,
     SplitByUnion,
     SplitByLength,
+    DuplicateString,
 } from '../String'
 import { assertType, exactly } from '../../utilityFunctions/misc'
 
@@ -87,6 +88,12 @@ describe('ReplaceValuesWithMap', () => {
     })
     test('non-replaced value at end of string', () => {
         exactly<'barbarquxqux', ReplaceValuesWithMap<'foobarbazqux', { foo: 'bar'; baz: 'qux' }>>()
+    })
+    test('stack depth (tail recursion optimization)', () => {
+        exactly<
+            DuplicateString<'bye', 100>,
+            ReplaceValuesWithMap<DuplicateString<'hi', 100>, { hi: 'bye' }>
+        >()
     })
 })
 
