@@ -41,9 +41,9 @@ export type UrlString = UriString<'http' | 'https'>
 /** a domain name */
 export type Domain = `${string}.${string}`
 
-export type IPv4 = `${bigint}.${bigint}.${bigint}.${bigint}` // use bigint instead of number to prevent additional dots
+export type IPv4 = Join<TupleOf<bigint, 4>, '.'> // use bigint instead of number to prevent additional dots
 
-export type IPv6 = `${string}:${string}:${string}:${string}:${string}:${string}:${string}:${string}`
+export type IPv6 = Join<TupleOf<string, 8>, ':'>
 
 /** an IP address */
 export type IP = IPv4 | IPv6
