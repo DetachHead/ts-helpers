@@ -23,7 +23,6 @@ import { PowerAssert } from 'typed-nodejs-assert'
 import { Throw } from 'throw-expression'
 import { exactly } from '../misc'
 import { subtract } from '../Number'
-import { TupleOf } from '../../utilityTypes/Array'
 // eslint-disable-next-line @typescript-eslint/no-var-requires -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
 
@@ -124,7 +123,6 @@ describe('indexOf', () => {
     test('union', () => exactly(2 as 0 | 2, indexOf(['foo', 'bar', 'baz'], 'baz' as 'foo' | 'baz')))
     test('string', () =>
         exactly(2 as number, indexOf(['foo', 'bar', 'baz'] as string[], 'baz' as string)))
-    test('stack depth', () => exactly<500>()(indexOf({} as [...TupleOf<'hi', 500>, 'bye'], 'bye')))
 })
 
 describe('flat', () => {
