@@ -9,6 +9,8 @@ import {
     IPv4,
     IPv6,
     ReplaceValuesWithMap,
+    SplitByUnion,
+    SplitByLength,
 } from '../String'
 import { assertType, exactly } from '../../utilityFunctions/misc'
 
@@ -86,4 +88,13 @@ describe('ReplaceValuesWithMap', () => {
     test('non-replaced value at end of string', () => {
         exactly<'barbarquxqux', ReplaceValuesWithMap<'foobarbazqux', { foo: 'bar'; baz: 'qux' }>>()
     })
+})
+
+test('SplitByUnion', () => {
+    exactly<'foo' | 'bar' | 'baz', SplitByUnion<'foo.bar,baz', '.' | ','>>()
+})
+
+test('SplitByLength', () => {
+    type Foo = SplitByLength<'foobarbaz', 3> // $ExpectType ["foo", "bar", "baz"]
+    assertType<Foo>(['foo', 'bar', 'baz'])
 })
