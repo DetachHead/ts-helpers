@@ -35,8 +35,8 @@ test('EvaluateType', () => {
     type Entries<T> = EvaluateType<[Keys<T>, T[Keys<T>]][]>
     const value = {} as Entries<{ foo: number; bar: string }>
     // want to remove usages of ExpectType in most places because the exactly function is better as it actually checks
-    // the structure of the types rather than how the compiler represents them. however in this case that's what we want
-    // see https://github.com/JoshuaKGoldberg/eslint-plugin-expect-type/issues/18
+    //  the structure of the types rather than how the compiler represents them. however in this case that's what we want
+    //  see https://github.com/JoshuaKGoldberg/eslint-plugin-expect-type/issues/18
     // noinspection BadExpressionStatementJS
     value // $ExpectType ["foo" | "bar", string | number][]
 })
