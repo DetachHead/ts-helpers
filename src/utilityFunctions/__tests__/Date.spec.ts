@@ -8,7 +8,7 @@ describe('formatDate', () => {
     test('date', () => {
         const value = formatDate(new Date('2020-01-01'), 'dd/MM/yyyy')
         assert(value === '01/01/2020')
-        // // @ts-expect-error the expected error isn't appearing in ts >= 4.3.5 due to https://github.com/microsoft/TypeScript/issues/45201
+        // @ts-expect-error incorrect date format
         // noinspection BadExpressionStatementJS
         value === '01-01-2020'
     })
