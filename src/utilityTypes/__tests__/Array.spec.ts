@@ -1,4 +1,5 @@
-import { TupleOfUpTo } from '../Array'
+import { IndexOf, TupleOf, TupleOfUpTo } from '../Array'
+import { exactly } from '../../utilityFunctions/misc'
 
 test('TupleOfUpTo', () => {
     // TODO: figure out how to test with `noUncheckedIndexedAccess` on and off
@@ -9,3 +10,8 @@ test('TupleOfUpTo', () => {
     // noinspection BadExpressionStatementJS
     foo[3]
 })
+
+describe('IndexOf', () =>
+    test('stack depth', () => {
+        exactly<500, IndexOf<[...TupleOf<'hi', 500>, 'bye'], 'bye'>>()
+    }))
