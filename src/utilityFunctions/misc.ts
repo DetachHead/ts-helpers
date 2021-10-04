@@ -131,7 +131,7 @@ export const exactly: {
     >(
         expected: Narrow<Expected>,
         actual: Narrow<Actual>,
-    ): unknown
+    ): void
 } = ((...values: [unknown, unknown] | []) => {
     if (values.length === 2) {
         const [expected, actual] = values
