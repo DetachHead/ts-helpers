@@ -8,8 +8,9 @@ import {
     CaseInsensitive,
     IPv4,
     IPv6,
+    ReplaceValuesWithMap,
 } from '../String'
-import { assertType } from '../../utilityFunctions/misc'
+import { assertType, exactly } from '../../utilityFunctions/misc'
 
 test('UriString', () => {
     // @ts-expect-error TS2345: Argument of type '"asdf"' is not assignable to parameter of type '`${string}://${string}`'.
@@ -76,4 +77,13 @@ test('CaseInsensitive', () => {
     assertType<CaseInsensitive<'abc'>>('Abc')
     // @ts-expect-error wrong value
     assertType<CaseInsensitive<'abc'>>('ABd')
+})
+
+describe('ReplaceValuesWithMap', () => {
+    test('basic', () => {
+        exactly<'barbarqux', ReplaceValuesWithMap<'foobarbaz', { foo: 'bar'; baz: 'qux' }>>()
+    })
+    test('non-replaced value at end of string', () => {
+        exactly<'barbarquxqux', ReplaceValuesWithMap<'foobarbazqux', { foo: 'bar'; baz: 'qux' }>>()
+    })
 })

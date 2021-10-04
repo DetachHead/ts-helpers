@@ -240,9 +240,9 @@ export type IsLessThan<Num1s extends number, Num2s extends number> = {
 export type IsLessOrEqual<Num1 extends number, Num2 extends number> = Not<IsGreaterThan<Num1, Num2>>
 
 /** gets the highest number in a union of numbers */
-export type HighestNumber<Numbers extends number> = ListOf<Numbers>[IndexOfHighestNumber<
-    ListOf<Numbers>
->]
+export type HighestNumber<Numbers extends number> =
+    // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46171
+    ListOf<Numbers>[IndexOfHighestNumber<ListOf<Numbers>>]
 
 /**
  * a binary value in string format. obviously this type isn't perfect as it still allows for numbers that aren't 0 or 1
