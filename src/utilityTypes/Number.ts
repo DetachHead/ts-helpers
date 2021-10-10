@@ -1,6 +1,6 @@
 import { Equals } from './misc'
 import { IndexOfHighestNumber, TupleOf } from './Array'
-import { PadStart, Tail, ToString, TrimEnd, TrimStart } from './String'
+import { Includes, PadStart, StartsWith, Tail, ToString, TrimEnd, TrimStart } from './String'
 import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
 import { Length } from 'ts-toolbelt/out/String/Length'
 import { Not, Or } from './Boolean'
@@ -314,3 +314,42 @@ export type LeftShift<Num extends number, Count extends number> =
 export type RightShift<Num extends number, Count extends number> =
     // @ts-expect-error stack depth
     Divide<Num, Power<2, Count>>
+
+/**
+ * a `number` that cannot have a decimal
+ * @example
+ * declare const foo = <T extends number>(num: Integer<T>): void
+ * foo(1) //no error
+ * foo(1.2) //error
+ */
+export type Integer<T extends number> = number extends T
+    ? never
+    : Includes<`${T}`, '.'> extends true
+    ? never
+    : T
+
+/**
+ * a `number` that can only be positive
+ * @example
+ * declare const foo = <T extends number>(num: PositiveNumber<T>): void
+ * foo(1) //no error
+ * foo(-1) //error
+ */
+export type PositiveNumber<T extends number> = number extends T
+    ? never
+    : StartsWith<`${T}`, '-'> extends true
+    ? never
+    : T
+
+/**
+ * a `number` that can only be negative
+ * @example
+ * declare const foo = <T extends number>(num: NegativeNumber<T>): void
+ * foo(-1) //no error
+ * foo(1) //error
+ */
+export type NegativeNumber<T extends number> = number extends T
+    ? never
+    : PositiveNumber<T> extends never
+    ? T
+    : never
