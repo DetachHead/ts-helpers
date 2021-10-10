@@ -3,9 +3,12 @@ import {
     BinaryToNumber,
     Divide,
     HighestNumber,
+    Integer,
     IsGreaterThan,
     Multiply,
+    NegativeNumber,
     NumberToBinary,
+    PositiveNumber,
     Subtract,
 } from '../Number'
 import { assertType } from '../../utilityFunctions/misc'
@@ -98,4 +101,49 @@ describe('BinaryToNumber', () => {
         // just allow any number
         assertType<BinaryToNumber<`${bigint}`>>(1 as number)
     })
+})
+
+describe('Integer', () => {
+    const foo = <T extends number>(_num: Integer<T>): void => undefined
+    test('pass', () => foo(1))
+    test('fail', () =>
+        foo(
+            // @ts-expect-error negative test
+            1.2,
+        ))
+    test('number', () =>
+        foo(
+            // @ts-expect-error negative test
+            1 as number,
+        ))
+})
+
+describe('PositiveNumber', () => {
+    const foo = <T extends number>(_num: PositiveNumber<T>): void => undefined
+    test('pass', () => foo(1))
+    test('fail', () =>
+        foo(
+            // @ts-expect-error negative test
+            -1,
+        ))
+    test('number', () =>
+        foo(
+            // @ts-expect-error negative test
+            1 as number,
+        ))
+})
+
+describe('NegativeNumber', () => {
+    const foo = <T extends number>(_num: NegativeNumber<T>): void => undefined
+    test('pass', () => foo(-1))
+    test('fail', () =>
+        foo(
+            // @ts-expect-error negative test
+            1,
+        ))
+    test('number', () =>
+        foo(
+            // @ts-expect-error negative test
+            1 as number,
+        ))
 })
