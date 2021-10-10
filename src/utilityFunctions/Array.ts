@@ -165,7 +165,7 @@ export const removeDuplicates = <T, L extends number>(arr: T[]): TupleOfUpTo<T, 
  * findDuplicates([1,1,2,3,3,3]) // [1,3]
  */
 export const findDuplicates = <T, L extends number>(arr: TupleOf<T, L>): TupleOfUpTo<T, L> =>
-    removeDuplicates(arr.filter((item) => arr.filter((item2) => item === item2).length > 1))
+    removeDuplicates<T, L>(arr.filter((item) => arr.filter((item2) => item === item2).length > 1))
 
 /**
  * concatenates two arrays while keeping track of their length
