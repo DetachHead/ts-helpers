@@ -77,10 +77,11 @@ export type TupleOf<Type, Length extends number> = number extends Length
  * foo[0] //number (or number|undefined if `noUncheckedIndexedAccess` is enabled)
  * foo[3] //error: tuple of length '3' has no element at index '3'
  */
-// TODO: make the length property return a range type of all the possible lengths without breaking its ability to work on huge numbers
-export type TupleOfUpTo<T, L extends number> =
-    | TupleOf<T, L>
-    | (NoUncheckedIndexedAccess extends true ? [] : never)
+export type TupleOfUpTo<T, L extends number> = TupleOf<
+    T,
+    // @ts-expect-error see Increment documentation
+    Enumerate<Increment<L>>
+>
 
 /**
  * an array of length `L` - 1
