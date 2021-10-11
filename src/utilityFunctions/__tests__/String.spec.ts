@@ -4,6 +4,8 @@ import {
     includes,
     indexOf,
     join,
+    makeEndsWith,
+    makeStartsWith,
     match,
     padStart,
     replaceAll,
@@ -149,5 +151,45 @@ describe('truncate', () => {
     test('custom ellipsis', () => exactly('foo--', truncate('foobarbaz', 5, '--')))
     test('value not known at compiletime', () => {
         exactly<string>()(truncate('foobar' as string, 4))
+    })
+})
+
+describe('makeStartsWith', () => {
+    test("doesn't already start with prefix", () => {
+        exactly('.foobar', makeStartsWith('foobar', '.'))
+    })
+    test('already starts with prefix', () => {
+        exactly('.foobar', makeStartsWith('.foobar', '.'))
+    })
+    describe('strings not known at compiletime', () => {
+        test('original string', () => {
+            exactly<string>()(makeStartsWith('.foobar' as string, '.'))
+        })
+        test('second string', () => {
+            exactly<string>()(makeStartsWith('.foobar', '.' as string))
+        })
+        test('both', () => {
+            exactly<string>()(makeStartsWith('.foobar' as string, '.' as string))
+        })
+    })
+})
+
+describe('makeEndsWith', () => {
+    test("doesn't already end with suffix", () => {
+        exactly('foobar.', makeEndsWith('foobar', '.'))
+    })
+    test('already ends with suffix', () => {
+        exactly('foobar.', makeEndsWith('foobar.', '.'))
+    })
+    describe('strings not known at compiletime', () => {
+        test('original string', () => {
+            exactly<string>()(makeEndsWith('foobar.' as string, '.'))
+        })
+        test('second string', () => {
+            exactly<string>()(makeEndsWith('foobar.', '.' as string))
+        })
+        test('both', () => {
+            exactly<string>()(makeEndsWith('foobar.' as string, '.' as string))
+        })
     })
 })
