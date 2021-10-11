@@ -7,6 +7,7 @@ import { Head } from 'ts-toolbelt/out/List/Head'
 import { Tail } from 'ts-toolbelt/out/List/Tail'
 import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
 import { Keys } from './Any'
+import { Extends, Or } from './Boolean'
 
 type _BuildPowersOf2LengthArrays<
     Length extends number,
@@ -214,21 +215,21 @@ export type IndexOfLongestString<Strings extends readonly string[]> = Strings ex
     ? number
     : _IndexOfLongestString<Strings, 0, 0>
 
+type SortLongestStringsTailRec<Array extends string[], Result extends string[]> = Or<
+    Extends<Array, TupleOfUpTo<string, 1>> | Extends<number, Array['length']>
+> extends true
+    ? [...Result, ...Array]
+    : SortLongestStringsTailRec<
+          RemoveIndex<
+              Array,
+              // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46176 or https://github.com/microsoft/TypeScript/issues/46171
+              IndexOfLongestString<Array>
+          >,
+          [...Result, Array[IndexOfLongestString<Array>]]
+      >
+
 /** sorts an array of strings by longest to shortest */
-export type SortLongestStrings<Array extends string[]> = Array extends TupleOfUpTo<string, 1>
-    ? Array
-    : number extends Array['length']
-    ? Array
-    : [
-          Array[IndexOfLongestString<Array>],
-          ...SortLongestStrings<
-              RemoveIndex<
-                  Array,
-                  // @ts-expect-error stack depth error, but it's fine for short arrays
-                  IndexOfLongestString<Array>
-              >
-          >
-      ]
+export type SortLongestStrings<Array extends string[]> = SortLongestStringsTailRec<Array, []>
 
 type _IndexOfHighestNumber<
     Numbers extends readonly number[],
