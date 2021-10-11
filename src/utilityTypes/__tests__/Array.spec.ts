@@ -1,4 +1,4 @@
-import { IndexOf, SortLongestStrings, TupleOf, TupleOfUpTo } from '../Array'
+import { IndexOf, RemoveValue, SortLongestStrings, TupleOf, TupleOfUpTo } from '../Array'
 import { exactly } from '../../utilityFunctions/misc'
 
 describe('TupleOfUpTo', () => {
@@ -26,4 +26,13 @@ describe('IndexOf', () =>
 test('SortLongestStrings tail-recursive', () => {
     // don't need to compare this type to anything, just making sure it doesn't trigger a stack depth error
     exactly<SortLongestStrings<TupleOf<never, 1000>>>()
+})
+
+describe('RemoveValue', () => {
+    test('normal', () => {
+        exactly<['foo', 'baz'], RemoveValue<['foo', 'bar', 'baz'], 'bar'>>()
+    })
+    test('stack depth', () => {
+        exactly<[], RemoveValue<TupleOf<never, 999>, never>>()
+    })
 })
