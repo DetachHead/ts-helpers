@@ -403,3 +403,31 @@ export type Truncate<
     : IsLessOrEqual<Length<Str>, MaxLength> extends true
     ? Str
     : `${Substring<Str, 0, Subtract<MaxLength, Length<Ellipsis>>>}${Ellipsis}`
+
+/**
+ * if the given `Str` doesn't already start with the given `Prefix`, then append the prefix to the start of the string.
+ *
+ * if the `Str` already starts with the `Prefix`, then returns the string as is
+ * @example
+ * type Foo = MakeStartsWith<'foo', '.'> // '.foo'
+ * type Bar = MakeStartsWith<'.foo', '.'> // '.foo'
+ */
+export type MakeStartsWith<Str extends string, Prefix extends string> = string extends Str | Prefix
+    ? string
+    : StartsWith<Str, Prefix> extends true
+    ? Str
+    : `${Prefix}${Str}`
+
+/**
+ * if the given `Str` doesn't already end with the given `Suffix`, then append the suffix to the end of the string.
+ *
+ * if the `Str` already ends with the `Suffix`, then returns the string as is
+ * @example
+ * type Foo = MakeEndsWith<'foo', '.'> // 'foo.'
+ * type Bar = MakeEndsWith<'foo.', '.'> // 'foo.'
+ */
+export type MakeEndsWith<Str extends string, Suffix extends string> = string extends Str | Suffix
+    ? string
+    : EndsWith<Str, Suffix> extends true
+    ? Str
+    : `${Str}${Suffix}`
