@@ -4,6 +4,8 @@ import {
     EndsWith,
     Includes,
     IndexOf,
+    MakeEndsWith,
+    MakeStartsWith,
     PadStart,
     Replace,
     ReplaceOne,
@@ -182,3 +184,29 @@ export const truncate: {
         ? string
         : `${string.substring(0, maxLength - ellipsis.length)}${ellipsis}`) as never
 }
+
+/**
+ * if the given `str` doesn't already start with the given `prefix`, then append the prefix to the start of the string.
+ *
+ * if the `str` already starts with the `prefix`, then returns the string as is
+ * @example
+ * makeStartsWith('foo', '.') // '.foo'
+ * makeStartsWith('.foo', '.') // '.foo'
+ */
+export const makeStartsWith = <Str extends string, Prefix extends string>(
+    str: Str,
+    prefix: Prefix,
+): MakeStartsWith<Str, Prefix> => (startsWith(str, prefix) ? str : `${prefix}${str}`) as never
+
+/**
+ * if the given `str` doesn't already end with the given `suffix`, then append the suffix to the end of the string.
+ *
+ * if the `str` already ends with the `suffix`, then returns the string as is
+ * @example
+ * makeEndsWith('foo', '.') // 'foo.'
+ * makeEndsWith('foo.', '.') // 'foo.'
+ */
+export const makeEndsWith = <Str extends string, Suffix extends string>(
+    str: Str,
+    suffix: Suffix,
+): MakeEndsWith<Str, Suffix> => (endsWith(str, suffix) ? str : `${str}${suffix}`) as never
