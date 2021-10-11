@@ -181,9 +181,13 @@ describe('indexOfLongestString', () => {
     })
 })
 
-test('sortByLongestStrings', () => {
-    const value = sortByLongestStrings(['foo', 'barbaz', 'foobarbaz', 'a', 'ab']) // $ExpectType ["foobarbaz", "barbaz", "foo", "ab", "a"]
-    assert.deepStrictEqual(value, ['foobarbaz', 'barbaz', 'foo', 'ab', 'a'])
+describe('sortByLongestStrings', () => {
+    test('normal', () => {
+        exactly(
+            ['foobarbaz', 'barbaz', 'foo', 'ab', 'a'],
+            sortByLongestStrings(['foo', 'barbaz', 'foobarbaz', 'a', 'ab']),
+        )
+    })
 })
 
 describe('slice', () => {

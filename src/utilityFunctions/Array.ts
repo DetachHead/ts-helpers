@@ -242,9 +242,9 @@ export const indexOfLongestString = <Strings extends string[]>(
     findIndexWithHighestNumber(strings, (string) => string.length) as never
 
 /** sorts an array of strings by longest to shortest */
-export const sortByLongestStrings = <Strings extends string[]>(
+export const sortByLongestStrings: <Strings extends string[]>(
     strings: Narrow<Strings>,
-): SortLongestStrings<Strings> => _.orderBy(strings, 'length', 'desc') as never
+) => SortLongestStrings<Strings> = (strings) => _.orderBy(strings, 'length', 'desc') as never
 
 /**
  * removes any `undefined` values from `array` before maooiung over them and returning the mappved array with no
