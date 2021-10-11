@@ -253,15 +253,24 @@ export type IndexOfHighestNumber<Numbers extends readonly number[]> = _IndexOfHi
     0
 >
 
+export type RemoveValueTailRec<
+    Array extends unknown[],
+    Value,
+    Result extends unknown[]
+> = Array extends []
+    ? Result
+    : RemoveValueTailRec<
+          Tail<Array>,
+          Value,
+          [...Result, ...(Head<Array> extends Value ? [] : [Head<Array>])]
+      >
+
 /**
  * removes types from `Array` that match type `Value`
  * @example
  * type Foo: RemoveValue<['foo', 'bar', 'baz'], 'bar'> //['foo', 'baz']
  */
-export type RemoveValue<Array extends unknown[], Value> = Array extends []
-    ? []
-    : // @ts-expect-error stack depth error, but it's fine for short arrays
-      [...(Head<Array> extends Value ? [] : [Head<Array>]), ...RemoveValue<Tail<Array>, Value>]
+export type RemoveValue<Array extends unknown[], Value> = RemoveValueTailRec<Array, Value, []>
 
 /**
  * compiletime version of {@link Array.slice}
