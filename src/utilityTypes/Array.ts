@@ -78,11 +78,7 @@ export type TupleOf<Type, Length extends number> = number extends Length
  * foo[0] //number (or number|undefined if `noUncheckedIndexedAccess` is enabled)
  * foo[3] //error: tuple of length '3' has no element at index '3'
  */
-export type TupleOfUpTo<T, L extends number> = TupleOf<
-    T,
-    // @ts-expect-error see Increment documentation
-    Enumerate<Increment<L>>
->
+export type TupleOfUpTo<T, L extends number> = TupleOf<T, Enumerate<Increment<L>>>
 
 /**
  * an array of length `L` - 1
@@ -118,18 +114,17 @@ type _IndexOf<
     Array extends readonly unknown[],
     Value extends Array[number],
     CurrentIndex extends Index<Array>
-> =
-    // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46176
-    Array[CurrentIndex] extends Value
-        ? CurrentIndex
-        : CurrentIndex extends Array['length']
-        ? -1
-        : _IndexOf<
-              Array,
-              Value,
-              // @ts-expect-error see Increment documentation
-              Increment<CurrentIndex>
-          >
+> = Array[CurrentIndex] extends Value
+    ? CurrentIndex
+    : CurrentIndex extends Array['length']
+    ? -1
+    : _IndexOf<
+          Array,
+          Value,
+          Increment<CurrentIndex> &
+              // intersection to prevent compiler failing to narrow
+              Index<Array>
+      >
 
 /**
  * the type equivalent of {@link Array.prototype.indexOf}
@@ -143,8 +138,9 @@ export type IndexOf<
           [Key in Keys<ListOf<Value>>]: _IndexOf<
               Array,
               ListOf<Value>[Key],
-              // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46176
-              0
+              0 &
+                  // intersection to prevent compiler failing to narrow
+                  Index<Array>
           >
       }[Keys<ListOf<Value>>]
 
@@ -168,20 +164,11 @@ export type Splice<
     Array extends unknown[],
     StartIndex extends number,
     DeleteCount extends number = Subtract<Array['length'], StartIndex>
-> = [
-    ...Take<Array, StartIndex>,
-    ...Take<
-        Array,
-        // @ts-expect-error see add doco
-        Add<StartIndex, DeleteCount>,
-        '<-'
-    >
-]
+> = [...Take<Array, StartIndex>, ...Take<Array, Add<StartIndex, DeleteCount>, '<-'>]
 
 /** removes the value at index `RemoveIndex` from `Array` */
 export type RemoveIndex<Array extends unknown[], RemoveIndex extends Index<Array>> = Splice<
     Array,
-    // @ts-expect-error false positive
     RemoveIndex,
     1
 >
@@ -194,7 +181,6 @@ type _IndexOfLongestString<
     ? CurrentLongestIndex
     : _IndexOfLongestString<
           Strings,
-          // @ts-expect-error see increment doco
           Increment<CurrentIndex>,
           IsGreaterThan<
               Length<Strings[CurrentIndex]>,
@@ -222,8 +208,8 @@ type SortLongestStringsTailRec<Array extends string[], Result extends string[]> 
     : SortLongestStringsTailRec<
           RemoveIndex<
               Array,
-              // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46176 or https://github.com/microsoft/TypeScript/issues/46171
-              IndexOfLongestString<Array>
+              IndexOfLongestString<Array> & // https://github.com/microsoft/TypeScript/issues/46176 or https://github.com/microsoft/TypeScript/issues/46171
+                  Index<Array>
           >,
           [...Result, Array[IndexOfLongestString<Array>]]
       >
@@ -239,7 +225,6 @@ type _IndexOfHighestNumber<
     ? CurrentHighestNumberIndex
     : _IndexOfHighestNumber<
           Numbers,
-          // @ts-expect-error see Increment doco
           Increment<CurrentIndex>,
           IsGreaterThan<Numbers[CurrentIndex], CurrentHighestNumberIndex> extends true
               ? CurrentIndex
@@ -251,7 +236,8 @@ export type IndexOfHighestNumber<Numbers extends readonly number[]> = _IndexOfHi
     Numbers,
     0,
     0
->
+> & // intersection to prevent compiler from failing to narrow https://github.com/microsoft/TypeScript/issues/46171
+    number
 
 export type RemoveValueTailRec<
     Array extends unknown[],
