@@ -65,9 +65,25 @@ describe('arithmetic', () => {
         })
     })
     describe('power', () => {
-        test('value known at compiletime', () => {
-            const value = power(7, 4) // $ExpectType 2401
-            assert(value === 2401)
+        describe('value known at compiletime', () => {
+            test('regular numbers', () => {
+                exactly(2401, power(7, 4))
+            })
+            test('0', () => {
+                exactly(1, power(20, 0))
+            })
+            test('1', () => {
+                exactly(15, power(15, 1))
+            })
+            test('0^0', () => {
+                exactly(1, power(0, 0))
+            })
+            test('0^1', () => {
+                exactly(0, power(0, 1))
+            })
+            test('stack depth', () => {
+                power(1000, 0)
+            })
         })
         describe('value not known at compiletime', () => {
             test('num', () => {
