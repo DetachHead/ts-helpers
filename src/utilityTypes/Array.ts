@@ -63,8 +63,16 @@ export type TupleOf<Type, Length extends number> = number extends Length
           > extends infer TwoDimensionalArray
               ? TwoDimensionalArray extends never[][]
                   ? _Replace<
-                        // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46171
-                        _ConcatLargestUntilDone<LengthKey, TwoDimensionalArray, []>,
+                        // need this additional conditional type due to https://github.com/microsoft/TypeScript/issues/46171
+                        _ConcatLargestUntilDone<
+                            LengthKey,
+                            TwoDimensionalArray,
+                            []
+                        > extends infer Narrowed
+                            ? Narrowed extends unknown[]
+                                ? Narrowed
+                                : never
+                            : never,
                         Type
                     >
                   : never

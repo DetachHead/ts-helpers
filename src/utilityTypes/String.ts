@@ -147,12 +147,13 @@ type _IndexOf<
 /**
  * gets the index of a `Substring` within a `String`. returns `-1` if it's not present
  */
-export type IndexOf<String extends string, Substring extends string> = Includes<
+export type IndexOf<String extends string, Substring extends string> = (Includes<
     String,
     Substring
 > extends true
     ? _IndexOf<String, Substring, 0>
-    : -1
+    : -1) & // intersection to work around https://github.com/microsoft/TypeScript/issues/46171
+    number
 
 type _Replace<
     String extends string,
@@ -231,7 +232,8 @@ type _DuplicateStringUntilLength<
 export type DuplicateStringUntilLength<
     String extends string,
     Size extends number
-> = _DuplicateStringUntilLength<String, Size, String>
+> = _DuplicateStringUntilLength<String, Size, String> & // intersection to work around https://github.com/microsoft/TypeScript/issues/46171
+    string
 
 /**
  * the type equivalent of {@link String.prototype.padStart}
@@ -245,10 +247,7 @@ export type PadStart<
     : {
           [Key in String]: number extends Size
               ? string
-              : `${
-                    // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46171
-                    DuplicateStringUntilLength<PadString, Subtract<Size, Length<Key>>>
-                }${Key}`
+              : `${DuplicateStringUntilLength<PadString, Subtract<Size, Length<Key>>>}${Key}`
       }[String]
 
 /**
@@ -327,15 +326,14 @@ type _TokenizeString<
         ? NextTokenIndex extends -1
             ? [...Tokens, Value]
             : _TokenizeString<
-                  // @ts-expect-error see above
                   TrimStart<Value, IndexOf<Value, Keys<Map>>>,
                   Map,
                   [
                       ...Tokens,
                       TrimEnd<
                           Value,
-                          // @ts-expect-error https://github.com/microsoft/TypeScript/issues/43736
-                          NextTokenIndex
+                          // intersection to work around https://github.com/microsoft/TypeScript/issues/43736
+                          NextTokenIndex & number
                       >,
                   ]
               >
@@ -345,7 +343,7 @@ type _TokenizeString<
 type _ReplaceValuesWithMap<
     InputTokens extends string[],
     Map extends ReplaceValuesMap,
-    OutputTokens extends string[]
+    OutputTokens // extends string[] (handled in the conditional type below instead to work around https://github.com/microsoft/TypeScript/issues/46171)
 > = string[] extends InputTokens
     ? InputTokens
     : InputTokens extends []
@@ -353,9 +351,8 @@ type _ReplaceValuesWithMap<
     : _ReplaceValuesWithMap<
           ArrayTail<InputTokens>,
           Map,
-          // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46171
           [
-              ...OutputTokens,
+              ...(OutputTokens extends string[] ? OutputTokens : never),
               ArrayHead<InputTokens> extends Keys<Map>
                   ? Map[ArrayHead<InputTokens>]
                   : ArrayHead<InputTokens>,
@@ -367,9 +364,23 @@ type _ReplaceValuesWithMap<
  * @example
  * type Foo = ReplaceValuesWithMap<'foobarbaz', {foo: 'bar', baz: 'qux'}> // "barbarqux"
  */
-export type ReplaceValuesWithMap<Format extends string, Map extends ReplaceValuesMap> =
-    // @ts-expect-error stack depth error due to generic failing to narrow https://github.com/microsoft/TypeScript/issues/46171
-    Join<_ReplaceValuesWithMap<_TokenizeString<Format, Map, []>, Map, []>>
+export type ReplaceValuesWithMap<Format extends string, Map extends ReplaceValuesMap> = Join<
+    // need to narrow the generics using these conditional types because the compiler fails to
+    //  see https://github.com/microsoft/TypeScript/issues/46171
+    _ReplaceValuesWithMap<
+        _TokenizeString<Format, Map, []> extends infer Tokens
+            ? Tokens extends string[]
+                ? Tokens
+                : never
+            : never,
+        Map,
+        []
+    > extends infer Strings
+        ? Strings extends ReadonlyArray<Literal>
+            ? Strings
+            : never
+        : never
+>
 
 /**
  * a stringified version of {@link Enumerate}
@@ -405,15 +416,9 @@ type SplitByUnionTailRec<
     : IndexOf<Value, SplitBy> extends 0
     ? SplitByUnionTailRec<TrimStart<Value, Length<SplitBy>>, SplitBy, CurrentResult>
     : SplitByUnionTailRec<
-          // @ts-expect-error see above
           TrimStart<Value, Add<Length<SplitBy>, IndexOf<Value, SplitBy>>>,
           SplitBy,
-          | CurrentResult
-          | TrimEnd<
-                Value,
-                // @ts-expect-error see above
-                IndexOf<Value, SplitBy>
-            >
+          CurrentResult | TrimEnd<Value, IndexOf<Value, SplitBy>>
       >
 
 /**
