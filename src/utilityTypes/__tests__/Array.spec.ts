@@ -18,10 +18,11 @@ describe('TupleOfUpTo', () => {
     })
 })
 
-describe('IndexOf', () =>
+describe('IndexOf', () => {
     test('stack depth', () => {
         exactly<500, IndexOf<[...TupleOf<'hi', 500>, 'bye'], 'bye'>>()
-    }))
+    })
+})
 
 test('SortLongestStrings tail-recursive', () => {
     // don't need to compare this type to anything, just making sure it doesn't trigger a stack depth error
