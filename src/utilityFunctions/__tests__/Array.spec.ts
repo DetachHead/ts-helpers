@@ -23,6 +23,7 @@ import { PowerAssert } from 'typed-nodejs-assert'
 import { Throw } from 'throw-expression'
 import { exactly } from '../misc'
 import { subtract } from '../Number'
+import { TupleOf } from '../../utilityTypes/Array'
 // eslint-disable-next-line @typescript-eslint/no-var-requires -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
 
