@@ -288,14 +288,39 @@ export const forEach = <T extends ReadonlyArray<unknown>>(
         previous: () => T[number],
         next: () => T[number],
     ) => void,
-): void => {
+): void => void map<T, void>(items, callback)
+
+/**
+ * {@link Array.prototype.map} on steroids™.
+ * * preserves the length if known at compiletime, allowing you to use the index to access other items in the array
+ *   when and use the values in teh resulting array when the `noUncheckedIndexedAccess` compiler flag is enabled without
+ *   it being possibly `undefined`
+ * * `previous` and `next` functions are available in the callback to allow for easy access of the previous and next item
+ * @example
+ * const numbers = [1,2,3,4]
+ * forEach(numbers, (num, index, prev, next) => {
+ *     if (index !== 0)
+ *         const foo = prev() // 1 | 2 | 3
+ * }
+ * @param items
+ * @param callback
+ */
+export const map = <T extends ReadonlyArray<unknown>, R>(
+    items: Narrow<T>,
+    callback: (
+        value: T[number],
+        index: Enumerate<T['length']>,
+        previous: () => T[number],
+        next: () => T[number],
+    ) => R,
+): TupleOf<R, T['length']> => {
     let currentIndex = -1
     const previous = () => items[currentIndex - 1]
     const next = () => items[currentIndex + 1]
-    items.forEach((item, index) => {
+    return items.map((item, index) => {
         currentIndex++
-        callback(item, index as never, previous, next)
-    })
+        return callback(item, index as never, previous, next)
+    }) as never
 }
 
 /** {@link _.castArray} but the type is known at compiletime */
