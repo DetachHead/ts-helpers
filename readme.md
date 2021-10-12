@@ -82,3 +82,15 @@ Equals<number, 1 | 2> // false
 Equals<any, 10> // false
 Equals<unknown, never> // false
 ```
+
+## requirements
+
+### typescript
+
+this package is designed for typescript 4.5. you will probably have issues trying to use it with older versions, tho it will probably still work if you set `skipLibCheck` to `true` in your `tsconfig.json` (which isn't recommended)
+
+### supported js runtimes
+
+-   [x] nodejs
+-   [x] browser
+-   [ ] deno (https://github.com/DetachHead/ts-helpers/issues/97)
