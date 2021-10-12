@@ -93,4 +93,4 @@ this package is designed for typescript 4.5. you will probably have issues tryin
 
 -   [x] nodejs
 -   [x] browser
--   [ ] deno (https://github.com/DetachHead/ts-helpers/issues/97)
+-   [x] deno (using esm.sh - eg. `import { exactly } from 'http://esm.sh/@detachhead/ts-helpers/dist/utilityFunctions/misc'`)
