@@ -1,13 +1,11 @@
 import {
     Add,
-    BinaryToNumber,
     Divide,
     HighestNumber,
     Integer,
     IsGreaterThan,
     Multiply,
     NegativeNumber,
-    NumberToBinary,
     PositiveNumber,
     Subtract,
 } from '../Number'
@@ -73,34 +71,6 @@ test('HighestNumber', () => {
         // @ts-expect-error wrong value
         2,
     )
-})
-
-describe('NumberToBinary', () => {
-    test('specific value', () => {
-        assertType<NumberToBinary<12>>('1100')
-        assertType<NumberToBinary<12>>(
-            // @ts-expect-error wrong value
-            '101010',
-        )
-    })
-    test('number type', () => {
-        // just allow any string with numbers in it
-        assertType<NumberToBinary<number>>('1010101')
-    })
-})
-
-describe('BinaryToNumber', () => {
-    test('specific value', () => {
-        assertType<BinaryToNumber<'10101'>>(21)
-        assertType<BinaryToNumber<'11111'>>(
-            // @ts-expect-error wrong value
-            30,
-        )
-    })
-    test('number type', () => {
-        // just allow any number
-        assertType<BinaryToNumber<`${bigint}`>>(1 as number)
-    })
 })
 
 describe('Integer', () => {
