@@ -140,16 +140,20 @@ export type Modulo<N1 extends number, N2 extends number> = _LessThanTerminus<N1,
     ? N1
     : Modulo<Subtract<N1, N2>, N2>
 
+type PowerTailRec<
+    Num extends number,
+    PowerOf extends number,
+    Result extends number
+> = number extends PowerOf
+    ? number
+    : PowerOf extends 0
+    ? Result
+    : PowerTailRec<Num, Decrement<PowerOf>, Multiply<Result, Num>>
+
 /**
  * raises the value of `Num` to the power of the `PowerOf` parameter.
  */
-export type Power<Num extends number, PowerOf extends number> = number extends PowerOf
-    ? number
-    : PowerOf extends 0
-    ? 1
-    : PowerOf extends 1
-    ? Num
-    : Multiply<Power<Num, Decrement<PowerOf>>, Num>
+export type Power<Num extends number, PowerOf extends number> = PowerTailRec<Num, PowerOf, 1>
 
 /**
  * raises the value of `Num` to the power of 2
