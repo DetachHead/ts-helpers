@@ -18,8 +18,9 @@ export const hasPropertyPredicate: {
         : {
               // need an intersection of these types instead of a union, otherwise when Key is a union of two possible
               //  properties it would incorrectly narrow to a type that has both
-              // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46176#issuecomment-933422434
-              [K in IntersectOf<Key>]: unknown
+              [K in IntersectOf<Key> &
+                  // https://github.com/microsoft/TypeScript/issues/46176#issuecomment-933422434
+                  Key]: unknown
           }
     /**
      * returns whether the given object has the given propertyName and narrows the type of the object to the specified generic

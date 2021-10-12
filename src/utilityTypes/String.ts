@@ -99,19 +99,16 @@ type _TrimStart<
     Iterator extends number
 > = Iterator extends Index
     ? String
-    : _TrimStart<
-          String extends `${Head<String>}${infer R}` ? R : never,
-          Index,
-          // @ts-expect-error see documentation for Increment type
-          Increment<Iterator>
-      >
+    : _TrimStart<String extends `${Head<String>}${infer R}` ? R : never, Index, Increment<Iterator>>
 
 /**
  * trims the characters up to `Index` off the start of `String` (inclusive)
  * @example
  * type Foo = TrimStart<'foobar', 2> //'bar'
  */
-export type TrimStart<String extends string, Index extends number> = _TrimStart<String, Index, 0>
+export type TrimStart<String extends string, Index extends number> = _TrimStart<String, Index, 0> &
+    // intersection to work around https://github.com/microsoft/TypeScript/issues/46171
+    string
 
 /**
  * trims the characters past `Index` off the end of `String` (exclusive)
@@ -127,17 +124,9 @@ export type Substring<
     String extends string,
     StartIndex extends number,
     EndIndex extends number
-> = TrimStart<String, StartIndex> extends `${infer R}${
-    // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46171
-    TrimStart<String, EndIndex>
-}`
-    ? R
-    : never
+> = TrimStart<String, StartIndex> extends `${infer R}${TrimStart<String, EndIndex>}` ? R : never
 
-export type CharAt<String extends string, Index extends number> = Head<
-    // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46171
-    TrimStart<String, Index>
->
+export type CharAt<String extends string, Index extends number> = Head<TrimStart<String, Index>>
 
 /**
  * `true` if `String` contains `Substring`, else `false`
@@ -151,19 +140,9 @@ type _IndexOf<
     String extends string,
     Substr extends string,
     CurrentIndex extends number
-> = Substring<
-    String,
-    CurrentIndex,
-    // @ts-expect-error see Add documentation
-    Add<CurrentIndex, Length<Substr>>
-> extends Substr
+> = Substring<String, CurrentIndex, Add<CurrentIndex, Length<Substr>>> extends Substr
     ? CurrentIndex
-    : _IndexOf<
-          String,
-          Substr,
-          // @ts-expect-error see Increment documentation
-          Increment<CurrentIndex>
-      >
+    : _IndexOf<String, Substr, Increment<CurrentIndex>>
 
 /**
  * gets the index of a `Substring` within a `String`. returns `-1` if it's not present
@@ -219,7 +198,6 @@ export type LengthGreaterOrEqual<String extends string, Length extends number> =
  */
 export type LengthGreaterThan<String extends string, Length extends number> = LengthGreaterOrEqual<
     String,
-    // @ts-expect-error see Increment documentation
     Increment<Length>
 >
 
@@ -345,12 +323,7 @@ type _TokenizeString<
     ? Tokens
     : LongestString<MatchStart<Value, Keys<Map>>> extends infer Token
     ? Token extends string
-        ? _TokenizeString<
-              // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46171
-              TrimStart<Value, Length<Token>>,
-              Map,
-              [...Tokens, Token]
-          >
+        ? _TokenizeString<TrimStart<Value, Length<Token>>, Map, [...Tokens, Token]>
         : IndexOf<Value, Keys<Map>> extends infer NextTokenIndex
         ? NextTokenIndex extends -1
             ? [...Tokens, Value]
@@ -431,12 +404,7 @@ type SplitByUnionTailRec<
     : IndexOf<Value, SplitBy> extends -1
     ? CurrentResult | Value
     : IndexOf<Value, SplitBy> extends 0
-    ? SplitByUnionTailRec<
-          // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46171
-          TrimStart<Value, Length<SplitBy>>,
-          SplitBy,
-          CurrentResult
-      >
+    ? SplitByUnionTailRec<TrimStart<Value, Length<SplitBy>>, SplitBy, CurrentResult>
     : SplitByUnionTailRec<
           // @ts-expect-error see above
           TrimStart<Value, Add<Length<SplitBy>, IndexOf<Value, SplitBy>>>,
@@ -466,12 +434,7 @@ type SplitByLengthTailRec<
     Result extends string[]
 > = Length<T> extends Len
     ? [...Result, T]
-    : SplitByLengthTailRec<
-          // @ts-expect-error https://github.com/microsoft/TypeScript/issues/46171
-          TrimStart<T, Len>,
-          Len,
-          [...Result, TrimEnd<T, Len>]
-      >
+    : SplitByLengthTailRec<TrimStart<T, Len>, Len, [...Result, TrimEnd<T, Len>]>
 
 /**
  * splits a string into an array of strings with a specified length

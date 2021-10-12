@@ -4,6 +4,7 @@ import { Includes, PadStart, StartsWith, Tail, ToString, TrimEnd, TrimStart } fr
 import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
 import { Length } from 'ts-toolbelt/out/String/Length'
 import { Not, Or } from './Boolean'
+import { Keys } from './Any'
 
 type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
     ? ((t: T, ...a: A) => void) extends (...x: infer X) => void
@@ -22,10 +23,11 @@ type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['lengt
  * type Foo = Enumerate<3> //0|1|2
  * @see https://stackoverflow.com/a/63918062
  */
+// TODO: maybe revisit this type once this is fixed https://github.com/microsoft/TypeScript/issues/46316
 export type Enumerate<N extends number> = number extends N
     ? number
-    : _Enumerate<[], N> extends (infer E)[]
-    ? E
+    : _Enumerate<[], N> extends infer NumbersArray
+    ? NumbersArray[Keys<NumbersArray>]
     : never
 
 /**
@@ -43,17 +45,15 @@ export type RangeType<FROM extends number, TO extends number> =
 
 /**
  * adds two `number` types together
- *
- * **WARNING:** for some reason the compiler sometimes thinks this isn't a valid number when passing it into other
- * utility types. as far as i can tell this is a false positive, and the types still behave as expected if you suppress
- * the error with @ts-expect-error. see [this issue](https://github.com/microsoft/TypeScript/issues/46176)
  * @example
  * type Foo = Add<2, 3> //5
  */
 export type Add<N1 extends number, N2 extends number> = [
     ...TupleOf<never, N1>,
     ...TupleOf<never, N2>
-]['length']
+]['length'] &
+    // intersection to suppress compiler narrowing bug
+    number
 
 /**
  * subtracts `N2` from `N1`
@@ -75,12 +75,9 @@ type _MultiAdd<
     IterationsLeft extends number
 > = IterationsLeft extends 0
     ? Accumulator
-    : _MultiAdd<
-          Number,
-          // @ts-expect-error see documentation for Add type
-          Add<Number, Accumulator>,
-          Decrement<IterationsLeft>
-      >
+    : _MultiAdd<Number, Add<Number, Accumulator>, Decrement<IterationsLeft>> &
+          // intersection to suppress compiler narrowing bug
+          number
 
 /**
  * multiplies `N1` by `N2`
@@ -119,12 +116,7 @@ type _MultiSub<
     QuotientAccumulator extends number
 > = _LessThanTerminus<Dividee, Divider> extends true
     ? QuotientAccumulator
-    : _MultiSub<
-          Subtract<Dividee, Divider>,
-          Divider,
-          // @ts-expect-error see documentation for Increment type
-          Increment<QuotientAccumulator>
-      >
+    : _MultiSub<Subtract<Dividee, Divider>, Divider, Increment<QuotientAccumulator>>
 
 /**
  * divides `N1` by `N2`
@@ -173,10 +165,6 @@ export type IsPositive<T extends number> = `${T}` extends `-${number}` ? false :
 
 /**
  * adds 1 to `T`
- *
- * **WARNING:** for some reason the compiler sometimes thinks this isn't a valid number when passing it into other
- * utility types. as far as i can tell this is a false positive, and the types still behave as expected if you suppress
- * the error with @ts-expect-error
  */
 export type Increment<T extends number> = Add<T, 1>
 
