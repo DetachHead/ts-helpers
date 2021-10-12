@@ -13,6 +13,7 @@ import {
     lengthIs,
     lengthLessOrEqual,
     lengthLessThan,
+    map,
     removeDuplicates,
     slice,
     sortByLongestStrings,
@@ -22,6 +23,7 @@ import { PowerAssert } from 'typed-nodejs-assert'
 import { Throw } from 'throw-expression'
 import { exactly } from '../misc'
 import { subtract } from '../Number'
+import { TupleOf } from '../../utilityTypes/Array'
 // eslint-disable-next-line @typescript-eslint/no-var-requires -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
 
@@ -248,6 +250,25 @@ describe('forEach', () => {
             prev() // $ExpectType number
             next() // $ExpectType number
         })
+    })
+})
+
+describe('map', () => {
+    const values = [1, 2, 3, 4, 5] as const
+    test('fixed length return value', () =>
+        // TODO: make it narrow
+        exactly(
+            ['', ''] as [string, string],
+            map(['', ''], (value) => value),
+        ))
+    test('next/previous', () => {
+        exactly<TupleOf<1 | 2 | 3 | 4 | 5, 5>>()(
+            map(values, (value, index, prev, next) => {
+                assert(values[index - 1] === prev())
+                assert(values[index + 1] === next())
+                return value
+            }),
+        )
     })
 })
 
