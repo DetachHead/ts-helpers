@@ -67,8 +67,6 @@ export type Subtract<N1 extends number, N2 extends number> = TupleOf<never, N1> 
     ? R['length']
     : never
 
-// TODO: figure out how to do Multiply and Divide logarithmically like TupleOf so it doesn't fail on numbers > 40
-
 type _MultiAdd<
     Number extends number,
     Accumulator extends number,
