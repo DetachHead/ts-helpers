@@ -202,6 +202,12 @@ export type LengthGreaterThan<String extends string, Length extends number> = Le
     Increment<Length>
 >
 
+type CaseInsensitiveTailRec<Value extends string, Result extends string> = Value extends ''
+    ? Result
+    : CaseInsensitiveTailRec<
+          Tail<Value>,
+          `${Result}${Uppercase<Head<Value>> | Lowercase<Head<Value>>}`
+      >
 /**
  * creates a union of every possible capitalization of the given string
  *
@@ -209,9 +215,7 @@ export type LengthGreaterThan<String extends string, Length extends number> = Le
  * @example
  * type Foo = CaseInsensitive<'abc'> //"abc" | "Abc" | "ABc" | "ABC" | "AbC" | "aBc" | "aBC" | "abC"
  */
-export type CaseInsensitive<T extends string> = T extends ''
-    ? ''
-    : `${Uppercase<Head<T>> | Lowercase<Head<T>>}${CaseInsensitive<Tail<T>>}`
+export type CaseInsensitive<T extends string> = CaseInsensitiveTailRec<T, ''>
 
 type _DuplicateStringUntilLength<
     String extends string,
