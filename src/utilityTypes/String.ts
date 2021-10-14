@@ -500,16 +500,31 @@ export type MakeEndsWith<Str extends string, Suffix extends string> = string ext
     ? Str
     : `${Str}${Suffix}`
 
+/**
+ * gets the string to the left of the given `Substring`
+ * @example
+ * type Foo = LeftOf<'foo.bar', '.'> //'foo'
+ */
 export type LeftOf<String extends string, Substring extends string> = TrimEnd<
     String,
     IndexOf<String, Substring>
 >
 
+/**
+ * gets the string to the right of the given `Substring`
+ * @example
+ * type Foo = RightOf<'foo.bar', '.'> //'bar'
+ */
 export type RightOf<String extends string, Substring extends string> = TrimStart<
     String,
     Add<IndexOf<String, Substring>, Length<Substring>>
 >
 
+/**
+ * gets the string between the given `Start` and `End` types
+ * @example
+ * MidOf<'foo(bar)baz', '(', ')'> //'bar'
+ */
 export type MidOf<String extends string, Start extends string, End extends string> = RightOf<
     LeftOf<String, End>,
     Start
@@ -523,6 +538,11 @@ export type CountInStringTailRec<
     ? Result
     : CountInStringTailRec<RightOf<Str, Substring>, Substring, Increment<Result>>
 
+/**
+ * counts how many instances of the given `Substring` are in `Str`
+ * @example
+ * CountInString<'1,2,3,4', ','> //3
+ */
 export type CountInString<Str extends string, Substring extends string> = string extends
     | Str
     | Substring
