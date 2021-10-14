@@ -22,6 +22,9 @@ describe('IndexOf', () => {
     test('stack depth', () => {
         exactly<500, IndexOf<[...TupleOf<'hi', 500>, 'bye'], 'bye'>>()
     })
+    test('not literals', () => {
+        exactly<number, IndexOf<number[], 1>>()
+    })
 })
 
 test('SortLongestStrings tail-recursive', () => {
