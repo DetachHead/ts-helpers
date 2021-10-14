@@ -3,15 +3,16 @@ import { IndexOfHighestNumber, TupleOf } from './Array'
 import { Includes, PadStart, StartsWith, Tail, ToString } from './String'
 import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
 import { Not, Or } from './Boolean'
-import { Keys } from './Any'
 
 type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
-    ? ((t: T, ...a: A) => void) extends (...x: infer X) => void
+    ? [T, ...A] extends [...infer X]
         ? X
         : never
     : never
 
-type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['length']
+type _Enumerate<A extends Array<unknown>, N extends number> = number extends N
+    ? number[]
+    : N extends A['length']
     ? A
     : _Enumerate<_PrependNextNum<A>, N>
 
@@ -22,12 +23,7 @@ type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['lengt
  * type Foo = Enumerate<3> //0|1|2
  * @see https://stackoverflow.com/a/63918062
  */
-// TODO: maybe revisit this type once this is fixed https://github.com/microsoft/TypeScript/issues/46316
-export type Enumerate<N extends number> = number extends N
-    ? number
-    : _Enumerate<[], N> extends infer NumbersArray
-    ? NumbersArray[Keys<NumbersArray>]
-    : never
+export type Enumerate<N extends number> = _Enumerate<[], N>[never]
 
 /**
  * creates a range type of numbers from generics `FROM` (inclusive) to `TO` (inclusive)

@@ -111,9 +111,7 @@ export type TrimStart<String extends string, Index extends number> = Or<
     Extends<string, String> | Extends<number, Index>
 > extends true
     ? string
-    : _TrimStart<String, Index, 0> &
-          // intersection to work around https://github.com/microsoft/TypeScript/issues/46171
-          string
+    : _TrimStart<String, Index, 0>
 
 /**
  * trims the characters past `Index` off the end of `String` (exclusive)
@@ -160,8 +158,9 @@ export type IndexOf<String extends string, Substring extends string> = string ex
     | String
     | Substring
     ? number
-    : (Includes<String, Substring> extends true ? _IndexOf<String, Substring, 0> : -1) & // intersection to work around https://github.com/microsoft/TypeScript/issues/46171
-          number
+    : Includes<String, Substring> extends true
+    ? _IndexOf<String, Substring, 0>
+    : -1
 
 type _Replace<
     String extends string,
@@ -244,8 +243,7 @@ type _DuplicateStringUntilLength<
 export type DuplicateStringUntilLength<
     String extends string,
     Size extends number
-> = _DuplicateStringUntilLength<String, Size, String> & // intersection to work around https://github.com/microsoft/TypeScript/issues/46171
-    string
+> = _DuplicateStringUntilLength<String, Size, String>
 
 /**
  * the type equivalent of {@link String.prototype.padStart}
@@ -314,11 +312,7 @@ type _Join<T extends ReadonlyArray<unknown>, D extends string, Result extends st
  * @see https://github.com/millsp/ts-toolbelt/issues/255
  */
 // TODO: remove this once https://github.com/millsp/ts-toolbelt/issues/255 is merged
-export type Join<T extends ReadonlyArray<Literal>, D extends string = ''> = _Join<
-    T,
-    D,
-    ''
-> extends infer X
+export type Join<T extends Array<Literal>, D extends string = ''> = _Join<T, D, ''> extends infer X
     ? Cast<X, string>
     : never
 
@@ -355,7 +349,7 @@ type _TokenizeString<
 type _ReplaceValuesWithMap<
     InputTokens extends string[],
     Map extends ReplaceValuesMap,
-    OutputTokens // extends string[] (handled in the conditional type below instead to work around https://github.com/microsoft/TypeScript/issues/46171)
+    OutputTokens // extends string[] (handled in the conditional type below instead to work around https://github.com/microsoft/TypeScript/issues/46176)
 > = string[] extends InputTokens
     ? InputTokens
     : InputTokens extends []
@@ -377,17 +371,9 @@ type _ReplaceValuesWithMap<
  * type Foo = ReplaceValuesWithMap<'foobarbaz', {foo: 'bar', baz: 'qux'}> // "barbarqux"
  */
 export type ReplaceValuesWithMap<Format extends string, Map extends ReplaceValuesMap> = Join<
-    // need to narrow the generics using these conditional types because the compiler fails to
-    //  see https://github.com/microsoft/TypeScript/issues/46171
-    _ReplaceValuesWithMap<
-        _TokenizeString<Format, Map, []> extends infer Tokens
-            ? Tokens extends string[]
-                ? Tokens
-                : never
-            : never,
-        Map,
-        []
-    > extends infer Strings
+    // need to narrow using a conditional type because the compiler fails to
+    //  see https://github.com/microsoft/TypeScript/issues/43736
+    _ReplaceValuesWithMap<_TokenizeString<Format, Map, []>, Map, []> extends infer Strings
         ? Strings extends ReadonlyArray<Literal>
             ? Strings
             : never
