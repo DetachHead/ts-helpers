@@ -68,9 +68,7 @@ type _MultiAdd<
     IterationsLeft extends number
 > = IterationsLeft extends 0
     ? Accumulator
-    : _MultiAdd<Number, Add<Number, Accumulator>, Decrement<IterationsLeft>> &
-          // intersection to suppress compiler narrowing bug
-          number
+    : _MultiAdd<Number, Add<Number, Accumulator>, Decrement<IterationsLeft>>
 
 /**
  * multiplies `N1` by `N2`
@@ -230,18 +228,10 @@ export type HighestNumber<Numbers extends number> = ListOf<Numbers>[IndexOfHighe
 >]
 
 /** shifts the bits of `Num` left by the given `Count` */
-export type LeftShift<Num extends number, Count extends number> = Multiply<
-    Num,
-    Power<2, Count> & // intersection to suppress compiler narrowing bug
-        number
->
+export type LeftShift<Num extends number, Count extends number> = Multiply<Num, Power<2, Count>>
 
 /** shifts the bits of `Num` right by the given `Count` */
-export type RightShift<Num extends number, Count extends number> = Divide<
-    Num,
-    Power<2, Count> & // intersection to suppress compiler narrowing bug
-        number
->
+export type RightShift<Num extends number, Count extends number> = Divide<Num, Power<2, Count>>
 
 /**
  * a `number` that cannot have a decimal
