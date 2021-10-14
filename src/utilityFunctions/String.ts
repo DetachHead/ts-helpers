@@ -1,14 +1,18 @@
 import _ from 'lodash'
 import {
     CharAt,
+    CountInString,
     EndsWith,
     Includes,
     IndexOf,
+    LeftOf,
     MakeEndsWith,
     MakeStartsWith,
+    MidOf,
     PadStart,
     Replace,
     ReplaceOne,
+    RightOf,
     StartsWith,
     Substring,
     Truncate,
@@ -210,3 +214,24 @@ export const makeEndsWith = <Str extends string, Suffix extends string>(
     str: Str,
     suffix: Suffix,
 ): MakeEndsWith<Str, Suffix> => (endsWith(str, suffix) ? str : `${str}${suffix}`) as never
+
+export const leftOf = <Str extends string, Substring extends string>(
+    str: Str,
+    substring: Substring,
+): LeftOf<Str, Substring> => (str.split(substring)[0] ?? -1) as never
+
+export const rightOf = <Str extends string, Substring extends string>(
+    str: Str,
+    substring: Substring,
+): RightOf<Str, Substring> => str.slice(str.indexOf(substring) + substring.length) as never
+
+export const midOf = <Str extends string, Start extends string, End extends string>(
+    str: Str,
+    start: Start,
+    end: End,
+): MidOf<Str, Start, End> => rightOf(leftOf(str, end), start)
+
+export const countInString = <Str extends string, Substring extends string>(
+    str: Str,
+    substring: Substring,
+): CountInString<Str, Substring> => (str.split(substring).length - 1) as never

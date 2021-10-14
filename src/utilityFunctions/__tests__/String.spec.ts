@@ -1,15 +1,19 @@
 import {
     charAt,
+    countInString,
     endsWith,
     includes,
     indexOf,
     join,
+    leftOf,
     makeEndsWith,
     makeStartsWith,
     match,
+    midOf,
     padStart,
     replaceAll,
     replaceOne,
+    rightOf,
     split,
     startsWith,
     substring,
@@ -190,6 +194,74 @@ describe('makeEndsWith', () => {
         })
         test('both', () => {
             exactly<string>()(makeEndsWith('foobar.' as string, '.' as string))
+        })
+    })
+})
+
+describe('leftOf', () => {
+    test('known at compiletime', () => {
+        exactly('foo', leftOf('foobarbaz', 'bar'))
+    })
+    describe('not known at compiletime', () => {
+        test('string', () => {
+            exactly<string>()(leftOf('foobarbaz' as string, 'bar'))
+        })
+        test('substring', () => {
+            exactly<string>()(leftOf('foobarbaz', 'bar' as string))
+        })
+        test('both', () => {
+            exactly<string>()(leftOf('foobarbaz' as string, 'bar' as string))
+        })
+    })
+})
+
+describe('rightOf', () => {
+    test('known at compiletime', () => {
+        exactly('baz', rightOf('foobarbaz', 'bar'))
+    })
+    describe('not known at compiletime', () => {
+        test('string', () => {
+            exactly<string>()(rightOf('foobarbaz' as string, 'bar'))
+        })
+        test('substring', () => {
+            exactly<string>()(rightOf('foobarbaz', 'bar' as string))
+        })
+        test('both', () => {
+            exactly<string>()(rightOf('foobarbaz' as string, 'bar' as string))
+        })
+    })
+})
+
+describe('midOf', () => {
+    test('known at compiletime', () => {
+        exactly('baz', midOf('foobarbazquxquux', 'bar', 'qux'))
+    })
+    describe('not known at compiletime', () => {
+        test('string', () => {
+            exactly<string>()(midOf('foobarbazquxquux' as string, 'bar', 'qux'))
+        })
+        test('start', () => {
+            exactly<string>()(midOf('foobarbazquxquux', 'bar' as string, 'qux'))
+        })
+        test('end', () => {
+            exactly<string>()(midOf('foobarbazquxquux', 'bar', 'qux' as string))
+        })
+    })
+})
+
+describe('countInString', () => {
+    test('known at compiletime', () => {
+        exactly(3, countInString('1,2,3,4', ','))
+    })
+    describe('not known at compiletime', () => {
+        test('string', () => {
+            exactly<number>()(countInString('1,2,3,4' as string, ','))
+        })
+        test('substring', () => {
+            exactly<number>()(countInString('1,2,3,4', ',' as string))
+        })
+        test('both', () => {
+            exactly<number>()(countInString('1,2,3,4' as string, ',' as string))
         })
     })
 })
