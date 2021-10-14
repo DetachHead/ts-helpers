@@ -114,13 +114,7 @@ type _IndexOf<
     ? CurrentIndex
     : CurrentIndex extends Array['length']
     ? -1
-    : _IndexOf<
-          Array,
-          Value,
-          Increment<CurrentIndex> &
-              // intersection to prevent compiler failing to narrow
-              Index<Array>
-      >
+    : _IndexOf<Array, Value, Increment<CurrentIndex>>
 
 /**
  * the type equivalent of {@link Array.prototype.indexOf}
@@ -131,13 +125,7 @@ export type IndexOf<
 > = number extends Array['length']
     ? number
     : {
-          [Key in Keys<ListOf<Value>>]: _IndexOf<
-              Array,
-              ListOf<Value>[Key],
-              0 &
-                  // intersection to prevent compiler failing to narrow
-                  Index<Array>
-          >
+          [Key in Keys<ListOf<Value>>]: _IndexOf<Array, ListOf<Value>[Key], 0>
       }[Keys<ListOf<Value>>]
 
 /**
