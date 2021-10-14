@@ -25,7 +25,7 @@ import { PowerAssert } from 'typed-nodejs-assert'
 const assert: PowerAssert = require('power-assert')
 
 test('match', () => {
-    const foo = match('', /a/)
+    const foo = match('', /a/u)
     if (foo !== null) {
         // noinspection BadExpressionStatementJS
         foo[0] // $ExpectType string
