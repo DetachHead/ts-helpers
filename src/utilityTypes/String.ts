@@ -530,7 +530,7 @@ export type MidOf<String extends string, Start extends string, End extends strin
     Start
 >
 
-export type CountInStringTailRec<
+type CountInStringTailRec<
     Str extends string,
     Substring extends string,
     Result extends number
