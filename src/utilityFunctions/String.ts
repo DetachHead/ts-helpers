@@ -215,22 +215,42 @@ export const makeEndsWith = <Str extends string, Suffix extends string>(
     suffix: Suffix,
 ): MakeEndsWith<Str, Suffix> => (endsWith(str, suffix) ? str : `${str}${suffix}`) as never
 
+/**
+ * gets the string to the left of the given `substring`
+ * @example
+ * leftOf('foo.bar', '.') //'foo'
+ */
 export const leftOf = <Str extends string, Substring extends string>(
     str: Str,
     substring: Substring,
 ): LeftOf<Str, Substring> => (str.split(substring)[0] ?? -1) as never
 
+/**
+ * gets the string to the right of the given `substring`
+ * @example
+ * rightOf('foo.bar', '.') //'bar'
+ */
 export const rightOf = <Str extends string, Substring extends string>(
     str: Str,
     substring: Substring,
 ): RightOf<Str, Substring> => str.slice(str.indexOf(substring) + substring.length) as never
 
+/**
+ * gets the string between the given `start` and `end` strings
+ * @example
+ * midOf('foo(bar)baz', '(', ')') //'bar'
+ */
 export const midOf = <Str extends string, Start extends string, End extends string>(
     str: Str,
     start: Start,
     end: End,
 ): MidOf<Str, Start, End> => rightOf(leftOf(str, end), start)
 
+/**
+ * counts how many instances of the given `substring` are in `str`
+ * @example
+ * countInString('1,2,3,4', ',') //3
+ */
 export const countInString = <Str extends string, Substring extends string>(
     str: Str,
     substring: Substring,
