@@ -29,8 +29,7 @@ describe('IndexOf', () => {
 
 test('SortLongestStrings tail-recursive', () => {
     // don't need to compare this type to anything, just making sure it doesn't trigger a stack depth error
-    // TODO: this should be able to go up to 1000 but can't due to hacky intersections, see comments in SortLongestStrings
-    exactly<SortLongestStrings<TupleOf<never, 750>>>()
+    exactly<SortLongestStrings<TupleOf<never, 900>>>()
 })
 
 describe('RemoveValue', () => {
