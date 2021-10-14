@@ -9,6 +9,7 @@ import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
 import { Head as ArrayHead } from 'ts-toolbelt/out/List/Head'
 import { Tail as ArrayTail } from 'ts-toolbelt/out/List/Tail'
 import { Literal } from 'ts-toolbelt/out/String/_Internal'
+import { Extends, Or } from './Boolean'
 
 /**
  * a type that can be converted to a string in a template literal type
@@ -106,9 +107,13 @@ type _TrimStart<
  * @example
  * type Foo = TrimStart<'foobar', 2> //'bar'
  */
-export type TrimStart<String extends string, Index extends number> = _TrimStart<String, Index, 0> &
-    // intersection to work around https://github.com/microsoft/TypeScript/issues/46171
-    string
+export type TrimStart<String extends string, Index extends number> = Or<
+    Extends<string, String> | Extends<number, Index>
+> extends true
+    ? string
+    : _TrimStart<String, Index, 0> &
+          // intersection to work around https://github.com/microsoft/TypeScript/issues/46171
+          string
 
 /**
  * trims the characters past `Index` off the end of `String` (exclusive)
@@ -124,7 +129,11 @@ export type Substring<
     String extends string,
     StartIndex extends number,
     EndIndex extends number
-> = TrimStart<String, StartIndex> extends `${infer R}${TrimStart<String, EndIndex>}` ? R : never
+> = Or<Extends<string, String> | Extends<number, StartIndex | EndIndex>> extends true
+    ? string
+    : TrimStart<String, StartIndex> extends `${infer R}${TrimStart<String, EndIndex>}`
+    ? R
+    : never
 
 export type CharAt<String extends string, Index extends number> = Head<TrimStart<String, Index>>
 
@@ -147,13 +156,12 @@ type _IndexOf<
 /**
  * gets the index of a `Substring` within a `String`. returns `-1` if it's not present
  */
-export type IndexOf<String extends string, Substring extends string> = (Includes<
-    String,
-    Substring
-> extends true
-    ? _IndexOf<String, Substring, 0>
-    : -1) & // intersection to work around https://github.com/microsoft/TypeScript/issues/46171
-    number
+export type IndexOf<String extends string, Substring extends string> = string extends
+    | String
+    | Substring
+    ? number
+    : (Includes<String, Substring> extends true ? _IndexOf<String, Substring, 0> : -1) & // intersection to work around https://github.com/microsoft/TypeScript/issues/46171
+          number
 
 type _Replace<
     String extends string,
@@ -491,3 +499,32 @@ export type MakeEndsWith<Str extends string, Suffix extends string> = string ext
     : EndsWith<Str, Suffix> extends true
     ? Str
     : `${Str}${Suffix}`
+
+export type LeftOf<String extends string, Substring extends string> = TrimEnd<
+    String,
+    IndexOf<String, Substring>
+>
+
+export type RightOf<String extends string, Substring extends string> = TrimStart<
+    String,
+    Add<IndexOf<String, Substring>, Length<Substring>>
+>
+
+export type MidOf<String extends string, Start extends string, End extends string> = RightOf<
+    LeftOf<String, End>,
+    Start
+>
+
+export type CountInStringTailRec<
+    Str extends string,
+    Substring extends string,
+    Result extends number
+> = IndexOf<Str, Substring> extends -1
+    ? Result
+    : CountInStringTailRec<RightOf<Str, Substring>, Substring, Increment<Result>>
+
+export type CountInString<Str extends string, Substring extends string> = string extends
+    | Str
+    | Substring
+    ? number
+    : CountInStringTailRec<Str, Substring, 0>
