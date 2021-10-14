@@ -56,25 +56,13 @@ type _Replace<R extends unknown[], T> = { [K in keyof R]: T }
 export type TupleOf<Type, Length extends number> = number extends Length
     ? Type[]
     : {
-          // in case Length is a tuple
+          // in case Length is a union
           [LengthKey in Length]: _BuildPowersOf2LengthArrays<
               LengthKey,
               [[never]]
           > extends infer TwoDimensionalArray
               ? TwoDimensionalArray extends never[][]
-                  ? _Replace<
-                        // need this additional conditional type due to https://github.com/microsoft/TypeScript/issues/46171
-                        _ConcatLargestUntilDone<
-                            LengthKey,
-                            TwoDimensionalArray,
-                            []
-                        > extends infer Narrowed
-                            ? Narrowed extends unknown[]
-                                ? Narrowed
-                                : never
-                            : never,
-                        Type
-                    >
+                  ? _Replace<_ConcatLargestUntilDone<LengthKey, TwoDimensionalArray, []>, Type>
                   : never
               : never
       }[Length]
@@ -214,11 +202,7 @@ type SortLongestStringsTailRec<Array extends string[], Result extends string[]> 
 > extends true
     ? [...Result, ...Array]
     : SortLongestStringsTailRec<
-          RemoveIndex<
-              Array,
-              IndexOfLongestString<Array> & // https://github.com/microsoft/TypeScript/issues/46176 or https://github.com/microsoft/TypeScript/issues/46171
-                  Index<Array>
-          >,
+          RemoveIndex<Array, IndexOfLongestString<Array>>,
           [...Result, Array[IndexOfLongestString<Array>]]
       >
 
@@ -244,8 +228,7 @@ export type IndexOfHighestNumber<Numbers extends readonly number[]> = _IndexOfHi
     Numbers,
     0,
     0
-> & // intersection to prevent compiler from failing to narrow https://github.com/microsoft/TypeScript/issues/46171
-    number
+>
 
 export type RemoveValueTailRec<
     Array extends unknown[],
