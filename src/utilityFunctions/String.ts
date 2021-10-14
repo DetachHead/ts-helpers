@@ -49,7 +49,7 @@ export const replaceAll = <
     find: Find,
     replace: ReplaceWithString,
 ): Replace<String, Find, ReplaceWithString> =>
-    str.replace(new RegExp(_.escapeRegExp(find), 'g'), replace) as never
+    str.replace(new RegExp(_.escapeRegExp(find), 'gu'), replace) as never
 
 /**
  * better version of {@link String.prototype.match} that doesn't allow for empty match arrays

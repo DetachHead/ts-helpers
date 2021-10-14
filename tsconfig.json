@@ -74,5 +74,5 @@
         "allowUnreachableCode": false,
         "stripInternal": true
     },
-    "include": ["src", "*.eslintrc.js"]
+    "include": ["src", "*.eslintrc.js", "jest.config.ts"]
 }
