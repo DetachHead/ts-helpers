@@ -255,3 +255,19 @@ export const countInString = <Str extends string, Substring extends string>(
     str: Str,
     substring: Substring,
 ): CountInString<Str, Substring> => (str.split(substring).length - 1) as never
+
+/** wrapper for {@link String.toLowerCase} that returns a {@link Lowercase} of the given `value` */
+export const toLowerCase = <T extends string>(value: T): Lowercase<T> =>
+    value.toLowerCase() as never
+
+/** wrapper for {@link String.toUpperCase} that returns a {@link Uppercase} of the given `value` */
+export const toUpperCase = <T extends string>(value: T): Uppercase<T> =>
+    value.toUpperCase() as never
+
+/** converts the first character of a string to uppercase */
+export const capitalize = <T extends string>(value: T): Capitalize<T> =>
+    _.capitalize(value) as never
+
+/** converts the first character of a string to lowercase */
+export const uncapitalize = <T extends string>(value: T): Uncapitalize<T> =>
+    `${value.charAt(0).toLowerCase()}${value.slice(1)}` as never
