@@ -1,4 +1,5 @@
 import {
+    capitalize,
     charAt,
     countInString,
     endsWith,
@@ -17,7 +18,10 @@ import {
     split,
     startsWith,
     substring,
+    toLowerCase,
+    toUpperCase,
     truncate,
+    uncapitalize,
 } from '../String'
 import { exactly, toStringType } from '../misc'
 import { PowerAssert } from 'typed-nodejs-assert'
@@ -262,6 +266,41 @@ describe('countInString', () => {
         })
         test('both', () => {
             exactly<number>()(countInString('1,2,3,4' as string, ',' as string))
+        })
+    })
+})
+
+describe('case', () => {
+    describe('toLowerCase', () => {
+        test('known at compiletime', () => {
+            exactly('foo', toLowerCase('FOO'))
+        })
+        test('not known at compiletime', () => {
+            exactly<string>()(toLowerCase('FOO' as string))
+        })
+    })
+    describe('toUpperCase', () => {
+        test('known at compiletime', () => {
+            exactly('FOO', toUpperCase('foo'))
+        })
+        test('not known at compiletime', () => {
+            exactly<string>()(toUpperCase('foo' as string))
+        })
+    })
+    describe('capitalize', () => {
+        test('known at compiletime', () => {
+            exactly('Foo', capitalize('foo'))
+        })
+        test('not known at compiletime', () => {
+            exactly<string>()(capitalize('foo' as string))
+        })
+    })
+    describe('uncapitalize', () => {
+        test('known at compiletime', () => {
+            exactly('foo', uncapitalize('Foo'))
+        })
+        test('not known at compiletime', () => {
+            exactly<string>()(uncapitalize('Foo' as string))
         })
     })
 })
