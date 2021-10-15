@@ -13,6 +13,7 @@ import {
     isGreaterOrEqual,
     isLessThan,
     isLessOrEqual,
+    toNumber,
 } from '../Number'
 import { PowerAssert } from 'typed-nodejs-assert'
 import { TupleOf } from '../../utilityTypes/Array'
@@ -243,5 +244,29 @@ describe('bitwise operations', () => {
         test('not known at compile-time', () => {
             leftShift(5 as number, 2) // $ExpectType number
         })
+    })
+})
+
+describe('toNumber', () => {
+    describe('known at compiletime', () => {
+        describe('valid numbers', () => {
+            test('normal', () => {
+                exactly(12 as number, toNumber('12'))
+            })
+            test('Infinity', () => {
+                exactly(Infinity, toNumber('Infinity'))
+            })
+        })
+        describe('invalid number', () => {
+            test('starts with valid number', () => {
+                exactly(undefined, toNumber('12asdf'))
+            })
+            test('empty string', () => {
+                exactly(undefined, toNumber(''))
+            })
+        })
+    })
+    test('not known at compiletime', () => {
+        exactly<undefined | number>()(toNumber('12' as string))
     })
 })
