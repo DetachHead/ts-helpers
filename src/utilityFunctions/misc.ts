@@ -135,8 +135,8 @@ export const exactly: {
 } = ((...values: [unknown, unknown] | []) => {
     if (values.length === 2) {
         const [expected, actual] = values
-        if (typeof values === 'object') assert.deepStrictEqual(expected, actual)
-        else assert.strictEqual(expected, actual)
+        if (typeof expected === 'object') assert.deepStrictEqual(actual, expected)
+        else assert.strictEqual(actual, expected)
         return undefined
     } else {
         return (value: unknown) => value
