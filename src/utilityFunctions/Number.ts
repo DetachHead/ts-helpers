@@ -13,10 +13,10 @@ import {
     Multiply,
     Ordinal,
     Power,
+    RangeType,
     RightShift,
     Square,
     Subtract,
-    RangeType,
 } from '../utilityTypes/Number'
 import { toStringType } from './misc'
 import { padStart } from './String'
@@ -129,3 +129,29 @@ export const rightShift = <Num extends number, Count extends number>(
     num: Num,
     count: Count,
 ): RightShift<Num, Count> => (num >> count) as never
+
+type StringifiedNumber = `${number}` | `${'-' | '+' | ''}Infinity`
+
+/**
+ * safely converts a string to a number, without any of the wacky behaviour from `Number` and `parseInt`
+ * @returns `undefined` if the value isn't a string representation of a number, otherwise returns the number
+ * @example
+ * toNumber('') //undefined
+ * toNumber('1asdf') //undefined
+ * toNumber('NaN') //undefined
+ * toNumber('12') //12
+ * toNumber('Infinity') //Infinity
+ */
+export const toNumber = <Result extends number, Input extends string>(
+    value: Input,
+): string extends Input
+    ? number | undefined
+    : // TODO: don't widen the type to number when the value is a literal known at compiletime. eg. toNumber('12') should have type `12`, not `number`
+    Input extends `${Result}` | StringifiedNumber
+    ? Result
+    : undefined => {
+    if (value === '') return undefined as never
+    const result = Number(value)
+    if (isNaN(result)) return undefined as never
+    return result as never
+}
