@@ -11,13 +11,9 @@ import {
     uncapitalize,
 } from '../String'
 import { exactly } from '../misc'
-import { PowerAssert } from 'typed-nodejs-assert'
-// eslint-disable-next-line @typescript-eslint/no-var-requires -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
-const assert: PowerAssert = require('power-assert')
 
 test('join', () => {
-    const value = join([1, 2, 3], ',') // $ExpectType "1,2,3"
-    assert(value === '1,2,3')
+    exactly('1,2,3', join([1, 2, 3], ','))
 })
 
 describe('truncate', () => {
