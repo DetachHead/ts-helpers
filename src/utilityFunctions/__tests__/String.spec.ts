@@ -24,133 +24,109 @@ import {
     uncapitalize,
 } from '../String'
 import { exactly, toStringType } from '../misc'
-import { PowerAssert } from 'typed-nodejs-assert'
-// eslint-disable-next-line @typescript-eslint/no-var-requires -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
-const assert: PowerAssert = require('power-assert')
 
 test('match', () => {
     const foo = match('', /a/u)
     if (foo !== null) {
-        // noinspection BadExpressionStatementJS
-        foo[0] // $ExpectType string
-        // noinspection BadExpressionStatementJS
-        foo[1] // $ExpectType string | undefined
+        exactly<string>()(foo[0])
+        exactly<string | undefined>()(foo[1])
     }
 })
 
 describe('toStringType', () => {
     test('value known at compiletime', () => {
-        const value = toStringType(123 as const) // $ExpectType "123"
-        assert(value === '123')
+        exactly('123', toStringType(123))
     })
     test('not known at compiletime', () => {
-        const value = toStringType({ foo: 1 }) // $ExpectType string
-        assert(value === '[object Object]')
+        exactly('[object Object]' as string, toStringType({ foo: 1 }))
     })
 })
 
 test('charAt', () => {
-    const value = charAt('asdf', 2) // $ExpectType "d"
-    assert(value === 'd')
+    exactly('d', charAt('asdf', 2))
 })
 
 test('substring', () => {
-    const value = substring('foobarbaz', 3, 6) // $ExpectType "bar"
-    assert(value === 'bar')
+    exactly('bar', substring('foobarbaz', 3, 6))
 })
 
 test('join', () => {
-    const value = join([1, 2, 3], ',') // $ExpectType "1,2,3"
-    assert(value === '1,2,3')
+    exactly('1,2,3', join([1, 2, 3], ','))
 })
 
 test('split', () => {
-    const value = split('1,2,3', ',') // $ExpectType ["1", "2", "3"]
-    assert.deepStrictEqual(value, ['1', '2', '3'])
+    exactly(['1', '2', '3'], split('1,2,3', ','))
 })
 
 describe('indexOf', () => {
     test('substring exists', () => {
-        const value = indexOf('foobarbaz', 'bar') // $ExpectType 3
-        assert(value === 3)
+        exactly(3, indexOf('foobarbaz', 'bar'))
     })
     test("substring doesn't exist", () => {
-        const value = indexOf('foobarbaz', 'qux') // $ExpectType -1
-        assert(value === -1)
+        exactly(-1, indexOf('foobarbaz', 'qux'))
     })
 })
 
 describe('includes', () => {
     test('true', () => {
-        const value = includes('foobar', 'bar') // $ExpectType true
-        assert(value)
+        exactly(true, includes('foobar', 'bar'))
     })
     test('false', () => {
-        const value = includes('foobar', 'baz') // $ExpectType false
-        assert(!value)
+        exactly(false, includes('foobar', 'baz'))
     })
 })
 
 test('replaceOne', () => {
-    const value = replaceOne('foo,bar,baz', ',', '.') // $ExpectType "foo.bar,baz"
-    assert(value === 'foo.bar,baz')
+    exactly('foo.bar,baz', replaceOne('foo,bar,baz', ',', '.'))
 })
 
 test('replaceAll', () => {
-    const value = replaceAll('foo,bar,baz', ',', '.') // $ExpectType "foo.bar.baz"
-    assert(value === 'foo.bar.baz')
+    exactly('foo.bar.baz', replaceAll('foo,bar,baz', ',', '.'))
 })
 
 describe('padStart', () => {
     test('padString cut off', () => {
-        const value = padStart('foo', 6, 'ab') // $ExpectType "abafoo"
-        assert(value === 'abafoo')
+        exactly('abafoo', padStart('foo', 6, 'ab'))
     })
     test('padString not cut off', () => {
-        const value = padStart('foo', 12, 'bar') // $ExpectType "barbarbarfoo"
-        assert(value === 'barbarbarfoo')
+        exactly('barbarbarfoo', padStart('foo', 12, 'bar'))
     })
     test('default pad', () => {
-        const value = padStart('foo', 5) // $ExpectType "  foo"
-        assert(value === '  foo')
+        exactly('  foo', padStart('foo', 5))
     })
     test('string not known at compiletime', () => {
-        padStart('foo' as string, 6, 'ab') // $ExpectType string
+        exactly<string>()(padStart('foo' as string, 6, 'ab'))
     })
     test('padstring not known at compiletime', () => {
-        padStart('foo', 6, 'ab' as string) // $ExpectType string
+        exactly<string>()(padStart('foo', 6, 'ab' as string))
     })
 })
 
 describe('startsWith', () => {
     test('true', () => {
-        const result = startsWith('foobar', 'foo') // $ExpectType true
-        assert(result)
-        startsWith('foobar' as `foo${string}`, 'foo') // $ExpectType true
+        exactly(true, startsWith('foobar', 'foo'))
+        exactly(true, startsWith('foobar' as `foo${string}`, 'foo'))
     })
     test('false', () => {
-        const result = startsWith('foobar', 'baz') // $ExpectType false
-        assert(!result)
+        exactly(false, startsWith('foobar', 'baz'))
     })
     test('not known at compiletime', () => {
-        startsWith('foobar' as string, 'baz') // $ExpectType boolean
-        startsWith('foobar', 'baz' as string) // $ExpectType boolean
+        exactly<boolean>()(startsWith('foobar' as string, 'baz'))
+        exactly<boolean>()(startsWith('foobar', 'baz' as string))
     })
 })
 
 describe('endsWith', () => {
     test('true', () => {
-        const result = endsWith('foobar', 'bar') // $ExpectType true
-        assert(result)
-        endsWith('foobar' as `${string}bar`, 'bar') // $ExpectType true
+        exactly(true, endsWith('foobar', 'bar'))
+        exactly(true, endsWith('foobar' as `${string}bar`, 'bar'))
     })
     test('false', () => {
-        const result = endsWith('foobar', 'baz') // $ExpectType false
-        assert(!result)
+        exactly(false, endsWith('foobar', 'baz'))
     })
     test('not known at compiletime', () => {
-        endsWith('foobar' as string, 'baz') // $ExpectType boolean
-        endsWith('foobar', 'baz' as string) // $ExpectType boolean
+        exactly<boolean>()(endsWith('foobar' as string, 'baz'))
+        exactly<boolean>()(endsWith('foobar', 'baz' as string))
     })
 })
 
