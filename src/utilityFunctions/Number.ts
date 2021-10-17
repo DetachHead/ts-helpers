@@ -18,8 +18,6 @@ import {
     Square,
     Subtract,
 } from '../utilityTypes/Number'
-import { toStringType } from './misc'
-import { padStart } from './String'
 
 /**
  * gets a random number in the given range from `Min` to `Max` (inclusive)
@@ -93,8 +91,8 @@ export const leadingZeros = <Num extends number, Size extends number>(
     length: Size,
 ): LeadingZeros<Num, Size> =>
     (number < 0
-        ? `-${padStart(toStringType(number * -1), length, '0')}`
-        : padStart(toStringType(number), length, '0')) as never
+        ? `-${(number * -1).toString().padStart(length, '0')}`
+        : number.toString().padStart(length, '0')) as never
 
 /** creates a stringified ordinal value for the given number, and at compile-time */
 export const ordinalNumber = <T extends number>(num: T): Ordinal<T> => ordinal(num) as never

@@ -1,4 +1,3 @@
-import { Stringable, TemplateLiteralStringable, ToString } from '../utilityTypes/String'
 import { Equals, OnlyInfer } from '../utilityTypes/misc'
 import isCI from 'is-ci'
 import { hasPropertyPredicate } from './Any'
@@ -28,13 +27,6 @@ export const cast = <Base, Narrowed extends Base>(_value: Base): asserts _value 
 export const unsafeCast = <T>(_value: unknown): asserts _value is T => {
     // do nothing
 }
-
-/**
- * converts the given `value` to a string, preserving its value at compiletime where possible
- */
-export const toStringType = <T extends Stringable>(
-    value: T,
-): T extends TemplateLiteralStringable ? ToString<T> : string => value.toString() as never
 
 /**
  * asserts that a value matches the given type

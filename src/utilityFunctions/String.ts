@@ -1,84 +1,18 @@
 import _ from 'lodash'
 import {
-    CharAt,
     CountInString,
-    EndsWith,
-    Includes,
-    IndexOf,
     LeftOf,
     MakeEndsWith,
     MakeStartsWith,
     MidOf,
-    PadStart,
-    Replace,
-    ReplaceOne,
     RightOf,
-    StartsWith,
-    Substring,
     Truncate,
 } from '../utilityTypes/String'
-import { List } from 'ts-toolbelt/out/List/List'
-import { Literal } from 'ts-toolbelt/out/String/_Internal'
 import { Join } from 'ts-toolbelt/out/String/Join'
-import { Split } from 'ts-toolbelt/out/String/Split'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import { Throw } from 'throw-expression'
-
-/**
- * replaces the first occurrence of `find` with `replace`
- */
-export const replaceOne = <
-    String extends string,
-    Find extends string,
-    ReplaceWithString extends string
->(
-    str: String,
-    find: Find,
-    replace: ReplaceWithString,
-): ReplaceOne<String, Find, ReplaceWithString> => str.replace(find, replace) as never
-
-/**
- * replaces all occurrences of `find` in the given string with `replace`
- */
-export const replaceAll = <
-    String extends string,
-    Find extends string,
-    ReplaceWithString extends string
->(
-    str: String,
-    find: Find,
-    replace: ReplaceWithString,
-): Replace<String, Find, ReplaceWithString> =>
-    str.replace(new RegExp(_.escapeRegExp(find), 'gu'), replace) as never
-
-/**
- * better version of {@link String.prototype.match} that doesn't allow for empty match arrays
- *
- * useful when using the `noUncheckedIndexedAccess` compiler option
- * @see https://github.com/microsoft/TypeScript/issues/42296
- */
-export const match = (str: string, regex: RegExp): (RegExpMatchArray & [string]) | null =>
-    str.match(regex) as (RegExpMatchArray & [string]) | null
-
-/**
- * gets the character at the given `index` at compiletime
- */
-export const charAt = <T extends string, I extends number>(string: T, index: I): CharAt<T, I> =>
-    string.charAt(index) as CharAt<T, I>
-
-/**
- * does {@link String.substring} but at compiletime
- */
-export const substring = <
-    String extends string,
-    StartIndex extends number,
-    EndIndex extends number
->(
-    string: String,
-    start: StartIndex,
-    end: EndIndex,
-): Substring<String, StartIndex, EndIndex> =>
-    string.substring(start, end) as Substring<String, StartIndex, EndIndex>
+import { Literal } from 'ts-toolbelt/out/String/_Internal'
+import { List } from 'ts-toolbelt/out/List/List'
 
 /**
  * concatenates strings while keeping their values known at compiletime
@@ -97,57 +31,6 @@ export const join = <T extends List<Literal>, D extends string>(
     items: Narrow<T>,
     delimiter: D,
 ): Join<T, D> => items.join(delimiter) as Join<T, D>
-
-/**
- * splits a string by the given `delimiter` at compiletime
- */
-export const split = <T extends string, D extends string>(string: T, delimiter: D): Split<T, D> =>
-    string.split(delimiter) as Split<T, D>
-
-/**
- * does {@link String.indexOf} but at compiletime
- */
-export const indexOf = <String extends string, Substring extends string>(
-    string: String,
-    substring: Substring,
-): IndexOf<String, Substring> => string.indexOf(substring) as IndexOf<String, Substring>
-
-/**
- * does {@link String.includes} but at compiletime
- */
-export const includes = <String extends string, Substring extends string>(
-    string: String,
-    substring: Substring,
-): Includes<String, Substring> => string.includes(substring) as Includes<String, Substring>
-
-/**
- * does {@link String.padStart} at compiletime
- */
-export const padStart = <
-    String extends string,
-    Size extends number,
-    PadString extends string = ' '
->(
-    string: String,
-    length: Size,
-    padString?: PadString,
-): PadStart<String, Size, PadString> => string.padStart(length, padString) as never
-
-/**
- * {@link String.startsWith} at compile-time
- */
-export const startsWith = <Full extends string, CheckStart extends string>(
-    full: Full,
-    checkStart: CheckStart,
-): StartsWith<Full, CheckStart> => full.startsWith(checkStart) as never
-
-/**
- * {@link String.endsWith} at compile-time
- */
-export const endsWith = <Full extends string, CheckEnd extends string>(
-    full: Full,
-    checkEnd: CheckEnd,
-): EndsWith<Full, CheckEnd> => full.endsWith(checkEnd) as never
 
 const defaultEllipsis = '…'
 
@@ -200,7 +83,7 @@ export const truncate: {
 export const makeStartsWith = <Str extends string, Prefix extends string>(
     str: Str,
     prefix: Prefix,
-): MakeStartsWith<Str, Prefix> => (startsWith(str, prefix) ? str : `${prefix}${str}`) as never
+): MakeStartsWith<Str, Prefix> => (str.startsWith(prefix) ? str : `${prefix}${str}`) as never
 
 /**
  * if the given `str` doesn't already end with the given `suffix`, then append the suffix to the end of the string.
@@ -213,7 +96,7 @@ export const makeStartsWith = <Str extends string, Prefix extends string>(
 export const makeEndsWith = <Str extends string, Suffix extends string>(
     str: Str,
     suffix: Suffix,
-): MakeEndsWith<Str, Suffix> => (endsWith(str, suffix) ? str : `${str}${suffix}`) as never
+): MakeEndsWith<Str, Suffix> => (str.endsWith(suffix) ? str : `${str}${suffix}`) as never
 
 /**
  * gets the string to the left of the given `substring`
@@ -255,14 +138,6 @@ export const countInString = <Str extends string, Substring extends string>(
     str: Str,
     substring: Substring,
 ): CountInString<Str, Substring> => (str.split(substring).length - 1) as never
-
-/** wrapper for {@link String.toLowerCase} that returns a {@link Lowercase} of the given `value` */
-export const toLowerCase = <T extends string>(value: T): Lowercase<T> =>
-    value.toLowerCase() as never
-
-/** wrapper for {@link String.toUpperCase} that returns a {@link Uppercase} of the given `value` */
-export const toUpperCase = <T extends string>(value: T): Uppercase<T> =>
-    value.toUpperCase() as never
 
 /** converts the first character of a string to uppercase */
 export const capitalize = <T extends string>(value: T): Capitalize<T> =>
