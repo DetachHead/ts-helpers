@@ -57,6 +57,19 @@ describe('exactly', () => {
                 })
             })
         })
+        describe('undefined', () => {
+            test('pass', () => {
+                exactly<string | undefined>()('' as undefined | string)
+            })
+            test('fail', () => {
+                // @ts-expect-error doesn't match
+                exactly<string | undefined>()('' as string)
+                // @ts-expect-error doesn't match
+                exactly<string | null>()('' as string)
+                // @ts-expect-error doesn't match
+                exactly<string | undefined>()('' as undefined)
+            })
+        })
         describe('unions, intersections and Readonly', () => {
             test('pass', () => {
                 exactly<1 | 2>()(oneOrTwo)
@@ -174,6 +187,17 @@ describe('exactly', () => {
                 type Function2 = (x: number, y: string) => void
 
                 exactly<Function1 & Function2, Function2 & Function1>()
+            })
+        })
+        describe('undefined', () => {
+            test('pass', () => {
+                exactly<string | undefined, undefined | string>()
+            })
+            test('fail', () => {
+                // @ts-expect-error doesn't match
+                exactly<string | undefined, string>()
+                // @ts-expect-error doesn't match
+                exactly<string, string | undefined>()
             })
         })
         describe('arrays/tuples', () => {
