@@ -27,4 +27,12 @@ describe('hasPropertyPredicate', () => {
     test('explicit', () => {
         if (hasPropertyPredicate<unknown[]>(value, 'length')) exactly<unknown[]>()(value)
     })
+    describe('undefined/null', () => {
+        test('undefined', () => {
+            hasPropertyPredicate(undefined, 'length')
+        })
+        test('null', () => {
+            hasPropertyPredicate(null, 'length')
+        })
+    })
 })
