@@ -29,33 +29,23 @@ const assert: PowerAssert = require('power-assert')
 
 test('lengthGreaterOrEqual', () => {
     const foo: string[] = []
-    // noinspection BadExpressionStatementJS
-    foo[0] // $ExpectType string | undefined
+    exactly<string | undefined>()(foo[0])
     if (lengthGreaterOrEqual(foo, 3)) {
-        // noinspection BadExpressionStatementJS
-        foo[0] // $ExpectType string
-        // noinspection BadExpressionStatementJS
-        foo[2] // $ExpectType string
-        // noinspection BadExpressionStatementJS
-        foo[3] // $ExpectType string | undefined
-        // noinspection BadExpressionStatementJS
-        foo[4] // $ExpectType string | undefined
+        exactly<string>()(foo[0])
+        exactly<string>()(foo[2])
+        exactly<string | undefined>()(foo[3])
+        exactly<string | undefined>()(foo[4])
     }
 })
 
 test('lengthGreaterThan', () => {
     const foo: string[] = []
-    // noinspection BadExpressionStatementJS
-    foo[0] // $ExpectType string | undefined
+    exactly<string | undefined>()(foo[0])
     if (lengthGreaterThan(foo, 3)) {
-        // noinspection BadExpressionStatementJS
-        foo[0] // $ExpectType string
-        // noinspection BadExpressionStatementJS
-        foo[2] // $ExpectType string
-        // noinspection BadExpressionStatementJS
-        foo[3] // $ExpectType string
-        // noinspection BadExpressionStatementJS
-        foo[4] // $ExpectType string | undefined
+        exactly<string>()(foo[0])
+        exactly<string>()(foo[2])
+        exactly<string>()(foo[3])
+        exactly<string | undefined>()(foo[4])
     }
 })
 
@@ -64,12 +54,7 @@ test('lengthGreaterThan', () => {
 test('lengthLessOrEqual', () => {
     const foo: string[] = []
     if (lengthLessOrEqual(foo, 3)) {
-        // noinspection BadExpressionStatementJS
-        foo
-        // noinspection BadExpressionStatementJS
-        foo[0] // $ExpectType string | undefined
-        // noinspection BadExpressionStatementJS
-        foo[2] // $ExpectType string | undefined
+        exactly<string | undefined>()(foo[2])
         // @ts-expect-error TS2493: Tuple type '[string, string, string]' of length '3' has no element at index '4'.
         // noinspection BadExpressionStatementJS
         foo[4] // error: tuple of length '3' has no element at index '3'
@@ -79,8 +64,7 @@ test('lengthLessOrEqual', () => {
 test('lengthLessThan', () => {
     const foo: string[] = []
     if (lengthLessThan(foo, 3)) {
-        // noinspection BadExpressionStatementJS
-        foo[0] // $ExpectType string | undefined
+        exactly<string | undefined>()(foo[0])
         // @ts-expect-error TS2339: Property '2' does not exist on type 'TupleOfUpToButNotIncluding '.
         // noinspection BadExpressionStatementJS
         foo[2]
@@ -90,12 +74,10 @@ test('lengthLessThan', () => {
 test('lengthIs', () => {
     const foo: string[] = []
     // noinspection BadExpressionStatementJS
-    foo[0] // $ExpectType string | undefined
+    exactly<string | undefined>()(foo[0])
     if (lengthIs(foo, 3)) {
-        // noinspection BadExpressionStatementJS
-        foo[0] // $ExpectType string
-        // noinspection BadExpressionStatementJS
-        foo[2] // $ExpectType string
+        exactly<string>()(foo[0])
+        exactly<string>()(foo[2])
         // @ts-expect-error TS2493: Tuple type '[string, string, string]' of length '3' has no element at index '3'.
         // noinspection BadExpressionStatementJS
         foo[3]
@@ -115,8 +97,7 @@ describe('duplicate functions', () => {
 })
 
 test('concat', () => {
-    const value = concat([1, 2, 3], [1, 2, 3, 4]) // $ExpectType [1, 2, 3, 1, 2, 3, 4]
-    assert.deepStrictEqual(value, [1, 2, 3, 1, 2, 3, 4])
+    exactly([1, 2, 3, 1, 2, 3, 4], concat([1, 2, 3], [1, 2, 3, 4]))
 })
 
 describe('indexOf', () => {
@@ -128,57 +109,49 @@ describe('indexOf', () => {
 
 describe('flat', () => {
     test('default depth', () => {
-        const value = flat([
-            ['foo', 'bar'],
-            ['baz, qux', ['asdf']],
-        ])
-        // noinspection BadExpressionStatementJS ExpectType was failing to find the node so have to put it here
-        value // $ExpectType ["foo", "bar", "baz, qux", ["asdf"]]
-        assert.deepStrictEqual(value, ['foo', 'bar', 'baz, qux', ['asdf']])
+        exactly(
+            ['foo', 'bar', 'baz, qux', ['asdf']],
+            flat([
+                ['foo', 'bar'],
+                ['baz, qux', ['asdf']],
+            ]),
+        )
     })
     test('deeper', () => {
         const arrayToFlatten = [
             ['foo', 'bar'],
             ['baz, qux', ['asdf', ['asdf']]],
         ] as const
-
-        const flattenedDepth2 = flat(arrayToFlatten, 2) // $ExpectType ["foo", "bar", "baz, qux", "asdf", readonly ["asdf"]]
-        assert.deepStrictEqual(flattenedDepth2, ['foo', 'bar', 'baz, qux', 'asdf', ['asdf']])
-        const flattenedDepth3 = flat(arrayToFlatten, 3) // $ExpectType ["foo", "bar", "baz, qux", "asdf", "asdf"]
-        assert.notDeepStrictEqual(flattenedDepth3, ['foo', 'bar', 'baz, qux', 'asdf', ['asdf']])
+        exactly(['foo', 'bar', 'baz, qux', 'asdf', ['asdf'] as const], flat(arrayToFlatten, 2))
+        exactly(['foo', 'bar', 'baz, qux', 'asdf', 'asdf'], flat(arrayToFlatten, 3))
     })
 })
 
 test('splice', () => {
-    const value = splice([1, 2, 3, 4, 5, 6], 2, 3) // $ExpectType [1, 2, 6]
-    assert.deepStrictEqual(value, [1, 2, 6])
+    exactly([1, 2, 6], splice([1, 2, 3, 4, 5, 6], 2, 3))
 })
 
 describe('findIndexOfHighestNumber', () => {
     test('returns number', () => {
-        const value = findIndexWithHighestNumber(
-            ['a', 'foo', 'barbaz', 'qux'],
-            (string) => string.length,
+        exactly(
+            2 as number,
+            findIndexWithHighestNumber(['a', 'foo', 'barbaz', 'qux'], (string) => string.length),
         )
-        // noinspection BadExpressionStatementJS
-        value // $ExpectType number
-        assert(value === 2)
     })
     test('empty array', () => {
-        const value = findIndexWithHighestNumber([], () => Throw('waaaaaat?'))
-        // noinspection BadExpressionStatementJS
-        value // $ExpectType undefined
-        assert(value === undefined)
+        exactly(
+            undefined,
+            findIndexWithHighestNumber([], () => Throw('waaaaaat?')),
+        )
     })
 })
 
 describe('indexOfLongestString', () => {
     test('known at compiletime', () => {
-        const value = indexOfLongestString(['foo', 'barbaz', 'qux']) // $ExpectType 1
-        assert(value === 1)
+        exactly(1, indexOfLongestString(['foo', 'barbaz', 'qux']))
     })
     test('not known at compiletime', () => {
-        indexOfLongestString(['foo', 'barbaz', 'qux'] as string[]) // $ExpectType number
+        exactly<number>()(indexOfLongestString(['foo', 'barbaz', 'qux'] as string[]))
     })
 })
 
@@ -193,21 +166,17 @@ describe('sortByLongestStrings', () => {
 
 describe('slice', () => {
     test('no end', () => {
-        const value = slice([1, 2, 3, 4, 5, 6], 3) // $ExpectType [4, 5, 6]
-        assert.deepStrictEqual(value, [4, 5, 6])
+        exactly([4, 5, 6], slice([1, 2, 3, 4, 5, 6], 3))
     })
     test('start and end', () => {
-        const value = slice([1, 2, 3, 4, 5, 6], 2, 4) // $ExpectType [3, 4]
-        assert.deepStrictEqual(value, [3, 4])
+        exactly([3, 4], slice([1, 2, 3, 4, 5, 6], 2, 4))
     })
     describe('not known at compiletime', () => {
         test('array', () => {
-            const value = slice([1, 2, 3, 4, 5, 6] as number[], 2, 4) // $ExpectType number[]
-            assert.deepStrictEqual(value, [3, 4])
+            exactly<number[]>()(slice([1, 2, 3, 4, 5, 6] as number[], 2, 4))
         })
         test('start', () => {
             const value = slice([1, 2, 3, 4, 5, 6], 2 as number, 4)
-            // can't use ExpectType due to unreliabvle positioning of items in unions
             exactly<(1 | 2 | 3 | 4 | 5 | 6)[]>()(value)
         })
     })
@@ -224,15 +193,16 @@ describe('forEach', () => {
     test('no undefined when index access with known index', () => {
         forEach(values, (_, index) => {
             if (index !== 0) {
-                const value = values[subtract(index, 1)] // $ExpectType 1 | 2 | 3 | 4
+                const value = values[subtract(index, 1)]
+                exactly<1 | 2 | 3 | 4>()(value)
                 assert([1, 2, 3, 4].includes(value))
             }
         })
     })
     test('not known at compiletime', () => {
         forEach(values as readonly number[], (_, __, prev, next) => {
-            prev() // $ExpectType number
-            next() // $ExpectType number
+            exactly<number>()(prev())
+            exactly<number>()(next())
         })
     })
 })

@@ -10,11 +10,7 @@ describe('TupleOfUpTo', () => {
     })
     test('index access', () => {
         const foo = [1, 1, 1] as TupleOfUpTo<number, 3>
-        // noinspection BadExpressionStatementJS
-        foo[0] // $ExpectType number | undefined
-        // @ts-expect-error array is guaranteed to not have a number at index 3
-        // noinspection BadExpressionStatementJS
-        foo[3]
+        exactly<[] | [number] | [number, number] | [number, number, number]>()(foo)
     })
 })
 

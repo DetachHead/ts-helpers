@@ -29,11 +29,7 @@ test('UrlString', () => {
     assertType<UrlString>('https://asdf.com')
 })
 test('Email', () => {
-    // @ts-expect-error TS2345: Argument of type '"asdf.com"' is not assignable to parameter of type '`${string}@${string}.${string}`'.
-    assertType<Email>('asdf.com')
-    // @ts-expect-error TS2345: Argument of type '"foo@asdf"' is not assignable to parameter of type '`${string}@${string}.${string}`'.
-    assertType<Email>('foo@asdf')
-    assertType<Email>('foo@bar.com')
+    exactly<`${string}@${string}.${string}`, Email>()
 })
 
 test('Guid', () => {
@@ -65,26 +61,19 @@ test('FileName', () => {
 })
 
 test('LengthGreaterOrEqual', () => {
-    assertType<LengthGreaterOrEqual<'asdf', 4>>(true)
-    assertType<LengthGreaterOrEqual<'asdf', 5>>(false)
-    assertType<LengthGreaterOrEqual<'asdf', 3>>(true)
+    exactly<true, LengthGreaterOrEqual<'asdf', 4>>()
+    exactly<false, LengthGreaterOrEqual<'asdf', 5>>()
+    exactly<true, LengthGreaterOrEqual<'asdf', 3>>()
 })
 
 test('LengthGreaterThan', () => {
-    assertType<LengthGreaterThan<'asdf', 4>>(false)
-    assertType<LengthGreaterThan<'asdf', 5>>(false)
-    assertType<LengthGreaterThan<'asdf', 3>>(true)
+    exactly<false, LengthGreaterThan<'asdf', 4>>()
+    exactly<false, LengthGreaterThan<'asdf', 5>>()
+    exactly<true, LengthGreaterThan<'asdf', 3>>()
 })
 
 test('CaseInsensitive', () => {
-    assertType<CaseInsensitive<'abc'>>('abc')
-    assertType<CaseInsensitive<'abc'>>('AbC')
-    assertType<CaseInsensitive<'abc'>>('aBC')
-    assertType<CaseInsensitive<'abc'>>('ABC')
-    assertType<CaseInsensitive<'abc'>>('aBc')
-    assertType<CaseInsensitive<'abc'>>('Abc')
-    // @ts-expect-error wrong value
-    assertType<CaseInsensitive<'abc'>>('ABd')
+    exactly<'abc' | 'aBC' | 'ABC' | 'abC' | 'AbC' | 'aBc' | 'ABc' | 'Abc', CaseInsensitive<'abc'>>()
 })
 
 describe('ReplaceValuesWithMap', () => {
@@ -107,6 +96,5 @@ test('SplitByUnion', () => {
 })
 
 test('SplitByLength', () => {
-    type Foo = SplitByLength<'foobarbaz', 3> // $ExpectType ["foo", "bar", "baz"]
-    assertType<Foo>(['foo', 'bar', 'baz'])
+    exactly<['foo', 'bar', 'baz'], SplitByLength<'foobarbaz', 3>>()
 })

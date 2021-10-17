@@ -24,45 +24,37 @@ const assert: PowerAssert = require('power-assert')
 test('random', () => {
     const arr: TupleOf<number, 5> = [1, 2, 3, 4, 5]
     const foo = random(1, 4)
-    // noinspection BadExpressionStatementJS
-    arr[foo] // $ExpectType number
+    exactly<number>()(arr[foo])
 })
 
 describe('arithmetic', () => {
     describe('add', () => {
         test('normal numbers', () => {
-            const num = add(1, 3) // $ExpectType 4
-            assert(num === 4)
+            exactly(4, add(1, 3))
         })
         test('big numbers', () => {
-            const num = add(1000, 3000) // $ExpectType 4000
-            assert(num === 4000)
+            exactly(4000, add(1000, 3000))
         })
     })
     describe('subtract', () => {
         test('normal numbers', () => {
-            const num = subtract(5, 3) // $ExpectType 2
-            assert(num === 2)
+            exactly(2, subtract(5, 3))
         })
         test('big numbers', () => {
-            const num = subtract(5000, 3000) // $ExpectType 2000
-            assert(num === 2000)
+            exactly(2000, subtract(5000, 3000))
         })
     })
     describe('multiply', () => {
         test('normal numbers', () => {
-            const num = multiply(5, 3) // $ExpectType 15
-            assert(num === 15)
+            exactly(15, multiply(5, 3))
         })
     })
     describe('divide', () => {
         test('normal numbers', () => {
-            const num = divide(10, 2) // $ExpectType 5
-            assert(num === 5)
+            exactly(5, divide(10, 2))
         })
         test('value not known at compile-time', () => {
-            const num = divide(10 as number, 2) // $ExpectType number
-            assert(num === 5)
+            exactly(5 as number, divide(10 as number, 2))
         })
     })
     describe('power', () => {
@@ -88,12 +80,10 @@ describe('arithmetic', () => {
         })
         describe('value not known at compiletime', () => {
             test('num', () => {
-                const value = power(2 as number, 4) // $ExpectType number
-                assert(value === 16)
+                exactly(16 as number, power(2 as number, 4))
             })
             test('power', () => {
-                const value = power(4, 8 as number) // $ExpectType number
-                assert(value === 65536)
+                exactly(65536 as number, power(4, 8 as number))
             })
         })
     })
@@ -101,46 +91,36 @@ describe('arithmetic', () => {
 
 describe('leadingZeros', () => {
     test('values known at compiletime', () => {
-        const value = leadingZeros(12, 5) // $ExpectType "00012"
-        assert(value === '00012')
+        exactly('00012', leadingZeros(12, 5))
     })
     describe('values not known at compiletime', () => {
         test('num', () => {
-            leadingZeros(12 as number, 5) // $ExpectType `${number}`
+            exactly<`${number}`>()(leadingZeros(12 as number, 5))
         })
         test('length', () => {
-            leadingZeros(12, 5 as number) // $ExpectType `${number}`
+            exactly<`${number}`>()(leadingZeros(12, 5 as number))
         })
         test('both', () => {
-            leadingZeros(12 as number, 5 as number) // $ExpectType `${number}`
+            exactly<`${number}`>()(leadingZeros(12 as number, 5 as number))
         })
     })
     test('negative numbers', () => {
-        const value = leadingZeros(-20, 4) // $ExpectType "-0020"
-        assert(value === '-0020')
+        exactly('-0020', leadingZeros(-20, 4))
     })
 })
 
 describe('ordinal', () => {
     it('1/2/3', () => {
-        assert(ordinalNumber(1) === '1st')
-        assert(ordinalNumber(12) === '12th')
-        assert(ordinalNumber(23) === '23rd')
-        assert(
-            // @ts-expect-error wrong value
-            ordinalNumber(3) !== '3th',
-        )
+        exactly('1st', ordinalNumber(1))
+        exactly('12th', ordinalNumber(12))
+        exactly('23rd', ordinalNumber(23))
     })
     it('th', () => {
-        assert(ordinalNumber(24) === '24th')
-        assert(ordinalNumber(0) === '0th')
-        assert(
-            // @ts-expect-error wrong value
-            ordinalNumber(0) !== '1000nd',
-        )
+        exactly('24th', ordinalNumber(24))
+        exactly('0th', ordinalNumber(0))
     })
     it('value not known at compiletime', () => {
-        ordinalNumber(1 as number) // $ExpectType `${number}st` | `${number}nd` | `${number}rd` | `${number}th`
+        exactly<`${number}${'st' | 'nd' | 'rd' | 'th'}`>()(ordinalNumber(1 as number))
     })
 })
 
@@ -229,20 +209,18 @@ describe('comparison', () => {
 describe('bitwise operations', () => {
     describe('leftShift', () => {
         test('known at compile-time', () => {
-            const value = leftShift(5, 3) // $ExpectType 40
-            assert(value === 40)
+            exactly(40, leftShift(5, 3))
         })
         test('not known at compile-time', () => {
-            leftShift(5 as number, 3) // $ExpectType number
+            exactly<number>()(leftShift(5 as number, 3))
         })
     })
     describe('rightShift', () => {
         test('known at compile-time', () => {
-            const value = rightShift(5, 2) // $ExpectType 1
-            assert(value === 1)
+            exactly(1, rightShift(5, 2))
         })
         test('not known at compile-time', () => {
-            leftShift(5 as number, 2) // $ExpectType number
+            exactly<number>()(leftShift(5 as number, 2))
         })
     })
 })

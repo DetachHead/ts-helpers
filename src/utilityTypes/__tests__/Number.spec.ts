@@ -9,68 +9,40 @@ import {
     PositiveNumber,
     Subtract,
 } from '../Number'
-import { assertType } from '../../utilityFunctions/misc'
+import { exactly } from '../../utilityFunctions/misc'
 
 test('multiply', () => {
-    assertType<Multiply<2 | 3, 5 | 2>>(4)
-    assertType<Multiply<2 | 3, 5 | 2>>(6)
-    assertType<Multiply<2 | 3, 5 | 2>>(10)
-    assertType<Multiply<2 | 3, 5 | 2>>(15)
-    // @ts-expect-error not valid product
-    assertType<Multiply<2 | 3, 5 | 2>>(11)
-    // @ts-expect-error not valid product
-    assertType<Multiply<2 | 3, 5 | 2>>(8)
+    exactly<4 | 6 | 10 | 15, Multiply<2 | 3, 5 | 2>>()
 })
 
 test('add', () => {
-    assertType<Add<2 | 5, 10 | 20>>(12)
-    assertType<Add<2 | 5, 10 | 20>>(15)
-    assertType<Add<2 | 5, 10 | 20>>(22)
-    assertType<Add<2 | 5, 10 | 20>>(25)
-    // @ts-expect-error not valid sum
-    assertType<Add<2 | 5, 10 | 20>>(20)
+    exactly<12 | 15 | 22 | 25, Add<2 | 5, 10 | 20>>()
 })
 
 test('subtract', () => {
-    assertType<Subtract<10 | 20, 2 | 3>>(8)
-    assertType<Subtract<10 | 20, 2 | 3>>(18)
-    assertType<Subtract<10 | 20, 2 | 3>>(7)
-    assertType<Subtract<10 | 20, 2 | 3>>(17)
-    // @ts-expect-error not valid
-    assertType<Subtract<10 | 20, 2 | 3>>(16)
+    exactly<8 | 18 | 7 | 17, Subtract<10 | 20, 2 | 3>>()
 })
 
 test('divide', () => {
-    assertType<Divide<6 | 12, 2 | 3>>(2)
-    assertType<Divide<6 | 12, 2 | 3>>(3)
-    assertType<Divide<6 | 12, 2 | 3>>(6)
-    assertType<Divide<6 | 12, 2 | 3>>(4)
-    // @ts-expect-error not valid quotient
-    assertType<Divide<6 | 12, 2 | 3>>(9)
+    exactly<2 | 3 | 6 | 4, Divide<6 | 12, 2 | 3>>()
 })
 
 describe('IsGreaterThan', () => {
     test('false', () => {
-        assertType<IsGreaterThan<6, 7>>(false)
-        assertType<IsGreaterThan<6, 6>>(false)
+        exactly<false, IsGreaterThan<6, 7>>()
+        exactly<false, IsGreaterThan<6, 6>>()
     })
     test('true', () => {
-        assertType<IsGreaterThan<7, 6>>(true)
+        exactly<true, IsGreaterThan<7, 6>>()
     })
     test('big numbers', () => {
-        assertType<IsGreaterThan<4999, 5000>>(false)
-        assertType<IsGreaterThan<5001, 5000>>(true)
-        // @ts-expect-error wrong value
-        assertType<IsGreaterThan<5000, 5000>>(true)
+        exactly<false, IsGreaterThan<4999, 5000>>()
+        exactly<true, IsGreaterThan<5001, 5000>>()
     })
 })
 
 test('HighestNumber', () => {
-    assertType<HighestNumber<1 | 3 | 6 | 2>>(6)
-    assertType<HighestNumber<1 | 3 | 6 | 2>>(
-        // @ts-expect-error wrong value
-        2,
-    )
+    exactly<6, HighestNumber<1 | 3 | 6 | 2>>()
 })
 
 describe('Integer', () => {
