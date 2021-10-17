@@ -7,7 +7,7 @@
  *   value](https://github.com/typescript-eslint/typescript-eslint/issues/2063#issuecomment-675156492)) - see
  *   [this comment](https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-778623742)
  */
-type EqualsWrapped<T> = T extends infer R & {}
+type EqualsWrapped<T> = T extends (T extends {} ? infer R & {} : infer R)
     ? {
           [P in keyof R]: R[P]
       }
