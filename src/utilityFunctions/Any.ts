@@ -27,6 +27,8 @@ export const hasPropertyPredicate: {
      */
     <Narrowed>(object: unknown, propertyName: keyof Narrowed): object is Narrowed
 } = <T>(object: unknown, propertyName: keyof T): object is T =>
+    typeof object !== 'undefined' &&
+    object !== null &&
     Object.prototype.hasOwnProperty.call(object, propertyName)
 
 /**
