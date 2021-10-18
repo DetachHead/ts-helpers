@@ -12,6 +12,7 @@ import {
     SplitByUnion,
     SplitByLength,
     DuplicateString,
+    GUID,
 } from '../String'
 import { assertType, exactly } from '../../utilityFunctions/misc'
 
@@ -33,6 +34,10 @@ test('Email', () => {
     // @ts-expect-error TS2345: Argument of type '"foo@asdf"' is not assignable to parameter of type '`${string}@${string}.${string}`'.
     assertType<Email>('foo@asdf')
     assertType<Email>('foo@bar.com')
+})
+
+test('Guid', () => {
+    exactly<`${string}-${string}-${string}-${string}-${string}`, GUID>()
 })
 
 describe('IP', () => {

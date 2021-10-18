@@ -52,6 +52,8 @@ export type IP = IPv4 | IPv6
 /** an email address */
 export type Email = `${string}@${Domain}`
 
+export type GUID = Join<TupleOf<string, 5>, '-'>
+
 /**
  * the name of a file with an `Extension`.
  * if `Extension` is not provided an empty string then it's treated as a file with no extension
