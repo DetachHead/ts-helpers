@@ -32,9 +32,10 @@ export const unsafeCast = <T>(_value: unknown): asserts _value is T => {
 /**
  * converts the given `value` to a string, preserving its value at compiletime where possible
  */
-export const toStringType = <T extends Stringable>(
-    value: T,
-): T extends TemplateLiteralStringable ? ToString<T> : string => value.toString() as never
+export const toStringType: {
+    <T extends TemplateLiteralStringable>(value: T): ToString<T>
+    <T extends Stringable>(value: T): string
+} = (value: Stringable) => value.toString() as never
 
 /**
  * asserts that a value matches the given type
