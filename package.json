@@ -3,7 +3,8 @@
   "version": "10.0.0",
   "files": [
     "dist",
-    "src"
+    "src",
+    "!src/**/__tests__"
   ],
   "scripts": {
     "test": "jest",
