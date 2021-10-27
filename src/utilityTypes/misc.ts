@@ -100,3 +100,13 @@ export type TODO<Reason extends string = 'no reason provided'> = {
     '_type not implemented (TODO)': never
     _reason: Reason
 }
+
+/**
+ * prevents `any` from being passed as a parameter. useful when using a badly typed lib with `any`'s all over the place
+ * @example
+ * declare const foo: <T extends number>(value: NoAny<T>) => void
+ * foo(1) //no error
+ * foo(1 as any) //error
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- need to use any to ban it
+export type NoAny<T> = Equals<T, any> extends true ? never : T
