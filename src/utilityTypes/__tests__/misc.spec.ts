@@ -1,4 +1,4 @@
-import { OnlyInfer } from '../misc'
+import { NoAny, OnlyInfer } from '../misc'
 
 describe('OnlyInfer', () => {
     test('basic', () => {
@@ -13,4 +13,12 @@ describe('OnlyInfer', () => {
         // @ts-expect-error should still error when you try to specify the NoInfer generic
         foo<number, number, number>(1)
     })
+})
+
+test('NoAny', () => {
+    const foo = <T extends number>(value: NoAny<T>) => value
+    foo(1)
+    // @ts-expect-error any is banned
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- testing any
+    foo(1 as any)
 })
