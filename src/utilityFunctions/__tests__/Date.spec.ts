@@ -1,7 +1,7 @@
 import { formatDate } from '../Date'
 import { PowerAssert } from 'typed-nodejs-assert'
 import { set } from 'date-fns'
-// eslint-disable-next-line @typescript-eslint/no-var-requires -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
+// eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
 
 describe('formatDate', () => {
