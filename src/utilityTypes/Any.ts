@@ -14,7 +14,9 @@ export type Entries<T> = [Keys<T>, T[Keys<T>]][]
 /**
  * Replace in `T` those types that are assignable to `Find` with the types that are assignable to `ReplaceWith`
  */
-export type Replace<T, Find, ReplaceWith> = Exclude<T, Find> | ReplaceWith
+export type Replace<T, Find, ReplaceWith> =
+    | (Find extends T ? ReplaceWith : never)
+    | Exclude<T, Find>
 
 export type ReplaceRecursive<T, Find, ReplaceWith> = T extends object
     ? {
