@@ -2,6 +2,24 @@
 
 various typescript helper functions and utility types
 
+## install
+
+### npm
+
+```bash
+npm install @detachhead/ts-helpers
+```
+
+```ts
+import { exactly } from '@detachhead/ts-helpers/dist/utilityFunctions/misc'
+```
+
+### deno
+
+```ts
+import { exactly } from 'https://deno.land/x/helpers/utilityFunctions/misc'
+```
+
 [![npm](https://img.shields.io/npm/v/@detachhead/ts-helpers)](https://npmjs.org/@detachhead/ts-helpers)
 
 ## features
@@ -88,9 +106,3 @@ Equals<unknown, never> // false
 ### typescript
 
 this package is designed for typescript 4.5. you will probably have issues trying to use it with older versions, tho it will probably still work if you set `skipLibCheck` to `true` in your `tsconfig.json` (which isn't recommended)
-
-### supported js runtimes
-
--   [x] nodejs
--   [x] browser
--   [x] deno (using esm.sh - eg. `import { exactly } from 'http://esm.sh/@detachhead/ts-helpers/dist/utilityFunctions/misc'`)
