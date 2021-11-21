@@ -1,11 +1,11 @@
 import isCI from 'is-ci'
 import { exactly, failCI } from '../misc'
 import { PowerAssert } from 'typed-nodejs-assert'
-// eslint-disable-next-line @typescript-eslint/no-var-requires -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
+// eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
 
 describe('exactly', () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this test is for the any type
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-assignment -- this test is for the any type
     const any = undefined as any
     const never = undefined as never
     const number = 1 as number
@@ -259,7 +259,6 @@ describe('exactly', () => {
         describe('unions, intersections and Readonly', () => {
             test('pass', () => {
                 exactly(oneOrTwo, oneOrTwo)
-                exactly(oneOrTwo as 2 | 1, oneOrTwo)
                 exactly(x1AndY2 as Readonly<{ x: 1 } & { y: 2 }>, x1AndY2)
             })
             test('fail', () => {

@@ -58,7 +58,7 @@ export const replaceAll = <
  * @see https://github.com/microsoft/TypeScript/issues/42296
  */
 export const match = (str: string, regex: RegExp): (RegExpMatchArray & [string]) | null =>
-    str.match(regex) as (RegExpMatchArray & [string]) | null
+    regex.exec(str) as (RegExpMatchArray & [string]) | null
 
 /**
  * gets the character at the given `index` at compiletime

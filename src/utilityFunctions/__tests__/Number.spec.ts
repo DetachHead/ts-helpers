@@ -18,7 +18,7 @@ import {
 import { PowerAssert } from 'typed-nodejs-assert'
 import { TupleOf } from '../../utilityTypes/Array'
 import { exactly } from '../misc'
-// eslint-disable-next-line @typescript-eslint/no-var-requires -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
+// eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
 
 test('random', () => {
