@@ -142,6 +142,7 @@ describe('exactly', () => {
                 exactly<2 | 1, 1 | 2>()
                 exactly<Readonly<{ x: 1 } & { y: 2 }>, typeof x1AndY2>()
                 exactly<{ x: 1 } & { y: 2 }, { x: 1; y: 2 }>()
+                exactly<{ a: { x: 1 } & { y: 2 } }, { a: { x: 1; y: 2 } }>()
                 exactly<{ x: 1; y: 2 }, { x: 1; y: 2 } & {}>()
 
                 // https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-778623742
@@ -187,6 +188,15 @@ describe('exactly', () => {
                 type Function2 = (x: number, y: string) => void
 
                 exactly<Function1 & Function2, Function2 & Function1>()
+            })
+            describe('optional args', () => {
+                test('pass', () => {
+                    exactly<(a?: number) => number, (a?: number) => number>()
+                })
+                test('fail', () => {
+                    // @ts-expect-error doesn't match
+                    exactly<() => number, (a?: number) => number>()
+                })
             })
         })
         describe('undefined', () => {
