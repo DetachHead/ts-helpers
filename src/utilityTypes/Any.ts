@@ -22,13 +22,14 @@ export type ReplaceRecursive<T, Find, ReplaceWith> = T extends object
     ? {
           [K in keyof T]: ReplaceRecursive<T[K], Find, ReplaceWith>
       } &
-          T extends AnyFunction
-        ? (
-              ...args: ReplaceRecursive<Parameters<T & AnyFunction>, Find, ReplaceWith> & unknown[]
-          ) => ReplaceRecursive<ReturnType<T & AnyFunction>, Find, ReplaceWith>
-        : unknown & T extends readonly unknown[]
-        ? readonly unknown[]
-        : T extends unknown[]
-        ? unknown[]
-        : unknown
+          (T extends AnyFunction
+              ? (
+                    ...args: ReplaceRecursive<Parameters<T & AnyFunction>, Find, ReplaceWith> &
+                        unknown[]
+                ) => ReplaceRecursive<ReturnType<T & AnyFunction>, Find, ReplaceWith>
+              : T extends readonly unknown[]
+              ? readonly unknown[]
+              : T extends unknown[]
+              ? unknown[]
+              : unknown)
     : Replace<T, Find, ReplaceWith>
