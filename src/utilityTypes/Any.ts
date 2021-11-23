@@ -1,5 +1,5 @@
 import { Keys as TsToolbeltKeys } from 'ts-toolbelt/out/Any/Keys'
-import { AnyFunction } from 'tsdef'
+import { Cast } from 'ts-toolbelt/out/Any/Cast'
 
 /**
  * like ts-toolbelt's `Keys` except it doesn't include number (for objects where you know all of the keys)
@@ -18,18 +18,57 @@ export type Replace<T, Find, ReplaceWith> =
     | (Find extends T ? ReplaceWith : never)
     | Exclude<T, Find>
 
+/**
+ * recursively replaces all instances of the `Find` type with the `ReplaceWith` type. any instance of it anywhere in the type will be replaced:
+ *
+ * - object/array values
+ * - union values
+ * - function/constructor parameters
+ * - function/constructor return type
+ * - function `this` types
+ *
+ * **WARNING: does not work on intersections/overloads!** any types that create an intersection (`&`) result in loss of type information.
+ * for example:
+ * ```ts
+ * type Foo = number & string //never
+ * ```
+ * what was this `never` type made up of? the compiler can't tell. so `ReplaceRecursive<string & number, string, boolean>` will do nothing.
+ *
+ * that means overloads too. `{ (arg: string): string; (): void }` is actually `((arg: string) => string) & (() => void)`
+ */
 export type ReplaceRecursive<T, Find, ReplaceWith> = T extends object
-    ? {
-          [K in keyof T]: ReplaceRecursive<T[K], Find, ReplaceWith>
-      } &
-          (T extends AnyFunction
-              ? (
-                    ...args: ReplaceRecursive<Parameters<T & AnyFunction>, Find, ReplaceWith> &
-                        unknown[]
-                ) => ReplaceRecursive<ReturnType<T & AnyFunction>, Find, ReplaceWith>
-              : T extends readonly unknown[]
+    ? Cast<
+          // if it's an object of any kind, recursively replace all its values (if it's an array it gets narrowed back later)
+          {
+              [K in keyof T]: ReplaceRecursive<T[K], Find, ReplaceWith>
+          } &
+              // if it's a function with a this type
+              (T extends (this: infer This, ...args: infer Args) => infer Result
+                  ? (
+                        this: This,
+                        ...args: Cast<ReplaceRecursive<Args, Find, ReplaceWith>, unknown[]>
+                    ) => ReplaceRecursive<Result, Find, ReplaceWith>
+                  : // if it's a regular function
+                    (T extends (...args: infer Args) => infer Result
+                        ? (
+                              ...args: Cast<ReplaceRecursive<Args, Find, ReplaceWith>, unknown[]>
+                          ) => ReplaceRecursive<Result, Find, ReplaceWith>
+                        : unknown) &
+                        // if it's a constructor (which it can't be if it has a this type)
+                        (T extends new (...args: infer Args) => infer Result
+                            ? new (
+                                  ...args: Cast<
+                                      ReplaceRecursive<Args, Find, ReplaceWith>,
+                                      unknown[]
+                                  >
+                              ) => ReplaceRecursive<Result, Find, ReplaceWith>
+                            : unknown)),
+          // if it's an array, narrow it back to either an Array or a ReadonlyArray using Cast
+          T extends readonly unknown[]
               ? readonly unknown[]
               : T extends unknown[]
               ? unknown[]
-              : unknown)
-    : Replace<T, Find, ReplaceWith>
+              : unknown
+      >
+    : // if it's a primitive, use a simple union replace
+      Replace<T, Find, ReplaceWith>
