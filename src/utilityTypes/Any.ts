@@ -44,27 +44,18 @@ export type ReplaceRecursive<T, Find, ReplaceWith> = T extends Find
           {
               [K in keyof T]: ReplaceRecursive<T[K], Find, ReplaceWith>
           } &
-              // if it's a function with a this type
+              // if it's a function
               (T extends (this: infer This, ...args: infer Args) => infer Result
                   ? (
-                        this: This,
+                        this: ReplaceRecursive<This, Find, ReplaceWith>,
                         ...args: Cast<ReplaceRecursive<Args, Find, ReplaceWith>, unknown[]>
                     ) => ReplaceRecursive<Result, Find, ReplaceWith>
-                  : // if it's a regular function
-                    (T extends (...args: infer Args) => infer Result
-                        ? (
-                              ...args: Cast<ReplaceRecursive<Args, Find, ReplaceWith>, unknown[]>
-                          ) => ReplaceRecursive<Result, Find, ReplaceWith>
-                        : unknown) &
-                        // if it's a constructor (which it can't be if it has a this type)
-                        (T extends new (...args: infer Args) => infer Result
-                            ? new (
-                                  ...args: Cast<
-                                      ReplaceRecursive<Args, Find, ReplaceWith>,
-                                      unknown[]
-                                  >
-                              ) => ReplaceRecursive<Result, Find, ReplaceWith>
-                            : unknown)),
+                  : // if it's a constructor (which it can't be if it has a this type)
+                  T extends new (...args: infer Args) => infer Result
+                  ? new (
+                        ...args: Cast<ReplaceRecursive<Args, Find, ReplaceWith>, unknown[]>
+                    ) => ReplaceRecursive<Result, Find, ReplaceWith>
+                  : unknown),
           // if it's an array, narrow it back to either an Array or a ReadonlyArray using Cast
           T extends readonly unknown[]
               ? readonly unknown[]
