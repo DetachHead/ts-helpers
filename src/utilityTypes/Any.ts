@@ -36,7 +36,9 @@ export type Replace<T, Find, ReplaceWith> =
  *
  * that means overloads too. `{ (arg: string): string; (): void }` is actually `((arg: string) => string) & (() => void)`
  */
-export type ReplaceRecursive<T, Find, ReplaceWith> = T extends object
+export type ReplaceRecursive<T, Find, ReplaceWith> = T extends Find
+    ? ReplaceWith
+    : T extends object
     ? Cast<
           // if it's an object of any kind, recursively replace all its values (if it's an array it gets narrowed back later)
           {
