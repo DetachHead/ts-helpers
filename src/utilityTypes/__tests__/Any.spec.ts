@@ -23,8 +23,25 @@ describe('ReplaceRecursive', () => {
             ReplaceRecursive<{ a: boolean; b: boolean; c: string }, boolean, number>
         >()
     })
-    test('function', () => {
-        exactly<(a: number) => number, ReplaceRecursive<(a: boolean) => boolean, boolean, number>>()
+    describe('functions', () => {
+        test('normal', () => {
+            exactly<
+                (a: number) => number,
+                ReplaceRecursive<(a: boolean) => boolean, boolean, number>
+            >()
+        })
+        test('this parameter', () => {
+            exactly<
+                (this: boolean, a: number) => number,
+                ReplaceRecursive<(this: string, a: number) => number, string, boolean>
+            >()
+        })
+        test('method (arrow function)', () => {
+            exactly<
+                { foo: (a: number) => number },
+                ReplaceRecursive<{ foo: (a: boolean) => boolean }, boolean, number>
+            >()
+        })
     })
     test('class', () => {
         exactly<
@@ -37,6 +54,20 @@ describe('ReplaceRecursive', () => {
                 },
                 number,
                 boolean
+            >
+        >()
+    })
+    test('nested', () => {
+        exactly<
+            {
+                foo: (value: 'b', value2: number) => { asdf: number; value: 'b' }
+            },
+            ReplaceRecursive<
+                {
+                    foo: (value: 'a', value2: number) => { asdf: number; value: 'a' }
+                },
+                'a',
+                'b'
             >
         >()
     })
