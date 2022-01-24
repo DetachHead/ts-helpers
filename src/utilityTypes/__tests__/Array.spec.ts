@@ -1,5 +1,12 @@
-import { IndexOf, RemoveValue, SortLongestStrings, TupleOf, TupleOfUpTo } from '../Array'
-import { exactly } from '../../utilityFunctions/misc'
+import {
+    DimensionArray,
+    IndexOf,
+    RemoveValue,
+    SortLongestStrings,
+    TupleOf,
+    TupleOfUpTo,
+} from '../Array'
+import { assertType, exactly } from '../../utilityFunctions/misc'
 
 describe('TupleOfUpTo', () => {
     test('type', () => {
@@ -35,4 +42,8 @@ describe('RemoveValue', () => {
     test('stack depth', () => {
         exactly<[], RemoveValue<TupleOf<never, 999>, never>>()
     })
+})
+
+test('DimensionArray', () => {
+    assertType<DimensionArray<string, 20>>(['', [[[[[[[[[['']]]]]]]]]], ['']])
 })
