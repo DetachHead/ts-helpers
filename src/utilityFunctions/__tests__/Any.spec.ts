@@ -1,4 +1,4 @@
-import { entries, hasPropertyPredicate } from '../Any'
+import { entries, hasPropertyPredicate, runUntil } from '../Any'
 import { exactly } from '../misc'
 
 test('entries', () => {
@@ -34,5 +34,28 @@ describe('hasPropertyPredicate', () => {
         test('null', () => {
             hasPropertyPredicate(null, 'length')
         })
+    })
+})
+
+describe('runUntil', () => {
+    test('rejects', async () => {
+        let isDone = false
+        setTimeout(() => (isDone = true), 1000)
+        await expect(
+            runUntil(
+                () => new Promise<boolean>((res) => setTimeout(() => res(isDone), 10)),
+                (result) => result,
+                100,
+            ),
+        ).rejects.toThrow("runUntil failed because the predicate didn't return true in 100 ms")
+    })
+    test('resolves', async () => {
+        let isDone = false
+        setTimeout(() => (isDone = true), 80)
+        await runUntil(
+            () => new Promise<boolean>((res) => setTimeout(() => res(isDone), 10)),
+            (result) => result,
+            100,
+        )
     })
 })

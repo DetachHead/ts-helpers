@@ -39,3 +39,27 @@ export const hasPropertyPredicate: {
  * @see https://github.com/Microsoft/TypeScript/issues/12870
  */
 export const entries = <T>(object: T): Entries<T> => Object.entries(object) as never
+
+/**
+ * runs the given `callback` until `predicate` returns `true` or `timeoutMs` is reached
+ */
+export const runUntil = async <T>(
+    callback: () => Promise<T>,
+    predicate: (result: T) => boolean,
+    timeoutMs: number,
+): Promise<void> => {
+    let timedOut = false
+    const timer = setTimeout(() => {
+        timedOut = true
+    }, timeoutMs)
+    while (!timedOut)
+        if (predicate(await callback())) {
+            clearTimeout(timer)
+            return
+        }
+    if (timedOut)
+        throw new Error(
+            `runUntil failed because the predicate didn't return true in ${timeoutMs} ms`,
+        )
+    throw new Error('this should never happen what the hack')
+}
