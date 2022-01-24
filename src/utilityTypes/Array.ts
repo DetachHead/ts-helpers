@@ -258,3 +258,11 @@ export type Slice<
 
 /** compiletime version of {@link  _.castArray} */
 export type CastArray<T> = T extends unknown[] ? T : [T]
+
+/**
+ * an array with a specified `Dimension`
+ */
+export type DimensionArray<T, Dimension extends number> = (
+    | T
+    | (Dimension extends 0 ? never : DimensionArray<T, Decrement<Dimension>>)
+)[]
