@@ -106,17 +106,27 @@ export const arrayOfAll = <T>() => {
     return <U extends T[]>(array: U & ([T] extends [U[number]] ? unknown : never)): U => array
 }
 
+/**
+ * like {@link Array.prototype.map} but for promises where you want to execute the callback asynchronously.
+ * preserves the length of the array at compiletime
+ */
 export const mapAsync = async <T extends unknown[], Result>(
-    arr: T,
+    arr: Narrow<T>,
     callbackfn: (value: T[number], index: number, array: T) => Promise<Result>,
-): Promise<Result[]> => {
+): Promise<TupleOf<Result, T['length']>> => {
     const result: Result[] = []
-    // eslint-disable-next-line @typescript-eslint/no-for-in-array -- how else are you meant to do this
     for (const indexStr in arr) {
         const index = Number(indexStr)
-        result.push(await callbackfn(arr[index], index, arr))
+        result.push(
+            await callbackfn(
+                arr[index],
+                index,
+                // need to cast due to Narrow type
+                arr as T,
+            ),
+        )
     }
-    return result
+    return result as never
 }
 
 type FindResult<T> =

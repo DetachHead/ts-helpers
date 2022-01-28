@@ -86,14 +86,12 @@ test('lengthIs', () => {
 })
 
 test('mapAsync', async () => {
-    assert.deepStrictEqual(
-        await mapAsync(
-            [2, 1],
-            (value: number) =>
-                new Promise<number>((res) => setTimeout(() => res(value), value * 50)),
-        ),
+    const result = await mapAsync(
         [2, 1],
+        (value: number) => new Promise<number>((res) => setTimeout(() => res(value), value * 50)),
     )
+    exactly<[number, number]>()(result)
+    assert.deepStrictEqual(result, [2, 1])
 })
 
 describe('duplicate functions', () => {
