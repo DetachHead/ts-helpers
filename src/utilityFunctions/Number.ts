@@ -20,6 +20,8 @@ import {
 } from '../utilityTypes/Number'
 import { toStringType } from './misc'
 import { padStart } from './String'
+import { Throw } from 'throw-expression'
+import { OptionalParameterFromGeneric } from '../utilityTypes/misc'
 
 /**
  * gets a random number in the given range from `Min` to `Max` (inclusive)
@@ -132,26 +134,32 @@ export const rightShift = <Num extends number, Count extends number>(
 
 type StringifiedNumber = `${number}` | `${'-' | '+' | ''}Infinity`
 
+// cringe
+type ToNumberFailedResult<ThrowError extends boolean> = ThrowError extends true ? never : undefined
+const toNumberFailedResult = (value: string, throwError: [] | [false] | [true]) =>
+    (throwError[0] ? Throw(`could not convert '${value}' to a number`) : undefined) as never
+
 /**
  * safely converts a string to a number, without any of the wacky behaviour from `Number` and `parseInt`
- * @returns `undefined` if the value isn't a string representation of a number, otherwise returns the number
+ * @returns `undefined` if the value isn't a string representation of a number (unless `throwError` is `true`), otherwise returns the number
  * @example
  * toNumber('') //undefined
- * toNumber('1asdf') //undefined
+ * toNumber('1asdf', true) //error
  * toNumber('NaN') //undefined
  * toNumber('12') //12
  * toNumber('Infinity') //Infinity
  */
-export const toNumber = <Result extends number, Input extends string>(
+export const toNumber = <Result extends number, Input extends string, ThrowError extends boolean>(
     value: Input,
+    ...throwError: OptionalParameterFromGeneric<ThrowError, false>
 ): string extends Input
-    ? number | undefined
+    ? number | ToNumberFailedResult<ThrowError>
     : // TODO: don't widen the type to number when the value is a literal known at compiletime. eg. toNumber('12') should have type `12`, not `number`
     Input extends `${Result}` | StringifiedNumber
     ? Result
-    : undefined => {
-    if (value === '') return undefined as never
+    : ToNumberFailedResult<ThrowError> => {
+    if (value === '') return toNumberFailedResult(value, throwError)
     const result = Number(value)
-    if (isNaN(result)) return undefined as never
+    if (isNaN(result)) return toNumberFailedResult(value, throwError)
     return result as never
 }
