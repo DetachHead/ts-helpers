@@ -247,4 +247,7 @@ describe('toNumber', () => {
     test('not known at compiletime', () => {
         exactly<undefined | number>()(toNumber('12' as string))
     })
+    describe('error', () => {
+        assert.throws(() => toNumber('asdf', true), "failed to convert 'asdf' to a number")
+    })
 })
