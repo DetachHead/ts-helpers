@@ -14,6 +14,7 @@ import {
     lengthLessOrEqual,
     lengthLessThan,
     map,
+    mapAsync,
     removeDuplicates,
     slice,
     sortByLongestStrings,
@@ -82,6 +83,17 @@ test('lengthIs', () => {
         // noinspection BadExpressionStatementJS
         foo[3]
     }
+})
+
+test('mapAsync', async () => {
+    assert.deepStrictEqual(
+        await mapAsync(
+            [2, 1],
+            (value: number) =>
+                new Promise<number>((res) => setTimeout(() => res(value), value * 50)),
+        ),
+        [2, 1],
+    )
 })
 
 describe('duplicate functions', () => {
