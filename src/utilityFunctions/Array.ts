@@ -106,6 +106,19 @@ export const arrayOfAll = <T>() => {
     return <U extends T[]>(array: U & ([T] extends [U[number]] ? unknown : never)): U => array
 }
 
+export const mapAsync = async <T extends unknown[], Result>(
+    arr: T,
+    callbackfn: (value: T[number], index: number, array: T) => Promise<Result>,
+): Promise<Result[]> => {
+    const result: Result[] = []
+    // eslint-disable-next-line @typescript-eslint/no-for-in-array -- how else are you meant to do this
+    for (const indexStr in arr) {
+        const index = Number(indexStr)
+        result.push(await callbackfn(arr[index], index, arr))
+    }
+    return result
+}
+
 type FindResult<T> =
     | {
           /** the result of the first `callback` that didn't return `undefined` or `null` */
