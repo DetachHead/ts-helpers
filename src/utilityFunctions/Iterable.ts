@@ -1,3 +1,5 @@
+import { MaybePromise } from 'tsdef'
+
 const findErrorHandler = (error: boolean, hasUndefined: boolean): void => {
     const errorMessage = 'predicate did not return true for any values in the iterator.'
     if (error) {
@@ -33,7 +35,7 @@ export const find = <T>(
  */
 export const findAsync = async <T>(
     iterable: AsyncIterable<T> | Iterable<Promise<T>>,
-    predicate: (value: T) => boolean,
+    predicate: (value: T) => MaybePromise<boolean>,
     error = true,
 ): Promise<T | undefined> => {
     let hasUndefined = false
@@ -41,7 +43,7 @@ export const findAsync = async <T>(
         if (!hasUndefined && typeof value === 'undefined') {
             hasUndefined = true
         }
-        if (predicate(value)) return value
+        if (await predicate(value)) return value
     }
     findErrorHandler(error, hasUndefined)
     return undefined
