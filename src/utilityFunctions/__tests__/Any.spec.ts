@@ -1,4 +1,4 @@
-import { entries, hasPropertyPredicate, runUntil } from '../Any'
+import { entries, hasPropertyPredicate, isNullOrUndefined, runUntil } from '../Any'
 import { exactly } from '../misc'
 
 test('entries', () => {
@@ -57,5 +57,19 @@ describe('runUntil', () => {
             (result) => result,
             100,
         )
+    })
+})
+
+describe('isNullOrUndefined', () => {
+    describe('true', () => {
+        test('null', () => {
+            exactly(true, isNullOrUndefined(null))
+        })
+        test('undefined', () => {
+            exactly(true, isNullOrUndefined(undefined))
+        })
+    })
+    test('false', () => {
+        exactly(false, isNullOrUndefined('foo'))
     })
 })
