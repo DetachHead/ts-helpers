@@ -48,7 +48,7 @@ export const runUntil = async <T>(
     predicate: (result: T) => boolean,
     timeoutMs: number,
 ): Promise<void> => {
-    let timedOut = false
+    let timedOut = false as boolean
     const timer = setTimeout(() => {
         timedOut = true
     }, timeoutMs)
@@ -57,6 +57,7 @@ export const runUntil = async <T>(
             clearTimeout(timer)
             return
         }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- typescript is narrowing the type because it doesn't know the timer changes it
     if (timedOut)
         throw new Error(
             `runUntil failed because the predicate didn't return true in ${timeoutMs} ms`,
