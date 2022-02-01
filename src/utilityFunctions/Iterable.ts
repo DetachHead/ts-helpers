@@ -31,7 +31,7 @@ export const find = <T>(
 
 /**
  * finds the first item in the `iterable` where the `predicate` returns `true`.
- * runs synchronously
+ * runs one at a time
  */
 export const findAsync = async <T>(
     iterable: AsyncIterable<T> | Iterable<Promise<T>>,
