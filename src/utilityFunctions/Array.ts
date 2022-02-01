@@ -17,6 +17,8 @@ import { isDefined } from 'ts-is-present'
 import { Enumerate } from '../utilityTypes/Number'
 import { Keys } from '../utilityTypes/Any'
 import { MaybePromise } from 'tsdef'
+import { FindResult } from '../utilityTypes/internal'
+import { isNullOrUndefined } from './Any'
 import { Throw } from 'throw-expression'
 
 /**
@@ -131,24 +133,20 @@ export const mapAsync = async <T extends unknown[], Result>(
     return result as never
 }
 
-type FindResult<T> =
-    | {
-          /** the result of the first `callback` that didn't return `undefined` or `null` */
-          result: T
-          /** the index in the array where that result occurred */
-          index: number
-      }
-    | undefined
-
 /**
  * finds the first item in an array where the given callback doesn't return `null` or `undefined`
  * @param arr the array of `T`s to check
  * @param callback the function to run on `arr` that may return `null` or `undefined`
+ * @param runAtTheSameTime whether to execute the `callback` on each element of `arr` at the same time
  */
-export const findNotUndefinedAsync = async <T extends {}[], R>(
+export const findNotUndefinedAsync = async <T extends unknown[]>(
     arr: T,
-    callback: (it: T[number]) => Promise<R> | void,
-): Promise<FindResult<R>> => {
+    callback: (it: T[number]) => Promise<unknown>,
+    runAtTheSameTime = false,
+): Promise<FindResult<T[number]>> => {
+    if (runAtTheSameTime) {
+        return find(arr, async (value) => !isNullOrUndefined(await callback(value)))
+    }
     // hack so the compiler knows index is within the range of arr
     for (let index: Keys<T> = 0 as never; index < arr.length; (index as number)++) {
         const value = arr[index]
@@ -162,10 +160,10 @@ export const findNotUndefinedAsync = async <T extends {}[], R>(
  * @param arr the array of `T`s to check
  * @param callback the function to run on `arr` that may return `null` or `undefined`
  */
-export const findNotUndefined = <T extends {}[], R>(
+export const findNotUndefined = <T extends unknown[]>(
     arr: T,
-    callback: (it: T[number]) => R | void,
-): FindResult<R> => {
+    callback: (it: T[number]) => unknown,
+): FindResult<T[number]> => {
     // hack so the compiler knows index is within the range of arr
     for (let index: Keys<T> = 0 as never; index < arr.length; (index as number)++) {
         const value = arr[index]
@@ -361,14 +359,22 @@ export const castArray = <T>(value: Narrow<T>): CastArray<T> =>
  *
  * if you want them to run one at a time, use {@link findAsync}
  */
-export const find = <T>(arr: T[], predicate: (value: T) => MaybePromise<boolean>): Promise<T> =>
-    Promise.any(
-        arr.map(async (value) =>
-            (await predicate(value))
-                ? value
-                : Throw(
-                      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions -- dont care
-                      `predicate for '${value}' returned false`,
-                  ),
-        ),
-    )
+export const find = async <T extends unknown[]>(
+    arr: T,
+    predicate: (value: T[number]) => MaybePromise<boolean>,
+): Promise<FindResult<T[number]>> => {
+    try {
+        return Promise.any(
+            arr.map(async (value, index) =>
+                (await predicate(value))
+                    ? { result: value, index }
+                    : Throw(`predicate returned false for value: ${value}`),
+            ),
+        )
+    } catch (e) {
+        if (e instanceof AggregateError) {
+            return undefined
+        }
+        throw e
+    }
+}
