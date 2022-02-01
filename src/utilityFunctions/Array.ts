@@ -16,6 +16,8 @@ import _ from 'lodash'
 import { isDefined } from 'ts-is-present'
 import { Enumerate } from '../utilityTypes/Number'
 import { Keys } from '../utilityTypes/Any'
+import { MaybePromise } from 'tsdef'
+import { Throw } from 'throw-expression'
 
 /**
  * checks whether the given array's length is larger than **or equal to** the given number, and narrows the type of the
@@ -352,3 +354,21 @@ export const castArray = <T>(value: Narrow<T>): CastArray<T> =>
         // @ts-expect-error false positive due to narrow type
         value,
     ) as never
+
+/**
+ * like {@link Array.prototype.find} but works properly with promises. it still executes the `predicate`s at the same
+ * time though and returns on the first promise that resolves with `true`.
+ *
+ * if you want them to run one at a time, use {@link findAsync}
+ */
+export const find = <T>(arr: T[], predicate: (value: T) => MaybePromise<boolean>): Promise<T> =>
+    Promise.any(
+        arr.map(async (value) =>
+            (await predicate(value))
+                ? value
+                : Throw(
+                      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions -- dont care
+                      `predicate for '${value}' returned false`,
+                  ),
+        ),
+    )
