@@ -5,6 +5,8 @@ import {
     find,
     findDuplicates,
     findIndexWithHighestNumber,
+    findNotUndefined,
+    findNotUndefinedAsync,
     flat,
     forEach,
     indexOf,
@@ -93,6 +95,29 @@ test('mapAsync', async () => {
     )
     exactly<[number, number]>()(result)
     assert.deepStrictEqual(result, [2, 1])
+})
+
+describe('findNotUndefined', () => {
+    test('has result', () => {
+        assert(findNotUndefined([undefined, null, 1], (value) => value)?.result === 1)
+    })
+    test('no result', () => {
+        assert(findNotUndefined([undefined, null], (value) => value) === undefined)
+    })
+})
+describe('findNotUndefinedAsync', () => {
+    test('has result', async () => {
+        assert(
+            (await findNotUndefinedAsync([undefined, null, 1], (value) => Promise.resolve(value)))
+                ?.result === 1,
+        )
+    })
+    test('no result', async () => {
+        assert(
+            (await findNotUndefinedAsync([undefined, null], (value) => Promise.resolve(value))) ===
+                undefined,
+        )
+    })
 })
 
 describe('duplicate functions', () => {
@@ -247,5 +272,6 @@ describe('castArray', () => {
 })
 
 test('find', async () => {
-    assert((await find([1, 2, 3], (value) => Promise.resolve(value === 3))) === 3)
+    const foo = await find([1, 2, 3], (value) => Promise.resolve(value === 3))
+    assert(foo?.result === 3)
 })
