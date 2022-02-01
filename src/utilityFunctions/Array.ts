@@ -111,7 +111,7 @@ export const arrayOfAll = <T>() => {
 }
 
 /**
- * like {@link Array.prototype.map} but for promises where you want to execute the callback asynchronously.
+ * like {@link Array.prototype.map} but for promises where you want to execute the callback one at a time.
  * preserves the length of the array at compiletime
  */
 export const mapAsync = async <T extends unknown[], Result>(
