@@ -2,6 +2,7 @@ import {
     castArray,
     concat,
     containsDuplicates,
+    find,
     findDuplicates,
     findIndexWithHighestNumber,
     flat,
@@ -243,4 +244,8 @@ describe('castArray', () => {
     test('not an array', () => {
         exactly([1], castArray(1))
     })
+})
+
+test('find', async () => {
+    assert((await find([1, 2, 3], (value) => Promise.resolve(value === 3))) === 3)
 })
