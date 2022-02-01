@@ -359,16 +359,19 @@ export const castArray = <T>(value: Narrow<T>): CastArray<T> =>
  *
  * if you want them to run one at a time, use {@link findAsync}
  */
-export const find = async <T extends unknown[]>(
+export const find = <T extends unknown[]>(
     arr: T,
     predicate: (value: T[number]) => MaybePromise<boolean>,
-): Promise<FindResult<T[number]>> => {
+): MaybePromise<FindResult<T[number]>> => {
     try {
         return Promise.any(
             arr.map(async (value, index) =>
                 (await predicate(value))
                     ? { result: value, index }
-                    : Throw(`predicate returned false for value: ${value}`),
+                    : Throw(
+                          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions -- dont care
+                          `predicate returned false for value: ${value}`,
+                      ),
             ),
         )
     } catch (e) {
