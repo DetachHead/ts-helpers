@@ -13,7 +13,11 @@ describe('exactly', () => {
     const x1AndY2 = { x: 1, y: 2 } as const
 
     describe('mixed', () => {
-        test('it returns the value', () => assert(exactly<1>()(1) === 1))
+        test('it returns the value', () =>
+            assert(
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- testing
+                exactly<1>()(1) === 1,
+            ))
         describe('simple types', () => {
             test('pass', () => {
                 exactly<number>()(10 as number)
@@ -219,6 +223,7 @@ describe('exactly', () => {
             })
         })
         describe('any and never', () => {
+            /* eslint-disable @typescript-eslint/no-unsafe-argument -- testing the any type */
             test('fail', () => {
                 // @ts-expect-error doesn't match
                 exactly(any, never)
@@ -255,6 +260,7 @@ describe('exactly', () => {
                     )
                 })
             })
+            /* eslint-enable @typescript-eslint/no-unsafe-argument -- testing the any type */
         })
         describe('unions, intersections and Readonly', () => {
             test('pass', () => {

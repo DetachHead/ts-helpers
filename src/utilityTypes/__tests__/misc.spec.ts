@@ -19,6 +19,6 @@ test('NoAny', () => {
     const foo = <T extends number>(value: NoAny<T>) => value
     foo(1)
     // @ts-expect-error any is banned
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- testing any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-argument -- testing any
     foo(1 as any)
 })
