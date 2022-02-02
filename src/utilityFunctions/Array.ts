@@ -16,7 +16,7 @@ import _ from 'lodash'
 import { isDefined } from 'ts-is-present'
 import { Enumerate } from '../utilityTypes/Number'
 import { Keys } from '../utilityTypes/Any'
-import { MaybePromise } from 'tsdef'
+import { MaybePromise, NonNil } from 'tsdef'
 import { FindResult } from '../utilityTypes/internal'
 import { isNullOrUndefined } from './Any'
 import { Throw } from 'throw-expression'
@@ -134,41 +134,63 @@ export const mapAsync = async <T extends unknown[], Result>(
 }
 
 /**
+ * the return type of {@link findNotUndefined} and {@link findNotUndefinedAsync} when a callback is not provided
+ *
+ * ie. guaranteed to not be `undefined` or `null` if a result was found
+ */
+type FindNotUndefinedResult<T> =
+    | Exclude<FindResult<NonNil<T>>, undefined>
+    | (undefined extends T ? undefined : null extends T ? undefined : never)
+
+// TODO: narrow the arrays so these functions work with compiletime array literals
+/**
  * finds the first item in an array where the given callback doesn't return `null` or `undefined`
  * @param arr the array of `T`s to check
- * @param callback the function to run on `arr` that may return `null` or `undefined`
+ * @param callback a function to run on `arr` that may return `null` or `undefined`.
  * @param runAtTheSameTime whether to execute the `callback` on each element of `arr` at the same time
  */
-export const findNotUndefinedAsync = async <T extends unknown[]>(
+export const findNotUndefinedAsync: {
+    <T extends unknown[]>(
+        arr: T,
+        runAtTheSameTime: boolean,
+        callback: (it: T[number]) => Promise<unknown>,
+    ): Promise<FindResult<T[number]>>
+    <T extends unknown[]>(arr: T, runAtTheSameTime: boolean): Promise<
+        FindNotUndefinedResult<T[number]>
+    >
+} = async <T extends unknown[]>(
     arr: T,
-    callback: (it: T[number]) => Promise<unknown>,
-    runAtTheSameTime = false,
+    runAtTheSameTime: boolean,
+    callback: (it: T[number]) => Promise<unknown> = (value) => Promise.resolve(value),
 ): Promise<FindResult<T[number]>> => {
     if (runAtTheSameTime) {
-        return find(arr, async (value) => !isNullOrUndefined(await callback(value)))
+        return find(arr, async (value) => !isNullOrUndefined(await callback(value))) as never
     }
     // hack so the compiler knows index is within the range of arr
     for (let index: Keys<T> = 0 as never; index < arr.length; (index as number)++) {
         const value = arr[index]
         const result = await callback(value)
-        if (result) return { result, index }
+        if (result) return { result, index } as never
     }
     return
 }
 /**
  * finds the first item in an array where the given callback doesn't return `null` or `undefined`
  * @param arr the array of `T`s to check
- * @param callback the function to run on `arr` that may return `null` or `undefined`
+ * @param callback a function to run on `arr` that may return `null` or `undefined`.
  */
-export const findNotUndefined = <T extends unknown[]>(
+export const findNotUndefined: {
+    <T extends unknown[]>(arr: T, callback: (it: T[number]) => unknown): FindResult<T[number]>
+    <T extends unknown[]>(arr: T): FindNotUndefinedResult<T[number]>
+} = <T extends unknown[]>(
     arr: T,
-    callback: (it: T[number]) => unknown,
+    callback: (it: T[number]) => unknown = (value) => value,
 ): FindResult<T[number]> => {
     // hack so the compiler knows index is within the range of arr
     for (let index: Keys<T> = 0 as never; index < arr.length; (index as number)++) {
         const value = arr[index]
         const result = callback(value)
-        if (result) return { result, index }
+        if (!isNullOrUndefined(result)) return { result, index } as never
     }
     return
 }
@@ -359,12 +381,12 @@ export const castArray = <T>(value: Narrow<T>): CastArray<T> =>
  *
  * if you want them to run one at a time, use {@link findAsync}
  */
-export const find = <T extends unknown[]>(
+export const find = async <T extends unknown[]>(
     arr: T,
     predicate: (value: T[number]) => MaybePromise<boolean>,
-): MaybePromise<FindResult<T[number]>> => {
+): Promise<FindResult<T[number]>> => {
     try {
-        return Promise.any(
+        return await Promise.any(
             arr.map(async (value, index) =>
                 (await predicate(value))
                     ? { result: value, index }
