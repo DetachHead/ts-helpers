@@ -139,8 +139,8 @@ export const mapAsync = async <T extends unknown[], Result>(
  * ie. guaranteed to not be `undefined` or `null` if a result was found
  */
 type FindNotUndefinedResult<T> =
-    | Exclude<FindResult<NonNil<T>>, undefined>
-    | (undefined extends T ? undefined : null extends T ? undefined : never)
+    | Exclude<FindResult<NonNil<Awaited<T>>>, undefined>
+    | (undefined extends Awaited<T> ? undefined : null extends Awaited<T> ? undefined : never)
 
 // TODO: narrow the arrays so these functions work with compiletime array literals
 /**
