@@ -65,5 +65,9 @@ export const runUntil = async <T>(
     throw new Error('this should never happen what the hack')
 }
 
-export const isNullOrUndefined = <T>(value: T): T extends null | undefined ? true : false =>
+export const isNullOrUndefined = <T>(
+    value: T,
+):
+    | (undefined extends T ? true : null extends T ? true : never)
+    | (T extends null | undefined ? true : false) =>
     (value === null || value === undefined) as never

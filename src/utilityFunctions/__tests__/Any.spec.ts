@@ -72,4 +72,7 @@ describe('isNullOrUndefined', () => {
     test('false', () => {
         exactly(false, isNullOrUndefined('foo'))
     })
+    test('not known at compiletime', () => {
+        exactly<boolean>()(isNullOrUndefined(1 as unknown))
+    })
 })
