@@ -47,7 +47,7 @@ describe('findAsync', () => {
 
 describe('find', () => {
     test('Array', () => {
-        assert(find([1, 2, 3, 4], (value) => value === 3) === 3)
+        assert(find([1, 2, 3, 4], (value) => value === 3)?.result === 3)
     })
     test('generators', () => {
         assert(
@@ -58,7 +58,7 @@ describe('find', () => {
                     yield 3
                 })(),
                 (value) => value === 2,
-            ) === 2,
+            )?.result === 2,
         )
     })
 })
