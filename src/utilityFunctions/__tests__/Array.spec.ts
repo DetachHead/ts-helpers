@@ -24,7 +24,7 @@ import {
     splice,
 } from '../Array'
 import { PowerAssert } from 'typed-nodejs-assert'
-import { Throw } from 'throw-expression'
+import { Throw, throwIfUndefined } from 'throw-expression'
 import { exactly } from '../misc'
 import { subtract } from '../Number'
 import { TupleOf } from '../../utilityTypes/Array'
@@ -98,25 +98,56 @@ test('mapAsync', async () => {
 })
 
 describe('findNotUndefined', () => {
-    test('has result', () => {
-        assert(findNotUndefined([undefined, null, 1], (value) => value)?.result === 1)
+    describe('callback', () => {
+        test('has result', () => {
+            exactly(
+                1 as number | null | undefined,
+                throwIfUndefined(findNotUndefined([undefined, null, 1], (value) => value)).result,
+            )
+        })
+        test('no result', () => {
+            assert(findNotUndefined([undefined, null], (value) => value) === undefined)
+        })
     })
-    test('no result', () => {
-        assert(findNotUndefined([undefined, null], (value) => value) === undefined)
+    describe('no callback', () => {
+        test('has result', () => {
+            exactly(1 as number, throwIfUndefined(findNotUndefined([undefined, null, 1])).result)
+        })
+        test('no result', () => {
+            assert(findNotUndefined([undefined, null]) === undefined)
+        })
     })
 })
 describe('findNotUndefinedAsync', () => {
-    test('has result', async () => {
-        assert(
-            (await findNotUndefinedAsync([undefined, null, 1], (value) => Promise.resolve(value)))
-                ?.result === 1,
-        )
+    describe('callback', () => {
+        test('has result', async () => {
+            exactly(
+                1 as number | null | undefined,
+                throwIfUndefined(
+                    await findNotUndefinedAsync([undefined, null, 1], true, (value) =>
+                        Promise.resolve(value),
+                    ),
+                ).result,
+            )
+        })
+        test('no result', async () => {
+            assert(
+                (await findNotUndefinedAsync([undefined, null], false, (value) =>
+                    Promise.resolve(value),
+                )) === undefined,
+            )
+        })
     })
-    test('no result', async () => {
-        assert(
-            (await findNotUndefinedAsync([undefined, null], (value) => Promise.resolve(value))) ===
-                undefined,
-        )
+    describe('no callback', () => {
+        test('has result', async () => {
+            exactly(
+                1 as number,
+                throwIfUndefined(await findNotUndefinedAsync([undefined, null, 1], false)).result,
+            )
+        })
+        test('no result', async () => {
+            assert((await findNotUndefinedAsync([undefined, null], true)) === undefined)
+        })
     })
 })
 
