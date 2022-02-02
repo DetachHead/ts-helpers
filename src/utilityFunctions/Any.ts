@@ -41,11 +41,10 @@ export const hasPropertyPredicate: {
 export const entries = <T>(object: T): Entries<T> => Object.entries(object) as never
 
 /**
- * runs the given `callback` until `predicate` returns `true` or `timeoutMs` is reached
+ * runs the given `callback` until it returns `true` or `timeoutMs` is reached
  */
-export const runUntil = async <T>(
-    callback: () => Promise<T>,
-    predicate: (result: T) => boolean,
+export const runUntil = async (
+    callback: () => Promise<boolean>,
     timeoutMs: number,
 ): Promise<void> => {
     let timedOut = false as boolean
@@ -53,7 +52,7 @@ export const runUntil = async <T>(
         timedOut = true
     }, timeoutMs)
     while (!timedOut)
-        if (predicate(await callback())) {
+        if (await callback()) {
             clearTimeout(timer)
             return
         }
