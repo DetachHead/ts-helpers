@@ -142,7 +142,12 @@ describe('findNotUndefinedAsync', () => {
         test('has result', async () => {
             exactly(
                 1 as number,
-                throwIfUndefined(await findNotUndefinedAsync([undefined, null, 1], false)).result,
+                throwIfUndefined(
+                    await findNotUndefinedAsync(
+                        [undefined, null, 1].map((value) => Promise.resolve(value)),
+                        false,
+                    ),
+                ).result,
             )
         })
         test('no result', async () => {
