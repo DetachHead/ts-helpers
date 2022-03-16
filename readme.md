@@ -87,10 +87,11 @@ Equals<unknown, never> // false
 
 ### typescript
 
-this package is designed for typescript 4.5. you will probably have issues trying to use it with older versions, tho it will probably still work if you set `skipLibCheck` to `true` in your `tsconfig.json` (which isn't recommended)
+this package is designed for typescript >=4.5. you will probably have issues trying to use it with older versions, tho it will probably still work if you set `skipLibCheck` to `true` in your `tsconfig.json` (which isn't recommended)
 
-### supported js runtimes
+### runtime
 
--   [x] nodejs
--   [x] browser
--   [x] deno (using esm.sh - eg. `import { exactly } from 'http://esm.sh/@detachhead/ts-helpers/dist/utilityFunctions/misc'`)
+as long as it supports es2021 you should be good. tested on:
+- nodejs >=15
+- browsers (chrome >=85)
+- deno (using esm.sh - eg. `import { exactly } from 'http://esm.sh/@detachhead/ts-helpers/dist/utilityFunctions/misc'`)
