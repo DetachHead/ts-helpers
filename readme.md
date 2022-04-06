@@ -92,6 +92,7 @@ this package is designed for typescript >=4.5. you will probably have issues try
 ### runtime
 
 as long as it supports es2021 you should be good. tested on:
-- nodejs >=15
-- browsers (chrome >=85)
-- deno (using esm.sh - eg. `import { exactly } from 'http://esm.sh/@detachhead/ts-helpers/dist/utilityFunctions/misc'`)
+
+-   nodejs >=15
+-   browsers (chrome >=85)
+-   deno (using esm.sh - eg. `import { exactly } from 'http://esm.sh/@detachhead/ts-helpers/dist/utilityFunctions/misc'`)
