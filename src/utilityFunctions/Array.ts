@@ -292,7 +292,7 @@ export const sortByLongestStrings: <Strings extends string[]>(
 ) => SortLongestStrings<Strings> = (strings) => _.orderBy(strings, 'length', 'desc') as never
 
 /**
- * removes any `undefined` values from `array` before maooiung over them and returning the mappved array with no
+ * removes any `undefined` values from `array` before mapping over them and returning the mapped array with no
  * undefined or null values
  */
 export const mapNotUndefined = <T, R>(array: (T | undefined)[], callback: (value: T) => R): R =>
