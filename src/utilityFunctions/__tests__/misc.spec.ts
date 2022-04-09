@@ -211,6 +211,8 @@ describe('exactly', () => {
                         { (x: 0, y: null): void; (x: number, y: null): void },
                         { (x: number, y: null): void; (x: 0, y: undefined): void }
                     >()
+                    // xfail https://github.com/DetachHead/ts-helpers/issues/127
+                    exactly<() => number, (a?: number) => number>()
                 })
             })
             test('intersections', () => {
