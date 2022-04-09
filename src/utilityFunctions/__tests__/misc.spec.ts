@@ -46,6 +46,9 @@ describe('exactly', () => {
                     exactly<any>()(number)
                     // @ts-expect-error doesn't match
                     exactly<number>()(any)
+                    // @ts-expect-error doesn't match
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- testing the any type
+                    exactly<{ value: number }>()({ value: {} as any })
                 })
                 /* eslint-enable @typescript-eslint/no-explicit-any -- testing the any type */
             })
@@ -61,9 +64,13 @@ describe('exactly', () => {
                 })
             })
         })
-        describe('undefined', () => {
+        describe('undefined, void and null', () => {
             test('pass', () => {
                 exactly<string | undefined>()('' as undefined | string)
+                exactly<undefined>()(undefined)
+                exactly<null>()(null)
+                exactly<void>()(undefined as void)
+                exactly<() => void>()((): void => undefined)
             })
             test('fail', () => {
                 // @ts-expect-error doesn't match
@@ -72,6 +79,12 @@ describe('exactly', () => {
                 exactly<string | null>()('' as string)
                 // @ts-expect-error doesn't match
                 exactly<string | undefined>()('' as undefined)
+                // @ts-expect-error doesn't match
+                exactly<void>()(null)
+                // @ts-expect-error doesn't match
+                exactly<undefined>()(null)
+                // @ts-expect-error doesn't match
+                exactly<() => void>()(() => undefined)
             })
         })
         describe('unions, intersections and Readonly', () => {
@@ -80,6 +93,8 @@ describe('exactly', () => {
                 exactly<2 | 1>()(oneOrTwo)
                 exactly<Readonly<{ x: 1 } & { y: 2 }>>()(x1AndY2)
                 exactly<Readonly<{ x: 1; y: 2 }>>()(x1AndY2)
+                // @ts-expect-error xfail
+                exactly<{ x: 1; y: 2 }>()({ x: 1, y: 2 as 2 & {} })
             })
             test('fail', () => {
                 // @ts-expect-error doesn't match
@@ -90,11 +105,17 @@ describe('exactly', () => {
                 exactly<1 | 2>()(1 as 2 | 3)
                 // @ts-expect-error doesn't match
                 exactly<{ x: 1 } & { y: 2 }>()(x1AndY2)
+                // @ts-expect-error doesn't match
+                exactly<{ x: 1; y: 2 & {} }>()({ x: 1, y: 3 as 3 & {} })
             })
         })
         test("can't specify Actual generic", () => {
             // @ts-expect-error see the OnlyInfer type
             exactly<number>()<number>(10 as number)
+        })
+        test('optional members', () => {
+            // @ts-expect-error doesn't match
+            exactly<{ a: number }>()({} as { a: number; b?: string })
         })
     })
 
@@ -125,6 +146,8 @@ describe('exactly', () => {
                     exactly<any, number>()
                     // @ts-expect-error doesn't match
                     exactly<number, any>()
+                    // @ts-expect-error doesn't match
+                    exactly<{ value: number }, { value: any }>()
                 })
             })
             /* eslint-enable @typescript-eslint/no-explicit-any -- testing the any type */
@@ -153,6 +176,8 @@ describe('exactly', () => {
                 exactly<1 | (number & {}), number>()
                 exactly<undefined & {}, never>()
                 exactly<{}, {}>()
+                // @ts-expect-error xfail
+                exactly<{ a: 1 & {} }, { a: 1 }>()
             })
             test('fail', () => {
                 // @ts-expect-error doesn't match
@@ -167,6 +192,8 @@ describe('exactly', () => {
                 exactly<{ x: 1 } & { y: 2 }, { x: 1; y: 2 } & { z: 2 }>()
                 // @ts-expect-error doesn't match - making sure EqualsWrapped doesn't cause false negatives
                 exactly<{}, never>()
+                // @ts-expect-error doesn't match
+                exactly<{ x: 1; y: 2 & {} }, { x: 1; y: 3 & {} }>()
             })
         })
         describe('functions', () => {
@@ -193,21 +220,35 @@ describe('exactly', () => {
                 exactly<Function1 & Function2, Function2 & Function1>()
             })
         })
-        describe('undefined', () => {
+        describe('undefined, void and null', () => {
             test('pass', () => {
                 exactly<string | undefined, undefined | string>()
+                exactly<undefined, undefined>()
+                exactly<null, null>()
+                exactly<void, void>()
+                exactly<() => void, () => void>()
             })
             test('fail', () => {
                 // @ts-expect-error doesn't match
                 exactly<string | undefined, string>()
                 // @ts-expect-error doesn't match
                 exactly<string, string | undefined>()
+                // @ts-expect-error doesn't match
+                exactly<void, null>()
+                // @ts-expect-error doesn't match
+                exactly<undefined, null>()
+                // @ts-expect-error doesn't match
+                exactly<() => void, () => undefined>()
             })
         })
-        describe('arrays/tuples', () => {
+        test('arrays/tuples', () => {
             // @ts-expect-error doesn't match
             // eslint-disable-next-line @typescript-eslint/no-explicit-any -- testing the any type
             exactly<[any, number], [number, any]>()
+        })
+        test('optional members', () => {
+            // @ts-expect-error doesn't match
+            exactly<{ a: number }, { a: number; b?: string }>()
         })
     })
     describe('values', () => {
@@ -243,6 +284,9 @@ describe('exactly', () => {
                         // @ts-expect-error doesn't match
                         exactly(number, any),
                     )
+                    // @ts-expect-error doesn't match
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- testing the any type
+                    assert.throws(() => exactly({ value: 1 }, { value: any }))
                 })
             })
             describe('never', () => {
@@ -266,6 +310,7 @@ describe('exactly', () => {
             test('pass', () => {
                 exactly(oneOrTwo, oneOrTwo)
                 exactly(x1AndY2 as Readonly<{ x: 1 } & { y: 2 }>, x1AndY2)
+                exactly({ x: 1, y: 2 as 2 & {} } as const, { x: 1, y: 2 as 2 & {} } as const)
             })
             test('fail', () => {
                 // @ts-expect-error doesn't match
@@ -278,11 +323,19 @@ describe('exactly', () => {
                 )
                 // @ts-expect-error doesn't match
                 exactly(x1AndY2 as { x: 1 } & { y: 2 }, x1AndY2)
+                assert.throws(() =>
+                    // xfail (compiletime not runtime) idk why this behaves different in value form
+                    exactly({ x: 1, y: 2 as 2 & {} } as const, { x: 1, y: 3 as 3 & {} } as const),
+                )
             })
         })
         test("can't specify the generics", () => {
             // @ts-expect-error see the OnlyInfer type
             exactly<1 | 2, 1 | 2>(oneOrTwo, oneOrTwo)
+        })
+        test('optional members', () => {
+            // @ts-expect-error doesn't match
+            exactly({} as { a: number; b?: string }, {} as { a: number })
         })
     })
 })
