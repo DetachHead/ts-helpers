@@ -282,9 +282,8 @@ describe('forEach', () => {
 describe('map', () => {
     const values = [1, 2, 3, 4, 5] as const
     test('fixed length return value', () =>
-        // TODO: make it narrow
         exactly(
-            ['', ''] as [string, string],
+            ['', ''],
             map(['', ''], (value) => value),
         ))
     test('next/previous', () => {
