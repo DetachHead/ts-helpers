@@ -53,6 +53,9 @@ export const exactly: {
      * - mixed form: `exactly<Type>()(value)`<br/>
      * - value form: `exactly(expectedValue, actualValue)`<br/>
      * Correctly checks `any` and `never`.
+     * <br>
+     * **WARNING:** there are several cases where this doesn't work properly,
+     * see [these issues](https://github.com/DetachHead/ts-helpers/labels/type%20testing)
      * @see Equals
      * # Mixed Form
      * ## `exactly` function
@@ -91,6 +94,9 @@ export const exactly: {
      * - mixed form: `exactly<Type>()(value)`<br/>
      * - value form: `exactly(expectedValue, actualValue)`<br/>
      * Correctly checks `any` and `never`.
+     * <br>
+     * **WARNING:** there are several cases where this doesn't work properly,
+     * see [these issues](https://github.com/DetachHead/ts-helpers/labels/type%20testing)
      * # Type form
      * ## generics
      * - **`Expected`:**  The expected type.
@@ -115,6 +121,9 @@ export const exactly: {
      * - mixed form: `exactly<Type>()(value)`<br/>
      * - value form: `exactly(expectedValue, actualValue)`<br/>
      * Correctly checks `any` and `never`.
+     * <br>
+     * **WARNING:** there are several cases where this doesn't work properly,
+     * see [these issues](https://github.com/DetachHead/ts-helpers/labels/type%20testing)
      * # value form
      * checks that the values match at runtime as well!
      * @param expected the expected value. its type gets automatically narrowed using the {@link Narrow} type
