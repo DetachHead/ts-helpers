@@ -93,7 +93,7 @@ describe('exactly', () => {
                 exactly<2 | 1>()(oneOrTwo)
                 exactly<Readonly<{ x: 1 } & { y: 2 }>>()(x1AndY2)
                 exactly<Readonly<{ x: 1; y: 2 }>>()(x1AndY2)
-                // @ts-expect-error xfail
+                // @ts-expect-error xfail https://github.com/DetachHead/ts-helpers/issues/128
                 exactly<{ x: 1; y: 2 }>()({ x: 1, y: 2 as 2 & {} })
             })
             test('fail', () => {
@@ -176,7 +176,7 @@ describe('exactly', () => {
                 exactly<1 | (number & {}), number>()
                 exactly<undefined & {}, never>()
                 exactly<{}, {}>()
-                // @ts-expect-error xfail
+                // @ts-expect-error xfail https://github.com/DetachHead/ts-helpers/issues/128
                 exactly<{ a: 1 & {} }, { a: 1 }>()
             })
             test('fail', () => {
@@ -326,8 +326,8 @@ describe('exactly', () => {
                 // @ts-expect-error doesn't match
                 exactly(x1AndY2 as { x: 1 } & { y: 2 }, x1AndY2)
                 assert.throws(() =>
-                    // xfail (compiletime not runtime) idk why this behaves different in value form
-                    exactly({ x: 1, y: 2 as 2 & {} } as const, { x: 1, y: 3 as 3 & {} } as const),
+                    // xfail (compiletime not runtime) https://github.com/DetachHead/ts-helpers/issues/152
+                    exactly({ x: 1, y: 2 as 2 & {} }, { x: 1, y: 3 as 3 & {} }),
                 )
             })
         })
