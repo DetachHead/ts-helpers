@@ -5,14 +5,22 @@ export type Not<Types extends boolean> = {
 
 /**
  * type equivalent of the `||` operator.
- *
- * note that an `And` type is not necessary, as `IsGreaterThan<1, 0> & IsGreaterThan<3, 0>` will resolve to `true` but
- * `IsGreaterThan<1, 0> | IsGreaterThan<1, 2>` will resolve to `boolean`
  * @example
  * type Foo = Or<IsGreaterThan<1, 0> | IsGreaterThan<1, 2>> //true
  *
  */
 export type Or<T extends boolean> = true extends T ? true : false
+
+/**
+ * type equivalent of the `&&` operator.
+ * @example
+ * type Foo = And<IsGreaterThan<1, 0> & IsGreaterThan<1, 2>> //false
+ */
+export type And<T extends boolean> = (T extends never ? false : true) extends never
+    ? false
+    : T extends false
+    ? false
+    : true
 
 /**
  * `true` if `Subtype` extends `Supertype`, else `false
