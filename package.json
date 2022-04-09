@@ -7,7 +7,7 @@
     "!src/**/__tests__"
   ],
   "scripts": {
-    "test": "tsc jest.config.ts && jest --detectOpenHandles --config jest.config.js",
+    "test": "jest --detectOpenHandles",
     "lint:check": "eslint . --ext .ts",
     "lint:fix": "npm run lint:check -- --fix",
     "format:check": "prettier --check .",
@@ -51,7 +51,7 @@
     "rimraf": "3.0.2",
     "source-map-support": "0.5.19",
     "ts-jest": "^27.1.4",
-    "ts-node": "^10.3.0",
+    "ts-node": "^10.7.0",
     "typed-nodejs-assert": "1.1.0",
     "typescript": "^4.7.0-beta"
   }
