@@ -2,3 +2,6 @@
 /.idea/
 /ts-helpers.iml
 /dist/
+
+# https://github.com/facebook/jest/issues/12655
+/jest.config.js

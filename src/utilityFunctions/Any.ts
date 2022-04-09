@@ -38,7 +38,7 @@ export const hasPropertyPredicate: {
  * treating all keys as `string[]` causes
  * @see https://github.com/Microsoft/TypeScript/issues/12870
  */
-export const entries = <T>(object: T): Entries<T> => Object.entries(object) as never
+export const entries = <T extends object>(object: T): Entries<T> => Object.entries(object) as never
 
 /**
  * runs the given `callback` until it returns `true` or `timeoutMs` is reached
