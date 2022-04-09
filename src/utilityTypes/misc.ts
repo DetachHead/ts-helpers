@@ -1,5 +1,3 @@
-import { And } from './Boolean'
-
 /**
  * "normalizes" types to be compared using {@link FunctionComparisonEquals}
  * - converts intersections of object types to normal object types
@@ -68,9 +66,9 @@ type InvariantComparisonEquals<
  * **WARNING:** there are several cases where this doesn't work properly, which is why i'm using two different methods to
  * compare the types. see [these issues](https://github.com/DetachHead/ts-helpers/labels/type%20testing)
  */
-export type Equals<Expected, Actual> = And<
-    InvariantComparisonEquals<Expected, Actual> & FunctionComparisonEquals<Expected, Actual>
->
+export type Equals<Expected, Actual> = InvariantComparisonEquals<Expected, Actual> extends true
+    ? FunctionComparisonEquals<Expected, Actual>
+    : false
 
 /**
  * the compiler sees this as `undefined` if `noUncheckedIndexedAccess` is enabled, and `never` if it's not.
