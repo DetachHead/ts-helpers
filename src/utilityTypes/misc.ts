@@ -1,5 +1,7 @@
+import { And } from './Boolean'
+
 /**
- * "normalizes" types to be compared using {@link Equals}
+ * "normalizes" types to be compared using {@link FunctionComparisonEquals}
  * - converts intersections of object types to normal object types
  *   (ie. converts `{foo: number} & {bar: number}` to `{foo: number, bar: number}`).
  *   see [this comment](https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-421529650)
@@ -7,24 +9,68 @@
  *   value](https://github.com/typescript-eslint/typescript-eslint/issues/2063#issuecomment-675156492)) - see
  *   [this comment](https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-778623742)
  */
-type EqualsWrapped<T> = T extends (T extends {} ? infer R & {} : infer R)
+type FunctionComparisonEqualsWrapped<T> = T extends (T extends {} ? infer R & {} : infer R)
     ? {
           [P in keyof R]: R[P]
       }
     : never
 
 /**
+ * compares two types using the technique described [here](https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-931205995)
+ *
+ * # benefits
+ * - correctly handles `any`
+ *
+ * # drawbacks
+ * - doesn't work properly with object types (see {@link FunctionComparisonEqualsWrapped}) and the fixes it applies don't work recursively
+ */
+type FunctionComparisonEquals<A, B> = (<T>() => T extends FunctionComparisonEqualsWrapped<A>
+    ? 1
+    : 2) extends <T>() => T extends FunctionComparisonEqualsWrapped<B> ? 1 : 2
+    ? true
+    : false
+
+/**
+ * makes `T` invariant for use in conditional types
+ * @example
+ * type Foo = InvariantComparisonEqualsWrapped<string> extends InvariantComparisonEqualsWrapped<string | number> ? true : false //false
+ */
+// TODO: update this to use in/out variance annotations instead of defining these useless members once prettier/eslint are updated to support it
+type InvariantComparisonEqualsWrapped<T> = { value: T; setValue: (value: T) => never }
+
+/**
+ * compares two types by creating invariant wrapper types for the `Expected` and `Actual` types, such that `extends`
+ * in conditional types only return `true` if the types are equivalent
+ * # benefits
+ * - far less hacky than {@link FunctionComparisonEqualsWrapped}
+ * - works properly with object types
+ *
+ * # drawbacks
+ * - doesn't work properly with `any` (if the type itself is `any` it's handled correctly by a workaround here but not
+ * if the type contains `any`)
+ */
+type InvariantComparisonEquals<
+    Expected,
+    Actual
+> = InvariantComparisonEqualsWrapped<Expected> extends InvariantComparisonEqualsWrapped<Actual>
+    ? IsAny<Expected | Actual> extends true
+        ? IsAny<Expected> | IsAny<Actual> extends true
+            ? true
+            : false
+        : true
+    : false
+
+/**
  * Checks if two types are equal at the type level.
  *
  * correctly checks `any` and `never`
  *
- * @see https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-931205995
+ * **WARNING:** there are several cases where this doesn't work properly, which is why i'm using two different methods to
+ * compare the types. see [these issues](https://github.com/DetachHead/ts-helpers/labels/type%20testing)
  */
-export type Equals<A, B> = (<T>() => T extends EqualsWrapped<A> ? 1 : 2) extends <
-    T
->() => T extends EqualsWrapped<B> ? 1 : 2
-    ? true
-    : false
+export type Equals<Expected, Actual> = And<
+    InvariantComparisonEquals<Expected, Actual> & FunctionComparisonEquals<Expected, Actual>
+>
 
 /**
  * the compiler sees this as `undefined` if `noUncheckedIndexedAccess` is enabled, and `never` if it's not.
@@ -101,6 +147,9 @@ export type TODO<Reason extends string = 'no reason provided'> = {
     _reason: Reason
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- checking for any type
+export type IsAny<T> = FunctionComparisonEquals<T, any>
+
 /**
  * prevents `any` from being passed as a parameter. useful when using a badly typed lib with `any`'s all over the place
  * @example
@@ -109,4 +158,4 @@ export type TODO<Reason extends string = 'no reason provided'> = {
  * foo(1 as any) //error
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- need to use any to ban it
-export type NoAny<T> = Equals<T, any> extends true ? never : T
+export type NoAny<T> = FunctionComparisonEquals<T, any> extends true ? never : T
