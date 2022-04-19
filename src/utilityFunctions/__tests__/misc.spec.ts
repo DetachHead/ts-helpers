@@ -1,5 +1,5 @@
 import isCI from 'is-ci'
-import { exactly, failCI } from '../misc'
+import { cast, exactly, failCI, unsafeCast } from '../misc'
 import { PowerAssert } from 'typed-nodejs-assert'
 // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
@@ -339,6 +339,36 @@ describe('exactly', () => {
             // @ts-expect-error doesn't match
             exactly({} as { a: number; b?: string }, {} as { a: number })
         })
+    })
+})
+
+describe('cast', () => {
+    test('success', () => {
+        const foo = 1 as number
+        cast(foo, foo as 1 | 2)
+        exactly<1 | 2>()(foo)
+    })
+    test('fail', () => {
+        const foo = '' as string
+        cast(
+            foo,
+            // @ts-expect-error negative test
+            foo as 1 | 2,
+        )
+        exactly<string>()(foo)
+    })
+})
+
+describe('unsafeCast', () => {
+    test('safe', () => {
+        const foo = 1 as number
+        unsafeCast<1 | 2>(foo)
+        exactly<1 | 2>()(foo)
+    })
+    test('unsafe', () => {
+        const foo = '' as string
+        unsafeCast<1 | 2>(foo)
+        exactly<never>()(foo)
     })
 })
 
