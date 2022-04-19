@@ -9,23 +9,36 @@ import { NoInfer } from 'ts-toolbelt/out/Function/NoInfer'
 
 /**
  * narrows the given value from type `Base` to type `Narrowed` without having to assign it to a new variable
+ * due to limitions in generics and assertion functions, you have to provide the value twice.
+ * first to declare the variable that gets narrowed, and second to cast it to the new type
  * @example
  * declare const foo: number
- * cast<number, 1|2>(foo)
+ * cast(foo, foo  as 1 | 2)
  * type Bar = typeof foo //1|2
  */
-export const cast = <Base, Narrowed extends Base>(_value: Base): asserts _value is Narrowed => {
+export const cast: <_ extends OnlyInfer, Base, Narrowed extends Base>(
+    _value: Base,
+    _castedValue: Narrowed,
+) => asserts _value is Narrowed = (_value) => {
     // do nothing
 }
 
 /**
  * unsafely casts the given value to type `T` without having to assign it to a new variable.
+ *
+ * because of how assertion functions work, the type will narrow to `never` if the types don't overlap
  * @example
+ * //safe example:
  * declare const foo: number
- * cast<number, 1|2>(foo)
+ * unsafeCast<1|2>(foo)
  * type Bar = typeof foo //1|2
+ *
+ * //unsafe example:
+ * declare const foo: string
+ * unsafeCast<1|2>(foo)
+ * type Bar = typeof foo //never
  */
-export const unsafeCast = <T>(_value: unknown): asserts _value is T => {
+export const unsafeCast: <T>(_value: unknown) => asserts _value is T = (_value) => {
     // do nothing
 }
 
