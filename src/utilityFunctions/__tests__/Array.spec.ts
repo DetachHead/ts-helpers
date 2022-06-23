@@ -181,13 +181,12 @@ describe('indexOf', () => {
 
 describe('flat', () => {
     test('default depth', () => {
-        exactly(
-            ['foo', 'bar', 'baz, qux', ['asdf']],
-            flat([
-                ['foo', 'bar'],
-                ['baz, qux', ['asdf']],
-            ]),
-        )
+        // the generic gets inferred incorrectly unless you define the variable first
+        const value = flat([
+            ['foo', 'bar'],
+            ['baz, qux', ['asdf']],
+        ])
+        exactly(['foo', 'bar', 'baz, qux', ['asdf']], value)
     })
     test('deeper', () => {
         const arrayToFlatten = [
@@ -211,16 +210,15 @@ describe('findIndexOfHighestNumber', () => {
         )
     })
     test('empty array', () => {
-        exactly(
-            undefined,
-            findIndexWithHighestNumber([], () => Throw('waaaaaat?')),
-        )
+        const value = findIndexWithHighestNumber([], () => Throw('waaaaaat?'))
+        exactly(undefined, value)
     })
 })
 
 describe('indexOfLongestString', () => {
     test('known at compiletime', () => {
-        exactly(1, indexOfLongestString(['foo', 'barbaz', 'qux']))
+        const value = indexOfLongestString(['foo', 'barbaz', 'qux'])
+        exactly(1, value)
     })
     test('not known at compiletime', () => {
         exactly<number>()(indexOfLongestString(['foo', 'barbaz', 'qux'] as string[]))
@@ -229,19 +227,19 @@ describe('indexOfLongestString', () => {
 
 describe('sortByLongestStrings', () => {
     test('normal', () => {
-        exactly(
-            ['foobarbaz', 'barbaz', 'foo', 'ab', 'a'],
-            sortByLongestStrings(['foo', 'barbaz', 'foobarbaz', 'a', 'ab']),
-        )
+        const value = sortByLongestStrings(['foo', 'barbaz', 'foobarbaz', 'a', 'ab'])
+        exactly(['foobarbaz', 'barbaz', 'foo', 'ab', 'a'], value)
     })
 })
 
 describe('slice', () => {
     test('no end', () => {
-        exactly([4, 5, 6], slice([1, 2, 3, 4, 5, 6], 3))
+        const value = slice([1, 2, 3, 4, 5, 6], 3)
+        exactly([4, 5, 6], value)
     })
     test('start and end', () => {
-        exactly([3, 4], slice([1, 2, 3, 4, 5, 6], 2, 4))
+        const value = slice([1, 2, 3, 4, 5, 6], 2, 4)
+        exactly([3, 4], value)
     })
     describe('not known at compiletime', () => {
         test('array', () => {
@@ -299,7 +297,8 @@ describe('map', () => {
 
 describe('castArray', () => {
     test('already an array', () => {
-        exactly([1, 2, 3], castArray([1, 2, 3]))
+        const value = castArray([1, 2, 3])
+        exactly([1, 2, 3], value)
     })
     test('not an array', () => {
         exactly([1], castArray(1))
