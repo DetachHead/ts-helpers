@@ -252,7 +252,7 @@ describe('case', () => {
             exactly('foo', toLowerCase('FOO'))
         })
         test('not known at compiletime', () => {
-            exactly<string>()(toLowerCase('FOO' as string))
+            exactly<Lowercase<string>>()(toLowerCase('FOO' as string))
         })
     })
     describe('toUpperCase', () => {
@@ -260,7 +260,7 @@ describe('case', () => {
             exactly('FOO', toUpperCase('foo'))
         })
         test('not known at compiletime', () => {
-            exactly<string>()(toUpperCase('foo' as string))
+            exactly<Uppercase<string>>()(toUpperCase('foo' as string))
         })
     })
     describe('capitalize', () => {
@@ -268,7 +268,7 @@ describe('case', () => {
             exactly('Foo', capitalize('foo'))
         })
         test('not known at compiletime', () => {
-            exactly<string>()(capitalize('foo' as string))
+            exactly<Capitalize<string>>()(capitalize('foo' as string))
         })
     })
     describe('uncapitalize', () => {
@@ -276,7 +276,7 @@ describe('case', () => {
             exactly('foo', uncapitalize('Foo'))
         })
         test('not known at compiletime', () => {
-            exactly<string>()(uncapitalize('Foo' as string))
+            exactly<Uncapitalize<string>>()(uncapitalize('Foo' as string))
         })
     })
 })
