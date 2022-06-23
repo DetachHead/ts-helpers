@@ -176,8 +176,15 @@ describe('exactly', () => {
                 exactly<1 | (number & {}), number>()
                 exactly<undefined & {}, never>()
                 exactly<{}, {}>()
-                // @ts-expect-error xfail https://github.com/DetachHead/ts-helpers/issues/128
+                // idk why this works now as of ts 4.8, it should fail due to https://github.com/DetachHead/ts-helpers/issues/128
+                // since it works now you'd expect exactly<number & {}, number>() to work as well without the {} workaround in
+                // FunctionComparisonEquals, but it doesn't ????
                 exactly<{ a: 1 & {} }, { a: 1 }>()
+                exactly<
+                    // @ts-expect-error xfail https://github.com/DetachHead/ts-helpers/issues/128
+                    { a: { foo: number; bar: number } },
+                    { a: { foo: number } & { bar: number } }
+                >()
             })
             test('fail', () => {
                 // @ts-expect-error doesn't match
@@ -326,7 +333,7 @@ describe('exactly', () => {
                 // @ts-expect-error doesn't match
                 exactly(x1AndY2 as { x: 1 } & { y: 2 }, x1AndY2)
                 assert.throws(() =>
-                    // xfail (compiletime not runtime) https://github.com/DetachHead/ts-helpers/issues/152
+                    // @ts-expect-error doesn't match
                     exactly({ x: 1, y: 2 as 2 & {} }, { x: 1, y: 3 as 3 & {} }),
                 )
             })
