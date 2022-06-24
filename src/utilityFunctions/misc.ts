@@ -77,7 +77,7 @@ export const exactly: {
      * - **`Expected`:** The expected type.<br/>
      *
      * ## curried function
-     * This is implemented as a higher order function to allow partial inference on the Expected type.     *
+     * This is implemented as a higher order function to allow partial inference on the Expected type.
      * ### parameters
      *
      * * **`value`:** The value that will be checked.
