@@ -56,7 +56,10 @@ export const toStringType: {
  * **WARNING**: for most type-testing scenarios, you probably want to use {@link exactly} instead, as it does an exact
  * match whereas this function only verifies that the value `extends` the given type
  */
-export const assertType = <T = never>(_value: NoInfer<T>): void => undefined
+export const assertType: {
+    <T>(_value: NoInfer<T>): void
+    <_Expected, _Actual extends _Expected>(): void
+} = (_value?: unknown) => undefined
 
 export const exactly: {
     /**
