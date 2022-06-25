@@ -35,15 +35,19 @@ export type ToNonArrowFunction<T extends AnyFunction> = {
  * @see https://github.com/microsoft/TypeScript/pull/18654
  */
 export type SafeVariance<T> = {
-    wrapped: {
-        [Key in keyof T]: T[Key] extends AnyFunction ? ToArrowFunction<T[Key]> : T[Key]
-    }
+    wrapped: T &
+        {
+            [Key in keyof T]: T[Key] extends AnyFunction ? ToArrowFunction<T[Key]> : T[Key]
+        }
 }['wrapped']
 
 /**
  * transforms all methods in `T` into non-arrow functions, which turns off variance checks
+ *
+ * **WARNING:** doesn't work properly with private/protected methods
  * @see https://github.com/microsoft/TypeScript/pull/18654
  */
+// TODO: fix private methods, probs dependent on https://github.com/microsoft/TypeScript/issues/22677
 export type UnsafeVariance<T> = {
     wrapped: {
         [Key in keyof T]: T[Key] extends AnyFunction ? ToNonArrowFunction<T[Key]> : T[Key]
