@@ -87,7 +87,7 @@ Equals<unknown, never> // false
 
 ### typescript
 
-this package is designed for typescript >=4.5. you will probably have issues trying to use it with older versions, tho it will probably still work if you set `skipLibCheck` to `true` in your `tsconfig.json` (which isn't recommended)
+this package is designed for typescript >=4.8. you will probably have issues trying to use it with older versions, tho it will probably still work if you set `skipLibCheck` to `true` in your `tsconfig.json` (which isn't recommended)
 
 ### runtime
 
