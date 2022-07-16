@@ -37,7 +37,7 @@
     "utility-types": "3.10.0"
   },
   "devDependencies": {
-    "@detachhead/eslint-config": "^0.0.11",
+    "@detachhead/eslint-config": "0.0.13-815ade9a5bd4c08fa5cbb542d9acaa29b071e376",
     "@jest/types": "^27.2.5",
     "@types/is-ci": "3.0.0",
     "@types/jest": "26.0.20",

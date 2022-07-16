@@ -28,6 +28,7 @@ export type ToArrowFunction<T extends AnyFunction> = {
  * type NotArrowFunction = ToNonArrowFunction<Foo['isArrowFunction']>
  */
 export type ToNonArrowFunction<T extends AnyFunction> = {
+    // eslint-disable-next-line @typescript-eslint/method-signature-style -- required for this type to work
     fn(...args: Parameters<T>): ReturnType<T>
 }['fn']
 
