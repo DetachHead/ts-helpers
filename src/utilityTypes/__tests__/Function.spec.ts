@@ -1,5 +1,11 @@
-import { assertType } from '../../utilityFunctions/misc'
-import { SafeVariance, ToArrowFunction, ToNonArrowFunction, UnsafeVariance } from '../Function'
+import { assertType, exactly } from '../../utilityFunctions/misc'
+import {
+    Methods,
+    SafeVariance,
+    ToArrowFunction,
+    ToNonArrowFunction,
+    UnsafeVariance,
+} from '../Function'
 
 declare class BivariantToArrowFunctionTest<T> {
     foo(_value: T): void
@@ -98,4 +104,20 @@ describe('UnsafeVariance', () => {
         assertType<Bivariant<number>, Bivariant<unknown>>()
         assertType<Bivariant<unknown>, Bivariant<number>>()
     })
+})
+
+test('Methods', () => {
+    class A {
+        // eslint-disable-next-line prefer-arrow/prefer-arrow-functions -- testing non arrow methods
+        foo(value: number) {
+            return value
+        }
+        bar = () => undefined
+        // eslint-disable-next-line prefer-arrow/prefer-arrow-functions -- testing non arrow methods
+        baz(this: number): void {
+            return
+        }
+        qux = 1
+    }
+    exactly<{ foo: (value: number) => number; bar: () => undefined }, Methods<A>>()
 })

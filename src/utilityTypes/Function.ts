@@ -1,4 +1,5 @@
 import { AnyFunction } from 'tsdef'
+import { PickByValue } from 'utility-types'
 
 /**
  * converts a non-arrow function type to an arrow function type. arrow functions are checked more strictly than
@@ -53,3 +54,16 @@ export type UnsafeVariance<T> = {
         [Key in keyof T]: T[Key] extends AnyFunction ? ToNonArrowFunction<T[Key]> : T[Key]
     }
 }['wrapped']
+
+/**
+ * filters out properties of `T` that aren't a method of `T` (ie. its `this` type must be `T`)
+ * @example
+ * class A {
+ *     foo(value: number) {return 1}
+ *     bar = () => {}
+ *     baz(this: number) {}
+ *     qux = 1
+ * }
+ * type B = Methods<A> // { foo(value: number); bar: () => void; }
+ **/
+export type Methods<T> = PickByValue<T, (this: T, ...args: never[]) => unknown>
