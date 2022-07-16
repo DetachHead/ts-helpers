@@ -11,6 +11,10 @@ describe('exactly', () => {
     const number = 1 as number
     const oneOrTwo = 1 as 1 | 2
     const x1AndY2 = { x: 1, y: 2 } as const
+    class Class {
+        constructor(public a: number) {}
+    }
+    const instance = new Class(1)
 
     describe('mixed', () => {
         test('it returns the value', () =>
@@ -109,6 +113,31 @@ describe('exactly', () => {
                 exactly<{ x: 1; y: 2 & {} }>()({ x: 1, y: 3 as 3 & {} })
             })
         })
+        describe('functions', () => {
+            test('pass', () => {
+                // @ts-expect-error xfail
+                exactly<() => 1>()(() => 1)
+            })
+            test('fail', () => {
+                // @ts-expect-error doesn't match
+                exactly<() => 1>()(() => '')
+                // @ts-expect-error doesn't match
+                exactly<1>()(() => 1)
+                // @ts-expect-error doesn't match
+                exactly<() => 1>()(1)
+            })
+        })
+        describe('constructors', () => {
+            test('pass', () => {
+                exactly<Class>()(instance)
+            })
+            test('fail', () => {
+                // @ts-expect-error doesn't match
+                exactly<Class>()(Class)
+                // @ts-expect-error doesn't match
+                exactly<InstanceType<Class>>()(instance)
+            })
+        })
         test("can't specify Actual generic", () => {
             // @ts-expect-error see the OnlyInfer type
             exactly<number>()<number>(10 as number)
@@ -204,6 +233,17 @@ describe('exactly', () => {
             })
         })
         describe('functions', () => {
+            test('pass', () => {
+                exactly<() => 1, () => 1>()
+            })
+            test('fail', () => {
+                // @ts-expect-error doesn't match
+                exactly<() => 1, () => ''>()
+                // @ts-expect-error doesn't match
+                exactly<1, () => 1>()
+                // @ts-expect-error doesn't match
+                exactly<() => 1, 1>()
+            })
             // https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-568233987
             describe('overloads', () => {
                 test('pass', () => {
@@ -227,6 +267,17 @@ describe('exactly', () => {
                 type Function2 = (x: number, y: string) => void
 
                 exactly<Function1 & Function2, Function2 & Function1>()
+            })
+        })
+        describe('constructors', () => {
+            test('pass', () => {
+                exactly<Class, typeof instance>()
+            })
+            test('fail', () => {
+                // @ts-expect-error doesn't match
+                exactly<Class, typeof Class>()
+                // @ts-expect-error doesn't match
+                exactly<InstanceType<Class>, typeof instance>()
             })
         })
         describe('undefined, void and null', () => {
@@ -345,6 +396,40 @@ describe('exactly', () => {
         test('optional members', () => {
             // @ts-expect-error doesn't match
             exactly({} as { a: number; b?: string }, {} as { a: number })
+        })
+        describe('functions', () => {
+            const fn1 = () => 1
+            const fn2 = () => ''
+            test('pass', () => {
+                exactly(fn1, fn1)
+            })
+            test('fail', () => {
+                assert.throws(() => {
+                    // xfail
+                    exactly(fn1, fn2)
+                })
+                assert.throws(() => {
+                    // @ts-expect-error doesn't match
+                    exactly(1, fn1)
+                })
+                assert.throws(() => {
+                    // xfail
+                    exactly(() => 1, 1)
+                })
+            })
+        })
+        describe('constructors', () => {
+            test('pass', () => {
+                exactly(Class, Class)
+            })
+            test('fail', () => {
+                // xfail because constructor isn't typed properly (but true at runtime)
+                exactly(Class, instance.constructor)
+                assert.throws(() => {
+                    // xfail because constructor isn't typed properly (false at runtime)
+                    exactly(Class, Class.constructor)
+                })
+            })
         })
     })
 })
