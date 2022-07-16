@@ -7,7 +7,9 @@
  *   value](https://github.com/typescript-eslint/typescript-eslint/issues/2063#issuecomment-675156492)) - see
  *   [this comment](https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-778623742)
  */
-type FunctionComparisonEqualsWrapped<T> = T extends (T extends {} ? infer R & {} : infer R)
+type FunctionComparisonEqualsWrapped<T> = T extends (
+    T extends NonNullish ? NonNullable<infer R> : infer R
+)
     ? {
           [P in keyof R]: R[P]
       }
@@ -157,3 +159,13 @@ export type IsAny<T> = FunctionComparisonEquals<T, any>
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- need to use any to ban it
 export type NoAny<T> = FunctionComparisonEquals<T, any> extends true ? never : T
+
+/**
+ * any value that's not `null` or `undefined`
+ *
+ * useful when banning the `{}` type with `@typescript-eslint/ban-types`
+ *
+ * @see https://github.com/typescript-eslint/typescript-eslint/issues/2063#issuecomment-675156492
+ */
+// eslint-disable-next-line @typescript-eslint/ban-types -- duh
+export type NonNullish = {}

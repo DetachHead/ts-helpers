@@ -28,27 +28,27 @@ import { Throw } from 'throw-expression'
  * replaces the first occurrence of `find` with `replace`
  */
 export const replaceOne = <
-    String extends string,
+    Str extends string,
     Find extends string,
     ReplaceWithString extends string
 >(
-    str: String,
+    str: Str,
     find: Find,
     replace: ReplaceWithString,
-): ReplaceOne<String, Find, ReplaceWithString> => str.replace(find, replace) as never
+): ReplaceOne<Str, Find, ReplaceWithString> => str.replace(find, replace) as never
 
 /**
  * replaces all occurrences of `find` in the given string with `replace`
  */
 export const replaceAll = <
-    String extends string,
+    Str extends string,
     Find extends string,
     ReplaceWithString extends string
 >(
-    str: String,
+    str: Str,
     find: Find,
     replace: ReplaceWithString,
-): Replace<String, Find, ReplaceWithString> =>
+): Replace<Str, Find, ReplaceWithString> =>
     str.replace(new RegExp(_.escapeRegExp(find), 'gu'), replace) as never
 
 /**
@@ -69,16 +69,12 @@ export const charAt = <T extends string, I extends number>(string: T, index: I):
 /**
  * does {@link String.substring} but at compiletime
  */
-export const substring = <
-    String extends string,
-    StartIndex extends number,
-    EndIndex extends number
->(
-    string: String,
+export const substring = <Str extends string, StartIndex extends number, EndIndex extends number>(
+    string: Str,
     start: StartIndex,
     end: EndIndex,
-): Substring<String, StartIndex, EndIndex> =>
-    string.substring(start, end) as Substring<String, StartIndex, EndIndex>
+): Substring<Str, StartIndex, EndIndex> =>
+    string.substring(start, end) as Substring<Str, StartIndex, EndIndex>
 
 /**
  * concatenates strings while keeping their values known at compiletime
@@ -107,31 +103,27 @@ export const split = <T extends string, D extends string>(string: T, delimiter: 
 /**
  * does {@link String.indexOf} but at compiletime
  */
-export const indexOf = <String extends string, Substring extends string>(
-    string: String,
+export const indexOf = <Str extends string, Substring extends string>(
+    string: Str,
     substring: Substring,
-): IndexOf<String, Substring> => string.indexOf(substring) as IndexOf<String, Substring>
+): IndexOf<Str, Substring> => string.indexOf(substring) as IndexOf<Str, Substring>
 
 /**
  * does {@link String.includes} but at compiletime
  */
-export const includes = <String extends string, Substring extends string>(
-    string: String,
+export const includes = <Str extends string, Substring extends string>(
+    string: Str,
     substring: Substring,
-): Includes<String, Substring> => string.includes(substring) as Includes<String, Substring>
+): Includes<Str, Substring> => string.includes(substring) as Includes<Str, Substring>
 
 /**
  * does {@link String.padStart} at compiletime
  */
-export const padStart = <
-    String extends string,
-    Size extends number,
-    PadString extends string = ' '
->(
-    string: String,
+export const padStart = <Str extends string, Size extends number, PadString extends string = ' '>(
+    string: Str,
     length: Size,
     padString?: PadString,
-): PadStart<String, Size, PadString> => string.padStart(length, padString) as never
+): PadStart<Str, Size, PadString> => string.padStart(length, padString) as never
 
 /**
  * {@link String.startsWith} at compile-time

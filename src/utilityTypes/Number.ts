@@ -63,12 +63,12 @@ export type Subtract<N1 extends number, N2 extends number> = TupleOf<never, N1> 
     : never
 
 type _MultiAdd<
-    Number extends number,
+    Num extends number,
     Accumulator extends number,
     IterationsLeft extends number
 > = IterationsLeft extends 0
     ? Accumulator
-    : _MultiAdd<Number, Add<Number, Accumulator>, Decrement<IterationsLeft>>
+    : _MultiAdd<Num, Add<Num, Accumulator>, Decrement<IterationsLeft>>
 
 /**
  * multiplies `N1` by `N2`

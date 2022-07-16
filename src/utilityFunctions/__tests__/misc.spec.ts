@@ -1,6 +1,7 @@
 import isCI from 'is-ci'
 import { cast, exactly, failCI, unsafeCast } from '../misc'
 import { PowerAssert } from 'typed-nodejs-assert'
+import { NonNullish } from '../../utilityTypes/misc'
 // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
 
@@ -98,6 +99,7 @@ describe('exactly', () => {
                 exactly<Readonly<{ x: 1 } & { y: 2 }>>()(x1AndY2)
                 exactly<Readonly<{ x: 1; y: 2 }>>()(x1AndY2)
                 // @ts-expect-error xfail https://github.com/DetachHead/ts-helpers/issues/128
+                // eslint-disable-next-line @typescript-eslint/ban-types -- testing this
                 exactly<{ x: 1; y: 2 }>()({ x: 1, y: 2 as 2 & {} })
             })
             test('fail', () => {
@@ -110,6 +112,7 @@ describe('exactly', () => {
                 // @ts-expect-error doesn't match
                 exactly<{ x: 1 } & { y: 2 }>()(x1AndY2)
                 // @ts-expect-error doesn't match
+                // eslint-disable-next-line @typescript-eslint/ban-types -- testing this
                 exactly<{ x: 1; y: 2 & {} }>()({ x: 1, y: 3 as 3 & {} })
             })
         })
@@ -198,16 +201,21 @@ describe('exactly', () => {
                 exactly<2 | 1, 1 | 2>()
                 exactly<Readonly<{ x: 1 } & { y: 2 }>, typeof x1AndY2>()
                 exactly<{ x: 1 } & { y: 2 }, { x: 1; y: 2 }>()
+                // eslint-disable-next-line @typescript-eslint/ban-types -- testing this
                 exactly<{ x: 1; y: 2 }, { x: 1; y: 2 } & {}>()
 
                 // https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-778623742
+                // eslint-disable-next-line @typescript-eslint/ban-types -- testing this
                 exactly<number & {}, number>()
+                // eslint-disable-next-line @typescript-eslint/ban-types -- testing this
                 exactly<1 | (number & {}), number>()
+                // eslint-disable-next-line @typescript-eslint/ban-types -- testing this
                 exactly<undefined & {}, never>()
-                exactly<{}, {}>()
+                exactly<NonNullish, NonNullish>()
                 // idk why this works now as of ts 4.8, it should fail due to https://github.com/DetachHead/ts-helpers/issues/128
                 // since it works now you'd expect exactly<number & {}, number>() to work as well without the {} workaround in
                 // FunctionComparisonEquals, but it doesn't ????
+                // eslint-disable-next-line @typescript-eslint/ban-types -- testing this
                 exactly<{ a: 1 & {} }, { a: 1 }>()
                 exactly<
                     // @ts-expect-error xfail https://github.com/DetachHead/ts-helpers/issues/128
@@ -227,8 +235,9 @@ describe('exactly', () => {
                 // @ts-expect-error doesn't match
                 exactly<{ x: 1 } & { y: 2 }, { x: 1; y: 2 } & { z: 2 }>()
                 // @ts-expect-error doesn't match - making sure EqualsWrapped doesn't cause false negatives
-                exactly<{}, never>()
+                exactly<NonNullish, never>()
                 // @ts-expect-error doesn't match
+                // eslint-disable-next-line @typescript-eslint/ban-types -- testing this
                 exactly<{ x: 1; y: 2 & {} }, { x: 1; y: 3 & {} }>()
             })
         })
@@ -370,6 +379,7 @@ describe('exactly', () => {
             test('pass', () => {
                 exactly(oneOrTwo, oneOrTwo)
                 exactly(x1AndY2 as Readonly<{ x: 1 } & { y: 2 }>, x1AndY2)
+                // eslint-disable-next-line @typescript-eslint/ban-types -- testing this
                 exactly({ x: 1, y: 2 as 2 & {} } as const, { x: 1, y: 2 as 2 & {} } as const)
             })
             test('fail', () => {
@@ -385,6 +395,7 @@ describe('exactly', () => {
                 exactly(x1AndY2 as { x: 1 } & { y: 2 }, x1AndY2)
                 assert.throws(() =>
                     // @ts-expect-error doesn't match
+                    // eslint-disable-next-line @typescript-eslint/ban-types -- testing this
                     exactly({ x: 1, y: 2 as 2 & {} }, { x: 1, y: 3 as 3 & {} }),
                 )
             })

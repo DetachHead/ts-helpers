@@ -89,88 +89,84 @@ export interface Stringable {
 /**
  * gets the first character in a string
  */
-export type Head<String extends string> = String extends `${infer R}${string}` ? R : never
+export type Head<Str extends string> = Str extends `${infer R}${string}` ? R : never
 
 /**
  * removes the first character off the start of a string
  */
-export type Tail<String extends string> = TrimStart<String, 1>
+export type Tail<Str extends string> = TrimStart<Str, 1>
 
 type _TrimStart<
-    String extends string,
+    Str extends string,
     Index extends number,
     Iterator extends number
 > = Iterator extends Index
-    ? String
-    : _TrimStart<String extends `${Head<String>}${infer R}` ? R : never, Index, Increment<Iterator>>
+    ? Str
+    : _TrimStart<Str extends `${Head<Str>}${infer R}` ? R : never, Index, Increment<Iterator>>
 
 /**
  * trims the characters up to `Index` off the start of `String` (inclusive)
  * @example
  * type Foo = TrimStart<'foobar', 2> //'bar'
  */
-export type TrimStart<String extends string, Index extends number> = Or<
-    Extends<string, String> | Extends<number, Index>
+export type TrimStart<Str extends string, Index extends number> = Or<
+    Extends<string, Str> | Extends<number, Index>
 > extends true
     ? string
-    : _TrimStart<String, Index, 0>
+    : _TrimStart<Str, Index, 0>
 
 /**
  * trims the characters past `Index` off the end of `String` (exclusive)
  * @example
  * type Foo = TrimEnd<'foobar', 2> //'foo'
  */
-export type TrimEnd<String extends string, Index extends number> = Substring<String, 0, Index>
+export type TrimEnd<Str extends string, Index extends number> = Substring<Str, 0, Index>
 
 /**
  * gets the characters of `String` between `StartIndex` (inclusive) and `EndIndex` (exclusive)
  */
-export type Substring<
-    String extends string,
-    StartIndex extends number,
-    EndIndex extends number
-> = Or<Extends<string, String> | Extends<number, StartIndex | EndIndex>> extends true
+export type Substring<Str extends string, StartIndex extends number, EndIndex extends number> = Or<
+    Extends<string, Str> | Extends<number, StartIndex | EndIndex>
+> extends true
     ? string
-    : TrimStart<String, StartIndex> extends `${infer R}${TrimStart<String, EndIndex>}`
+    : TrimStart<Str, StartIndex> extends `${infer R}${TrimStart<Str, EndIndex>}`
     ? R
     : never
 
-export type CharAt<String extends string, Index extends number> = Head<TrimStart<String, Index>>
+export type CharAt<Str extends string, Index extends number> = Head<TrimStart<Str, Index>>
 
 /**
  * `true` if `String` contains `Substring`, else `false`
  */
 export type Includes<
-    String extends string,
+    Str extends string,
     Substring extends string
-> = String extends `${string}${Substring}${string}` ? true : false
+> = Str extends `${string}${Substring}${string}` ? true : false
 
-type _IndexOf<
-    String extends string,
-    Substr extends string,
-    CurrentIndex extends number
-> = Substring<String, CurrentIndex, Add<CurrentIndex, Length<Substr>>> extends Substr
+type _IndexOf<Str extends string, Substr extends string, CurrentIndex extends number> = Substring<
+    Str,
+    CurrentIndex,
+    Add<CurrentIndex, Length<Substr>>
+> extends Substr
     ? CurrentIndex
-    : _IndexOf<String, Substr, Increment<CurrentIndex>>
+    : _IndexOf<Str, Substr, Increment<CurrentIndex>>
 
 /**
  * gets the index of a `Substring` within a `String`. returns `-1` if it's not present
  */
-export type IndexOf<String extends string, Substring extends string> = string extends
-    | String
-    | Substring
+export type IndexOf<Str extends string, Substring extends string> = string extends Str | Substring
     ? number
-    : Includes<String, Substring> extends true
-    ? _IndexOf<String, Substring, 0>
+    : Includes<Str, Substring> extends true
+    ? _IndexOf<Str, Substring, 0>
     : -1
 
 type _Replace<
-    String extends string,
+    Str extends string,
     Find extends TemplateLiteralStringable,
     ReplaceWith extends TemplateLiteralStringable
-> = String extends `${infer BS}${Find}${infer AS}`
+> = Str extends `${infer BS}${Find}${infer AS}`
     ? Replace<`${BS}${ReplaceWith}${AS}`, Find, ReplaceWith>
-    : String
+    : Str
 
 /**
  * replaces all instances of `Find` with `ReplaceWith`. the type equivalent of {@link String.prototype.replace}
@@ -179,25 +175,25 @@ type _Replace<
  * that also allows `undefined` and `null` (ie. anything that template literal types allow)
  */
 export declare type Replace<
-    String extends string,
+    Str extends string,
     Find extends TemplateLiteralStringable,
     ReplaceWith extends TemplateLiteralStringable
-> = _Replace<String, Find, ReplaceWith> extends infer X ? Cast<X, string> : never
+> = _Replace<Str, Find, ReplaceWith> extends infer X ? Cast<X, string> : never
 
 /**
  * replaces the first instance of `Find` with `ReplaceWith`. the type equivalent of {@link String.prototype.replace}
  */
 export type ReplaceOne<
-    String extends TemplateLiteralStringable,
+    Str extends TemplateLiteralStringable,
     Find extends TemplateLiteralStringable,
     ReplaceWith extends TemplateLiteralStringable
-> = String extends `${infer Start}${Find}${infer End}` ? `${Start}${ReplaceWith}${End}` : String
+> = Str extends `${infer Start}${Find}${infer End}` ? `${Start}${ReplaceWith}${End}` : Str
 
 /**
  * checks whether the length of type `String` is **greater than or equal to** the length of type `Length`
  */
-export type LengthGreaterOrEqual<String extends string, Length extends number> = CharAt<
-    String,
+export type LengthGreaterOrEqual<Str extends string, Length extends number> = CharAt<
+    Str,
     Decrement<Length>
 > extends never
     ? false
@@ -206,8 +202,8 @@ export type LengthGreaterOrEqual<String extends string, Length extends number> =
 /**
  * checks whether the length of type `String` is **greater than** the length of type `Length`
  */
-export type LengthGreaterThan<String extends string, Length extends number> = LengthGreaterOrEqual<
-    String,
+export type LengthGreaterThan<Str extends string, Length extends number> = LengthGreaterOrEqual<
+    Str,
     Increment<Length>
 >
 
@@ -227,14 +223,14 @@ type CaseInsensitiveTailRec<Value extends string, Result extends string> = Value
 export type CaseInsensitive<T extends string> = CaseInsensitiveTailRec<T, ''>
 
 type _DuplicateStringUntilLength<
-    String extends string,
+    Str extends string,
     Size extends number,
     CurrentString extends string
 > = Length<CurrentString> extends Size
     ? CurrentString
-    : LengthGreaterThan<`${CurrentString}${String}`, Size> extends true
-    ? TrimEnd<`${CurrentString}${String}`, Size>
-    : _DuplicateStringUntilLength<String, Size, `${CurrentString}${String}`>
+    : LengthGreaterThan<`${CurrentString}${Str}`, Size> extends true
+    ? TrimEnd<`${CurrentString}${Str}`, Size>
+    : _DuplicateStringUntilLength<Str, Size, `${CurrentString}${Str}`>
 
 /**
  * like {@link DuplicateString} except it duplicates until the exact provided `Size`, instead of a number of repetitions
@@ -243,36 +239,36 @@ type _DuplicateStringUntilLength<
  * type Foo = DuplicateStringUntilLength<'abc', 8> //'abcabcab'
  */
 export type DuplicateStringUntilLength<
-    String extends string,
+    Str extends string,
     Size extends number
-> = _DuplicateStringUntilLength<String, Size, String>
+> = _DuplicateStringUntilLength<Str, Size, Str>
 
 /**
  * the type equivalent of {@link String.prototype.padStart}
  */
 export type PadStart<
-    String extends string,
+    Str extends string,
     Size extends number,
     PadString extends string
-> = `${TemplateLiteralStringable}` extends String | PadString
+> = `${TemplateLiteralStringable}` extends Str | PadString
     ? string
     : {
-          [Key in String]: number extends Size
+          [Key in Str]: number extends Size
               ? string
               : `${DuplicateStringUntilLength<PadString, Subtract<Size, Length<Key>>>}${Key}`
-      }[String]
+      }[Str]
 
 /**
  * takes a `String` and a `MatchString` (ideally a union) and returns the string in the union that `String` started with
  * @example
  * type Foo: MatchStart<'foo', 'bar' | 'foo' | 'baz'>
  */
-export type MatchStart<String extends string, MatchString extends string> = string extends
-    | String
+export type MatchStart<Str extends string, MatchString extends string> = string extends
+    | Str
     | MatchString
     ? string
-    : String extends `${MatchString}${infer End}`
-    ? String extends `${infer Start}${End}`
+    : Str extends `${MatchString}${infer End}`
+    ? Str extends `${infer Start}${End}`
         ? Start
         : never
     : never
@@ -493,9 +489,9 @@ export type MakeEndsWith<Str extends string, Suffix extends string> = string ext
  * @example
  * type Foo = LeftOf<'foo.bar', '.'> //'foo'
  */
-export type LeftOf<String extends string, Substring extends string> = TrimEnd<
-    String,
-    IndexOf<String, Substring>
+export type LeftOf<Str extends string, Substring extends string> = TrimEnd<
+    Str,
+    IndexOf<Str, Substring>
 >
 
 /**
@@ -503,9 +499,9 @@ export type LeftOf<String extends string, Substring extends string> = TrimEnd<
  * @example
  * type Foo = RightOf<'foo.bar', '.'> //'bar'
  */
-export type RightOf<String extends string, Substring extends string> = TrimStart<
-    String,
-    Add<IndexOf<String, Substring>, Length<Substring>>
+export type RightOf<Str extends string, Substring extends string> = TrimStart<
+    Str,
+    Add<IndexOf<Str, Substring>, Length<Substring>>
 >
 
 /**
@@ -513,8 +509,8 @@ export type RightOf<String extends string, Substring extends string> = TrimStart
  * @example
  * MidOf<'foo(bar)baz', '(', ')'> //'bar'
  */
-export type MidOf<String extends string, Start extends string, End extends string> = RightOf<
-    LeftOf<String, End>,
+export type MidOf<Str extends string, Start extends string, End extends string> = RightOf<
+    LeftOf<Str, End>,
     Start
 >
 

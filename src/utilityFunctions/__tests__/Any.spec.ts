@@ -1,5 +1,6 @@
 import { entries, hasPropertyPredicate, isNullOrUndefined, runUntil } from '../Any'
 import { exactly } from '../misc'
+import { NonNullish } from '../../utilityTypes/misc'
 
 test('entries', () => {
     exactly(
@@ -18,7 +19,8 @@ describe('hasPropertyPredicate', () => {
             if (hasPropertyPredicate(value, 'foo')) exactly<{ foo: unknown }>()(value)
         })
         test('union', () => {
-            if (hasPropertyPredicate(value, 'length' as 'length' | 'asdf')) exactly<{}>()(value)
+            if (hasPropertyPredicate(value, 'length' as 'length' | 'asdf'))
+                exactly<NonNullish>()(value)
         })
         test('not known at compiletime', () => {
             if (hasPropertyPredicate(value, 'length' as string)) exactly<unknown>()(value)
