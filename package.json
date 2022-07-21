@@ -6,6 +6,9 @@
     "src",
     "!src/**/__tests__"
   ],
+  "exports": {
+    "./**/*.js": "./dist/**/*.js"
+  },
   "scripts": {
     "test": "jest --detectOpenHandles",
     "lint:check": "eslint . --ext .ts",
