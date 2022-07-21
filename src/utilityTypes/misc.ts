@@ -1,3 +1,5 @@
+import { Keys as TsToolbeltKeys } from 'ts-toolbelt/out/Any/Keys'
+
 /**
  * "normalizes" types to be compared using {@link FunctionComparisonEquals}
  * - converts intersections of object types to normal object types
@@ -169,3 +171,13 @@ export type NoAny<T> = FunctionComparisonEquals<T, any> extends true ? never : T
  */
 // eslint-disable-next-line @typescript-eslint/ban-types -- duh
 export type NonNullish = {}
+
+/**
+ * like ts-toolbelt's `Keys` except it doesn't include number (for objects where you know all of the keys)
+ *
+ * in some cases, `ts-toolbelt`'s `KnownKeys` will probably work for you, but it doesn't seem to work properly for arrays
+ */
+export type Keys<T> = Exclude<TsToolbeltKeys<T>, number>
+
+/** compiletime version of {@link ObjectConstructor.entries} */
+export type Entries<T> = [Keys<T>, T[Keys<T>]][]

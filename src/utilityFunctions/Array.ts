@@ -15,10 +15,10 @@ import { Flatten } from 'ts-toolbelt/out/List/Flatten'
 import _ from 'lodash'
 import { isDefined } from 'ts-is-present'
 import { Enumerate } from '../utilityTypes/Number'
-import { Keys } from '../utilityTypes/Any'
+import { Keys } from '../utilityTypes/misc'
 import { MaybePromise, NonNil } from 'tsdef'
 import { FindResult } from '../utilityTypes/internal'
-import { isNullOrUndefined } from './Any'
+import { isNullOrUndefined } from './misc'
 import { Throw } from 'throw-expression'
 
 /**
