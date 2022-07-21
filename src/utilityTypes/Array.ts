@@ -1,4 +1,4 @@
-import { NoUncheckedIndexedAccess } from './misc'
+import { NoUncheckedIndexedAccess, Keys } from './misc'
 import { Add, Decrement, Enumerate, Increment, IsGreaterThan, Subtract } from './Number'
 import { Flatten } from 'ts-toolbelt/out/List/Flatten'
 import { Take } from 'ts-toolbelt/out/List/Take'
@@ -6,7 +6,6 @@ import { Length } from 'ts-toolbelt/out/String/Length'
 import { Head } from 'ts-toolbelt/out/List/Head'
 import { Tail } from 'ts-toolbelt/out/List/Tail'
 import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
-import { Keys } from './Any'
 import { Extends, Or } from './Boolean'
 
 type _BuildPowersOf2LengthArrays<
