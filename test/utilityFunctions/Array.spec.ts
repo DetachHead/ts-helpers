@@ -1,33 +1,33 @@
+import { PowerAssert } from 'typed-nodejs-assert'
+import { Throw, throwIfUndefined } from 'throw-expression'
 import {
-    castArray,
-    concat,
     containsDuplicates,
-    find,
     findDuplicates,
     findIndexWithHighestNumber,
     findNotUndefined,
     findNotUndefinedAsync,
     flat,
-    forEach,
-    indexOf,
     indexOfLongestString,
     lengthGreaterOrEqual,
     lengthGreaterThan,
     lengthIs,
     lengthLessOrEqual,
     lengthLessThan,
-    map,
     mapAsync,
     removeDuplicates,
-    slice,
     sortByLongestStrings,
     splice,
-} from '../Array'
-import { PowerAssert } from 'typed-nodejs-assert'
-import { Throw, throwIfUndefined } from 'throw-expression'
-import { exactly } from '../misc'
-import { subtract } from '../Number'
-import { TupleOf } from '../../utilityTypes/Array'
+    castArray,
+    find,
+    forEach,
+    indexOf,
+    map,
+    concat,
+    slice,
+} from '../../src/utilityFunctions/Array'
+import { subtract } from '../../src/utilityFunctions/Number'
+import { exactly } from '../../src/utilityFunctions/misc'
+import { TupleOf } from '../../src/utilityTypes/Array'
 // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
 

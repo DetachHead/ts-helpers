@@ -1,4 +1,4 @@
-import { NoAny, OnlyInfer } from '../misc'
+import { NoAny, OnlyInfer } from '../../src/utilityTypes/misc'
 
 describe('OnlyInfer', () => {
     test('basic', () => {

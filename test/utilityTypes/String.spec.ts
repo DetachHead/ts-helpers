@@ -1,20 +1,20 @@
+import { assertType, exactly } from '../../src/utilityFunctions/misc'
 import {
+    CaseInsensitive,
+    DuplicateString,
     Email,
     FileName,
-    LengthGreaterOrEqual,
-    LengthGreaterThan,
-    UriString,
-    UrlString,
-    CaseInsensitive,
+    GUID,
     IPv4,
     IPv6,
+    LengthGreaterOrEqual,
+    LengthGreaterThan,
     ReplaceValuesWithMap,
-    SplitByUnion,
     SplitByLength,
-    DuplicateString,
-    GUID,
-} from '../String'
-import { assertType, exactly } from '../../utilityFunctions/misc'
+    SplitByUnion,
+    UriString,
+    UrlString,
+} from '../../src/utilityTypes/String'
 
 test('UriString', () => {
     // @ts-expect-error TS2345: Argument of type '"asdf"' is not assignable to parameter of type '`${string}://${string}`'.

@@ -22,8 +22,8 @@ import {
     toUpperCase,
     truncate,
     uncapitalize,
-} from '../String'
-import { exactly, toStringType } from '../misc'
+} from '../../src/utilityFunctions/String'
+import { exactly, toStringType } from '../../src/utilityFunctions/misc'
 
 test('match', () => {
     const foo = match('', /a/u)
