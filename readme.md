@@ -83,6 +83,90 @@ Equals<any, 10> // false
 Equals<unknown, never> // false
 ```
 
+### variance modifier types
+
+when using the old method syntax, typescript does not check the variance on assignment:
+
+```ts
+declare class A<T> {
+    set(value: T): void
+    get(): T
+}
+
+const a = new A<number>()
+
+const b: A<unknown> = a
+
+b.set('')
+a.get() // typescript thinks this is a number but it's actually a string
+```
+
+for more information about how variance works, see [this PR](https://github.com/microsoft/TypeScript/pull/18654). the TL;DR is basically that arrow functions are checked more strictly than the old method syntax (for backwards compatibility reasons). this means you should be using arrow functions where possible.
+
+```ts
+declare class A<T> {
+    set: (value: T) => void
+    get: () => T
+}
+
+const a = new A<number>()
+
+const b: A<unknown> = a // error: Type 'A<number>' is not assignable to type 'A<unknown>'
+```
+
+unfortunately however, arrow functions can't always be used. sometimes you need to use methods instead if, for example, you need to access `super` from a subclass:
+
+```ts
+class B extends A<number> {
+    get = () => super.get() // runtime error, arrow functions can't access super
+}
+```
+
+this is where variance modifiers come in
+
+#### `SafeVariance` / `ToArrowFunction`
+
+you can use `SafeVariance<A>` to enable strict variance checking on a class that has methods in it. or if for whatever reason you need to convert an individual function type to an arrow function type, you can use `ToArrowFunction<A['get']>`
+
+```ts
+class B<T> extends A<T> {
+    override get() {
+        return super.get()
+    }
+}
+
+const a = new B<number>()
+
+const b: SafeVariance<A<unknown>> = a // error
+```
+
+#### `UnsafeVariance` / `ToNonArrowFunction`
+
+variance is only an issue when you're dealing with classes that have mutable state. if your type is immutable, you may want to disable variance checking without having to convert your shiny new arrow functions into cringe old methods.
+
+to do this, simply use `UnsafeVariance<A>` on your class, or `ToNonArrowFunction<A['set']>` to convert a function type:
+
+```ts
+declare class A<T> {
+    doSomethingElseThatTotallyDoesntChangeTheValue: (value: T) => void
+    get: () => T
+}
+
+const a = new A<number>()
+
+const b: UnsafeVariance<A<unknown>> = a // no error
+```
+
+#### drawbacks
+
+-   these modifier types can currently only be used at the use site, meaning you have to remember to use them on all usages of your types. see these issues:
+    -   [functions](https://github.com/DetachHead/ts-helpers/issues/162)
+    -   [classes](https://github.com/DetachHead/ts-helpers/issues/184)
+-   probably doesn't work properly with more complicated types. if you encounter anything like that, [raise an issue](https://github.com/DetachHead/ts-helpers/issues/new/choose)
+-   [private methods don't work properly with `UnsafeVariance`](https://github.com/DetachHead/ts-helpers/issues/160)
+
+it goes without saying that these modifiers _do not_ change the runtime behavior of a function. an arrow function is still an arrow function regardless of whether you use the `ToNonArrowFunction` type on it.
+
 ## requirements
 
 ### typescript
