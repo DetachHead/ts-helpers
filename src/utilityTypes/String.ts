@@ -99,7 +99,7 @@ export type Tail<Str extends string> = TrimStart<Str, 1>
 type _TrimStart<
     Str extends string,
     Index extends number,
-    Iterator extends number
+    Iterator extends number,
 > = Iterator extends Index
     ? Str
     : _TrimStart<Str extends `${Head<Str>}${infer R}` ? R : never, Index, Increment<Iterator>>
@@ -140,7 +140,7 @@ export type CharAt<Str extends string, Index extends number> = Head<TrimStart<St
  */
 export type Includes<
     Str extends string,
-    Substring extends string
+    Substring extends string,
 > = Str extends `${string}${Substring}${string}` ? true : false
 
 type _IndexOf<Str extends string, Substr extends string, CurrentIndex extends number> = Substring<
@@ -163,7 +163,7 @@ export type IndexOf<Str extends string, Substring extends string> = string exten
 type _Replace<
     Str extends string,
     Find extends TemplateLiteralStringable,
-    ReplaceWith extends TemplateLiteralStringable
+    ReplaceWith extends TemplateLiteralStringable,
 > = Str extends `${infer BS}${Find}${infer AS}`
     ? Replace<`${BS}${ReplaceWith}${AS}`, Find, ReplaceWith>
     : Str
@@ -177,7 +177,7 @@ type _Replace<
 export declare type Replace<
     Str extends string,
     Find extends TemplateLiteralStringable,
-    ReplaceWith extends TemplateLiteralStringable
+    ReplaceWith extends TemplateLiteralStringable,
 > = _Replace<Str, Find, ReplaceWith> extends infer X ? Cast<X, string> : never
 
 /**
@@ -186,7 +186,7 @@ export declare type Replace<
 export type ReplaceOne<
     Str extends TemplateLiteralStringable,
     Find extends TemplateLiteralStringable,
-    ReplaceWith extends TemplateLiteralStringable
+    ReplaceWith extends TemplateLiteralStringable,
 > = Str extends `${infer Start}${Find}${infer End}` ? `${Start}${ReplaceWith}${End}` : Str
 
 /**
@@ -225,7 +225,7 @@ export type CaseInsensitive<T extends string> = CaseInsensitiveTailRec<T, ''>
 type _DuplicateStringUntilLength<
     Str extends string,
     Size extends number,
-    CurrentString extends string
+    CurrentString extends string,
 > = Length<CurrentString> extends Size
     ? CurrentString
     : LengthGreaterThan<`${CurrentString}${Str}`, Size> extends true
@@ -240,7 +240,7 @@ type _DuplicateStringUntilLength<
  */
 export type DuplicateStringUntilLength<
     Str extends string,
-    Size extends number
+    Size extends number,
 > = _DuplicateStringUntilLength<Str, Size, Str>
 
 /**
@@ -249,7 +249,7 @@ export type DuplicateStringUntilLength<
 export type PadStart<
     Str extends string,
     Size extends number,
-    PadString extends string
+    PadString extends string,
 > = `${TemplateLiteralStringable}` extends Str | PadString
     ? string
     : {
@@ -320,7 +320,7 @@ type ReplaceValuesMap = Record<Exclude<AnyKey, symbol>, unknown>
 type _TokenizeString<
     Value extends string,
     Map extends ReplaceValuesMap,
-    Tokens extends string[]
+    Tokens extends string[],
 > = '' extends Value
     ? Tokens
     : LongestString<MatchStart<Value, Keys<Map>>> extends infer Token
@@ -347,7 +347,7 @@ type _TokenizeString<
 type _ReplaceValuesWithMap<
     InputTokens extends string[],
     Map extends ReplaceValuesMap,
-    OutputTokens // extends string[] (handled in the conditional type below instead to work around https://github.com/microsoft/TypeScript/issues/46176)
+    OutputTokens, // extends string[] (handled in the conditional type below instead to work around https://github.com/microsoft/TypeScript/issues/46176)
 > = string[] extends InputTokens
     ? InputTokens
     : InputTokens extends []
@@ -404,7 +404,7 @@ export type LongestString<Strings extends string> = ListOf<Strings>[IndexOfLonge
 type SplitByUnionTailRec<
     Value extends string,
     SplitBy extends string,
-    CurrentResult extends string
+    CurrentResult extends string,
 > = Value extends ''
     ? never
     : IndexOf<Value, SplitBy> extends -1
@@ -431,7 +431,7 @@ export type SplitByUnion<Value extends string, SplitBy extends string> = SplitBy
 type SplitByLengthTailRec<
     T extends string,
     Len extends number,
-    Result extends string[]
+    Result extends string[],
 > = Length<T> extends Len
     ? [...Result, T]
     : SplitByLengthTailRec<TrimStart<T, Len>, Len, [...Result, TrimEnd<T, Len>]>
@@ -449,7 +449,7 @@ export type SplitByLength<T extends string, Len extends number> = SplitByLengthT
 export type Truncate<
     Str extends string,
     MaxLength extends number,
-    Ellipsis extends string = '…'
+    Ellipsis extends string = '…',
 > = IsGreaterThan<Length<Ellipsis>, MaxLength> extends true
     ? never
     : IsLessOrEqual<Length<Str>, MaxLength> extends true
@@ -517,7 +517,7 @@ export type MidOf<Str extends string, Start extends string, End extends string> 
 type CountInStringTailRec<
     Str extends string,
     Substring extends string,
-    Result extends number
+    Result extends number,
 > = IndexOf<Str, Substring> extends -1
     ? Result
     : CountInStringTailRec<RightOf<Str, Substring>, Substring, Increment<Result>>

@@ -45,7 +45,7 @@ export type RangeType<FROM extends number, TO extends number> =
  */
 export type Add<N1 extends number, N2 extends number> = [
     ...TupleOf<never, N1>,
-    ...TupleOf<never, N2>
+    ...TupleOf<never, N2>,
 ]['length'] &
     // intersection to suppress compiler narrowing bug
     number
@@ -57,7 +57,7 @@ export type Add<N1 extends number, N2 extends number> = [
  */
 export type Subtract<N1 extends number, N2 extends number> = TupleOf<never, N1> extends [
     ...TupleOf<never, N2>,
-    ...infer R
+    ...infer R,
 ]
     ? R['length']
     : never
@@ -65,7 +65,7 @@ export type Subtract<N1 extends number, N2 extends number> = TupleOf<never, N1> 
 type _MultiAdd<
     Num extends number,
     Accumulator extends number,
-    IterationsLeft extends number
+    IterationsLeft extends number,
 > = IterationsLeft extends 0
     ? Accumulator
     : _MultiAdd<Num, Add<Num, Accumulator>, Decrement<IterationsLeft>>
@@ -104,7 +104,7 @@ type _LessThanTerminus<Dividee extends number, Divider extends number> = _AtTerm
 type _MultiSub<
     Dividee extends number,
     Divider extends number,
-    QuotientAccumulator extends number
+    QuotientAccumulator extends number,
 > = _LessThanTerminus<Dividee, Divider> extends true
     ? QuotientAccumulator
     : _MultiSub<Subtract<Dividee, Divider>, Divider, Increment<QuotientAccumulator>>
@@ -136,7 +136,7 @@ export type Modulo<N1 extends number, N2 extends number> = _LessThanTerminus<N1,
 type PowerTailRec<
     Num extends number,
     PowerOf extends number,
-    Result extends number
+    Result extends number,
 > = number extends PowerOf
     ? number
     : PowerOf extends 0

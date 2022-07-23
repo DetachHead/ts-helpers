@@ -30,7 +30,7 @@ import { Literal } from 'ts-toolbelt/out/String/_Internal'
 export const replaceOne = <
     Str extends string,
     Find extends string,
-    ReplaceWithString extends string
+    ReplaceWithString extends string,
 >(
     str: Str,
     find: Find,
@@ -43,7 +43,7 @@ export const replaceOne = <
 export const replaceAll = <
     Str extends string,
     Find extends string,
-    ReplaceWithString extends string
+    ReplaceWithString extends string,
 >(
     str: Str,
     find: Find,
@@ -154,7 +154,7 @@ export const truncate: {
     <
         Str extends string,
         MaxLength extends number,
-        Ellipsis extends string = typeof defaultEllipsis
+        Ellipsis extends string = typeof defaultEllipsis,
     >(
         string: Str,
         maxLength: MaxLength,
@@ -172,13 +172,15 @@ export const truncate: {
     ? Truncate<Str, MaxLength>
     : Truncate<Str, MaxLength, Ellipsis> => {
     const ellipsis = optionalEllipsis ?? defaultEllipsis
-    return (ellipsis.length > maxLength
-        ? Throw(
-              `can't truncate string: "${string}" with "${ellipsis}" because it's longer than the max length: ${maxLength}`,
-          )
-        : string.length < maxLength
-        ? string
-        : `${string.substring(0, maxLength - ellipsis.length)}${ellipsis}`) as never
+    return (
+        ellipsis.length > maxLength
+            ? Throw(
+                  `can't truncate string: "${string}" with "${ellipsis}" because it's longer than the max length: ${maxLength}`,
+              )
+            : string.length < maxLength
+            ? string
+            : `${string.substring(0, maxLength - ellipsis.length)}${ellipsis}`
+    ) as never
 }
 
 /**

@@ -10,7 +10,7 @@ import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
 
 type _BuildPowersOf2LengthArrays<
     Length extends number,
-    AccumulatedArray extends never[][]
+    AccumulatedArray extends never[][],
 > = AccumulatedArray[0][Length] extends never
     ? AccumulatedArray
     : _BuildPowersOf2LengthArrays<
@@ -21,7 +21,7 @@ type _BuildPowersOf2LengthArrays<
 type _ConcatLargestUntilDone<
     Length extends number,
     AccumulatedArray extends never[][],
-    NextArray extends never[]
+    NextArray extends never[],
 > = NextArray['length'] extends Length
     ? NextArray
     : [...AccumulatedArray[0], ...NextArray][Length] extends never
@@ -108,7 +108,7 @@ export type Index<T extends readonly unknown[]> = Enumerate<T['length']>
 type _IndexOf<
     Array extends readonly unknown[],
     Value extends Array[number],
-    CurrentIndex extends Index<Array>
+    CurrentIndex extends Index<Array>,
 > = Array[CurrentIndex] extends Value
     ? CurrentIndex
     : CurrentIndex extends Array['length']
@@ -120,7 +120,7 @@ type _IndexOf<
  */
 export type IndexOf<
     Array extends readonly unknown[],
-    Value extends Array[number]
+    Value extends Array[number],
 > = number extends Array['length']
     ? number
     : {
@@ -146,7 +146,7 @@ export type LengthGreaterThan<Array extends unknown[], Length extends number> = 
 export type Splice<
     Array extends unknown[],
     StartIndex extends number,
-    DeleteCount extends number = Subtract<Array['length'], StartIndex>
+    DeleteCount extends number = Subtract<Array['length'], StartIndex>,
 > = [...Take<Array, StartIndex>, ...Take<Array, Add<StartIndex, DeleteCount>, '<-'>]
 
 /** removes the value at index `RemoveIndex` from `Array` */
@@ -159,7 +159,7 @@ export type RemoveIndex<Array extends unknown[], RemoveIndex extends Index<Array
 type _IndexOfLongestString<
     Strings extends readonly string[],
     CurrentIndex extends number,
-    CurrentLongestIndex extends number
+    CurrentLongestIndex extends number,
 > = Strings[CurrentIndex] extends undefined
     ? CurrentLongestIndex
     : _IndexOfLongestString<
@@ -199,7 +199,7 @@ export type SortLongestStrings<Array extends string[]> = SortLongestStringsTailR
 type _IndexOfHighestNumber<
     Numbers extends readonly number[],
     CurrentIndex extends number,
-    CurrentHighestNumberIndex extends number
+    CurrentHighestNumberIndex extends number,
 > = CurrentIndex extends Numbers['length']
     ? CurrentHighestNumberIndex
     : _IndexOfHighestNumber<
@@ -220,7 +220,7 @@ export type IndexOfHighestNumber<Numbers extends readonly number[]> = _IndexOfHi
 export type RemoveValueTailRec<
     Array extends unknown[],
     Value,
-    Result extends unknown[]
+    Result extends unknown[],
 > = Array extends []
     ? Result
     : RemoveValueTailRec<
@@ -242,7 +242,7 @@ export type RemoveValue<Array extends unknown[], Value> = RemoveValueTailRec<Arr
 export type Slice<
     Array extends unknown[],
     Start extends number,
-    End extends number = Array['length']
+    End extends number = Array['length'],
 > = number extends Array['length']
     ? Array
     : number extends Start | End
@@ -250,7 +250,7 @@ export type Slice<
     : Array extends [
           ...TupleOf<unknown, Start>,
           ...infer Result,
-          ...TupleOf<unknown, Subtract<Array['length'], End>>
+          ...TupleOf<unknown, Subtract<Array['length'], End>>,
       ]
     ? Result
     : never

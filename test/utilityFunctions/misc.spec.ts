@@ -525,19 +525,13 @@ describe('runUntil', () => {
         let isDone = false
         setTimeout(() => (isDone = true), 1000)
         await expect(
-            runUntil(
-                () => new Promise<boolean>((res) => setTimeout(() => res(isDone), 10)),
-                100,
-            ),
+            runUntil(() => new Promise<boolean>((res) => setTimeout(() => res(isDone), 10)), 100),
         ).rejects.toThrow("runUntil failed because the predicate didn't return true in 100 ms")
     })
     test('resolves', async () => {
         let isDone = false
         setTimeout(() => (isDone = true), 80)
-        await runUntil(
-            () => new Promise<boolean>((res) => setTimeout(() => res(isDone), 10)),
-            100,
-        )
+        await runUntil(() => new Promise<boolean>((res) => setTimeout(() => res(isDone), 10)), 100)
     })
 })
 

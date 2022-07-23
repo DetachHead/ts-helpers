@@ -51,16 +51,14 @@ type InvariantComparisonEqualsWrapped<T> = { value: T; setValue: (value: T) => n
  * - doesn't work properly with `any` (if the type itself is `any` it's handled correctly by a workaround here but not
  * if the type contains `any`)
  */
-type InvariantComparisonEquals<
-    Expected,
-    Actual
-> = InvariantComparisonEqualsWrapped<Expected> extends InvariantComparisonEqualsWrapped<Actual>
-    ? IsAny<Expected | Actual> extends true
-        ? IsAny<Expected> | IsAny<Actual> extends true
-            ? true
-            : false
-        : true
-    : false
+type InvariantComparisonEquals<Expected, Actual> =
+    InvariantComparisonEqualsWrapped<Expected> extends InvariantComparisonEqualsWrapped<Actual>
+        ? IsAny<Expected | Actual> extends true
+            ? IsAny<Expected> | IsAny<Actual> extends true
+                ? true
+                : false
+            : true
+        : false
 
 /**
  * Checks if two types are equal at the type level.
@@ -136,9 +134,10 @@ export type OptionalParameterFromGeneric<Type, Extends> = Type extends Extends
  * foo(1) //no error
  * foo<number>(1) // error
  */
-export type OnlyInfer = '__do not specify any of the generics here, as they have been marked as `OnlyInfer`' & {
-    _: never
-}
+export type OnlyInfer =
+    '__do not specify any of the generics here, as they have been marked as `OnlyInfer`' & {
+        _: never
+    }
 
 /**
  * creates an "error type" stating that the operation is not yet implemented. useful for shutting up the type checker

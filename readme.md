@@ -28,9 +28,9 @@ can be solved with `lengthGreaterThan`
 
 ```ts
 import { lengthGreaterThan } from '@detachhead/ts-helpers'
+
 if (lengthGreaterThan(foo, 2)) {
-    const bar: string = foo[1] no error, foo is casted to [string, string]
-}
+    const bar: string = foo[1] //no error, foo is casted to [string, string]
 }
 ```
 
