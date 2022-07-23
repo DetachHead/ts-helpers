@@ -1,3 +1,4 @@
+import { assertType, exactly } from '../../src/utilityFunctions/misc'
 import {
     DimensionArray,
     IndexOf,
@@ -6,7 +7,6 @@ import {
     TupleOf,
     TupleOfUpTo,
 } from '../../src/utilityTypes/Array'
-import { assertType, exactly } from '../../src/utilityFunctions/misc'
 
 describe('TupleOfUpTo', () => {
     test('type', () => {

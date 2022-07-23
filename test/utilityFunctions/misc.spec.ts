@@ -1,4 +1,3 @@
-import { PowerAssert } from 'typed-nodejs-assert'
 import {
     cast,
     entries,
@@ -9,6 +8,8 @@ import {
     unsafeCast,
 } from '../../src/utilityFunctions/misc'
 import { NonNullish } from '../../src/utilityTypes/misc'
+import { PowerAssert } from 'typed-nodejs-assert'
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
 

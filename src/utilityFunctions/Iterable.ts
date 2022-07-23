@@ -1,5 +1,5 @@
-import { MaybePromise } from 'tsdef'
 import { FindResult } from '../utilityTypes/internal'
+import { MaybePromise } from 'tsdef'
 
 /** finds the first item in the `iterable` where the `predicate` returns `true` */
 export const find = <T>(iterable: Iterable<T>, predicate: (value: T) => boolean): FindResult<T> => {

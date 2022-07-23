@@ -1,5 +1,3 @@
-import _ from 'lodash'
-import ordinal from 'ordinal'
 import {
     Add,
     Divide,
@@ -18,10 +16,12 @@ import {
     Square,
     Subtract,
 } from '../utilityTypes/Number'
-import { toStringType } from './misc'
-import { padStart } from './String'
-import { Throw } from 'throw-expression'
 import { OptionalParameterFromGeneric } from '../utilityTypes/misc'
+import { padStart } from './String'
+import { toStringType } from './misc'
+import _ from 'lodash'
+import ordinal from 'ordinal'
+import { Throw } from 'throw-expression'
 
 /**
  * gets a random number in the given range from `Min` to `Max` (inclusive)

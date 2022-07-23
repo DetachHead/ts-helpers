@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import {
     CharAt,
     CountInString,
@@ -17,12 +16,13 @@ import {
     Substring,
     Truncate,
 } from '../utilityTypes/String'
+import _ from 'lodash'
+import { Throw } from 'throw-expression'
+import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import { List } from 'ts-toolbelt/out/List/List'
-import { Literal } from 'ts-toolbelt/out/String/_Internal'
 import { Join } from 'ts-toolbelt/out/String/Join'
 import { Split } from 'ts-toolbelt/out/String/Split'
-import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
-import { Throw } from 'throw-expression'
+import { Literal } from 'ts-toolbelt/out/String/_Internal'
 
 /**
  * replaces the first occurrence of `find` with `replace`
