@@ -128,7 +128,7 @@ export const exactly: {
     <
         Expected extends Equals<Expected, Actual> extends true ? Actual : never,
         Actual extends _Bound,
-        _Bound = Expected
+        _Bound = Expected,
     >(): unknown
     /**
      * Used to check that two types are an exact match. Useful for testing types<br/>
@@ -153,7 +153,7 @@ export const exactly: {
         _ extends OnlyInfer,
         Expected extends Equals<Expected, Actual> extends true ? Actual : never,
         Actual extends Bound,
-        Bound = Expected
+        Bound = Expected,
     >(
         expected: Narrow<Expected>,
         actual: Narrow<Actual>,

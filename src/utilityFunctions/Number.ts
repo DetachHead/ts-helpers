@@ -39,7 +39,7 @@ export const random = <Min extends number, Max extends number>(
  * type Foo = typeof foo //5
  */
 export const add = <N1 extends number, N2 extends number>(num1: N1, num2: N2): Add<N1, N2> =>
-    ((num1 + num2) as unknown) as Add<N1, N2>
+    (num1 + num2) as unknown as Add<N1, N2>
 
 /**
  * subtracts two numbers at compiletime

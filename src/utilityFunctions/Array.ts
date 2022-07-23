@@ -248,7 +248,7 @@ export const flat = <Array extends readonly unknown[], Depth extends number = 1>
 export const splice = <
     Array extends unknown[],
     StartIndex extends number,
-    DeleteCount extends number
+    DeleteCount extends number,
 >(
     array: Narrow<Array>,
     startIndex: StartIndex,
@@ -304,7 +304,7 @@ export const mapNotUndefined = <T, R>(array: (T | undefined)[], callback: (value
 export const slice = <
     Array extends unknown[],
     Start extends number,
-    End extends number = Array['length']
+    End extends number = Array['length'],
 >(
     array: Narrow<Array>,
     start: Start,

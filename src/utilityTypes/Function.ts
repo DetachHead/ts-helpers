@@ -37,10 +37,9 @@ export type ToNonArrowFunction<T extends AnyFunction> = {
  * @see https://github.com/microsoft/TypeScript/pull/18654
  */
 export type SafeVariance<T> = {
-    wrapped: T &
-        {
-            [Key in keyof T]: T[Key] extends AnyFunction ? ToArrowFunction<T[Key]> : T[Key]
-        }
+    wrapped: T & {
+        [Key in keyof T]: T[Key] extends AnyFunction ? ToArrowFunction<T[Key]> : T[Key]
+    }
 }['wrapped']
 
 /**
