@@ -8,13 +8,14 @@
   ],
   "scripts": {
     "test": "jest --detectOpenHandles",
-    "lint:check": "eslint . --ext .ts",
+    "lint:check": "eslint .",
     "lint:fix": "npm run lint:check -- --fix",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
-    "build": "rimraf ./dist && tsc -p tsconfig.build.json",
+    "build": "rimraf ./dist && tsc -p src/tsconfig.json",
+    "typecheck:config-files": "tsc -p tsconfig.json",
     "build-and-lib-check": "npm run build && tsc -p tsconfig.lib-check.json",
-    "check": "npm run build-and-lib-check && npm run lint:check && npm run format:check && npm run test"
+    "check": "npm run typecheck:config-files && npm run build-and-lib-check && npm run lint:check && npm run format:check && npm run test"
   },
   "keywords": [],
   "author": "detachhead",
@@ -26,6 +27,7 @@
   },
   "dependencies": {
     "@types/lodash": "4.14.167",
+    "assert": "^2.0.0",
     "date-fns": "2.21.1",
     "is-ci": "2.0.0",
     "lodash": "4.17.20",
@@ -39,7 +41,8 @@
   "devDependencies": {
     "@detachhead/eslint-config": "0.0.13-815ade9a5bd4c08fa5cbb542d9acaa29b071e376",
     "@jest/types": "^27.2.5",
-    "@types/is-ci": "3.0.0",
+    "@types/assert": "^1.5.6",
+    "@types/eslint": "^8.4.5",
     "@types/jest": "26.0.20",
     "@types/node": "14.14.20",
     "@types/power-assert": "1.5.3",

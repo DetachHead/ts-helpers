@@ -5,8 +5,8 @@ import {
     SortLongestStrings,
     TupleOf,
     TupleOfUpTo,
-} from '../Array'
-import { assertType, exactly } from '../../utilityFunctions/misc'
+} from '../../src/utilityTypes/Array'
+import { assertType, exactly } from '../../src/utilityFunctions/misc'
 
 describe('TupleOfUpTo', () => {
     test('type', () => {

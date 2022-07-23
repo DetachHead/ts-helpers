@@ -1,16 +1,14 @@
-import isCI from 'is-ci'
+import { PowerAssert } from 'typed-nodejs-assert'
 import {
     cast,
     entries,
     exactly,
-    failCI,
     hasPropertyPredicate,
     isNullOrUndefined,
     runUntil,
     unsafeCast,
-} from '../misc'
-import { PowerAssert } from 'typed-nodejs-assert'
-import { NonNullish } from '../../utilityTypes/misc'
+} from '../../src/utilityFunctions/misc'
+import { NonNullish } from '../../src/utilityTypes/misc'
 // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
 
@@ -482,12 +480,6 @@ describe('unsafeCast', () => {
         unsafeCast<1 | 2>(foo)
         exactly<never>()(foo)
     })
-})
-
-test('failCI', () => {
-    console.log({ isCI })
-    if (isCI) assert.throws(failCI)
-    else assert.doesNotThrow(failCI)
 })
 
 test('entries', () => {

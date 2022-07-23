@@ -1,6 +1,5 @@
 import { Stringable, TemplateLiteralStringable, ToString } from '../utilityTypes/String'
 import { Equals, OnlyInfer, Entries } from '../utilityTypes/misc'
-import isCI from 'is-ci'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import assert from 'assert'
 import { Throw } from 'throw-expression'
@@ -169,14 +168,6 @@ export const exactly: {
         return (value: unknown) => value
     }
 }) as never
-
-/** throws an error if running in CI. useful if you want to remind yourself to fix something later */
-export const failCI = (message?: string): void => {
-    if (isCI) throw new Error(message)
-}
-
-export const isErrnoException = (error: unknown): error is NodeJS.ErrnoException =>
-    hasPropertyPredicate<NodeJS.ErrnoException>(error, 'code')
 
 /**
  * throws an error stating that the operation is not yet implemented. useful for shutting up the type checker
