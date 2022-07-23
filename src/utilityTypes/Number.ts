@@ -1,8 +1,8 @@
-import { Equals } from './misc'
 import { IndexOfHighestNumber, TupleOf } from './Array'
-import { Includes, PadStart, StartsWith, Tail, ToString } from './String'
-import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
 import { Not, Or } from './Boolean'
+import { Includes, PadStart, StartsWith, Tail, ToString } from './String'
+import { Equals } from './misc'
+import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
 
 type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
     ? [T, ...A] extends [...infer X]

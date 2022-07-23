@@ -15,9 +15,10 @@ import {
     isLessOrEqual,
     toNumber,
 } from '../../src/utilityFunctions/Number'
-import { PowerAssert } from 'typed-nodejs-assert'
-import { TupleOf } from '../../src/utilityTypes/Array'
 import { exactly } from '../../src/utilityFunctions/misc'
+import { TupleOf } from '../../src/utilityTypes/Array'
+import { PowerAssert } from 'typed-nodejs-assert'
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
 

@@ -1,3 +1,7 @@
+import { IndexOfLongestString, TupleOf } from './Array'
+import { Extends, Or } from './Boolean'
+import { Add, Decrement, Increment, IsGreaterThan, IsLessOrEqual, Subtract } from './Number'
+import { Keys } from './misc'
 import { Cast } from 'ts-toolbelt/out/Any/Cast'
 import { Head as ArrayHead } from 'ts-toolbelt/out/List/Head'
 import { Tail as ArrayTail } from 'ts-toolbelt/out/List/Tail'
@@ -6,10 +10,6 @@ import { Literal } from 'ts-toolbelt/out/String/_Internal'
 import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
 import { AnyKey, IsNever } from 'tsdef'
 import { Primitive } from 'utility-types'
-import { IndexOfLongestString, TupleOf } from './Array'
-import { Extends, Or } from './Boolean'
-import { Keys } from './misc'
-import { Add, Decrement, Increment, IsGreaterThan, IsLessOrEqual, Subtract } from './Number'
 
 /**
  * a type that can be converted to a string in a template literal type

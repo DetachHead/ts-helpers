@@ -10,16 +10,16 @@ import {
     TupleOfUpTo,
     TupleOfUpToButNotIncluding,
 } from '../utilityTypes/Array'
+import { Enumerate } from '../utilityTypes/Number'
+import { FindResult } from '../utilityTypes/internal'
+import { Keys } from '../utilityTypes/misc'
+import { isNullOrUndefined } from './misc'
+import _ from 'lodash'
+import { Throw } from 'throw-expression'
+import { isDefined } from 'ts-is-present'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import { Flatten } from 'ts-toolbelt/out/List/Flatten'
-import _ from 'lodash'
-import { isDefined } from 'ts-is-present'
-import { Enumerate } from '../utilityTypes/Number'
-import { Keys } from '../utilityTypes/misc'
 import { MaybePromise, NonNil } from 'tsdef'
-import { FindResult } from '../utilityTypes/internal'
-import { isNullOrUndefined } from './misc'
-import { Throw } from 'throw-expression'
 
 /**
  * checks whether the given array's length is larger than **or equal to** the given number, and narrows the type of the

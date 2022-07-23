@@ -1,11 +1,11 @@
 import { Stringable, TemplateLiteralStringable, ToString } from '../utilityTypes/String'
 import { Equals, OnlyInfer, Entries } from '../utilityTypes/misc'
-import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import assert from 'assert'
 import { Throw } from 'throw-expression'
-import { AnyKey } from 'tsdef'
-import { IntersectOf } from 'ts-toolbelt/out/Union/IntersectOf'
+import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import { NoInfer } from 'ts-toolbelt/out/Function/NoInfer'
+import { IntersectOf } from 'ts-toolbelt/out/Union/IntersectOf'
+import { AnyKey } from 'tsdef'
 
 /**
  * narrows the given value from type `Base` to type `Narrowed` without having to assign it to a new variable
