@@ -15,7 +15,8 @@
     "build": "rimraf ./dist && tsc -p src/tsconfig.json",
     "typecheck:config-files": "tsc -p tsconfig.json",
     "build-and-lib-check": "npm run build && tsc -p tsconfig.lib-check.json",
-    "check": "npm run typecheck:config-files && npm run build-and-lib-check && npm run lint:check && npm run format:check && npm run test"
+    "check": "npm run typecheck:config-files && npm run build-and-lib-check && npm run lint:check && npm run format:check && npm run test",
+    "bump": "npm version"
   },
   "keywords": [],
   "author": "detachhead",
