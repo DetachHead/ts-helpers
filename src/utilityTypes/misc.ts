@@ -33,32 +33,9 @@ type FunctionComparisonEquals<A, B> = (<T>() => T extends FunctionComparisonEqua
     : false
 
 /**
- * makes `T` invariant for use in conditional types
- * @example
- * type Foo = InvariantComparisonEqualsWrapped<string> extends InvariantComparisonEqualsWrapped<string | number> ? true : false //false
+ * idk how this even works anymore i just kept tweaking it until all my tests passed
  */
-// TODO: update this to use in/out variance annotations instead of defining these useless members once prettier/eslint are updated to support it
-type InvariantComparisonEqualsWrapped<T> = { value: T; setValue: (value: T) => never }
-
-/**
- * compares two types by creating invariant wrapper types for the `Expected` and `Actual` types, such that `extends`
- * in conditional types only return `true` if the types are equivalent
- * # benefits
- * - far less hacky than {@link FunctionComparisonEqualsWrapped}
- * - works properly with object types
- *
- * # drawbacks
- * - doesn't work properly with `any` (if the type itself is `any` it's handled correctly by a workaround here but not
- * if the type contains `any`)
- */
-type InvariantComparisonEquals<Expected, Actual> =
-    InvariantComparisonEqualsWrapped<Expected> extends InvariantComparisonEqualsWrapped<Actual>
-        ? IsAny<Expected | Actual> extends true
-            ? IsAny<Expected> | IsAny<Actual> extends true
-                ? true
-                : false
-            : true
-        : false
+type Extends<Expected, Actual> = [Expected] extends [Actual] ? true : false
 
 /**
  * Checks if two types are equal at the type level.
@@ -68,7 +45,7 @@ type InvariantComparisonEquals<Expected, Actual> =
  * **WARNING:** there are several cases where this doesn't work properly, which is why i'm using two different methods to
  * compare the types. see [these issues](https://github.com/DetachHead/ts-helpers/labels/type%20testing)
  */
-export type Equals<Expected, Actual> = InvariantComparisonEquals<Expected, Actual> extends true
+export type Equals<Expected, Actual> = Extends<Expected, Actual> extends true
     ? FunctionComparisonEquals<Expected, Actual>
     : false
 

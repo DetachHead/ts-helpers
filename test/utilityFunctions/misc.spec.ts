@@ -126,7 +126,6 @@ describe('exactly', () => {
         })
         describe('functions', () => {
             test('pass', () => {
-                // @ts-expect-error xfail
                 exactly<() => 1>()(() => 1)
             })
             test('fail', () => {
