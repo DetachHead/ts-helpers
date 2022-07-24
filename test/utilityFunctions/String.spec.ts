@@ -92,7 +92,10 @@ describe('padStart', () => {
         exactly('barbarbarfoo', padStart('foo', 12, 'bar'))
     })
     test('default pad', () => {
-        exactly('  foo', padStart('foo', 5))
+        // the generic gets inferred incorrectly unless you define the variable first
+        // TODO: figure out whats going on with this. with each ts update this seems to happen more frequently
+        const result = padStart('foo', 5)
+        exactly('  foo', result)
     })
     test('string not known at compiletime', () => {
         exactly<string>()(padStart('foo' as string, 6, 'ab'))
