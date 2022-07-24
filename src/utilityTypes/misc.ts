@@ -38,8 +38,8 @@ type FunctionComparisonEquals<A, B> = (<T>() => T extends FunctionComparisonEqua
  * @example
  * type Foo = InvariantComparisonEqualsWrapped<string> extends InvariantComparisonEqualsWrapped<string | number> ? true : false //false
  */
-// TODO: update this to use in/out variance annotations instead of defining these useless members once prettier/eslint are updated to support it
-type InvariantComparisonEqualsWrapped<T> = { value: T; setValue: (value: T) => never }
+// eslint-disable-next-line @typescript-eslint/no-empty-interface -- who asked
+interface InvariantComparisonEqualsWrapped<in out _T> {}
 
 /**
  * compares two types by creating invariant wrapper types for the `Expected` and `Actual` types, such that `extends`
