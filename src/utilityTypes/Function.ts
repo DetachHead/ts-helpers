@@ -65,5 +65,5 @@ export type UnsafeVariance<T> = {
  *     qux = 1
  * }
  * type B = Methods<A> // { foo(value: number); bar: () => void; }
- **/
+ */
 export type Methods<T> = PickByValue<T, (this: T, ...args: never[]) => unknown>

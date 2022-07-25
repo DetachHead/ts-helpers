@@ -146,8 +146,8 @@ type FindNotUndefinedResult<T> =
 /**
  * finds the first item in an array where the given callback doesn't return `null` or `undefined`
  * @param arr the array of `T`s to check
- * @param callback a function to run on `arr` that may return `null` or `undefined`.
  * @param runAtTheSameTime whether to execute the `callback` on each element of `arr` at the same time
+ * @param callback a function to run on `arr` that may return `null` or `undefined`.
  */
 export const findNotUndefinedAsync: {
     <T extends unknown[]>(
@@ -322,8 +322,6 @@ export const slice = <
  *     if (index !== 0)
  *         const foo = prev() // 1 | 2 | 3
  * }
- * @param items
- * @param callback
  */
 export const forEach = <T extends ReadonlyArray<unknown>>(
     items: Narrow<T>,
@@ -347,8 +345,6 @@ export const forEach = <T extends ReadonlyArray<unknown>>(
  *     if (index !== 0)
  *         const foo = prev() // 1 | 2 | 3
  * }
- * @param items
- * @param callback
  */
 export const map = <T extends ReadonlyArray<unknown>, R>(
     items: Narrow<T>,
