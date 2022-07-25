@@ -7,7 +7,6 @@ export type Not<Types extends boolean> = {
  * type equivalent of the `||` operator.
  * @example
  * type Foo = Or<IsGreaterThan<1, 0> | IsGreaterThan<1, 2>> //true
- *
  */
 export type Or<T extends boolean> = true extends T ? true : false
 
