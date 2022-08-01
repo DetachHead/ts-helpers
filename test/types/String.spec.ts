@@ -15,6 +15,7 @@ import {
     UriString,
     UrlString,
 } from '../../src/types/String'
+import { describe, test } from 'bun:test'
 
 test('UriString', () => {
     // @ts-expect-error TS2345: Argument of type '"asdf"' is not assignable to parameter of type '`${string}://${string}`'.

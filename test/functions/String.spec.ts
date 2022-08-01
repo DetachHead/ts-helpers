@@ -26,6 +26,7 @@ import {
     uncapitalize,
 } from '../../src/functions/String'
 import { assertType, exactly, toStringType } from '../../src/functions/misc'
+import { describe, test } from 'bun:test'
 
 test('match', () => {
     const foo = match('', /a/u)

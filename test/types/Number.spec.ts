@@ -10,6 +10,7 @@ import {
     PositiveNumber,
     Subtract,
 } from '../../src/types/Number'
+import { describe, test } from 'bun:test'
 
 test('multiply', () => {
     exactly<4 | 6 | 10 | 15, Multiply<2 | 3, 5 | 2>>()

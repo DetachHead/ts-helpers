@@ -27,10 +27,8 @@ import { subtract } from '../../src/functions/Number'
 import { exactly } from '../../src/functions/misc'
 import { TupleOf } from '../../src/types/Array'
 import { Throw, throwIfUndefined } from 'throw-expression'
-import { PowerAssert } from 'typed-nodejs-assert'
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
-const assert: PowerAssert = require('power-assert')
+import { ok as assert, deepStrictEqual } from 'assert'
+import { describe, test } from 'bun:test'
 
 test('lengthGreaterOrEqual', () => {
     const foo: string[] = []
@@ -95,7 +93,7 @@ test('mapAsync', async () => {
         (value: number) => new Promise<number>((res) => setTimeout(() => res(value), value * 50)),
     )
     exactly<[number, number]>()(result)
-    assert.deepStrictEqual(result, [2, 1])
+    deepStrictEqual(result, [2, 1])
 })
 
 describe('findNotUndefined', () => {
@@ -163,10 +161,10 @@ describe('duplicate functions', () => {
         test('false', () => assert(!containsDuplicates(['asdf', 'sdfg', 'dfgh'])))
     })
 
-    test('duplicates', () => assert.deepStrictEqual(findDuplicates([1, 1, 2, 3, 3, 3]), [1, 3]))
+    test('duplicates', () => deepStrictEqual(findDuplicates([1, 1, 2, 3, 3, 3]), [1, 3]))
 
     test('removeDuplicates', () =>
-        assert.deepStrictEqual(removeDuplicates([1, 1, 2, 3, 3, 3]), [1, 2, 3]))
+        deepStrictEqual(removeDuplicates([1, 1, 2, 3, 3, 3]), [1, 2, 3]))
 })
 
 test('concat', () => {
