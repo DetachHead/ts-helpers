@@ -271,3 +271,11 @@ export type NegativeNumber<T extends number> = number extends T
     : PositiveNumber<T> extends never
     ? T
     : never
+
+export type StringifiedNumber = `${number}` | `${'-' | '+' | ''}Infinity`
+
+export type ToNumber<T extends string> = T extends `${infer Result extends number}`
+    ? Result
+    : T extends StringifiedNumber
+    ? number
+    : undefined | (string extends T ? number : never)

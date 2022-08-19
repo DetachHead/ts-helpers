@@ -230,7 +230,7 @@ describe('toNumber', () => {
     describe('known at compiletime', () => {
         describe('valid numbers', () => {
             test('normal', () => {
-                exactly(12 as number, toNumber('12'))
+                exactly(12, toNumber('12'))
             })
             test('Infinity', () => {
                 exactly(Infinity, toNumber('Infinity'))
