@@ -78,9 +78,9 @@ exactly<1 | 2, Foo>() // no error
 The `Equals` type allows you to check if two types are equal at the type level
 
 ```ts
-Equals<number, 1 | 2> // false
-Equals<any, 10> // false
-Equals<unknown, never> // false
+type Foo = Equals<number, 1 | 2> // false
+type Bar = Equals<any, 10> // false
+type Baz = Equals<unknown, never> // false
 ```
 
 ### variance modifier types
