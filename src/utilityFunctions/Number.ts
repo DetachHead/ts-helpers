@@ -15,6 +15,7 @@ import {
     RightShift,
     Square,
     Subtract,
+    ToNumber,
 } from '../utilityTypes/Number'
 import { OptionalParameterFromGeneric } from '../utilityTypes/misc'
 import { padStart } from './String'
@@ -132,10 +133,6 @@ export const rightShift = <Num extends number, Count extends number>(
     count: Count,
 ): RightShift<Num, Count> => (num >> count) as never
 
-type StringifiedNumber = `${number}` | `${'-' | '+' | ''}Infinity`
-
-// cringe
-type ToNumberFailedResult<ThrowError extends boolean> = ThrowError extends true ? never : undefined
 const toNumberFailedResult = (value: string, throwError: [] | [false] | [true]) =>
     (throwError[0] ? Throw(`could not convert '${value}' to a number`) : undefined) as never
 
@@ -149,15 +146,14 @@ const toNumberFailedResult = (value: string, throwError: [] | [false] | [true]) 
  * toNumber('12') //12
  * toNumber('Infinity') //Infinity
  */
-export const toNumber = <Result extends number, Input extends string, ThrowError extends boolean>(
+export const toNumber = <Input extends string, ThrowError extends boolean>(
     value: Input,
     ...throwError: OptionalParameterFromGeneric<ThrowError, false>
-): string extends Input
-    ? number | ToNumberFailedResult<ThrowError>
-    : // TODO: don't widen the type to number when the value is a literal known at compiletime. eg. toNumber('12') should have type `12`, not `number`
-    Input extends `${Result}` | StringifiedNumber
-    ? Result
-    : ToNumberFailedResult<ThrowError> => {
+): ToNumber<Input> extends infer Result
+    ?
+          | Exclude<Result, undefined>
+          | (undefined extends Result ? (ThrowError extends true ? never : undefined) : never)
+    : never => {
     if (value === '') return toNumberFailedResult(value, throwError)
     const result = Number(value)
     if (isNaN(result)) return toNumberFailedResult(value, throwError)
