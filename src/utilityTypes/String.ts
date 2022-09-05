@@ -104,6 +104,8 @@ type _TrimStart<
     ? Str
     : _TrimStart<Str extends `${Head<Str>}${infer R}` ? R : never, Index, Increment<Iterator>>
 
+// TODO: better names for TrimStart and TrimEnd, i always get them the wrong way around and it's confusing
+//  since there's also the Trim type which is for trimming whitespace
 /**
  * trims the characters up to `Index` off the start of `String` (inclusive)
  * @example
@@ -532,3 +534,9 @@ export type CountInString<Str extends string, Substring extends string> = string
     | Substring
     ? number
     : CountInStringTailRec<Str, Substring, 0>
+
+export type Trim<Str extends string> = StartsWith<Str, ' '> extends true
+    ? Trim<Tail<Str>>
+    : EndsWith<Str, ' '> extends true
+    ? Trim<TrimEnd<Str, Subtract<Length<Str>, 1>>>
+    : Str
