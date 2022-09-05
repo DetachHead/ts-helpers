@@ -535,8 +535,12 @@ export type CountInString<Str extends string, Substring extends string> = string
     ? number
     : CountInStringTailRec<Str, Substring, 0>
 
-export type Trim<Str extends string> = StartsWith<Str, ' '> extends true
-    ? Trim<Tail<Str>>
-    : EndsWith<Str, ' '> extends true
-    ? Trim<TrimEnd<Str, Subtract<Length<Str>, 1>>>
-    : Str
+export type Trim<Str extends string> = StartsWith<Str, ' '> extends infer StartsWithSpace
+    ? boolean extends StartsWithSpace
+        ? Str
+        : StartsWithSpace extends true
+        ? Trim<Tail<Str>>
+        : EndsWith<Str, ' '> extends true
+        ? Trim<TrimEnd<Str, Subtract<Length<Str>, 1>>>
+        : Str
+    : never

@@ -24,7 +24,7 @@ import {
     uncapitalize,
     trim,
 } from '../../src/utilityFunctions/String'
-import { exactly, toStringType } from '../../src/utilityFunctions/misc'
+import { assertType, exactly, toStringType } from '../../src/utilityFunctions/misc'
 
 test('match', () => {
     const foo = match('', /a/u)
@@ -304,6 +304,15 @@ describe('trim', () => {
         })
         test('3 and 1', () => {
             exactly('foo', trim('   foo '))
+        })
+    })
+    describe('not known at compiletime', () => {
+        test('string type', () => {
+            exactly<string>()(trim('foo' as string))
+        })
+        test('capitalization', () => {
+            // https://github.com/DetachHead/ts-helpers/issues/197
+            assertType<Uppercase<string>>(trim('foo' as Uppercase<string>))
         })
     })
 })
