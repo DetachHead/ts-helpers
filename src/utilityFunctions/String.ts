@@ -14,6 +14,7 @@ import {
     RightOf,
     StartsWith,
     Substring,
+    Trim,
     Truncate,
 } from '../utilityTypes/String'
 import _ from 'lodash'
@@ -265,3 +266,6 @@ export const capitalize = <T extends string>(value: T): Capitalize<T> =>
 /** converts the first character of a string to lowercase */
 export const uncapitalize = <T extends string>(value: T): Uncapitalize<T> =>
     `${value.charAt(0).toLowerCase()}${value.slice(1)}` as never
+
+/** does {@link String.trim} at compiletime */
+export const trim = <T extends string>(value: T): Trim<T> => value.trim() as Trim<T>

@@ -22,6 +22,7 @@ import {
     toUpperCase,
     truncate,
     uncapitalize,
+    trim,
 } from '../../src/utilityFunctions/String'
 import { exactly, toStringType } from '../../src/utilityFunctions/misc'
 
@@ -280,6 +281,29 @@ describe('case', () => {
         })
         test('not known at compiletime', () => {
             exactly<Uncapitalize<string>>()(uncapitalize('Foo' as string))
+        })
+    })
+})
+
+describe('trim', () => {
+    test('start', () => {
+        exactly('foo', trim('  foo'))
+    })
+    test('end', () => {
+        exactly('foo', trim('foo  '))
+    })
+    test('string has spaces in it', () => {
+        exactly('foo bar', trim('foo bar  '))
+    })
+    describe('both', () => {
+        test('1 and 2', () => {
+            exactly('foo', trim(' foo  '))
+        })
+        test('2 and 3', () => {
+            exactly('foo', trim('  foo   '))
+        })
+        test('3 and 1', () => {
+            exactly('foo',  trim('   foo '))
         })
     })
 })
