@@ -157,6 +157,17 @@ describe('exactly', () => {
             // @ts-expect-error doesn't match
             exactly<{ a: number }>()({} as { a: number; b?: string })
         })
+        describe('strings', () => {
+            describe('case', () => {
+                test('pass', () => {
+                    exactly<Uppercase<string>>()('' as Uppercase<string>)
+
+                    type Foo<T> = T extends unknown ? T : T
+                    // @ts-expect-error xfail https://github.com/DetachHead/ts-helpers/issues/197
+                    exactly<Uppercase<string>>()('' as Foo<Uppercase<string>>)
+                })
+            })
+        })
     })
 
     describe('types', () => {
