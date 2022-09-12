@@ -1,3 +1,9 @@
+import _ from 'lodash'
+import { Throw } from 'throw-expression'
+import { isDefined } from 'ts-is-present'
+import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
+import { Flatten } from 'ts-toolbelt/out/List/Flatten'
+import { MaybePromise, NonNil } from 'tsdef'
 import {
     CastArray,
     IndexOf,
@@ -10,16 +16,10 @@ import {
     TupleOfUpTo,
     TupleOfUpToButNotIncluding,
 } from '../utilityTypes/Array'
-import { Enumerate } from '../utilityTypes/Number'
 import { FindResult } from '../utilityTypes/internal'
 import { Keys } from '../utilityTypes/misc'
+import { Enumerate } from '../utilityTypes/Number'
 import { isNullOrUndefined } from './misc'
-import _ from 'lodash'
-import { Throw } from 'throw-expression'
-import { isDefined } from 'ts-is-present'
-import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
-import { Flatten } from 'ts-toolbelt/out/List/Flatten'
-import { MaybePromise, NonNil } from 'tsdef'
 
 /**
  * checks whether the given array's length is larger than **or equal to** the given number, and narrows the type of the
@@ -302,9 +302,9 @@ export const mapNotUndefined = <T, R>(array: (T | undefined)[], callback: (value
  * {@link Array.slice} using {@link Slice} so the result can be known at compiletime
  */
 export const slice = <
-    Array extends unknown[],
+    Array extends readonly unknown[],
     Start extends number,
-    End extends number = Array['length'],
+    End extends number | undefined = undefined,
 >(
     array: Narrow<Array>,
     start: Start,

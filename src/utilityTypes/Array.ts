@@ -1,12 +1,12 @@
-import { Extends, Or } from './Boolean'
-import { Add, Decrement, Enumerate, Increment, IsGreaterThan, Subtract } from './Number'
-import { NoUncheckedIndexedAccess, Keys } from './misc'
 import { Flatten } from 'ts-toolbelt/out/List/Flatten'
 import { Head } from 'ts-toolbelt/out/List/Head'
 import { Tail } from 'ts-toolbelt/out/List/Tail'
 import { Take } from 'ts-toolbelt/out/List/Take'
 import { Length } from 'ts-toolbelt/out/String/Length'
 import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
+import { Extends, Or } from './Boolean'
+import { Keys, NoUncheckedIndexedAccess } from './misc'
+import { Add, Decrement, Enumerate, Increment, IsGreaterThan, Subtract } from './Number'
 
 type _BuildPowersOf2LengthArrays<
     Length extends number,
@@ -236,24 +236,39 @@ export type RemoveValueTailRec<
  */
 export type RemoveValue<Array extends unknown[], Value> = RemoveValueTailRec<Array, Value, []>
 
+type SliceCount<
+    Array extends readonly unknown[],
+    Start extends number,
+    PositionFromEnd extends number,
+    StartCount extends number,
+    EndCount extends number,
+> = StartCount extends Start
+    ? EndCount extends PositionFromEnd
+        ? Array
+        : Array extends [...infer Rest, unknown]
+        ? SliceCount<Rest, Start, PositionFromEnd, StartCount, Increment<EndCount>>
+        : []
+    : Array extends [unknown, ...infer Rest]
+    ? SliceCount<Rest, Start, PositionFromEnd, Increment<StartCount>, EndCount>
+    : Array
+
+type GetPositionFromEnd<
+    Array extends readonly unknown[],
+    End extends number | undefined,
+> = Subtract<Array['length'], End extends undefined ? Array['length'] : End>
+
 /**
  * compiletime version of {@link Array.slice}
  */
 export type Slice<
-    Array extends unknown[],
+    Array extends readonly unknown[],
     Start extends number,
-    End extends number = Array['length'],
-> = number extends Array['length']
-    ? Array
-    : number extends Start | End
-    ? Array[never][]
-    : Array extends [
-          ...TupleOf<unknown, Start>,
-          ...infer Result,
-          ...TupleOf<unknown, Subtract<Array['length'], End>>,
-      ]
-    ? Result
-    : never
+    End extends number | undefined = undefined,
+> = number extends Start | End
+    ? Array[number][]
+    : GetPositionFromEnd<Array, End> extends never
+    ? Array[number][]
+    : SliceCount<Array, Start, GetPositionFromEnd<Array, End>, 0, 0>
 
 /** compiletime version of {@link  _.castArray} */
 export type CastArray<T> = T extends unknown[] ? T : [T]

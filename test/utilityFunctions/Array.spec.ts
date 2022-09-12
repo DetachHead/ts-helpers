@@ -1,33 +1,33 @@
+import { Throw, throwIfUndefined } from 'throw-expression'
+import { PowerAssert } from 'typed-nodejs-assert'
 import {
+    castArray,
+    concat,
     containsDuplicates,
+    find,
     findDuplicates,
     findIndexWithHighestNumber,
     findNotUndefined,
     findNotUndefinedAsync,
     flat,
+    forEach,
+    indexOf,
     indexOfLongestString,
     lengthGreaterOrEqual,
     lengthGreaterThan,
     lengthIs,
     lengthLessOrEqual,
     lengthLessThan,
+    map,
     mapAsync,
     removeDuplicates,
+    slice,
     sortByLongestStrings,
     splice,
-    castArray,
-    find,
-    forEach,
-    indexOf,
-    map,
-    concat,
-    slice,
 } from '../../src/utilityFunctions/Array'
-import { subtract } from '../../src/utilityFunctions/Number'
 import { exactly } from '../../src/utilityFunctions/misc'
+import { subtract } from '../../src/utilityFunctions/Number'
 import { TupleOf } from '../../src/utilityTypes/Array'
-import { Throw, throwIfUndefined } from 'throw-expression'
-import { PowerAssert } from 'typed-nodejs-assert'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
@@ -238,9 +238,29 @@ describe('slice', () => {
         const value = slice([1, 2, 3, 4, 5, 6], 3)
         exactly([4, 5, 6], value)
     })
+    test('end', () => {
+        const value = slice([1, 2, 3, 4, 5, 6], 0, 3)
+        exactly([1, 2, 3], value)
+    })
     test('start and end', () => {
-        const value = slice([1, 2, 3, 4, 5, 6], 2, 4)
-        exactly([3, 4], value)
+        const value1 = slice([1, 2, 3, 4, 5, 6], 2, 4)
+        exactly([3, 4], value1)
+        const value2 = slice([1, 2, 3, 4, 5, 6], 0, 1)
+        exactly([1], value2)
+    })
+    describe('rest', () => {
+        test('start, rest end', () => {
+            exactly<[2, ...number[]]>()(slice([1, 2, 3] as [1, 2, ...number[]], 1))
+        })
+        test('start, rest start', () => {
+            exactly<[...number[], 1, 2]>()(slice([1, 2, 3] as [...number[], 1, 2], 1))
+        })
+        test('end, rest end', () => {
+            exactly<number[]>()(slice([1, 2, 3] as [1, 2, ...number[]], 0, 1))
+        })
+        test('end, rest start', () => {
+            exactly<number[]>()(slice([1, 2, 3] as [...number[], 1, 2], 0, 1))
+        })
     })
     describe('not known at compiletime', () => {
         test('array', () => {
