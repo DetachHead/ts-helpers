@@ -1,6 +1,6 @@
 {
   "name": "@detachhead/ts-helpers",
-  "version": "12.1.1",
+  "version": "12.2.0",
   "files": [
     "dist",
     "src",
