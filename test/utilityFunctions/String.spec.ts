@@ -23,6 +23,7 @@ import {
     truncate,
     uncapitalize,
     trim,
+    removePrefix,
 } from '../../src/utilityFunctions/String'
 import { assertType, exactly, toStringType } from '../../src/utilityFunctions/misc'
 
@@ -313,6 +314,23 @@ describe('trim', () => {
         test('capitalization', () => {
             // https://github.com/DetachHead/ts-helpers/issues/197
             assertType<Uppercase<string>>(trim('foo' as Uppercase<string>))
+        })
+    })
+})
+
+describe('removePrefix', () => {
+    test('has prefix', () => {
+        exactly('df', removePrefix('asdf', 'as'))
+    })
+    test("doesn't have prefix", () => {
+        exactly('asdf', removePrefix('asdf', 'foo'))
+    })
+    describe('not known at compiletime', () => {
+        test('value', () => {
+            exactly<string>()(removePrefix('asdf' as string, 'as'))
+        })
+        test('prefix', () => {
+            exactly<string>()(removePrefix('asdf', 'as' as string))
         })
     })
 })

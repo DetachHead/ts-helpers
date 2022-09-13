@@ -9,6 +9,7 @@ import {
     MakeStartsWith,
     MidOf,
     PadStart,
+    RemovePrefix,
     Replace,
     ReplaceOne,
     RightOf,
@@ -269,3 +270,17 @@ export const uncapitalize = <T extends string>(value: T): Uncapitalize<T> =>
 
 /** does {@link String.trim} at compiletime */
 export const trim = <T extends string>(value: T): Trim<T> => value.trim() as Trim<T>
+
+/**
+ * removes the specified `prefix` from `value` if it starts with `prefix`. otherwise returns the `value` as is
+ */
+export const removePrefix = <T extends string, Prefix extends string>(
+    value: T,
+    prefix: Prefix,
+): RemovePrefix<T, Prefix> => {
+    type Result = RemovePrefix<T, Prefix>
+    if (value.startsWith(prefix)) {
+        return value.replace(prefix, '') as Result
+    }
+    return value as Result
+}
