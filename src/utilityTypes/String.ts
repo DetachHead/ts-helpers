@@ -544,3 +544,9 @@ export type Trim<Str extends string> = StartsWith<Str, ' '> extends infer Starts
         ? Trim<TrimEnd<Str, Subtract<Length<Str>, 1>>>
         : Str
     : never
+
+export type RemovePrefix<T extends string, Prefix extends string> = string extends Prefix
+    ? string
+    : T extends `${Prefix}${infer Result}`
+    ? Result
+    : T
