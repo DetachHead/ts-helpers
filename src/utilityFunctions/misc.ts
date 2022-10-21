@@ -1,11 +1,11 @@
 import { Stringable, TemplateLiteralStringable, ToString } from '../utilityTypes/String'
 import { Equals, OnlyInfer, Entries } from '../utilityTypes/misc'
-import assert from 'assert'
 import { Throw } from 'throw-expression'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import { NoInfer } from 'ts-toolbelt/out/Function/NoInfer'
 import { IntersectOf } from 'ts-toolbelt/out/Union/IntersectOf'
 import { AnyKey } from 'tsdef'
+import { isEqual } from 'lodash'
 
 /**
  * narrows the given value from type `Base` to type `Narrowed` without having to assign it to a new variable
@@ -161,9 +161,11 @@ export const exactly: {
 } = ((...values: [unknown, unknown] | []) => {
     if (values.length === 2) {
         const [expected, actual] = values
-        if (typeof expected === 'object') assert.deepStrictEqual(actual, expected)
-        else assert.strictEqual(actual, expected)
-        return undefined
+        if (isEqual(actual, expected)) {
+            return undefined
+        }
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions -- dont care
+        throw new Error(`values weren't equal.\nexpected: ${expected}\nactual: ${actual}`)
     } else {
         return (value: unknown) => value
     }

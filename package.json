@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "@types/lodash": "4.14.167",
-    "assert": "^2.0.0",
     "date-fns": "2.21.1",
     "is-ci": "2.0.0",
     "lodash": "4.17.20",
