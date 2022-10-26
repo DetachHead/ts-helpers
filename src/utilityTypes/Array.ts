@@ -1,12 +1,12 @@
+import { Extends, Or } from './Boolean'
+import { Add, Decrement, Enumerate, Increment, IsGreaterThan, Subtract } from './Number'
+import { Keys, NoUncheckedIndexedAccess } from './misc'
 import { Flatten } from 'ts-toolbelt/out/List/Flatten'
 import { Head } from 'ts-toolbelt/out/List/Head'
 import { Tail } from 'ts-toolbelt/out/List/Tail'
 import { Take } from 'ts-toolbelt/out/List/Take'
 import { Length } from 'ts-toolbelt/out/String/Length'
 import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
-import { Extends, Or } from './Boolean'
-import { Keys, NoUncheckedIndexedAccess } from './misc'
-import { Add, Decrement, Enumerate, Increment, IsGreaterThan, Subtract } from './Number'
 
 type _BuildPowersOf2LengthArrays<
     Length extends number,
