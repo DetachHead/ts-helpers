@@ -17,7 +17,7 @@
     "git.suggestSmartCommit": false,
     "git.supportCancellation": true,
     "git.useCommitInputAsStashMessage": true,
-    "git.pullBeforeCheckout":true,
+    "git.pullBeforeCheckout": true,
     "diffEditor.ignoreTrimWhitespace": false,
     "files.eol": "\n"
 }
