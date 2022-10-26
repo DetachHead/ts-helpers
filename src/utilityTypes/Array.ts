@@ -27,20 +27,12 @@ type _ConcatLargestUntilDone<
     : [...AccumulatedArray[0], ...NextArray][Length] extends never
     ? _ConcatLargestUntilDone<
           Length,
-          AccumulatedArray extends [AccumulatedArray[0], ...infer U]
-              ? U extends never[][]
-                  ? U
-                  : never
-              : never,
+          AccumulatedArray extends [AccumulatedArray[0], ...infer U extends never[][]] ? U : never,
           NextArray
       >
     : _ConcatLargestUntilDone<
           Length,
-          AccumulatedArray extends [AccumulatedArray[0], ...infer U]
-              ? U extends never[][]
-                  ? U
-                  : never
-              : never,
+          AccumulatedArray extends [AccumulatedArray[0], ...infer U extends never[][]] ? U : never,
           [...AccumulatedArray[0], ...NextArray]
       >
 
