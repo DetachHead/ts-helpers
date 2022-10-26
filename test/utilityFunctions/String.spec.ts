@@ -312,7 +312,6 @@ describe('trim', () => {
             exactly<string>()(trim('foo' as string))
         })
         test('capitalization', () => {
-            // https://github.com/DetachHead/ts-helpers/issues/197
             assertType<Uppercase<string>>(trim('foo' as Uppercase<string>))
         })
     })
