@@ -1,4 +1,5 @@
-import { NoAny, OnlyInfer } from '../../src/utilityTypes/misc'
+import { exactly } from '../../src/utilityFunctions/misc'
+import { IsExactOptionalProperty, NoAny, OnlyInfer } from '../../src/utilityTypes/misc'
 
 describe('OnlyInfer', () => {
     test('basic', () => {
@@ -21,4 +22,15 @@ test('NoAny', () => {
     // @ts-expect-error any is banned
     // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-argument -- testing any
     foo(1 as any)
+})
+
+describe('IsExactOptionalProperty', () => {
+    type Foo = { a?: number; b: number | undefined; c: number }
+    test('true', () => {
+        exactly<true, IsExactOptionalProperty<Foo, 'a'>>()
+    })
+    test('false', () => {
+        exactly<false, IsExactOptionalProperty<Foo, 'b'>>()
+        exactly<false, IsExactOptionalProperty<Foo, 'c'>>()
+    })
 })

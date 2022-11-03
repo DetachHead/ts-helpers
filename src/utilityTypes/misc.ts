@@ -1,3 +1,4 @@
+import { Extends, Not } from './Boolean'
 import { Keys as TsToolbeltKeys } from 'ts-toolbelt/out/Any/Keys'
 
 /**
@@ -178,3 +179,18 @@ export type Keys<T> = Exclude<TsToolbeltKeys<T>, number>
 
 /** compiletime version of {@link ObjectConstructor.entries} */
 export type Entries<T> = [Keys<T>, T[Keys<T>]][]
+
+/**
+ * checks whether `Key` is an "exact" optional property of `T`. (ie. the property is defined with a `?` prefix).
+ * required the [`exactOptionalPropertyTypes`](https://www.typescriptlang.org/tsconfig#exactOptionalPropertyTypes)
+ * compiler option to be enabled.
+ *
+ * @example
+ * type Foo = {a?: number, b: number | undefined, c: number}
+ * declare const foo: IsExactOptionalProperty<Foo, 'a'> // true
+ * declare const bar: IsExactOptionalProperty<Foo, 'b'> // false
+ * declare const baz: IsExactOptionalProperty<Foo, 'a'> // false
+ */
+export type IsExactOptionalProperty<T, Key extends keyof T> = undefined extends T[Key]
+    ? Not<Extends<{ [K in Key]: T[Key] }, { [k in Key]-?: T[Key] }>>
+    : false
