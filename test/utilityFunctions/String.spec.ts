@@ -12,6 +12,7 @@ import {
     match,
     midOf,
     padStart,
+    removePrefix,
     replaceAll,
     replaceOne,
     rightOf,
@@ -20,10 +21,9 @@ import {
     substring,
     toLowerCase,
     toUpperCase,
+    trim,
     truncate,
     uncapitalize,
-    trim,
-    removePrefix,
 } from '../../src/utilityFunctions/String'
 import { assertType, exactly, toStringType } from '../../src/utilityFunctions/misc'
 

@@ -1,5 +1,5 @@
 import { Stringable, TemplateLiteralStringable, ToString } from '../utilityTypes/String'
-import { Equals, OnlyInfer, Entries } from '../utilityTypes/misc'
+import { Entries, Equals, OnlyInfer } from '../utilityTypes/misc'
 import { isEqual } from 'lodash'
 import { Throw } from 'throw-expression'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
