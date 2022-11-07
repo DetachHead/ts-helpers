@@ -1,4 +1,4 @@
-import { findAsync, find } from '../../src/utilityFunctions/Iterable'
+import { find, findAsync } from '../../src/utilityFunctions/Iterable'
 import { PowerAssert } from 'typed-nodejs-assert'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
