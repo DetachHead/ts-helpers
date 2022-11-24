@@ -466,17 +466,13 @@ describe('exactly', () => {
 describe('cast', () => {
     test('success', () => {
         const foo = 1 as number
-        cast(foo, foo as 1 | 2)
+        cast<1 | 2>(foo)
         exactly<1 | 2>()(foo)
     })
     test('fail', () => {
         const foo = '' as string
-        cast(
-            foo,
-            // @ts-expect-error negative test
-            foo as 1 | 2,
-        )
-        exactly<string>()(foo)
+        cast<1 | 2>(foo)
+        exactly<never>()(foo)
     })
 })
 
