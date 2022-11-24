@@ -9,19 +9,16 @@ import { AnyKey } from 'tsdef'
 
 /**
  * narrows the given value from type `Base` to type `Narrowed` without having to assign it to a new variable
- * due to limitions in generics and assertion functions, you have to provide the value twice.
- * first to declare the variable that gets narrowed, and second to cast it to the new type
+ *
+ * **WARNING:** if the cast is unsafe (ie. the types are not overlapping), it will instead get narrowed to `never`
  * @example
  * declare const foo: number
- * cast(foo, foo  as 1 | 2)
+ * cast<1 | 2>(foo)
  * type Bar = typeof foo //1|2
  */
-export const cast: <_ extends OnlyInfer, Base, Narrowed extends Base>(
-    _value: Base,
-    _castedValue: Narrowed,
-) => asserts _value is Narrowed = (_value) => {
-    // do nothing
-}
+export const cast: <Narrowed extends Base, Base = unknown>(
+    value: Base,
+) => asserts value is Narrowed = (_value) => undefined
 
 /**
  * unsafely casts the given value to type `T` without having to assign it to a new variable.
