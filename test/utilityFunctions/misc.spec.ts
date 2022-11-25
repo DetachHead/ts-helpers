@@ -1,6 +1,7 @@
 import {
     as,
     cast,
+    dontNarrow,
     entries,
     exactly,
     hasPropertyPredicate,
@@ -561,4 +562,11 @@ describe('isNullOrUndefined', () => {
     test('not known at compiletime', () => {
         exactly<boolean>()(isNullOrUndefined(1 as unknown))
     })
+})
+
+test('dontNarrow', () => {
+    const foo = 1 as unknown
+    if (dontNarrow(typeof foo === 'number')) {
+        exactly<unknown>()(foo)
+    }
 })
