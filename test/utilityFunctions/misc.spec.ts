@@ -1,4 +1,5 @@
 import {
+    as,
     cast,
     entries,
     exactly,
@@ -466,13 +467,17 @@ describe('exactly', () => {
 describe('cast', () => {
     test('success', () => {
         const foo = 1 as number
-        cast<1 | 2>(foo)
+        cast(foo, as<1 | 2>)
         exactly<1 | 2>()(foo)
     })
     test('fail', () => {
         const foo = '' as string
-        cast<1 | 2>(foo)
-        exactly<never>()(foo)
+        cast(
+            foo,
+            // @ts-expect-error negative test
+            as<1 | 2>,
+        )
+        exactly<string>()(foo)
     })
 })
 

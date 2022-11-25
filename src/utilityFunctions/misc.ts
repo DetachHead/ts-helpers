@@ -8,17 +8,33 @@ import { IntersectOf } from 'ts-toolbelt/out/Union/IntersectOf'
 import { AnyKey } from 'tsdef'
 
 /**
- * narrows the given value from type `Base` to type `Narrowed` without having to assign it to a new variable
+ * a function to be used when you need to provide a type in a value position. currently this is only supposed to be used
+ * by {@link cast} but there may be other use cases for it.
  *
- * **WARNING:** if the cast is unsafe (ie. the types are not overlapping), it will instead get narrowed to `never`
+ * you should not call this function, since you can specify the generic without calling it.
+ * @example
+ * as<number> // correct
+ * as<number>() // incorrect
+ * @throws
+ */
+export const as = <T>(_dontCallThisFunction: never): T => {
+    throw new Error('you should not call the `as` function.')
+}
+
+/**
+ * narrows the given value from type `Base` to type `Narrowed` without having to assign it to a new variable
+ * due to limitations in generics and assertion functions, you have to provide the type using the {@link as} function.
  * @example
  * declare const foo: number
- * cast<1 | 2>(foo)
+ * cast(foo, as<1 | 2>)
  * type Bar = typeof foo //1|2
  */
-export const cast: <Narrowed extends Base, Base = unknown>(
+export const cast: <_ extends OnlyInfer, Base, Narrowed extends Base>(
     value: Base,
-) => asserts value is Narrowed = (_value) => undefined
+    type: typeof as<Narrowed>,
+) => asserts value is Narrowed = (_value, _type) => {
+    // do nothing
+}
 
 /**
  * unsafely casts the given value to type `T` without having to assign it to a new variable.
