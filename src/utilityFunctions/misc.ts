@@ -259,3 +259,9 @@ export const isNullOrUndefined = <T>(
     | (undefined extends T ? true : null extends T ? true : never)
     | (T extends null | undefined ? true : false) =>
     (value === null || value === undefined) as never
+
+/**
+ * wraps a boolean expression and does nothing with it. useful if you want to prevent an expression from narrowing
+ * the type of a value for some reason (eg. to work around an incorrect type definition)
+ */
+export const dontNarrow = (expression: boolean): boolean => expression
