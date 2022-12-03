@@ -194,3 +194,13 @@ export type Entries<T> = [Keys<T>, T[Keys<T>]][]
 export type IsExactOptionalProperty<T, Key extends keyof T> = undefined extends T[Key]
     ? Not<Extends<{ [K in Key]: T[Key] }, { [k in Key]-?: T[Key] }>>
     : false
+
+/**
+ * useful when using dynamic imports that have a default export
+ * @example
+ * const foo: HasDefaultExport = await import('./foo')
+ * console.log(foo.default)
+ */
+export interface HasDefaultExport<T = unknown> {
+    default: T
+}
