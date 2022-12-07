@@ -171,7 +171,10 @@ it goes without saying that these modifiers _do not_ change the runtime behavior
 
 ### typescript
 
-this package is designed for typescript >=4.8. you will probably have issues trying to use it with older versions, tho it will probably still work if you set `skipLibCheck` to `true` in your `tsconfig.json` (which isn't recommended)
+since this package pushes the limits of the typescript compiler, i often update it to depend on unreleased
+versions of typescript for bug fixes and to ensure that upcoming releases won't break any of my wacky types.
+currently it depends on typescript >=5.0. you will probably encounter type errors and/or performance issues trying to
+use it with older versions.
 
 ### runtime
 
