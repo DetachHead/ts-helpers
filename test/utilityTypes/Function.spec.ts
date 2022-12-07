@@ -10,7 +10,7 @@ import {
 declare class BivariantToArrowFunctionTest<T> {
     foo(_value: T): void
 }
-declare class ContravariantToArrowFunctionTest<T> {
+declare class ContravariantToArrowFunctionTest<in T> {
     foo: ToArrowFunction<BivariantToArrowFunctionTest<T>['foo']>
 }
 
