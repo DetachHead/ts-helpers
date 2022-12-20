@@ -42,7 +42,7 @@
     "utility-types": "3.10.0"
   },
   "devDependencies": {
-    "@detachhead/eslint-config": "0.0.14-43959a8a9dd85b573b01bae9139c42b838bdc4dd",
+    "@detachhead/eslint-config": "^0.0.21",
     "@jest/types": "^27.2.5",
     "@trivago/prettier-plugin-sort-imports": "^3.4.0",
     "@types/assert": "^1.5.6",

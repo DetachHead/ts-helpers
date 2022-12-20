@@ -15,7 +15,6 @@ const config = {
         project: ['./src/tsconfig.json'],
     },
     rules: {
-        '@typescript-eslint/no-unused-vars': 'off', // OnlyInfer type uses an unused generic
         'import/no-extraneous-dependencies': [
             'error',
             { devDependencies: ['.eslintrc.cjs', 'test/**/*.ts'] },
