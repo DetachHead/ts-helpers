@@ -18,7 +18,7 @@ const config = {
         '@typescript-eslint/no-unused-vars': 'off', // OnlyInfer type uses an unused generic
         'import/no-extraneous-dependencies': [
             'error',
-            { devDependencies: ['vite.config.ts', '.eslintrc.cjs', 'test/**/*.ts'] },
+            { devDependencies: ['.eslintrc.cjs', 'test/**/*.ts'] },
         ],
     },
     overrides: [
