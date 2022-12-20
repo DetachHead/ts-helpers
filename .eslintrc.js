@@ -19,6 +19,7 @@ const config = {
             'error',
             { devDependencies: ['.eslintrc.cjs', 'test/**/*.ts'] },
         ],
+        '@typescript-eslint/no-shadow': 'off',
     },
     overrides: [
         {

@@ -14,7 +14,7 @@ import { Enumerate } from '../utilityTypes/Number'
 import { FindResult } from '../utilityTypes/internal'
 import { Keys } from '../utilityTypes/misc'
 import { isNullOrUndefined } from './misc'
-import _ from 'lodash'
+import { castArray as lodashCastArray, orderBy } from 'lodash'
 import { Throw } from 'throw-expression'
 import { isDefined } from 'ts-is-present'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
@@ -289,7 +289,7 @@ export const indexOfLongestString = <Strings extends string[]>(
 /** sorts an array of strings by longest to shortest */
 export const sortByLongestStrings: <Strings extends string[]>(
     strings: Narrow<Strings>,
-) => SortLongestStrings<Strings> = (strings) => _.orderBy(strings, 'length', 'desc') as never
+) => SortLongestStrings<Strings> = (strings) => orderBy(strings, 'length', 'desc') as never
 
 /**
  * removes any `undefined` values from `array` before mapping over them and returning the mapped array with no
@@ -366,7 +366,7 @@ export const map = <T extends ReadonlyArray<unknown>, R>(
 
 /** {@link _.castArray} but the type is known at compiletime */
 export const castArray = <T>(value: Narrow<T>): CastArray<T> =>
-    _.castArray(
+    lodashCastArray(
         // @ts-expect-error false positive due to narrow type
         value,
     ) as never
