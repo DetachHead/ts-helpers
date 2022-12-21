@@ -16,8 +16,8 @@ import {
     Square,
     Subtract,
     ToNumber,
-} from '../utilityTypes/Number'
-import { OptionalParameterFromGeneric } from '../utilityTypes/misc'
+} from '../types/Number'
+import { OptionalParameterFromGeneric } from '../types/misc'
 import { padStart } from './String'
 import { toStringType } from './misc'
 import _ from 'lodash'

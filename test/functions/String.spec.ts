@@ -24,8 +24,8 @@ import {
     trim,
     truncate,
     uncapitalize,
-} from '../../src/utilityFunctions/String'
-import { assertType, exactly, toStringType } from '../../src/utilityFunctions/misc'
+} from '../../src/functions/String'
+import { assertType, exactly, toStringType } from '../../src/functions/misc'
 
 test('match', () => {
     const foo = match('', /a/u)

@@ -17,7 +17,7 @@ import {
     Substring,
     Trim,
     Truncate,
-} from '../utilityTypes/String'
+} from '../types/String'
 import _ from 'lodash'
 import { Throw } from 'throw-expression'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'

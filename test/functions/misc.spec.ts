@@ -8,8 +8,8 @@ import {
     isNullOrUndefined,
     runUntil,
     unsafeCast,
-} from '../../src/utilityFunctions/misc'
-import { NonNullish } from '../../src/utilityTypes/misc'
+} from '../../src/functions/misc'
+import { NonNullish } from '../../src/types/misc'
 import { PowerAssert } from 'typed-nodejs-assert'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert

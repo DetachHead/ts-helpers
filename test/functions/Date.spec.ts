@@ -1,4 +1,4 @@
-import { formatDate } from '../../src/utilityFunctions/Date'
+import { formatDate } from '../../src/functions/Date'
 import { set } from 'date-fns'
 import { PowerAssert } from 'typed-nodejs-assert'
 

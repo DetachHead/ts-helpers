@@ -9,10 +9,10 @@ import {
     TupleOfAtLeast,
     TupleOfUpTo,
     TupleOfUpToButNotIncluding,
-} from '../utilityTypes/Array'
-import { Enumerate } from '../utilityTypes/Number'
-import { FindResult } from '../utilityTypes/internal'
-import { Keys } from '../utilityTypes/misc'
+} from '../types/Array'
+import { Enumerate } from '../types/Number'
+import { FindResult } from '../types/internal'
+import { Keys } from '../types/misc'
 import { isNullOrUndefined } from './misc'
 import { castArray as lodashCastArray, orderBy } from 'lodash'
 import { Throw } from 'throw-expression'

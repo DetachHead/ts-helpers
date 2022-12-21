@@ -1,5 +1,5 @@
-import { exactly } from '../../src/utilityFunctions/misc'
-import { IsExactOptionalProperty, NoAny, OnlyInfer } from '../../src/utilityTypes/misc'
+import { exactly } from '../../src/functions/misc'
+import { IsExactOptionalProperty, NoAny, OnlyInfer } from '../../src/types/misc'
 
 describe('OnlyInfer', () => {
     test('basic', () => {
