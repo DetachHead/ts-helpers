@@ -1,4 +1,4 @@
-import { exactly } from '../../src/utilityFunctions/misc'
+import { exactly } from '../../src/functions/misc'
 import {
     Add,
     Divide,
@@ -9,7 +9,7 @@ import {
     NegativeNumber,
     PositiveNumber,
     Subtract,
-} from '../../src/utilityTypes/Number'
+} from '../../src/types/Number'
 
 test('multiply', () => {
     exactly<4 | 6 | 10 | 15, Multiply<2 | 3, 5 | 2>>()

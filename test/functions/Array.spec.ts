@@ -22,10 +22,10 @@ import {
     slice,
     sortByLongestStrings,
     splice,
-} from '../../src/utilityFunctions/Array'
-import { subtract } from '../../src/utilityFunctions/Number'
-import { exactly } from '../../src/utilityFunctions/misc'
-import { TupleOf } from '../../src/utilityTypes/Array'
+} from '../../src/functions/Array'
+import { subtract } from '../../src/functions/Number'
+import { exactly } from '../../src/functions/misc'
+import { TupleOf } from '../../src/types/Array'
 import { Throw, throwIfUndefined } from 'throw-expression'
 import { PowerAssert } from 'typed-nodejs-assert'
 

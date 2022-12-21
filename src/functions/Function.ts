@@ -1,4 +1,4 @@
-import { Methods } from '../utilityTypes/Function'
+import { Methods } from '../types/Function'
 import { AnyFunction } from 'tsdef'
 
 /**

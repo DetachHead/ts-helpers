@@ -1,11 +1,11 @@
-import { assertType, exactly } from '../../src/utilityFunctions/misc'
+import { assertType, exactly } from '../../src/functions/misc'
 import {
     Methods,
     SafeVariance,
     ToArrowFunction,
     ToNonArrowFunction,
     UnsafeVariance,
-} from '../../src/utilityTypes/Function'
+} from '../../src/types/Function'
 
 declare class BivariantToArrowFunctionTest<T> {
     foo(_value: T): void
