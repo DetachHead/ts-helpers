@@ -24,16 +24,12 @@ type _ConcatLargestUntilDone<
     NextArray extends never[],
 > = NextArray['length'] extends Length
     ? NextArray
-    : [...AccumulatedArray[0], ...NextArray][Length] extends never
-    ? _ConcatLargestUntilDone<
-          Length,
-          AccumulatedArray extends [AccumulatedArray[0], ...infer U extends never[][]] ? U : never,
-          NextArray
-      >
     : _ConcatLargestUntilDone<
           Length,
           AccumulatedArray extends [AccumulatedArray[0], ...infer U extends never[][]] ? U : never,
-          [...AccumulatedArray[0], ...NextArray]
+          [...AccumulatedArray[0], ...NextArray][Length] extends never
+              ? NextArray
+              : [...AccumulatedArray[0], ...NextArray]
       >
 
 type _Replace<R extends unknown[], T> = { [K in keyof R]: T }
