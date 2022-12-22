@@ -2,7 +2,6 @@ import { IndexOfLongestString, TupleOf } from './Array'
 import { Extends, Or } from './Boolean'
 import { Add, Decrement, Increment, IsGreaterThan, IsLessOrEqual, Subtract } from './Number'
 import { Keys } from './misc'
-import { Cast } from 'ts-toolbelt/out/Any/Cast'
 import { Head as ArrayHead } from 'ts-toolbelt/out/List/Head'
 import { Tail as ArrayTail } from 'ts-toolbelt/out/List/Tail'
 import { Length } from 'ts-toolbelt/out/String/Length'
@@ -180,7 +179,7 @@ export declare type Replace<
     Str extends string,
     Find extends TemplateLiteralStringable,
     ReplaceWith extends TemplateLiteralStringable,
-> = _Replace<Str, Find, ReplaceWith> extends infer X ? Cast<X, string> : never
+> = _Replace<Str, Find, ReplaceWith> extends infer X extends string ? X : never
 
 /**
  * replaces the first instance of `Find` with `ReplaceWith`. the type equivalent of {@link String.prototype.replace}
@@ -312,8 +311,12 @@ type _Join<T extends ReadonlyArray<unknown>, D extends string, Result extends st
  * @see https://github.com/millsp/ts-toolbelt/issues/255
  */
 // TODO: remove this once https://github.com/millsp/ts-toolbelt/issues/255 is merged
-export type Join<T extends Array<Literal>, D extends string = ''> = _Join<T, D, ''> extends infer X
-    ? Cast<X, string>
+export type Join<T extends Array<Literal>, D extends string = ''> = _Join<
+    T,
+    D,
+    ''
+> extends infer X extends string
+    ? X
     : never
 
 /** a map of values where the keys are to be replaced by the values in {@link ReplaceValuesWithMap} */
@@ -326,7 +329,8 @@ type _TokenizeString<
 > = '' extends Value
     ? Tokens
     : LongestString<MatchStart<Value, Keys<Map>>> extends infer Token
-    ? Token extends string
+    ? // TODO: figure out why infer extends doesnt work here
+      Token extends string
         ? _TokenizeString<TrimStart<Value, Length<Token>>, Map, [...Tokens, Token]>
         : IndexOf<Value, Keys<Map>> extends infer NextTokenIndex
         ? NextTokenIndex extends -1
@@ -373,6 +377,7 @@ type _ReplaceValuesWithMap<
 export type ReplaceValuesWithMap<Format extends string, Map extends ReplaceValuesMap> = Join<
     // need to narrow using a conditional type because the compiler fails to
     //  see https://github.com/microsoft/TypeScript/issues/43736
+    // TODO: figure out why infer extends doesnt work here
     _ReplaceValuesWithMap<_TokenizeString<Format, Map, []>, Map, []> extends infer Strings
         ? Strings extends ReadonlyArray<Literal>
             ? Strings

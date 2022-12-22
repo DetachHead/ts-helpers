@@ -52,7 +52,8 @@ export type TupleOf<Type, Length extends number> = number extends Length
               LengthKey,
               [[never]]
           > extends infer TwoDimensionalArray
-              ? TwoDimensionalArray extends never[][]
+              ? // TODO: figure out why infer extends doesnt work here
+                TwoDimensionalArray extends never[][]
                   ? _Replace<_ConcatLargestUntilDone<LengthKey, TwoDimensionalArray, []>, Type>
                   : never
               : never
