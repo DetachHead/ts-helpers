@@ -329,7 +329,7 @@ type _TokenizeString<
 > = '' extends Value
     ? Tokens
     : LongestString<MatchStart<Value, Keys<Map>>> extends infer Token
-    ? // TODO: figure out why infer extends doesnt work here
+    ? // infer extends doesnt work here due to https://github.com/microsoft/TypeScript/issues/50721#issuecomment-1363554868 i think
       Token extends string
         ? _TokenizeString<TrimStart<Value, Length<Token>>, Map, [...Tokens, Token]>
         : IndexOf<Value, Keys<Map>> extends infer NextTokenIndex
@@ -377,7 +377,7 @@ type _ReplaceValuesWithMap<
 export type ReplaceValuesWithMap<Format extends string, Map extends ReplaceValuesMap> = Join<
     // need to narrow using a conditional type because the compiler fails to
     //  see https://github.com/microsoft/TypeScript/issues/43736
-    // TODO: figure out why infer extends doesnt work here
+    // infer extends doesnt work here due to https://github.com/microsoft/TypeScript/issues/50721#issuecomment-1363554868 i think
     _ReplaceValuesWithMap<_TokenizeString<Format, Map, []>, Map, []> extends infer Strings
         ? Strings extends ReadonlyArray<Literal>
             ? Strings

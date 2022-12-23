@@ -48,7 +48,7 @@ export type TupleOf<Type, Length extends number> = number extends Length
               LengthKey,
               [[never]]
           > extends infer TwoDimensionalArray
-              ? // TODO: figure out why infer extends doesnt work here
+              ? // infer extends doesnt work here due to https://github.com/microsoft/TypeScript/issues/50721#issuecomment-1363554868 i think
                 TwoDimensionalArray extends never[][]
                   ? _Replace<_ConcatLargestUntilDone<LengthKey, TwoDimensionalArray, []>, Type>
                   : never
