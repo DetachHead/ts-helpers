@@ -1,4 +1,5 @@
 import {
+    New,
     as,
     cast,
     dontNarrow,
@@ -569,4 +570,21 @@ test('dontNarrow', () => {
     if (dontNarrow(typeof foo === 'number')) {
         exactly<unknown>()(foo)
     }
+})
+
+describe('New', () => {
+    class Foo {
+        constructor(public a: number) {}
+    }
+    test('positive', () => {
+        // eslint-disable-next-line @typescript-eslint/ban-types -- Object.constructor's type returns Function so this is unavoidable
+        exactly(New(Foo, 1).constructor, Foo as Function & typeof Foo)
+    })
+    test('negative', () => {
+        New(
+            Foo,
+            // @ts-expect-error negative test
+            '1',
+        )
+    })
 })
