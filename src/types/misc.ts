@@ -1,5 +1,6 @@
 import { Extends, Not } from './Boolean'
 import { Keys as TsToolbeltKeys } from 'ts-toolbelt/out/Any/Keys'
+import { AnyClass } from 'tsdef'
 
 /**
  * "normalizes" types to be compared using {@link FunctionComparisonEquals}
@@ -203,4 +204,12 @@ export type IsExactOptionalProperty<T, Key extends keyof T> = undefined extends 
  */
 export interface HasDefaultExport<T = unknown> {
     default: T
+}
+
+/**
+ * an instance of a class with a typed `constructor` property, used by the {@link New} function
+ * @see https://github.com/microsoft/TypeScript/issues/3841
+ */
+export type HasTypedConstructor<T extends AnyClass = AnyClass> = InstanceType<T> & {
+    constructor: T
 }
