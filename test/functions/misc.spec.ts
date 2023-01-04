@@ -577,8 +577,10 @@ describe('New', () => {
         constructor(public a: number) {}
     }
     test('positive', () => {
+        const foo = New(Foo, 1)
         // eslint-disable-next-line @typescript-eslint/ban-types -- Object.constructor's type returns Function so this is unavoidable
-        exactly(New(Foo, 1).constructor, Foo as Function & typeof Foo)
+        exactly(foo.constructor, Foo as Function & typeof Foo)
+        exactly(foo.a, 1 as number)
     })
     test('negative', () => {
         New(
