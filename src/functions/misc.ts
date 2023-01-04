@@ -1,11 +1,11 @@
 import { Stringable, TemplateLiteralStringable, ToString } from '../types/String'
-import { Entries, Equals, HasTypedConstructor, OnlyInfer } from '../types/misc'
+import { Constructor, Entries, Equals, HasTypedConstructor, OnlyInfer } from '../types/misc'
 import { isEqual } from 'lodash'
 import { Throw } from 'throw-expression'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import { NoInfer } from 'ts-toolbelt/out/Function/NoInfer'
 import { IntersectOf } from 'ts-toolbelt/out/Union/IntersectOf'
-import { AnyClass, AnyKey } from 'tsdef'
+import { AnyKey } from 'tsdef'
 
 /**
  * a function to be used when you need to provide a type in a value position. currently this is only supposed to be used
@@ -272,9 +272,7 @@ export const dontNarrow = (expression: boolean): boolean => expression
  * **WARNING:** does not work properly with overloaded constructors
  * @see https://github.com/microsoft/TypeScript/issues/3841
  */
-export const New = <T extends AnyClass>(
+export const New = <T extends Constructor>(
     class_: T,
     ...args: ConstructorParameters<T>
-): HasTypedConstructor<T> =>
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- SAFETY: This has been validated and independently audited for safety 🔐🚀
-    new class_(args)
+): HasTypedConstructor<T> => new class_(...args) as HasTypedConstructor<T>

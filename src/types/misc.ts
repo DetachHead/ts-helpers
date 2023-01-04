@@ -1,6 +1,5 @@
 import { Extends, Not } from './Boolean'
 import { Keys as TsToolbeltKeys } from 'ts-toolbelt/out/Any/Keys'
-import { AnyClass } from 'tsdef'
 
 /**
  * "normalizes" types to be compared using {@link FunctionComparisonEquals}
@@ -206,10 +205,17 @@ export interface HasDefaultExport<T = unknown> {
     default: T
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- InstanceType from the stdlib uses any so i have to use it here to avoid incorrect behavior when using it
+export type AbstractConstructor = abstract new (...args: any[]) => unknown
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- see comment on AbstractConstructor
+export type Constructor = new (...args: any[]) => unknown
+
 /**
  * an instance of a class with a typed `constructor` property, used by the {@link New} function
  * @see https://github.com/microsoft/TypeScript/issues/3841
  */
-export type HasTypedConstructor<T extends AnyClass = AnyClass> = InstanceType<T> & {
-    constructor: T
-}
+export type HasTypedConstructor<T extends AbstractConstructor = AbstractConstructor> =
+    InstanceType<T> & {
+        constructor: T
+    }
