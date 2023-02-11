@@ -94,7 +94,7 @@ describe('exactly', () => {
                 // @ts-expect-error doesn't match
                 exactly<string | null>()('' as string)
                 // @ts-expect-error doesn't match
-                exactly<string | undefined>()('' as undefined)
+                exactly<string | undefined>()('' as unknown as undefined)
                 // @ts-expect-error doesn't match
                 exactly<void>()(null)
                 // @ts-expect-error doesn't match
