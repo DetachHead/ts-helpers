@@ -104,7 +104,7 @@ export type NoUncheckedIndexedAccess = undefined extends typeof indexedAccessChe
  * getValue<undefined>()
  *
  * //but don't want it to be called like this:
- * getValue<number>() //invalid, but no compile error (that's why you get the compile error when returtning the value)
+ * getValue<number>() //invalid, but no compile error (that's why you get the compile error when returning the value)
  *
  * //so with this type, you can rewrite the function like so:
  * function getValue<T = undefined>(...value: OptionalParameterFromGeneric<T, undefined>): T {
@@ -182,7 +182,7 @@ export type Entries<T> = [Keys<T>, T[Keys<T>]][]
 
 /**
  * checks whether `Key` is an "exact" optional property of `T`. (ie. the property is defined with a `?` prefix).
- * required the [`exactOptionalPropertyTypes`](https://www.typescriptlang.org/tsconfig#exactOptionalPropertyTypes)
+ * requires the [`exactOptionalPropertyTypes`](https://www.typescriptlang.org/tsconfig#exactOptionalPropertyTypes)
  * compiler option to be enabled.
  *
  * @example
