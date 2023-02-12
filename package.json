@@ -37,6 +37,7 @@
     "ordinal": "1.0.3",
     "throw-expression": "1.0.2",
     "ts-is-present": "1.2.1",
+    "ts-spec": "^1.2.4",
     "ts-toolbelt": "9.6.0",
     "tsdef": "0.0.14",
     "utility-types": "3.10.0"
