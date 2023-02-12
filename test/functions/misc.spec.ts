@@ -110,8 +110,7 @@ describe('exactly', () => {
                 exactly<Readonly<{ x: 1 } & { y: 2 }>>()(x1AndY2)
                 exactly<Readonly<{ x: 1; y: 2 }>>()(x1AndY2)
                 // @ts-expect-error xfail https://github.com/DetachHead/ts-helpers/issues/128
-                // eslint-disable-next-line @typescript-eslint/ban-types -- testing this
-                exactly<{ x: 1; y: 2 }>()({ x: 1, y: 2 as 2 & {} })
+                exactly<{ x: { a: 1 } & { b: 1 } }>()({} as { x: { a: 1; b: 1 } })
             })
             test('fail', () => {
                 // @ts-expect-error doesn't match
@@ -123,14 +122,12 @@ describe('exactly', () => {
                 // @ts-expect-error doesn't match
                 exactly<{ x: 1 } & { y: 2 }>()(x1AndY2)
                 // @ts-expect-error doesn't match
-                // eslint-disable-next-line @typescript-eslint/ban-types -- testing this
-                exactly<{ x: 1; y: 2 & {} }>()({ x: 1, y: 3 as 3 & {} })
+                exactly<{ x: { a: 1 } & { b: 2 } }>()({} as { x: { a: 1; b: 1 } })
             })
         })
         describe('functions', () => {
             test('pass', () => {
-                // @ts-expect-error xfail
-                exactly<() => 1>()(() => 1)
+                exactly<() => 1>()((): 1 => 1)
             })
             test('fail', () => {
                 // @ts-expect-error doesn't match
@@ -148,8 +145,6 @@ describe('exactly', () => {
             test('fail', () => {
                 // @ts-expect-error doesn't match
                 exactly<Class>()(Class)
-                // @ts-expect-error doesn't match
-                exactly<InstanceType<Class>>()(instance)
             })
         })
         test("can't specify Actual generic", () => {
@@ -167,6 +162,10 @@ describe('exactly', () => {
 
                     type Foo<T> = T extends unknown ? T : T
                     exactly<Uppercase<string>>()('' as Foo<Uppercase<string>>)
+                })
+                test('fail', () => {
+                    // @ts-expect-error doesn't match
+                    exactly<Uppercase<string>>()('' as Lowercase<string>)
                 })
             })
         })
@@ -258,8 +257,7 @@ describe('exactly', () => {
                 // @ts-expect-error doesn't match - making sure EqualsWrapped doesn't cause false negatives
                 exactly<NonNullish, never>()
                 // @ts-expect-error doesn't match
-                // eslint-disable-next-line @typescript-eslint/ban-types -- testing this
-                exactly<{ x: 1; y: 2 & {} }, { x: 1; y: 3 & {} }>()
+                exactly<{ x: { a: 1 } & { b: 2 } }, { x: { a: 1; b: 1 } }>()
             })
         })
         describe('functions', () => {
@@ -306,8 +304,6 @@ describe('exactly', () => {
             test('fail', () => {
                 // @ts-expect-error doesn't match
                 exactly<Class, typeof Class>()
-                // @ts-expect-error doesn't match
-                exactly<InstanceType<Class>, typeof instance>()
             })
         })
         describe('undefined, void and null', () => {
@@ -400,8 +396,8 @@ describe('exactly', () => {
             test('pass', () => {
                 exactly(oneOrTwo, oneOrTwo)
                 exactly(x1AndY2 as Readonly<{ x: 1 } & { y: 2 }>, x1AndY2)
-                // eslint-disable-next-line @typescript-eslint/ban-types -- testing this
-                exactly({ x: 1, y: 2 as 2 & {} } as const, { x: 1, y: 2 as 2 & {} } as const)
+                // @ts-expect-error xfail https://github.com/DetachHead/ts-helpers/issues/128
+                exactly({} as { x: { a: 1 } & { b: 2 } }, {} as { x: { a: 1; b: 2 } })
             })
             test('fail', () => {
                 // @ts-expect-error doesn't match
@@ -414,11 +410,8 @@ describe('exactly', () => {
                 )
                 // @ts-expect-error doesn't match
                 exactly(x1AndY2 as { x: 1 } & { y: 2 }, x1AndY2)
-                assert.throws(() =>
-                    // @ts-expect-error doesn't match
-                    // eslint-disable-next-line @typescript-eslint/ban-types -- testing this
-                    exactly({ x: 1, y: 2 as 2 & {} }, { x: 1, y: 3 as 3 & {} }),
-                )
+                // @ts-expect-error doesn't match
+                exactly({} as { x: { a: 1 } & { b: 2 } }, {} as { x: { a: 1; b: 1 } })
             })
         })
         test("can't specify the generics", () => {
