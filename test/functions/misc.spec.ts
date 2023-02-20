@@ -17,6 +17,12 @@ import { PowerAssert } from 'typed-nodejs-assert'
 // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
 
+declare module 'ts-spec' {
+    interface Config {
+        strictOptionalProperties: true
+    }
+}
+
 describe('exactly' as const, () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-assignment -- this test is for the any type
     const any = undefined as any
