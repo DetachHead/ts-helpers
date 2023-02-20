@@ -42,7 +42,7 @@ describe('exactly' as const, () => {
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- testing any
                     t.not.equal(never)<any>,
             )
-            test2('fail' as const, (t) => t.not.equal(any)<never>)
+            test2('fail' as const, (t) => t.not.equal(any)<never>())
             describe('any' as const, () => {
                 /* eslint-disable @typescript-eslint/no-explicit-any -- testing the any type */
                 test2('pass' as const, (t) => t.equal(any)<any>())
@@ -112,7 +112,7 @@ describe('exactly' as const, () => {
                 test2('' as const, (t) => t.not.equal(1 as const)<() => 1>())
             })
         })
-        describe('constructors' as const, (t) => {
+        describe('constructors' as const, () => {
             describe('pass' as const, () => {
                 test2('' as const, (t) => t.equal(instance)<Class>())
             })
@@ -120,7 +120,7 @@ describe('exactly' as const, () => {
                 test2('' as const, (t) => t.not.equal(Class)<Class>())
             })
         })
-        test2("can't specify Actual generic" as const, (t) => {
+        test2("can't specify Actual generic" as const, () => {
             // @ts-expect-error see the OnlyInfer type
             exactly<number>()<number>(10 as number)
         })
@@ -133,8 +133,6 @@ describe('exactly' as const, () => {
                     test2('' as const, (t) =>
                         t.not.equal('' as Uppercase<string>)<Lowercase<string>>(),
                     )
-
-                    exactly<Uppercase<string>>()('' as Lowercase<string>)
 
                     type Foo<T> = T extends unknown ? T : T
                     exactly<Uppercase<string>>()('' as Foo<Uppercase<string>>)
