@@ -1,14 +1,15 @@
 import {
     New,
     as,
-    cast,
     dontNarrow,
     entries,
     exactly,
     hasPropertyPredicate,
     isNullOrUndefined,
+    narrow,
+    narrowCast,
     runUntil,
-    unsafeCast,
+    unsafeNarrow,
 } from '../../src/functions/misc'
 import { NonNullish } from '../../src/types/misc'
 import { PowerAssert } from 'typed-nodejs-assert'
@@ -459,15 +460,15 @@ describe('exactly', () => {
     })
 })
 
-describe('cast', () => {
+describe('narrow', () => {
     test('success', () => {
         const foo = 1 as number
-        cast(foo, as<1 | 2>)
+        narrow(foo, as<1 | 2>)
         exactly<1 | 2>()(foo)
     })
     test('fail', () => {
         const foo = '' as string
-        cast(
+        narrow(
             foo,
             // @ts-expect-error negative test
             as<1 | 2>,
@@ -476,16 +477,29 @@ describe('cast', () => {
     })
 })
 
-describe('unsafeCast', () => {
+describe('unsafeNarrow', () => {
     test('safe', () => {
         const foo = 1 as number
-        unsafeCast<1 | 2>(foo)
+        unsafeNarrow<1 | 2>(foo)
         exactly<1 | 2>()(foo)
     })
     test('unsafe', () => {
         const foo = '' as string
-        unsafeCast<1 | 2>(foo)
+        unsafeNarrow<1 | 2>(foo)
         exactly<never>()(foo)
+    })
+})
+
+describe('narrowCast', () => {
+    test('safe', () => {
+        const foo = 1 as number | string
+        const bar = narrowCast(foo, as<number | boolean>)
+        exactly<number>()(bar)
+    })
+    test('unsafe', () => {
+        const foo = 1 as number | string
+        const bar = narrowCast(foo, as<boolean>)
+        exactly<never>()(bar)
     })
 })
 

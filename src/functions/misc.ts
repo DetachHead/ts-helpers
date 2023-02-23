@@ -9,7 +9,7 @@ import { AnyKey } from 'tsdef'
 
 /**
  * a function to be used when you need to provide a type in a value position. currently this is only supposed to be used
- * by {@link cast} but there may be other use cases for it.
+ * by {@link narrow} but there may be other use cases for it.
  *
  * you should not call this function, since you can specify the generic without calling it.
  * @example
@@ -23,13 +23,14 @@ export const as = <T>(_dontCallThisFunction: never): T => {
 
 /**
  * narrows the given value from type `Base` to type `Narrowed` without having to assign it to a new variable
+ *
  * due to limitations in generics and assertion functions, you have to provide the type using the {@link as} function.
  * @example
  * declare const foo: number
  * cast(foo, as<1 | 2>)
  * type Bar = typeof foo //1|2
  */
-export const cast: <_ extends OnlyInfer, Base, Narrowed extends Base>(
+export const narrow: <_ extends OnlyInfer, Base, Narrowed extends Base>(
     value: Base,
     type: typeof as<Narrowed>,
 ) => asserts value is Narrowed = (_value, _type) => {
@@ -37,7 +38,7 @@ export const cast: <_ extends OnlyInfer, Base, Narrowed extends Base>(
 }
 
 /**
- * unsafely casts the given value to type `T` without having to assign it to a new variable.
+ * unsafely narrows the given value to type `T` without having to assign it to a new variable.
  *
  * because of how assertion functions work, the type will narrow to `never` if the types don't overlap
  * @example
@@ -51,9 +52,26 @@ export const cast: <_ extends OnlyInfer, Base, Narrowed extends Base>(
  * unsafeCast<1|2>(foo)
  * type Bar = typeof foo //never
  */
-export const unsafeCast: <T>(_value: unknown) => asserts _value is T = (_value) => {
+export const unsafeNarrow: <T>(_value: unknown) => asserts _value is T = (_value) => {
     // do nothing
 }
+
+/**
+ * casts the given value from type `Original` to an itersection of `Original & Casted` (like type predicates & type assertions do),
+ * but instead of changing the type of the original variable, it returns a value with the new type (like regular type casting does).
+ *
+ * due to limitations in generics and assertion functions, you have to provide the type using the {@link as} function.
+ *
+ * because of how assertion functions work, the type will narrow to `never` if the types don't overlap
+ * @example
+ * declare const foo: number
+ * cast(foo, as<1 | 2>)
+ * type Bar = typeof foo //1|2
+ */
+export const narrowCast = <_ extends OnlyInfer, Original, Casted>(
+    value: Original,
+    _type: typeof as<Casted>,
+): Original & Casted => value as Original & Casted
 
 /**
  * converts the given `value` to a string, preserving its value at compiletime where possible
