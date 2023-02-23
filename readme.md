@@ -27,7 +27,7 @@ if (foo.length > 2) {
 can be solved with `lengthGreaterThan`
 
 ```ts
-import { lengthGreaterThan } from '@detachhead/ts-helpers'
+import { lengthGreaterThan } from '@detachhead/ts-helpers/dist/functions/Number'
 
 if (lengthGreaterThan(foo, 2)) {
     const bar: string = foo[1] //no error, foo is casted to [string, string]
@@ -45,6 +45,8 @@ this library contains a helper type and function for formatting dates using
 the [`date-fns`](https://date-fns.org/v2.21.1/docs/format) format.
 
 ```ts
+import { formatDate } from '@detachhead/ts-helpers/dist/functions/Date'
+
 const date = formatDate(new Date(), 'dd-MM-yyyy')
 
 assert(date === '01/01/2021') //compile error, wrong date format
@@ -58,6 +60,8 @@ type to match your desired date format.
 With the `exactly` function you can test if types or values are an exact match to a type
 
 ```ts
+import { exactly } from '@detachhead/ts-helpers/dist/functions/misc'
+
 const a: 1 | 2 = 1
 //values (also does a runtime assertion on the values)
 exactly(1 as number, a) // error as `1 | 2` is not an exact match of `number`
@@ -78,6 +82,8 @@ exactly<1 | 2, Foo>() // no error
 The `Equals` type allows you to check if two types are equal at the type level
 
 ```ts
+import { Equals } from '@detachhead/ts-helpers/dist/types/misc'
+
 type Foo = Equals<number, 1 | 2> // false
 type Bar = Equals<any, 10> // false
 type Baz = Equals<unknown, never> // false
@@ -129,6 +135,8 @@ this is where variance modifiers come in
 you can use `SafeVariance<A>` to enable strict variance checking on a class that has methods in it. or if for whatever reason you need to convert an individual function type to an arrow function type, you can use `ToArrowFunction<A['get']>`
 
 ```ts
+import { SafeVariance, ToArrowFunction } from '@detachhead/ts-helpers/dist/types/Function'
+
 class B<T> extends A<T> {
     override get() {
         return super.get()
@@ -147,6 +155,8 @@ variance is only an issue when you're dealing with classes that have mutable sta
 to do this, simply use `UnsafeVariance<A>` on your class, or `ToNonArrowFunction<A['set']>` to convert a function type:
 
 ```ts
+import { UnsafeVariance, ToNonArrowFunction } from '@detachhead/ts-helpers/dist/types/Function'
+
 declare class A<T> {
     doSomethingElseThatTotallyDoesntChangeTheValue: (value: T) => void
     get: () => T
@@ -166,6 +176,22 @@ const b: UnsafeVariance<A<unknown>> = a // no error
 -   [private methods don't work properly with `UnsafeVariance`](https://github.com/DetachHead/ts-helpers/issues/160)
 
 it goes without saying that these modifiers _do not_ change the runtime behavior of a function. an arrow function is still an arrow function regardless of whether you use the `ToNonArrowFunction` type on it.
+
+### casting functions
+
+```ts
+import { narrow, unsafeNarrow, narrowCast } from '@detachhead/ts-helpers/dist/functions/misc'
+```
+
+the `as` keyword doesn't always work exactly how you want. the `narrow`, `unsafeNarrow` and `narrowCast` functions can be used to cast variables in different ways
+
+||modifies original variable's type|returns the value with the casted type|intersects original type with casted type|allows non-overlapping types|
+|-|-|-|-|-|
+`as` keyword||yes|||
+`narrow` function|yes||yes|
+`unsafeNarrow` function|yes||yes|yes
+`narrowCast` function||yes|yes|yes
+
 
 ## requirements
 
