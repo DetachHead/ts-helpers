@@ -155,7 +155,7 @@ variance is only an issue when you're dealing with classes that have mutable sta
 to do this, simply use `UnsafeVariance<A>` on your class, or `ToNonArrowFunction<A['set']>` to convert a function type:
 
 ```ts
-import { UnsafeVariance, ToNonArrowFunction } from '@detachhead/ts-helpers/dist/types/Function'
+import { ToNonArrowFunction, UnsafeVariance } from '@detachhead/ts-helpers/dist/types/Function'
 
 declare class A<T> {
     doSomethingElseThatTotallyDoesntChangeTheValue: (value: T) => void
@@ -180,18 +180,17 @@ it goes without saying that these modifiers _do not_ change the runtime behavior
 ### casting functions
 
 ```ts
-import { narrow, unsafeNarrow, narrowCast } from '@detachhead/ts-helpers/dist/functions/misc'
+import { narrow, narrowCast, unsafeNarrow } from '@detachhead/ts-helpers/dist/functions/misc'
 ```
 
 the `as` keyword doesn't always work exactly how you want. the `narrow`, `unsafeNarrow` and `narrowCast` functions can be used to cast variables in different ways
 
-||modifies original variable's type|returns the value with the casted type|intersects original type with casted type|allows non-overlapping types|
-|-|-|-|-|-|
-`as` keyword||yes|||
-`narrow` function|yes||yes|
-`unsafeNarrow` function|yes||yes|yes
-`narrowCast` function||yes|yes|yes
-
+|                         | modifies original variable's type | returns the value with the casted type | intersects original type with casted type | allows non-overlapping types |
+| ----------------------- | --------------------------------- | -------------------------------------- | ----------------------------------------- | ---------------------------- |
+| `as` keyword            |                                   | yes                                    |                                           |                              |
+| `narrow` function       | yes                               |                                        | yes                                       |
+| `unsafeNarrow` function | yes                               |                                        | yes                                       | yes                          |
+| `narrowCast` function   |                                   | yes                                    | yes                                       | yes                          |
 
 ## requirements
 
