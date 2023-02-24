@@ -219,3 +219,13 @@ export type HasTypedConstructor<T extends AbstractConstructor = AbstractConstruc
     InstanceType<T> & {
         constructor: T
     }
+
+/**
+ * intersects two types, correctly merging key types & index signatures
+ *
+ * @see https://github.com/microsoft/TypeScript/issues/52931
+ */
+export type Intersection<T, U> = {
+    [K in keyof (T | U)]: Intersection<T[K], U[K]>
+} & T &
+    U

@@ -1,5 +1,5 @@
-import { exactly } from '../../src/functions/misc'
-import { IsExactOptionalProperty, NoAny, OnlyInfer } from '../../src/types/misc'
+import { assertType, exactly } from '../../src/functions/misc'
+import { Intersection, IsExactOptionalProperty, NoAny, OnlyInfer } from '../../src/types/misc'
 
 describe('OnlyInfer', () => {
     test('basic', () => {
@@ -32,5 +32,70 @@ describe('IsExactOptionalProperty', () => {
     test('false', () => {
         exactly<false, IsExactOptionalProperty<Foo, 'b'>>()
         exactly<false, IsExactOptionalProperty<Foo, 'c'>>()
+    })
+})
+
+// TODO: figure out why these don't work with exactly type
+describe('Intersection', () => {
+    describe('key type and index signature', () => {
+        test('top level', () => {
+            interface Foo {
+                a: string
+            }
+            interface Bar {
+                [key: string]: 'foo'
+            }
+            assertType<'foo', Intersection<Foo, Bar>['a']>()
+            assertType<'foo', Intersection<Bar, Foo>['a']>()
+            assertType<
+                'asdf',
+                // @ts-expect-error negative test
+                Intersection<Foo, Bar>['a']
+            >()
+            assertType<
+                'asdf',
+                // @ts-expect-error negative test
+                Intersection<Bar, Foo>['a']
+            >()
+        })
+        test('nested', () => {
+            interface Foo {
+                a: {
+                    a: string
+                }
+            }
+
+            interface Bar {
+                a: { [key: string]: 'foo' }
+            }
+            assertType<'foo', Intersection<Foo, Bar>['a']['a']>()
+            assertType<'foo', Intersection<Bar, Foo>['a']['a']>()
+            assertType<
+                'asdf',
+                // @ts-expect-error negative test
+                Intersection<Foo, Bar>['a']['a']
+            >()
+            assertType<
+                'asdf',
+                // @ts-expect-error negative test
+                Intersection<Bar, Foo>['a']['a']
+            >()
+        })
+    })
+    describe('normal intersections', () => {
+        test('object', () => {
+            exactly<{ foo: string; bar: number }, Intersection<{ foo: string }, { bar: number }>>()
+        })
+        test('non-overlapping', () => {
+            exactly<never, Intersection<string, number>>()
+        })
+        test('unions', () => {
+            assertType<('a' | 'b') & ('a' | 'c'), Intersection<'a' | 'b', 'a' | 'c'>>()
+            assertType<
+                'c',
+                // @ts-expect-error negative test
+                Intersection<'a' | 'b', 'a' | 'c'>
+            >()
+        })
     })
 })
