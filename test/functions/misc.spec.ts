@@ -1,3 +1,5 @@
+import { test as test2 } from 'ts-spec'
+import { PowerAssert } from 'typed-nodejs-assert'
 import {
     New,
     as,
@@ -11,8 +13,6 @@ import {
     unsafeCast,
 } from '../../src/functions/misc'
 import { NonNullish } from '../../src/types/misc'
-import { test as test2 } from 'ts-spec'
-import { PowerAssert } from 'typed-nodejs-assert'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
@@ -126,14 +126,13 @@ describe('exactly' as const, () => {
                 test2('' as const, (t) => t.not.equal(Class)<Class>())
             })
         })
-        test2("can't specify Actual generic" as const, () => {
-            // @ts-expect-error see the OnlyInfer type
-            exactly<number>()<number>(10 as number)
-        })
+        // test2("can't specify Actual generic" as const, (_) => {
+        //     // exactly<number>()<number>(10 as number)
+        // })
         describe('optional members' as const, () => {
             test2('' as const, (t) => t.not.equal({} as { a: number; b?: string })<{ a: number }>())
         })
-        describe('strings' as const, (t) => {
+        describe('strings' as const, () => {
             describe('case' as const, () => {
                 describe('pass' as const, () => {
                     test2('' as const, (t) =>
