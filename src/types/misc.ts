@@ -1,5 +1,6 @@
 import { Extends, Not } from './Boolean'
 import { Keys as TsToolbeltKeys } from 'ts-toolbelt/out/Any/Keys'
+import { Primitive } from 'utility-types'
 
 /**
  * "normalizes" types to be compared using {@link FunctionComparisonEquals}
@@ -221,11 +222,25 @@ export type HasTypedConstructor<T extends AbstractConstructor = AbstractConstruc
     }
 
 /**
+ * reduces a type to `never` if it's an intersection between a primitive type and a non-primitive type
+ * (which means they do not overlap)
+ *
+ * @see https://stackoverflow.com/a/65908955
+ */
+export type CheckNever<T> = T extends Primitive ? (T extends object ? never : T) : T
+
+/**
  * intersects two types, correctly merging key types & index signatures
  *
  * @see https://github.com/microsoft/TypeScript/issues/52931
  */
-export type Intersection<T, U> = {
-    [K in keyof (T | U)]: Intersection<T[K], U[K]>
-} & T &
-    U
+export type Intersection<Left, Right> = Left extends infer DistributedLeft
+    ? Right extends infer DistributedRight
+        ? {
+              [K in keyof (DistributedLeft | DistributedRight)]: Intersection<
+                  DistributedLeft[K],
+                  DistributedRight[K]
+              >
+          } & CheckNever<DistributedLeft & DistributedRight>
+        : never
+    : never
