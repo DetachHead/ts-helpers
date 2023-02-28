@@ -225,12 +225,16 @@ export type HasTypedConstructor<T extends AbstractConstructor = AbstractConstruc
  * reduces a type to `never` if it's an intersection between a primitive type and a non-primitive type
  * (which means they do not overlap)
  *
+ * **WARNING:** this will break any "branded" types as they rely on non-overlapping intersections
+ *
  * @see https://stackoverflow.com/a/65908955
  */
 export type CheckNever<T> = T extends Primitive ? (T extends object ? never : T) : T
 
 /**
  * intersects two types, correctly merging key types & index signatures
+ *
+ * **WARNING:** this will break any "branded" types as they rely on non-overlapping intersections
  *
  * @see https://github.com/microsoft/TypeScript/issues/52931
  */
