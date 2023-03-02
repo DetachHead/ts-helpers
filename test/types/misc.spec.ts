@@ -6,6 +6,8 @@ import {
     NoAny,
     OnlyInfer,
     ReplaceValuesRecursive,
+    Required,
+    RequiredBy,
 } from '../../src/types/misc'
 
 describe('OnlyInfer', () => {
@@ -233,6 +235,36 @@ describe('Intersection', () => {
                 Intersection<'a' | 'b', 'a' | 'c'>
             >()
         })
+    })
+})
+
+describe('Required', () => {
+    test('StrictOptionalProperties true', () => {
+        exactly<
+            { foo: string | undefined; bar: string | undefined },
+            Required<{ foo?: string | undefined; bar?: string | undefined }, true>
+        >()
+    })
+    test('StrictOptionalProperties false', () => {
+        exactly<
+            { foo: string; bar: string },
+            Required<{ foo?: string | undefined; bar?: string | undefined }, false>
+        >()
+    })
+})
+
+describe('RequiredBy', () => {
+    test('StrictOptionalProperties true', () => {
+        exactly<
+            { foo: string | undefined; bar?: string | undefined },
+            RequiredBy<{ foo?: string | undefined; bar?: string | undefined }, 'foo', true>
+        >()
+    })
+    test('StrictOptionalProperties false', () => {
+        exactly<
+            { foo: string; bar?: string | undefined },
+            RequiredBy<{ foo?: string | undefined; bar?: string | undefined }, 'foo', false>
+        >()
     })
 })
 
