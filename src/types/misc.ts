@@ -198,6 +198,34 @@ export type IsExactOptionalProperty<T, Key extends keyof T> = undefined extends 
     : false
 
 /**
+ * makes all properties in the object `T` required. if `ExactOptionalProperties` is `true`,
+ * keys that are optional but also have `undefined` in their type will keep `undefined` in their type.
+ *
+ * @example
+ * type Foo = Required<{ a?: string | undefined }, true> // { a: string | undefined }
+ * type Bar = Required<{ a?: string | undefined }, true> // { a: string }
+ */
+export type Required<T extends object, ExactOptionalProperties extends boolean = true> = RequiredBy<
+    T,
+    keyof T,
+    ExactOptionalProperties
+>
+
+/**
+ * makes `Keys` in the object `T` required. if `ExactOptionalProperties` is `true`,
+ * keys that are optional but also have `undefined` in their type will keep `undefined` in their type.
+ *
+ * @example
+ * type Foo = RequiredBy<{ a?: string | undefined, b?: string | undefined }, true> // { a: string | undefined, b?: string | undefined }
+ * type Bar = RequiredBy<{ a?: string | undefined, b?: string | undefined }, true> // { a: string, b?: string | undefined }
+ */
+export type RequiredBy<
+    T extends object,
+    Keys extends keyof T,
+    ExactOptionalProperties extends boolean = true,
+> = { [K in Keys]-?: ExactOptionalProperties extends true ? T[K] : Exclude<T[K], undefined> } & T
+
+/**
  * useful when using dynamic imports that have a default export
  * @example
  * const foo: HasDefaultExport = await import('./foo')
