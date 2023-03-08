@@ -144,7 +144,7 @@ export type OnlyInfer =
  * creates an "error type" stating that the operation is not yet implemented. useful for shutting up the type checker
  * during development
  */
-export type TODO<Reason extends string = 'no reason provided'> = {
+export type TODO<in out Reason extends string = 'no reason provided'> = {
     '_type not implemented (TODO)': never
     _reason: Reason
 }
@@ -202,7 +202,7 @@ export type IsExactOptionalProperty<T, Key extends keyof T> = undefined extends 
  * const foo: HasDefaultExport = await import('./foo')
  * console.log(foo.default)
  */
-export interface HasDefaultExport<T = unknown> {
+export interface HasDefaultExport<in out T = unknown> {
     default: T
 }
 

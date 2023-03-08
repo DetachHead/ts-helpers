@@ -7,6 +7,8 @@ import {
     UnsafeVariance,
 } from '../../src/types/Function'
 
+/* eslint-disable detachhead/require-variance-annotations -- these types are using hacky ways to change the variance of a type, explicit variance annotations breaks them */
+
 declare class BivariantToArrowFunctionTest<T> {
     foo(_value: T): void
 }
@@ -121,3 +123,5 @@ test('Methods', () => {
     }
     exactly<{ foo: (value: number) => number; bar: () => undefined }, Methods<A>>()
 })
+
+/* eslint-enable detachhead/require-variance-annotations -- see above */
