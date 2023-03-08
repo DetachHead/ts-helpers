@@ -12,7 +12,7 @@ import { PickByValue } from 'utility-types'
  * }
  * type ArrowFunction = ToArrowFunction<Foo['notArrowFunction']>
  */
-export type ToArrowFunction<T extends AnyFunction> = {
+export type ToArrowFunction<in out T extends AnyFunction> = {
     fn: (...args: Parameters<T>) => ReturnType<T>
 }['fn']
 
@@ -27,6 +27,7 @@ export type ToArrowFunction<T extends AnyFunction> = {
  * }
  * type NotArrowFunction = ToNonArrowFunction<Foo['isArrowFunction']>
  */
+// eslint-disable-next-line detachhead/require-variance-annotations -- this type uses a hacky method of changing the variance of a function, explicit variance annotations breaks it
 export type ToNonArrowFunction<T extends AnyFunction> = {
     // eslint-disable-next-line @typescript-eslint/method-signature-style -- required for this type to work
     fn(...args: Parameters<T>): ReturnType<T>
@@ -49,6 +50,7 @@ export type SafeVariance<T> = {
  * @see https://github.com/microsoft/TypeScript/pull/18654
  */
 // TODO: fix private methods, probs dependent on https://github.com/microsoft/TypeScript/issues/22677
+// eslint-disable-next-line detachhead/require-variance-annotations -- this type uses a hacky method of changing the variance of a function, explicit variance annotations breaks it
 export type UnsafeVariance<T> = {
     wrapped: {
         [Key in keyof T]: T[Key] extends AnyFunction ? ToNonArrowFunction<T[Key]> : T[Key]
@@ -66,4 +68,4 @@ export type UnsafeVariance<T> = {
  * }
  * type B = Methods<A> // { foo(value: number); bar: () => void; }
  */
-export type Methods<T> = PickByValue<T, (this: T, ...args: never[]) => unknown>
+export type Methods<in out T> = PickByValue<T, (this: T, ...args: never[]) => unknown>
