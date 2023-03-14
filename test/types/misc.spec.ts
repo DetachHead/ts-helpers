@@ -5,6 +5,7 @@ import {
     IsExactOptionalProperty,
     NoAny,
     OnlyInfer,
+    ReplaceValuesRecursive,
 } from '../../src/types/misc'
 
 describe('OnlyInfer', () => {
@@ -232,5 +233,32 @@ describe('Intersection', () => {
                 Intersection<'a' | 'b', 'a' | 'c'>
             >()
         })
+    })
+})
+
+describe('ReplaceValuesRecursive', () => {
+    test('top level', () => {
+        exactly<
+            { a: number; b: string },
+            ReplaceValuesRecursive<{ a: number; b: boolean }, boolean, string>
+        >
+    })
+    test('nested', () => {
+        exactly<
+            { a: number; b: { a: number; b: string } },
+            ReplaceValuesRecursive<{ a: number; b: { a: number; b: boolean } }, boolean, string>
+        >
+    })
+    test('object type', () => {
+        exactly<
+            { a: number; b: string },
+            ReplaceValuesRecursive<{ a: number; b: Date }, Date, string>
+        >
+    })
+    test('array', () => {
+        exactly<
+            { a: number; b: [string, number] },
+            ReplaceValuesRecursive<{ a: number; b: [boolean, number] }, boolean, string>
+        >
     })
 })

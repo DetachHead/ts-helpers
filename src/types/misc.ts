@@ -248,3 +248,21 @@ export type Intersection<Left, Right> = Left extends infer DistributedLeft
           } & CheckNever<DistributedLeft & DistributedRight>
         : never
     : never
+
+/**
+ * recursively replaces value types in `T` that extend `Find` with `Replace`
+ *
+ * @example
+ * type Foo = ReplaceValuesRecursive<
+ *     { a: number; b: { a: number; b: boolean } },
+ *     boolean,
+ *     string
+ * > // { a: number; b: { a: number; b: string } }
+ */
+export type ReplaceValuesRecursive<out T extends object, in out Find, out Replace> = {
+    [K in keyof T]: T[K] extends Find
+        ? Replace
+        : T[K] extends object
+        ? ReplaceValuesRecursive<T[K], Find, Replace>
+        : T[K]
+}
