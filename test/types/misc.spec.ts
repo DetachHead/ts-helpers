@@ -261,4 +261,16 @@ describe('ReplaceValuesRecursive', () => {
             ReplaceValuesRecursive<{ a: number; b: [boolean, number] }, boolean, string>
         >
     })
+    test('union', () => {
+        exactly<
+            { a: number; b: string | undefined },
+            ReplaceValuesRecursive<{ a: number; b: boolean | undefined }, boolean, string>
+        >
+    })
+    test('optional', () => {
+        exactly<
+            { a: number; b?: string },
+            ReplaceValuesRecursive<{ a: number; b?: boolean }, boolean, string>
+        >
+    })
 })

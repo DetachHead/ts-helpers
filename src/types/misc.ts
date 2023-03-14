@@ -1,5 +1,6 @@
 import { Extends, Not } from './Boolean'
 import { Keys as TsToolbeltKeys } from 'ts-toolbelt/out/Any/Keys'
+import { Replace } from 'ts-toolbelt/out/Union/Replace'
 import { Primitive } from 'utility-types'
 
 /**
@@ -259,10 +260,10 @@ export type Intersection<Left, Right> = Left extends infer DistributedLeft
  *     string
  * > // { a: number; b: { a: number; b: string } }
  */
-export type ReplaceValuesRecursive<out T extends object, in out Find, out Replace> = {
-    [K in keyof T]: T[K] extends Find
-        ? Replace
+export type ReplaceValuesRecursive<in out T extends object, in out Find, out ReplaceWith> = {
+    [K in keyof T]: [Find] extends [T[K]]
+        ? Replace<T[K], Find, ReplaceWith>
         : T[K] extends object
-        ? ReplaceValuesRecursive<T[K], Find, Replace>
+        ? ReplaceValuesRecursive<T[K], Find, ReplaceWith>
         : T[K]
 }
