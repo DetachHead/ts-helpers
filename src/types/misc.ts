@@ -1,5 +1,6 @@
 import { Extends, Not } from './Boolean'
 import { Keys as TsToolbeltKeys } from 'ts-toolbelt/out/Any/Keys'
+import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
 import { Replace } from 'ts-toolbelt/out/Union/Replace'
 import { Primitive } from 'utility-types'
 
@@ -288,10 +289,16 @@ export type Intersection<Left, Right> = Left extends infer DistributedLeft
  *     string
  * > // { a: number; b: { a: number; b: string } }
  */
-export type ReplaceValuesRecursive<in out T extends object, in out Find, out ReplaceWith> = {
-    [K in keyof T]: [Find] extends [T[K]]
-        ? Replace<T[K], Find, ReplaceWith>
-        : T[K] extends object
-        ? ReplaceValuesRecursive<T[K], Find, ReplaceWith>
-        : T[K]
+export type ReplaceValuesRecursive<in out T, in out Find, out ReplaceWith> = {
+    [K in keyof T]: ListOf<
+        // first check if the Find type is in the union:
+        [Find] extends [T[K]] ? Replace<T[K], Find, ReplaceWith> : T[K]
+    > extends infer Union
+        ? // now iterate over the union and recursively call this type on any object types within the union:
+          {
+              [UnionIndex in keyof Union]: Union[UnionIndex] extends object
+                  ? ReplaceValuesRecursive<Union[UnionIndex], Find, ReplaceWith>
+                  : Union[UnionIndex]
+          }[Keys<Union>]
+        : never
 }

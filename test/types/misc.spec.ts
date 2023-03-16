@@ -287,7 +287,10 @@ describe('ReplaceValuesRecursive', () => {
             ReplaceValuesRecursive<{ a: number; b: Date }, Date, string>
         >
     })
-    test('array', () => {
+    test('top level array', () => {
+        exactly<[string, number], ReplaceValuesRecursive<[boolean, number], boolean, string>>
+    })
+    test('nested array', () => {
         exactly<
             { a: number; b: [string, number] },
             ReplaceValuesRecursive<{ a: number; b: [boolean, number] }, boolean, string>
@@ -303,6 +306,18 @@ describe('ReplaceValuesRecursive', () => {
         exactly<
             { a: number; b?: string },
             ReplaceValuesRecursive<{ a: number; b?: boolean }, boolean, string>
+        >
+    })
+    test('union and nested', () => {
+        exactly<
+            { a: { a: string } | string },
+            ReplaceValuesRecursive<{ a: { a: number } | number }, number, string>
+        >
+    })
+    test('optional and nested', () => {
+        exactly<
+            { a?: { a: string } },
+            ReplaceValuesRecursive<{ a?: { a: number } }, number, string>
         >
     })
 })
