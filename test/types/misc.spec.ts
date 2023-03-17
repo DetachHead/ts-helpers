@@ -288,21 +288,23 @@ describe('RequiredRecursive', () => {
         })
     })
     describe('nested', () => {
-        test('StrictOptionalProperties true', () => {
-            exactly<
-                { a: { foo: string | undefined; bar: string | undefined } },
-                RequiredRecursive<
-                    { a?: { foo?: string | undefined; bar?: string | undefined } },
-                    true
-                >
-            >()
-            exactly<
-                { a: { foo: string | undefined; bar: string | undefined } | undefined },
-                RequiredRecursive<
-                    { a?: { foo?: string | undefined; bar?: string | undefined } | undefined },
-                    true
-                >
-            >()
+        describe('StrictOptionalProperties true', () => {
+            test('normal', () => {
+                exactly<
+                    { a: { foo: string | undefined; bar: string | undefined } },
+                    RequiredRecursive<
+                        { a?: { foo?: string | undefined; bar?: string | undefined } },
+                        true
+                    >
+                >()
+                exactly<
+                    { a: { foo: string | undefined; bar: string | undefined } | undefined },
+                    RequiredRecursive<
+                        { a?: { foo?: string | undefined; bar?: string | undefined } | undefined },
+                        true
+                    >
+                >()
+            })
             test('union', () => {
                 exactly<
                     { a: number; b: { a: string | undefined } | { b: string | undefined } },
@@ -313,30 +315,32 @@ describe('RequiredRecursive', () => {
                 >
             })
         })
-        test('StrictOptionalProperties false', () => {
-            exactly<
-                { a: { foo: string; bar: string } },
-                RequiredRecursive<
-                    { a?: { foo?: string | undefined; bar?: string | undefined } },
-                    false
+        describe('StrictOptionalProperties false', () => {
+            test('normal', () => {
+                exactly<
+                    { a: { foo: string; bar: string } },
+                    RequiredRecursive<
+                        { a?: { foo?: string | undefined; bar?: string | undefined } },
+                        false
+                    >
+                >()
+                exactly<
+                    { a: { foo: string; bar: string } },
+                    RequiredRecursive<
+                        { a?: { foo?: string | undefined; bar?: string | undefined } | undefined },
+                        false
+                    >
+                >()
+            })
+            test('union', () => {
+                exactly<
+                    { a: number; b: { a: string } | { b: string } },
+                    RequiredRecursive<
+                        { a: number; b: { a?: string | undefined } | { b?: string | undefined } },
+                        false
+                    >
                 >
-            >()
-            exactly<
-                { a: { foo: string; bar: string } },
-                RequiredRecursive<
-                    { a?: { foo?: string | undefined; bar?: string | undefined } | undefined },
-                    false
-                >
-            >()
-        })
-        test('union', () => {
-            exactly<
-                { a: number; b: { a: string } | { b: string } },
-                RequiredRecursive<
-                    { a: number; b: { a?: string | undefined } | { b?: string | undefined } },
-                    false
-                >
-            >
+            })
         })
     })
 })
@@ -387,18 +391,23 @@ describe('OptionalRecursive', () => {
         })
     })
     describe('nested', () => {
-        test('StrictOptionalProperties true', () => {
-            exactly<
-                { a?: { foo?: string | undefined; bar?: string | undefined } },
-                OptionalRecursive<{ a: { foo: string | undefined; bar: string | undefined } }, true>
-            >()
-            exactly<
-                { a?: { foo?: string | undefined; bar?: string | undefined } | undefined },
-                OptionalRecursive<
-                    { a: { foo: string | undefined; bar: string | undefined } | undefined },
-                    true
-                >
-            >()
+        describe('StrictOptionalProperties true', () => {
+            test('normal', () => {
+                exactly<
+                    { a?: { foo?: string | undefined; bar?: string | undefined } },
+                    OptionalRecursive<
+                        { a: { foo: string | undefined; bar: string | undefined } },
+                        true
+                    >
+                >()
+                exactly<
+                    { a?: { foo?: string | undefined; bar?: string | undefined } | undefined },
+                    OptionalRecursive<
+                        { a: { foo: string | undefined; bar: string | undefined } | undefined },
+                        true
+                    >
+                >()
+            })
             test('union', () => {
                 exactly<
                     { a?: number; b?: { a?: string | undefined } | { b?: string | undefined } },
@@ -409,24 +418,22 @@ describe('OptionalRecursive', () => {
                 >
             })
         })
-        test('StrictOptionalProperties false', () => {
-            exactly<
-                { a?: { foo?: string | undefined; bar?: string | undefined } | undefined },
-                OptionalRecursive<{ a: { foo: string; bar: string } }, false>
-            >()
-            exactly<
-                { a?: { foo?: string | undefined; bar?: string | undefined } | undefined },
-                OptionalRecursive<{ a: { foo: string; bar: string } }, false>
-            >()
-        })
-        test('union', () => {
-            exactly<
-                {
-                    a?: number | undefined
-                    b?: { a?: string | undefined } | { b?: string | undefined } | undefined
-                },
-                OptionalRecursive<{ a: number; b: { a: string } | { b: string } }, false>
-            >
+        describe('StrictOptionalProperties false', () => {
+            test('normal', () => {
+                exactly<
+                    { a?: { foo?: string | undefined; bar?: string | undefined } | undefined },
+                    OptionalRecursive<{ a: { foo: string; bar: string } }, false>
+                >()
+            })
+            test('union', () => {
+                exactly<
+                    {
+                        a?: number | undefined
+                        b?: { a?: string | undefined } | { b?: string | undefined } | undefined
+                    },
+                    OptionalRecursive<{ a: number; b: { a: string } | { b: string } }, false>
+                >
+            })
         })
     })
 })
