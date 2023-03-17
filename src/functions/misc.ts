@@ -247,6 +247,10 @@ export const hasPropertyPredicate: {
  */
 export const entries = <T extends object>(object: T): Entries<T> => Object.entries(object) as never
 
+// https://github.com/microsoft/TypeScript/issues/53308
+declare const setTimeout: (fn: () => void, timeout: number) => unknown
+declare const clearTimeout: (value: unknown) => unknown
+
 /**
  * runs the given `callback` until it returns `true` or `timeoutMs` is reached
  */
