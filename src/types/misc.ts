@@ -89,6 +89,16 @@ const indexedAccessCheck = ([] as never[])[0]
 export type NoUncheckedIndexedAccess = undefined extends typeof indexedAccessCheck ? true : false
 
 /**
+ * `true` if `exactOptionalPropertyTypes` is set, else `false`. useful when creating types that need to behave differently
+ * based on this compiler option
+ */
+export type ExactOptionalPropertyTypes = undefined extends Required<{
+    value?: number | undefined
+}>['value']
+    ? true
+    : false
+
+/**
  * allows you to specify that a function parameter is optional but only if a generic type extends the specified
  * `Extends` type.
  *
@@ -186,7 +196,7 @@ export type Entries<T> = [Keys<T>, T[Keys<T>]][]
 /**
  * checks whether `Key` is an "exact" optional property of `T`. (ie. the property is defined with a `?` prefix).
  * requires the [`exactOptionalPropertyTypes`](https://www.typescriptlang.org/tsconfig#exactOptionalPropertyTypes)
- * compiler option to be enabled.
+ * compiler option to be enabled. will return `never` if it's not
  *
  * @example
  * type Foo = {a?: number, b: number | undefined, c: number}
@@ -194,7 +204,12 @@ export type Entries<T> = [Keys<T>, T[Keys<T>]][]
  * declare const bar: IsExactOptionalProperty<Foo, 'b'> // false
  * declare const baz: IsExactOptionalProperty<Foo, 'a'> // false
  */
-export type IsExactOptionalProperty<T, Key extends keyof T> = undefined extends T[Key]
+export type IsExactOptionalProperty<
+    T,
+    Key extends keyof T,
+> = ExactOptionalPropertyTypes extends false
+    ? never
+    : undefined extends T[Key]
     ? Not<Extends<{ [K in Key]: T[Key] }, { [k in Key]-?: T[Key] }>>
     : false
 
@@ -203,14 +218,42 @@ export type IsExactOptionalProperty<T, Key extends keyof T> = undefined extends 
  * keys that are optional but also have `undefined` in their type will keep `undefined` in their type.
  *
  * @example
- * type Foo = Required<{ a?: string | undefined }, true> // { a: string | undefined }
- * type Bar = Required<{ a?: string | undefined }, true> // { a: string }
+ * type Foo = RequiredProperties<{ a?: string | undefined }, true> // { a: string | undefined }
+ * type Bar = RequiredProperties<{ a?: string | undefined }, false> // { a: string }
  */
-export type Required<T extends object, ExactOptionalProperties extends boolean = true> = RequiredBy<
-    T,
-    keyof T,
-    ExactOptionalProperties
->
+export type RequiredProperties<
+    T extends object,
+    ExactOptionalProperties extends boolean = ExactOptionalPropertyTypes,
+> = RequiredBy<T, keyof T, ExactOptionalProperties>
+
+/**
+ * recursively makes all properties in the object `T` required. if `ExactOptionalProperties` is `true`,
+ * keys that are optional but also have `undefined` in their type will keep `undefined` in their type.
+ *
+ * @example
+ * type Foo = MandatoryRecursive<{ a: { a?: string | undefined } }, true> // { a: { a: string | undefined } }
+ * type Bar = MandatoryRecursive<{ a: { a?: string | undefined } }, fa;se> // { a: { a: string } }
+ */
+export type RequiredRecursive<
+    out T extends object,
+    out ExactOptionalProperties extends boolean = ExactOptionalPropertyTypes,
+> = {
+    [K in keyof T]-?: ListOf<
+        // first check if undefined is in the union:
+        ExactOptionalProperties extends false
+            ? [undefined] extends [T[K]]
+                ? Replace<T[K], undefined, never>
+                : T[K]
+            : T[K]
+    > extends infer Union
+        ? // now iterate over the union and recursively call this type on any object types within the union:
+          {
+              [UnionIndex in keyof Union]: Union[UnionIndex] extends object
+                  ? RequiredRecursive<Union[UnionIndex], ExactOptionalProperties>
+                  : Union[UnionIndex]
+          }[Keys<Union>]
+        : never
+}
 
 /**
  * makes `Keys` in the object `T` required. if `ExactOptionalProperties` is `true`,
@@ -223,8 +266,59 @@ export type Required<T extends object, ExactOptionalProperties extends boolean =
 export type RequiredBy<
     T extends object,
     Keys extends keyof T,
-    ExactOptionalProperties extends boolean = true,
+    ExactOptionalProperties extends boolean = ExactOptionalPropertyTypes,
 > = { [K in Keys]-?: ExactOptionalProperties extends true ? T[K] : Exclude<T[K], undefined> } & T
+
+/**
+ * makes all properties in the object `T` optional. if `ExactOptionalProperties` is `true`,
+ * keys that are optional but also have `undefined` in their type will keep `undefined` in their type.
+ *
+ * @example
+ * type Foo = OptionalProperties<{ a?: string | undefined }, true> // { a: string | undefined }
+ * type Bar = OptionalProperties<{ a?: string | undefined }, false> // { a: string }
+ */
+export type OptionalProperties<
+    T extends object,
+    ExactOptionalProperties extends boolean = ExactOptionalPropertyTypes,
+> = OptionalBy<T, keyof T, ExactOptionalProperties>
+
+/**
+ * recursively makes all properties in the object `T` optional. if `ExactOptionalProperties` is `true`,
+ * keys that are optional but also have `undefined` in their type will keep `undefined` in their type.
+ *
+ * @example
+ * type Foo = OptionalRecursive<{ a: { a?: string | undefined } }, true> // { a: { a: string | undefined } }
+ * type Bar = OptionalRecursive<{ a: { a?: string | undefined } }, false> // { a: { a: string } }
+ */
+export type OptionalRecursive<
+    out T extends object,
+    out ExactOptionalProperties extends boolean = ExactOptionalPropertyTypes,
+> = {
+    [K in keyof T]?: ListOf<
+        T[K] | (ExactOptionalProperties extends false ? undefined : never)
+    > extends infer Union
+        ? // now iterate over the union and recursively call this type on any object types within the union:
+          {
+              [UnionIndex in keyof Union]: Union[UnionIndex] extends object
+                  ? OptionalRecursive<Union[UnionIndex], ExactOptionalProperties>
+                  : Union[UnionIndex]
+          }[Keys<Union>]
+        : never
+}
+
+/**
+ * makes `Keys` in the object `T` optional. if `ExactOptionalProperties` is `true`,
+ * keys that are optional but also have `undefined` in their type will keep `undefined` in their type.
+ *
+ * @example
+ * type Foo = OptionalBy<{ a?: string | undefined, b?: string | undefined }, true> // { a: string | undefined, b?: string | undefined }
+ * type Bar = OptionalBy<{ a?: string | undefined, b?: string | undefined }, true> // { a: string, b?: string | undefined }
+ */
+export type OptionalBy<
+    T extends object,
+    Keys extends keyof T,
+    ExactOptionalProperties extends boolean = ExactOptionalPropertyTypes,
+> = { [K in Keys]?: ExactOptionalProperties extends true ? T[K] : T[K] | undefined } & Omit<T, Keys>
 
 /**
  * useful when using dynamic imports that have a default export
