@@ -1,6 +1,7 @@
 import { Extends, Or } from './Boolean'
 import { Add, Decrement, Enumerate, Increment, IsGreaterThan, Subtract } from './Number'
-import { Keys, NoUncheckedIndexedAccess } from './misc'
+import { NoUncheckedIndexedAccess } from './compilerOptions'
+import { Keys } from './misc'
 import { Flatten } from 'ts-toolbelt/out/List/Flatten'
 import { Head } from 'ts-toolbelt/out/List/Head'
 import { Tail } from 'ts-toolbelt/out/List/Tail'

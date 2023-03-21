@@ -1,4 +1,5 @@
 import { Extends, Not } from './Boolean'
+import { ExactOptionalPropertyTypes } from './compilerOptions'
 import { Keys as TsToolbeltKeys } from 'ts-toolbelt/out/Any/Keys'
 import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
 import { Replace } from 'ts-toolbelt/out/Union/Replace'
@@ -74,28 +75,6 @@ type InvariantComparisonEquals<Expected, Actual> =
  */
 export type Equals<Expected, Actual> = InvariantComparisonEquals<Expected, Actual> extends true
     ? FunctionComparisonEquals<Expected, Actual>
-    : false
-
-/**
- * the compiler sees this as `undefined` if `noUncheckedIndexedAccess` is enabled, and `never` if it's not.
- * used by {@link NoUncheckedIndexedAccess}
- */
-const indexedAccessCheck = ([] as never[])[0]
-
-/**
- * `true` if `noUncheckedIndexedAccess` is set, else `false`. useful when creating types that need to behave differently
- * based on this compiler option
- */
-export type NoUncheckedIndexedAccess = undefined extends typeof indexedAccessCheck ? true : false
-
-/**
- * `true` if `exactOptionalPropertyTypes` is set, else `false`. useful when creating types that need to behave differently
- * based on this compiler option
- */
-export type ExactOptionalPropertyTypes = undefined extends Required<{
-    value?: number | undefined
-}>['value']
-    ? true
     : false
 
 /**
