@@ -1,4 +1,4 @@
-import { FindResult } from '../types/internal'
+import { FindResult } from '../types/_internal'
 import { MaybePromise } from 'tsdef'
 
 /** finds the first item in the `iterable` where the `predicate` returns `true` */
