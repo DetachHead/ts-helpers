@@ -1,4 +1,3 @@
-import { FindResult } from '../../src/types/_internal'
 import {
     CastArray,
     IndexOf,
@@ -12,6 +11,7 @@ import {
     TupleOfUpToButNotIncluding,
 } from '../types/Array'
 import { Enumerate } from '../types/Number'
+import { FindResult } from '../types/_internal'
 import { Keys } from '../types/misc'
 import { isNullOrUndefined } from './misc'
 import { castArray as lodashCastArray, orderBy } from 'lodash'
