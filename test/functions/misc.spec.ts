@@ -112,6 +112,8 @@ describe('exactly', () => {
                 exactly<Readonly<{ x: 1; y: 2 }>>()(x1AndY2)
                 // @ts-expect-error xfail https://github.com/DetachHead/ts-helpers/issues/128
                 exactly<{ x: { a: 1 } & { b: 1 } }>()({} as { x: { a: 1; b: 1 } })
+                // @ts-expect-error xfail https://github.com/DetachHead/ts-helpers/issues/238
+                exactly<{ c: 1 } | { c: 1 }>({ c: 1 })
             })
             test('fail', () => {
                 // @ts-expect-error doesn't match
@@ -243,6 +245,8 @@ describe('exactly', () => {
                     { a: { foo: number; bar: number } },
                     { a: { foo: number } & { bar: number } }
                 >()
+                // @ts-expect-error xfail https://github.com/DetachHead/ts-helpers/issues/238
+                exactly<{ c: 1 } | { c: 1 }, { c: 1 }>()
             })
             test('fail', () => {
                 // @ts-expect-error doesn't match
@@ -399,6 +403,8 @@ describe('exactly', () => {
                 exactly(x1AndY2 as Readonly<{ x: 1 } & { y: 2 }>, x1AndY2)
                 // @ts-expect-error xfail https://github.com/DetachHead/ts-helpers/issues/128
                 exactly({} as { x: { a: 1 } & { b: 2 } }, {} as { x: { a: 1; b: 2 } })
+                //  https://github.com/DetachHead/ts-helpers/issues/238 (idk why it works on value form tho)
+                exactly({ c: 1 } as { c: 1 } | { c: 1 }, { c: 1 } as { c: 1 })
             })
             test('fail', () => {
                 // @ts-expect-error doesn't match
