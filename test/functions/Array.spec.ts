@@ -26,9 +26,9 @@ import {
 import { subtract } from '../../src/functions/Number'
 import { exactly } from '../../src/functions/misc'
 import { TupleOf } from '../../src/types/Array'
-import { Throw, throwIfUndefined } from 'throw-expression'
 import { ok as assert, deepStrictEqual } from 'assert'
 import { describe, test } from 'bun:test'
+import { Throw, throwIfUndefined } from 'throw-expression'
 
 test('lengthGreaterOrEqual', () => {
     const foo: string[] = []
@@ -163,8 +163,7 @@ describe('duplicate functions', () => {
 
     test('duplicates', () => deepStrictEqual(findDuplicates([1, 1, 2, 3, 3, 3]), [1, 3]))
 
-    test('removeDuplicates', () =>
-        deepStrictEqual(removeDuplicates([1, 1, 2, 3, 3, 3]), [1, 2, 3]))
+    test('removeDuplicates', () => deepStrictEqual(removeDuplicates([1, 1, 2, 3, 3, 3]), [1, 2, 3]))
 })
 
 test('concat', () => {
@@ -251,13 +250,13 @@ describe('slice', () => {
             exactly<[2, ...number[]]>()(slice([1, 2, 3] as [1, 2, ...number[]], 1))
         })
         test('start, rest start', () => {
-            exactly<[...number[], 1, 2]>()(slice([1, 2, 3] as [...number[], 1, 2], 1))
+            exactly<[...number[], 2, 3]>()(slice([1, 2, 3] as [...number[], 2, 3], 1))
         })
         test('end, rest end', () => {
             exactly<number[]>()(slice([1, 2, 3] as [1, 2, ...number[]], 0, 1))
         })
         test('end, rest start', () => {
-            exactly<number[]>()(slice([1, 2, 3] as [...number[], 1, 2], 0, 1))
+            exactly<number[]>()(slice([1, 2, 3] as [...number[], 2, 3], 0, 1))
         })
     })
     describe('not known at compiletime', () => {

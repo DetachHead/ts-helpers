@@ -1,7 +1,6 @@
 {
     "extends": "./tsconfig.base.json",
     "compilerOptions": {
-        "types": ["bun-types"],
         "noEmit": true,
         "allowJs": true,
         "checkJs": true

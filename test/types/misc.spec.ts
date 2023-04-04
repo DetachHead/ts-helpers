@@ -13,6 +13,7 @@ import {
     RequiredProperties,
     RequiredRecursive,
 } from '../../src/types/misc'
+import { describe, test } from 'bun:test'
 
 describe('OnlyInfer', () => {
     test('basic', () => {

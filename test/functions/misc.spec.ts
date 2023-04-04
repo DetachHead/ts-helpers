@@ -13,8 +13,7 @@ import {
 } from '../../src/functions/misc'
 import { NonNullish } from '../../src/types/misc'
 import { ok as assert, throws } from 'assert'
-import { describe, test } from 'bun:test'
-import { expect as jestExpect } from 'expect'
+import { describe, expect, test } from 'bun:test'
 
 describe('exactly', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-assignment -- this test is for the any type
@@ -549,9 +548,18 @@ describe('runUntil', () => {
     test('rejects', async () => {
         let isDone = false
         setTimeout(() => (isDone = true), 1000)
-        await jestExpect(
-            runUntil(() => new Promise<boolean>((res) => setTimeout(() => res(isDone), 10)), 100),
-        ).rejects.toThrow("runUntil failed because the predicate didn't return true in 100 ms")
+        // TODO: update this when bun test has a thing for expect promise rejections
+        try {
+            await runUntil(
+                () => new Promise<boolean>((res) => setTimeout(() => res(isDone), 10)),
+                100,
+            )
+            throw new Error("didn't reject")
+        } catch (e) {
+            expect(String(e)).toContain(
+                "runUntil failed because the predicate didn't return true in 100 ms",
+            )
+        }
     })
     test('resolves', async () => {
         let isDone = false
