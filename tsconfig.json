@@ -5,5 +5,5 @@
         "allowJs": true,
         "checkJs": true
     },
-    "include": [".eslintrc.js", "jest.config.ts"]
+    "include": [".eslintrc.js"]
 }

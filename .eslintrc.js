@@ -27,10 +27,6 @@ const config = {
             parserOptions: { ...parserOptions, project: ['./test/tsconfig.json'] },
         },
         {
-            files: ['jest.config.ts'],
-            parserOptions: configFileParserOptions,
-        },
-        {
             files: ['.eslintrc.js'],
             parserOptions: configFileParserOptions,
             rules: {
