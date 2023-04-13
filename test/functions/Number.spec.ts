@@ -17,10 +17,8 @@ import {
 } from '../../src/functions/Number'
 import { exactly } from '../../src/functions/misc'
 import { TupleOf } from '../../src/types/Array'
-import { PowerAssert } from 'typed-nodejs-assert'
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
-const assert: PowerAssert = require('power-assert')
+import { ok as assert, throws } from 'assert'
+import { describe, test } from 'bun:test'
 
 test('random', () => {
     const arr: TupleOf<number, 5> = [1, 2, 3, 4, 5]
@@ -111,16 +109,16 @@ describe('leadingZeros', () => {
 })
 
 describe('ordinal', () => {
-    it('1/2/3', () => {
+    test('1/2/3', () => {
         exactly('1st', ordinalNumber(1))
         exactly('12th', ordinalNumber(12))
         exactly('23rd', ordinalNumber(23))
     })
-    it('th', () => {
+    test('th', () => {
         exactly('24th', ordinalNumber(24))
         exactly('0th', ordinalNumber(0))
     })
-    it('value not known at compiletime', () => {
+    test('value not known at compiletime', () => {
         exactly<`${number}${'st' | 'nd' | 'rd' | 'th'}`>()(ordinalNumber(1 as number))
     })
 })
@@ -249,6 +247,6 @@ describe('toNumber', () => {
         exactly<undefined | number>()(toNumber('12' as string))
     })
     describe('error', () => {
-        assert.throws(() => toNumber('asdf', true), "failed to convert 'asdf' to a number")
+        throws(() => toNumber('asdf', true), "failed to convert 'asdf' to a number")
     })
 })

@@ -12,10 +12,8 @@ import {
     unsafeNarrow,
 } from '../../src/functions/misc'
 import { NonNullish } from '../../src/types/misc'
-import { PowerAssert } from 'typed-nodejs-assert'
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
-const assert: PowerAssert = require('power-assert')
+import { ok as assert, throws } from 'assert'
+import { describe, expect, test } from 'bun:test'
 
 describe('exactly', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-assignment -- this test is for the any type
@@ -348,7 +346,7 @@ describe('exactly', () => {
                 exactly(10, 10)
             })
             test("doesn't match", () => {
-                assert.throws(() =>
+                throws(() =>
                     // @ts-expect-error doesn't match
                     exactly(number, 10),
                 )
@@ -367,11 +365,11 @@ describe('exactly', () => {
                     exactly(any, any)
                 })
                 test('fail', () => {
-                    assert.throws(() =>
+                    throws(() =>
                         // @ts-expect-error doesn't match
                         exactly(any, number),
                     )
-                    assert.throws(() =>
+                    throws(() =>
                         // @ts-expect-error doesn't match
                         exactly(number, any),
                     )
@@ -385,11 +383,11 @@ describe('exactly', () => {
                     exactly(never, never)
                 })
                 test('fail', () => {
-                    assert.throws(() =>
+                    throws(() =>
                         // @ts-expect-error doesn't match
                         exactly(number, never),
                     )
-                    assert.throws(() =>
+                    throws(() =>
                         // @ts-expect-error doesn't match
                         exactly(never, number),
                     )
@@ -411,7 +409,7 @@ describe('exactly', () => {
                 exactly(oneOrTwo, 1)
                 // @ts-expect-error doesn't match
                 exactly(1, oneOrTwo)
-                assert.throws(() =>
+                throws(() =>
                     // @ts-expect-error doesn't match
                     exactly(oneOrTwo, 2 as 1 | 2 | 3),
                 )
@@ -436,15 +434,15 @@ describe('exactly', () => {
                 exactly(fn1, fn1)
             })
             test('fail', () => {
-                assert.throws(() => {
+                throws(() => {
                     // xfail
                     exactly(fn1, fn2)
                 })
-                assert.throws(() => {
+                throws(() => {
                     // @ts-expect-error doesn't match
                     exactly(1, fn1)
                 })
-                assert.throws(() => {
+                throws(() => {
                     // xfail
                     exactly(() => 1, 1)
                 })
@@ -457,7 +455,7 @@ describe('exactly', () => {
             test('fail', () => {
                 // xfail because constructor isn't typed properly (but true at runtime)
                 exactly(Class, instance.constructor)
-                assert.throws(() => {
+                throws(() => {
                     // xfail because constructor isn't typed properly (false at runtime)
                     exactly(Class, Class.constructor)
                 })
@@ -550,9 +548,18 @@ describe('runUntil', () => {
     test('rejects', async () => {
         let isDone = false
         setTimeout(() => (isDone = true), 1000)
-        await expect(
-            runUntil(() => new Promise<boolean>((res) => setTimeout(() => res(isDone), 10)), 100),
-        ).rejects.toThrow("runUntil failed because the predicate didn't return true in 100 ms")
+        // TODO: update this when bun test has a thing for expect promise rejections
+        try {
+            await runUntil(
+                () => new Promise<boolean>((res) => setTimeout(() => res(isDone), 10)),
+                100,
+            )
+            throw new Error("didn't reject")
+        } catch (e) {
+            expect(String(e)).toContain(
+                "runUntil failed because the predicate didn't return true in 100 ms",
+            )
+        }
     })
     test('resolves', async () => {
         let isDone = false

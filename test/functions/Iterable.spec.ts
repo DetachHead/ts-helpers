@@ -1,8 +1,6 @@
 import { find, findAsync } from '../../src/functions/Iterable'
-import { PowerAssert } from 'typed-nodejs-assert'
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
-const assert: PowerAssert = require('power-assert')
+import { ok as assert } from 'assert'
+import { describe, test } from 'bun:test'
 
 describe('findAsync', () => {
     test('predicate is a promise', async () => {

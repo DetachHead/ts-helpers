@@ -26,11 +26,9 @@ import {
 import { subtract } from '../../src/functions/Number'
 import { exactly } from '../../src/functions/misc'
 import { TupleOf } from '../../src/types/Array'
+import { ok as assert, deepStrictEqual } from 'assert'
+import { describe, test } from 'bun:test'
 import { Throw, throwIfUndefined } from 'throw-expression'
-import { PowerAssert } from 'typed-nodejs-assert'
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
-const assert: PowerAssert = require('power-assert')
 
 test('lengthGreaterOrEqual', () => {
     const foo: string[] = []
@@ -95,7 +93,7 @@ test('mapAsync', async () => {
         (value: number) => new Promise<number>((res) => setTimeout(() => res(value), value * 50)),
     )
     exactly<[number, number]>()(result)
-    assert.deepStrictEqual(result, [2, 1])
+    deepStrictEqual(result, [2, 1])
 })
 
 describe('findNotUndefined', () => {
@@ -163,10 +161,9 @@ describe('duplicate functions', () => {
         test('false', () => assert(!containsDuplicates(['asdf', 'sdfg', 'dfgh'])))
     })
 
-    test('duplicates', () => assert.deepStrictEqual(findDuplicates([1, 1, 2, 3, 3, 3]), [1, 3]))
+    test('duplicates', () => deepStrictEqual(findDuplicates([1, 1, 2, 3, 3, 3]), [1, 3]))
 
-    test('removeDuplicates', () =>
-        assert.deepStrictEqual(removeDuplicates([1, 1, 2, 3, 3, 3]), [1, 2, 3]))
+    test('removeDuplicates', () => deepStrictEqual(removeDuplicates([1, 1, 2, 3, 3, 3]), [1, 2, 3]))
 })
 
 test('concat', () => {
@@ -253,13 +250,13 @@ describe('slice', () => {
             exactly<[2, ...number[]]>()(slice([1, 2, 3] as [1, 2, ...number[]], 1))
         })
         test('start, rest start', () => {
-            exactly<[...number[], 1, 2]>()(slice([1, 2, 3] as [...number[], 1, 2], 1))
+            exactly<[...number[], 2, 3]>()(slice([1, 2, 3] as [...number[], 2, 3], 1))
         })
         test('end, rest end', () => {
             exactly<number[]>()(slice([1, 2, 3] as [1, 2, ...number[]], 0, 1))
         })
         test('end, rest start', () => {
-            exactly<number[]>()(slice([1, 2, 3] as [...number[], 1, 2], 0, 1))
+            exactly<number[]>()(slice([1, 2, 3] as [...number[], 2, 3], 0, 1))
         })
     })
     describe('not known at compiletime', () => {

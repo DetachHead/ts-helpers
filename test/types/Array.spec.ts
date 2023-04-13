@@ -7,6 +7,7 @@ import {
     TupleOf,
     TupleOfUpTo,
 } from '../../src/types/Array'
+import { describe, test } from 'bun:test'
 
 describe('TupleOfUpTo', () => {
     test('type', () => {

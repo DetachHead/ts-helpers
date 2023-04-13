@@ -1,8 +1,9 @@
 {
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
-        "types": ["@types/node", "@types/jest", "@jest/types"],
-        "noEmit": true
+        "types": ["bun-types"],
+        "noEmit": true,
+        "skipLibCheck": true // https://github.com/oven-sh/bun/issues/2620
     },
     "include": ["**/*.ts"]
 }

@@ -6,6 +6,7 @@ import {
     ToNonArrowFunction,
     UnsafeVariance,
 } from '../../src/types/Function'
+import { describe, test } from 'bun:test'
 
 /* eslint-disable detachhead/require-variance-annotations -- these types are using hacky ways to change the variance of a type, explicit variance annotations breaks them */
 
