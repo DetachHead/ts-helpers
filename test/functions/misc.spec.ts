@@ -8,6 +8,7 @@ import {
     isNullOrUndefined,
     narrow,
     narrowCast,
+    optionalProperties,
     runUntil,
     unsafeNarrow,
 } from '../../src/functions/misc'
@@ -601,5 +602,41 @@ describe('New', () => {
             // @ts-expect-error negative test
             '1',
         )
+    })
+})
+
+describe('optionalProperties', () => {
+    describe('object', () => {
+        test('top level', () => {
+            exactly(
+                { a: 1 } as { a: number; b?: string },
+                optionalProperties<{ a: number; b?: string | undefined }>({ a: 1, b: undefined }),
+            )
+        })
+        test('nested', () => {
+            exactly(
+                // @ts-expect-error xfail TODO: figure out why exactly doesn't work on nested ToExactOptionalProperties types
+                { a: { a: 1 } } as { a: { a: number; b?: string } },
+                optionalProperties<{ a: { a: number; b?: string | undefined } }>({
+                    a: { a: 1, b: undefined },
+                }),
+            )
+        })
+    })
+    test('array', () => {
+        exactly(
+            { a: [{ a: 1 }] } as { a: [{ a: number; b?: string }] },
+            // @ts-expect-error xfail TODO: figure out why exactly doesn't work on arrays in ToExactOptionalProperties
+            optionalProperties<{ a: [{ a: number; b?: string | undefined }] }>({
+                a: [{ a: 1, b: undefined }],
+            }),
+        )
+    })
+    test('real world example', () => {
+        interface Foo {
+            a: number
+            b?: string
+        }
+        optionalProperties({a: 1, b: Math.random() === 1? '': undefined}) satisfies Foo
     })
 })

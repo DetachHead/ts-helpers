@@ -1,6 +1,10 @@
 import { Extends, Not } from './Boolean'
 import { ExactOptionalPropertyTypes } from './compilerOptions'
 import { Keys as TsToolbeltKeys } from 'ts-toolbelt/out/Any/Keys'
+import { OptionalKeys as OptionalKeysList } from 'ts-toolbelt/out/List/OptionalKeys'
+import { RequiredKeys as RequiredKeysList } from 'ts-toolbelt/out/List/RequiredKeys'
+import { OptionalKeys as OptionalKeysObject } from 'ts-toolbelt/out/Object/OptionalKeys'
+import { RequiredKeys as RequiredKeysObject } from 'ts-toolbelt/out/Object/RequiredKeys'
 import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
 import { Replace } from 'ts-toolbelt/out/Union/Replace'
 import { Primitive } from 'utility-types'
@@ -375,3 +379,44 @@ export type ReplaceValuesRecursive<in out T, in out Find, out ReplaceWith> = {
           }[Keys<Union>]
         : never
 }
+
+/**
+ * gets the keys of `T` that are optional. works on both objects and arrays
+ */
+export type OptionalKeys<T extends object> = T extends readonly unknown[]
+    ? OptionalKeysList<T>
+    : OptionalKeysObject<T>
+
+/**
+ * gets the keys of `T` that are required. works on both objects and arrays
+ */
+export type RequiredKeys<T extends object> = T extends readonly unknown[]
+    ? RequiredKeysList<T>
+    : RequiredKeysObject<T>
+
+/**
+ * recursively removes `undefined` properties from an object type, where the properties are optional.
+ * only useful when using the `exactOptionalPropertyTypes` compiler option. this type has no effect if it's disabled
+ *
+ * @example
+ * type Foo = ToExactOptionalProperties<{ a?: number | undefined, b: string | undefined }> // { a?: number, b: string | undefined }
+ */
+export type ToExactOptionalProperties<T extends object> = {
+    [K in OptionalKeys<T>]?: ListOf<T[K & keyof T]> extends infer Union
+        ? // now iterate over the union and recursively call this type on any object types within the union:
+          {
+              [UnionIndex in keyof Union]: Union[UnionIndex] extends object
+                  ? ToExactOptionalProperties<Union[UnionIndex]>
+                  : Exclude<Union[UnionIndex], undefined>
+          }[Keys<Union>]
+        : never
+} & {
+    [K in RequiredKeys<T>]: ListOf<T[K & keyof T]> extends infer Union
+        ? // now iterate over the union and recursively call this type on any object types within the union:
+          {
+              [UnionIndex in keyof Union]: Union[UnionIndex] extends object
+                  ? ToExactOptionalProperties<Union[UnionIndex]>
+                  : Union[UnionIndex]
+          }[Keys<Union>]
+        : never
+} & T

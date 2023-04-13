@@ -1,5 +1,12 @@
 import { Stringable, TemplateLiteralStringable, ToString } from '../types/String'
-import { Constructor, Entries, Equals, HasTypedConstructor, OnlyInfer } from '../types/misc'
+import {
+    Constructor,
+    Entries,
+    Equals,
+    HasTypedConstructor,
+    OnlyInfer,
+    ToExactOptionalProperties,
+} from '../types/misc'
 import { isEqual } from 'lodash'
 import { Throw } from 'throw-expression'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
@@ -81,14 +88,25 @@ export const toStringType: {
     <T extends Stringable>(value: T): string
 } = (value: Stringable) => value.toString() as never
 
-/**
- * asserts that a value matches the given type
- *
- * **WARNING**: for most type-testing scenarios, you probably want to use {@link exactly} instead, as it does an exact
- * match whereas this function only verifies that the value `extends` the given type
- */
 export const assertType: {
+    /**
+     * @deprecated use the `satisfies` keyword instead:
+     * ```ts
+     * //old:
+     * assertType<string>('foo')
+     *
+     * //new:
+     * 'foo' satisfies string
+     * ```
+     */
     <T>(_value: NoInfer<T>): void
+
+    /**
+     * asserts that a value matches the given type
+     *
+     * **WARNING**: for most type-testing scenarios, you probably want to use {@link exactly} instead, as it does an exact
+     * match whereas this function only verifies that the value `extends` the given type
+     */
     <_Expected, _Actual extends _Expected>(): void
 } = (_value?: unknown) => undefined
 
@@ -298,3 +316,23 @@ export const New = <T extends Constructor>(
     class_: T,
     ...args: ConstructorParameters<T>
 ): HasTypedConstructor<T> => new class_(...args) as HasTypedConstructor<T>
+
+/**
+ * recursively removes `undefined` properties from an object.
+ * useful when using the `exactOptionalPropertyTypes` compiler option
+ */
+export const optionalProperties = <T extends object>(object: T): ToExactOptionalProperties<T> =>
+    (Object.entries(object) as [string, unknown][]).reduce((prev, [key, value]) => {
+        let result
+        if (Array.isArray(value)) {
+            result = value.map(optionalProperties)
+        } else if (typeof value === 'object' && value !== null) {
+            result = optionalProperties(value)
+        } else {
+            result = value
+        }
+        return {
+            ...prev,
+            ...(value === undefined ? {} : { [key]: result }),
+        }
+    }, {} as ToExactOptionalProperties<T>)
