@@ -210,8 +210,8 @@ export type RequiredProperties<
  * keys that are optional but also have `undefined` in their type will keep `undefined` in their type.
  *
  * @example
- * type Foo = MandatoryRecursive<{ a: { a?: string | undefined } }, true> // { a: { a: string | undefined } }
- * type Bar = MandatoryRecursive<{ a: { a?: string | undefined } }, fa;se> // { a: { a: string } }
+ * type Foo = RequiredRecursive<{ a: { a?: string | undefined } }, true> // { a: { a: string | undefined } }
+ * type Bar = RequiredRecursive<{ a: { a?: string | undefined } }, fa;se> // { a: { a: string } }
  */
 export type RequiredRecursive<
     out T extends object,
@@ -266,8 +266,8 @@ export type OptionalProperties<
  * keys that are optional but also have `undefined` in their type will keep `undefined` in their type.
  *
  * @example
- * type Foo = OptionalRecursive<{ a: { a?: string | undefined } }, true> // { a: { a: string | undefined } }
- * type Bar = OptionalRecursive<{ a: { a?: string | undefined } }, false> // { a: { a: string } }
+ * type Foo = OptionalRecursive<{ a: { a: string } }, true> // { a: { a?: string } }
+ * type Bar = OptionalRecursive<{ a: { a: string } }, false> // { a: { a: string | undefined } }
  */
 export type OptionalRecursive<
     out T extends object,
