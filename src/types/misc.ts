@@ -393,30 +393,3 @@ export type OptionalKeys<T extends object> = T extends readonly unknown[]
 export type RequiredKeys<T extends object> = T extends readonly unknown[]
     ? RequiredKeysList<T>
     : RequiredKeysObject<T>
-
-/**
- * recursively removes `undefined` properties from an object type, where the properties are optional.
- * only useful when using the `exactOptionalPropertyTypes` compiler option. this type has no effect if it's disabled
- *
- * @example
- * type Foo = ToExactOptionalProperties<{ a?: number | undefined, b: string | undefined }> // { a?: number, b: string | undefined }
- */
-export type ToExactOptionalProperties<T extends object> = {
-    [K in OptionalKeys<T>]?: ListOf<T[K & keyof T]> extends infer Union
-        ? // now iterate over the union and recursively call this type on any object types within the union:
-          {
-              [UnionIndex in keyof Union]: Union[UnionIndex] extends object
-                  ? ToExactOptionalProperties<Union[UnionIndex]>
-                  : Exclude<Union[UnionIndex], undefined>
-          }[Keys<Union>]
-        : never
-} & {
-    [K in RequiredKeys<T>]: ListOf<T[K & keyof T]> extends infer Union
-        ? // now iterate over the union and recursively call this type on any object types within the union:
-          {
-              [UnionIndex in keyof Union]: Union[UnionIndex] extends object
-                  ? ToExactOptionalProperties<Union[UnionIndex]>
-                  : Union[UnionIndex]
-          }[Keys<Union>]
-        : never
-} & T

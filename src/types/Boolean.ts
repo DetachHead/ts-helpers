@@ -1,5 +1,3 @@
-import { RequiredKeys } from 'utility-types'
-
 /** type equivalent of the `!` operator */
 export type Not<Types extends boolean> = {
     [T in `${Types}`]: T extends 'true' ? false : true
@@ -11,8 +9,6 @@ export type Not<Types extends boolean> = {
  * type Foo = Or<IsGreaterThan<1, 0> | IsGreaterThan<1, 2>> //true
  */
 export type Or<T extends boolean> = true extends T ? true : false
-
-type A = RequiredKeys
 
 /**
  * type equivalent of the `&&` operator.

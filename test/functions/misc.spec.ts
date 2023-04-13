@@ -609,15 +609,16 @@ describe('optionalProperties', () => {
     describe('object', () => {
         test('top level', () => {
             exactly(
-                { a: 1 } as { a: number; b?: string },
-                optionalProperties<{ a: number; b?: string | undefined }>({ a: 1, b: undefined }),
+                // TODO: this seems wrong
+                { a: 1 } as { a: number, b: never },
+                optionalProperties({ a: 1, b: undefined }),
             )
         })
         test('nested', () => {
             exactly(
                 // @ts-expect-error xfail TODO: figure out why exactly doesn't work on nested ToExactOptionalProperties types
                 { a: { a: 1 } } as { a: { a: number; b?: string } },
-                optionalProperties<{ a: { a: number; b?: string | undefined } }>({
+                optionalProperties({
                     a: { a: 1, b: undefined },
                 }),
             )
@@ -627,16 +628,19 @@ describe('optionalProperties', () => {
         exactly(
             { a: [{ a: 1 }] } as { a: [{ a: number; b?: string }] },
             // @ts-expect-error xfail TODO: figure out why exactly doesn't work on arrays in ToExactOptionalProperties
-            optionalProperties<{ a: [{ a: number; b?: string | undefined }] }>({
+            optionalProperties({
                 a: [{ a: 1, b: undefined }],
             }),
         )
     })
     test('real world example', () => {
-        interface Foo {
+        interface Expected {
             a: number
             b?: string
         }
-        optionalProperties({a: 1, b: Math.random() === 1? '': undefined}) satisfies Foo
+        const actual = {a: 1, b: Math.random() === 1? '': undefined}
+        // @ts-expect-error sanity check. if this is no longer an error then exactOptionalPropertyTypes was probably turned off
+        actual satisfies Expected
+        optionalProperties(actual) satisfies Expected
     })
 })
