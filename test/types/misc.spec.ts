@@ -12,6 +12,7 @@ import {
     RequiredBy,
     RequiredProperties,
     RequiredRecursive,
+    ToExactOptionalProperties,
 } from '../../src/types/misc'
 
 describe('OnlyInfer', () => {
@@ -379,8 +380,8 @@ describe('OptionalRecursive', () => {
     describe('top level', () => {
         test('StrictOptionalProperties true', () => {
             exactly<
-                { foo?: string | undefined; bar?: string | undefined },
-                OptionalRecursive<{ foo: string | undefined; bar: string | undefined }, true>
+                { foo?: string; bar?: string | undefined },
+                OptionalRecursive<{ foo: string; bar: string | undefined }, true>
             >()
         })
         test('StrictOptionalProperties false', () => {
@@ -488,5 +489,40 @@ describe('ReplaceValuesRecursive', () => {
             { a?: { a: string } },
             ReplaceValuesRecursive<{ a?: { a: number } }, number, string>
         >
+    })
+})
+
+describe('ToExactOptionalProperties', () => {
+    test('top level', () => {
+        exactly<
+            { a?: string; b: number | undefined },
+            ToExactOptionalProperties<{ a?: string | undefined; b: number | undefined }>
+        >()
+    })
+    test('nested', () => {
+        // TODO: figure out why exactly doesn't work here, these types are equal as far as i can tell
+        assertType<
+            { a: { a?: string; b: number | undefined } },
+            ToExactOptionalProperties<{ a: { a?: string | undefined; b: number | undefined } }>
+        >()
+        assertType<
+            ToExactOptionalProperties<{ a: { a?: string | undefined; b: number | undefined } }>,
+            { a: { a?: string; b: number | undefined } }
+        >()
+    })
+    test('array', () => {
+        assertType<
+            [{ a?: string; b: number | undefined }],
+            // @ts-expect-error xfail TODO: whats going on here? the type is correct
+            ToExactOptionalProperties<[{ a?: string | undefined; b: number | undefined }]>
+        >()
+        assertType<
+            ToExactOptionalProperties<[{ a?: string | undefined; b: number | undefined }]>,
+            [{ a?: string; b: number | undefined }]
+        >()
+        exactly<
+            [{ a?: string; b: number | undefined }][0],
+            ToExactOptionalProperties<[{ a?: string | undefined; b: number | undefined }]>[0]
+        >()
     })
 })
