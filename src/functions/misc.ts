@@ -4,14 +4,18 @@ import {
     Entries,
     Equals,
     HasTypedConstructor,
+    Keys,
     OnlyInfer,
-    ToExactOptionalProperties,
+    ReplaceValuesRecursive,
 } from '../types/misc'
 import { isEqual } from 'lodash'
 import { Throw } from 'throw-expression'
 import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import { NoInfer } from 'ts-toolbelt/out/Function/NoInfer'
+import { Filter as TsToolbeltFilter } from 'ts-toolbelt/out/Object/Filter'
 import { IntersectOf } from 'ts-toolbelt/out/Union/IntersectOf'
+import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
+import { Replace } from 'ts-toolbelt/out/Union/Replace'
 import { AnyKey } from 'tsdef'
 
 /**
@@ -317,11 +321,38 @@ export const New = <T extends Constructor>(
     ...args: ConstructorParameters<T>
 ): HasTypedConstructor<T> => new class_(...args) as HasTypedConstructor<T>
 
+declare const replacedUndefined: unique symbol
+
+/**
+ * recursively removes `undefined` properties from an object type. used by the `optionalProperties` function
+ * only useful when using the `exactOptionalPropertyTypes` compiler option. this type has no effect if it's disabled
+ *
+ * @example
+ * type Foo = RemoveUndefinedPropertiesRecursive<{ a?: number | undefined, b: string | undefined }> // { a?: number, b: string | undefined }
+ */
+// TODO: rewrite this, it sucks (currently turns properties into `never` instead of removing them)
+// should probably be moved to types and then exported when its fixed
+type OptionalProperties<T extends object> =
+    | TsToolbeltFilter<
+          {
+              [K in keyof T]: ListOf<T[K]> extends infer Union
+                  ? // now iterate over the union and recursively call this type on any object types within the union:
+                    {
+                        [UnionIndex in keyof Union]: Union[UnionIndex] extends object
+                            ? OptionalProperties<Union[UnionIndex]>
+                            : Replace<Union[UnionIndex], undefined, typeof replacedUndefined>
+                    }[Keys<Union>]
+                  : never
+          },
+          typeof replacedUndefined,
+          '<-contains'
+      > &
+          ReplaceValuesRecursive<T, undefined, never>
 /**
  * recursively removes `undefined` properties from an object.
  * useful when using the `exactOptionalPropertyTypes` compiler option
  */
-export const optionalProperties = <T extends object>(object: T): ToExactOptionalProperties<T> =>
+export const optionalProperties = <T extends object>(object: T): OptionalProperties<T> =>
     (Object.entries(object) as [string, unknown][]).reduce((prev, [key, value]) => {
         let result
         if (Array.isArray(value)) {
@@ -335,4 +366,4 @@ export const optionalProperties = <T extends object>(object: T): ToExactOptional
             ...prev,
             ...(value === undefined ? {} : { [key]: result }),
         }
-    }, {} as ToExactOptionalProperties<T>)
+    }, {} as OptionalProperties<T>)
