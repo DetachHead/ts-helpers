@@ -633,14 +633,29 @@ describe('optionalProperties', () => {
             }),
         )
     })
-    test('real world example', () => {
+    describe('real world examples', () => {
         interface Expected {
             a: number
             b?: string
         }
-        const actual = { a: 1, b: Math.random() === 1 ? '' : undefined }
-        // @ts-expect-error sanity check. if this is no longer an error then exactOptionalPropertyTypes was probably turned off
-        actual satisfies Expected
-        optionalProperties(actual) satisfies Expected
+        test('sanity check', () => {
+            optionalProperties({ a: 1, b: '' }) satisfies Expected
+        })
+        test('positive', () => {
+            const actual = { a: 1, b: Math.random() === 1 ? '' : undefined }
+            // @ts-expect-error sanity check. if this is no longer an error then exactOptionalPropertyTypes was probably turned off
+            actual satisfies Expected
+            optionalProperties(actual) satisfies Expected
+        })
+        describe('negative', () => {
+            test('optional type is wrong', () => {
+                // @ts-expect-error type is wrong
+                optionalProperties({ a: 1, b: true }) satisfies Expected
+            })
+            test('mandatory type is wrong', () => {
+                // @ts-expect-error type is wrong
+                optionalProperties({ a: '', b: '' }) satisfies Expected
+            })
+        })
     })
 })
