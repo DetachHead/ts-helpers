@@ -348,6 +348,7 @@ type OptionalProperties<T extends object> =
           '<-contains'
       > &
           ReplaceValuesRecursive<T, undefined, never>
+
 /**
  * recursively removes `undefined` properties from an object.
  * useful when using the `exactOptionalPropertyTypes` compiler option
