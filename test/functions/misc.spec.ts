@@ -610,7 +610,7 @@ describe('optionalProperties', () => {
         test('top level', () => {
             exactly(
                 // TODO: this seems wrong
-                { a: 1 } as { a: number, b: never },
+                { a: 1 } as { a: number; b: never },
                 optionalProperties({ a: 1, b: undefined }),
             )
         })
@@ -638,7 +638,7 @@ describe('optionalProperties', () => {
             a: number
             b?: string
         }
-        const actual = {a: 1, b: Math.random() === 1? '': undefined}
+        const actual = { a: 1, b: Math.random() === 1 ? '' : undefined }
         // @ts-expect-error sanity check. if this is no longer an error then exactOptionalPropertyTypes was probably turned off
         actual satisfies Expected
         optionalProperties(actual) satisfies Expected

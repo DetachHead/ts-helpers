@@ -60,5 +60,13 @@
     "ts-node": "^10.7.0",
     "typed-nodejs-assert": "^1.1.0",
     "typescript": "^5.0.0-dev.20221206"
-  }
+  },
+	"//": "https://github.com/trivago/prettier-plugin-sort-imports/issues/204#issuecomment-1431287240",
+	"overrides": {
+		"@trivago/prettier-plugin-sort-imports": {
+			"@babel/core": "7.20.12",
+			"@babel/parser": "7.20.15",
+			"@babel/traverse": "7.20.13"
+		}
+	}
 }
