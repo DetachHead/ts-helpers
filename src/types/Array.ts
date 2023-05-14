@@ -134,17 +134,16 @@ export type LengthGreaterThan<Array extends unknown[], Length extends number> = 
 
 /** removes `DeleteCount` values from `Array` starting at `StartIndex` */
 export type Splice<
-    Array extends unknown[],
+    Array extends readonly unknown[],
     StartIndex extends number,
     DeleteCount extends number = Subtract<Array['length'], StartIndex>,
 > = [...Take<Array, StartIndex>, ...Take<Array, Add<StartIndex, DeleteCount>, '<-'>]
 
 /** removes the value at index `RemoveIndex` from `Array` */
-export type RemoveIndex<Array extends unknown[], RemoveIndex extends Index<Array>> = Splice<
-    Array,
-    RemoveIndex,
-    1
->
+export type RemoveIndex<
+    Array extends readonly unknown[],
+    RemoveIndex extends Index<Array>,
+> = Splice<Array, RemoveIndex, 1>
 
 type _IndexOfLongestString<
     Strings extends readonly string[],
@@ -174,7 +173,7 @@ export type IndexOfLongestString<Strings extends readonly string[]> = Strings ex
     ? number
     : _IndexOfLongestString<Strings, 0, 0>
 
-type SortLongestStringsTailRec<Array extends string[], Result extends string[]> = Or<
+type SortLongestStringsTailRec<Array extends readonly string[], Result extends string[]> = Or<
     Extends<Array, TupleOfUpTo<string, 1>> | Extends<number, Array['length']>
 > extends true
     ? [...Result, ...Array]
@@ -184,7 +183,10 @@ type SortLongestStringsTailRec<Array extends string[], Result extends string[]> 
       >
 
 /** sorts an array of strings by longest to shortest */
-export type SortLongestStrings<Array extends string[]> = SortLongestStringsTailRec<Array, []>
+export type SortLongestStrings<Array extends readonly string[]> = SortLongestStringsTailRec<
+    Array,
+    []
+>
 
 type _IndexOfHighestNumber<
     Numbers extends readonly number[],
@@ -235,10 +237,10 @@ type SliceCount<
 > = StartCount extends Start
     ? EndCount extends PositionFromEnd
         ? Array
-        : Array extends [...infer Rest, unknown]
+        : Array extends readonly [...infer Rest, unknown]
         ? SliceCount<Rest, Start, PositionFromEnd, StartCount, Increment<EndCount>>
         : []
-    : Array extends [unknown, ...infer Rest]
+    : Array extends readonly [unknown, ...infer Rest]
     ? SliceCount<Rest, Start, PositionFromEnd, Increment<StartCount>, EndCount>
     : Array
 
@@ -261,7 +263,7 @@ export type Slice<
     : SliceCount<Array, Start, GetPositionFromEnd<Array, End>, 0, 0>
 
 /** compiletime version of {@link  _.castArray} */
-export type CastArray<T> = T extends unknown[] ? T : [T]
+export type CastArray<T> = T extends readonly unknown[] ? T : [T]
 
 /**
  * an array with a specified `Dimension`

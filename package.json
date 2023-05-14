@@ -41,7 +41,7 @@
     "utility-types": "3.10.0"
   },
   "devDependencies": {
-    "@detachhead/eslint-config": "^1",
+    "@detachhead/eslint-config": "^1.2.1",
     "@jest/types": "^27.2.5",
     "@trivago/prettier-plugin-sort-imports": "^3.4.0",
     "@types/assert": "^1.5.6",
@@ -53,20 +53,24 @@
     "espower-typescript": "^9.0.2",
     "jest": "^27.5.1",
     "power-assert": "^1.6.1",
-    "prettier": "^2.8.7",
+    "prettier": "^2.8.8",
     "rimraf": "^3.0.2",
     "source-map-support": "^0.5.19",
     "ts-jest": "^27.1.4",
     "ts-node": "^10.7.0",
+    "ts-spec": "^1.4.6",
     "typed-nodejs-assert": "^1.1.0",
     "typescript": "^5.0.0-dev.20221206"
   },
-	"//": "https://github.com/trivago/prettier-plugin-sort-imports/issues/204#issuecomment-1431287240",
-	"overrides": {
-		"@trivago/prettier-plugin-sort-imports": {
-			"@babel/core": "7.20.12",
-			"@babel/parser": "7.20.15",
-			"@babel/traverse": "7.20.13"
-		}
-	}
+  "//": "https://github.com/trivago/prettier-plugin-sort-imports/issues/204#issuecomment-1431287240",
+  "overrides": {
+    "@trivago/prettier-plugin-sort-imports": {
+      "@babel/core": "^7.21.8",
+      "@babel/parser": "^7.21.8",
+      "@babel/traverse": "^7.21.5"
+    },
+    "@detachhead/eslint-config": {
+      "eslint-plugin-detachhead": "1.2.0-f852a07aeb440b92d4516e2e9438b3fc43547e25"
+    }
+  }
 }

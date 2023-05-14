@@ -10,7 +10,6 @@ import {
 } from '../types/misc'
 import { isEqual } from 'lodash'
 import { Throw } from 'throw-expression'
-import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import { NoInfer } from 'ts-toolbelt/out/Function/NoInfer'
 import { Filter as TsToolbeltFilter } from 'ts-toolbelt/out/Object/Filter'
 import { IntersectOf } from 'ts-toolbelt/out/Union/IntersectOf'
@@ -204,12 +203,12 @@ export const exactly: {
      */
     <
         _ extends OnlyInfer,
-        Expected extends Equals<Expected, Actual> extends true ? Actual : never,
-        Actual extends Bound,
+        const Expected extends Equals<Expected, Actual> extends true ? Actual : never,
+        const Actual extends Bound,
         Bound = Expected,
     >(
-        expected: Narrow<Expected>,
-        actual: Narrow<Actual>,
+        expected: Expected,
+        actual: Actual,
     ): void
 } = ((...values: [unknown, unknown] | []) => {
     if (values.length === 2) {

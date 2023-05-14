@@ -26,6 +26,7 @@ import {
     uncapitalize,
 } from '../../src/functions/String'
 import { assertType, exactly, toStringType } from '../../src/functions/misc'
+import { Mutable } from 'utility-types'
 
 test('match', () => {
     const foo = match('', /a/u)
@@ -57,7 +58,8 @@ test('join', () => {
 })
 
 test('split', () => {
-    exactly(['1', '2', '3'], split('1,2,3', ','))
+    const expected = ['1', '2', '3'] as const
+    exactly(expected as Mutable<typeof expected>, split('1,2,3', ','))
 })
 
 describe('indexOf', () => {

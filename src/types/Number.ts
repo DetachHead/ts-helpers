@@ -55,7 +55,7 @@ export type Add<N1 extends number, N2 extends number> = [
  * @example
  * type Foo = Subtract<5, 2> //3
  */
-export type Subtract<N1 extends number, N2 extends number> = TupleOf<never, N1> extends [
+export type Subtract<N1 extends number, N2 extends number> = TupleOf<never, N1> extends readonly [
     ...TupleOf<never, N2>,
     ...infer R,
 ]

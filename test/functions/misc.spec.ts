@@ -404,7 +404,7 @@ describe('exactly', () => {
                 exactly(x1AndY2 as Readonly<{ x: 1 } & { y: 2 }>, x1AndY2)
                 // @ts-expect-error xfail https://github.com/DetachHead/ts-helpers/issues/128
                 exactly({} as { x: { a: 1 } & { b: 2 } }, {} as { x: { a: 1; b: 2 } })
-                //  https://github.com/DetachHead/ts-helpers/issues/238 (idk why it works on value form tho)
+                // @ts-expect-error xfail https://github.com/DetachHead/ts-helpers/issues/238
                 exactly({ c: 1 } as { c: 1 } | { c: 1 }, { c: 1 } as { c: 1 })
             })
             test('fail', () => {
@@ -438,7 +438,7 @@ describe('exactly', () => {
             })
             test('fail', () => {
                 assert.throws(() => {
-                    // xfail
+                    // @ts-expect-error doesn't match
                     exactly(fn1, fn2)
                 })
                 assert.throws(() => {
@@ -446,7 +446,7 @@ describe('exactly', () => {
                     exactly(1, fn1)
                 })
                 assert.throws(() => {
-                    // xfail
+                    // @ts-expect-error doesn't match
                     exactly(() => 1, 1)
                 })
             })
@@ -456,10 +456,10 @@ describe('exactly', () => {
                 exactly(Class, Class)
             })
             test('fail', () => {
-                // xfail because constructor isn't typed properly (but true at runtime)
+                // @ts-expect-error doesn't match because constructor is not typed properly
                 exactly(Class, instance.constructor)
                 assert.throws(() => {
-                    // xfail because constructor isn't typed properly (false at runtime)
+                    // @ts-expect-error doesn't match
                     exactly(Class, Class.constructor)
                 })
             })

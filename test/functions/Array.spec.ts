@@ -28,6 +28,7 @@ import { exactly } from '../../src/functions/misc'
 import { TupleOf } from '../../src/types/Array'
 import { Throw, throwIfUndefined } from 'throw-expression'
 import { PowerAssert } from 'typed-nodejs-assert'
+import { Mutable } from 'utility-types'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment -- https://github.com/detachHead/typed-nodejs-assert#with-power-assert
 const assert: PowerAssert = require('power-assert')
@@ -170,7 +171,9 @@ describe('duplicate functions', () => {
 })
 
 test('concat', () => {
-    exactly([1, 2, 3, 1, 2, 3, 4], concat([1, 2, 3], [1, 2, 3, 4]))
+    const expected = [1, 2, 3, 1, 2, 3, 4] as const
+    // hack because `as const` creates a readonly array but concat returns a mutable one
+    exactly(expected as Mutable<typeof expected>, concat([1, 2, 3], [1, 2, 3, 4]))
 })
 
 describe('indexOf', () => {
@@ -182,25 +185,32 @@ describe('indexOf', () => {
 
 describe('flat', () => {
     test('default depth', () => {
-        // the generic gets inferred incorrectly unless you define the variable first
-        const value = flat([
-            ['foo', 'bar'],
-            ['baz, qux', ['asdf']],
-        ])
-        exactly(['foo', 'bar', 'baz, qux', ['asdf']], value)
+        const expected = ['foo', 'bar', 'baz, qux', ['asdf']] as const
+        exactly(
+            expected as Mutable<typeof expected>,
+            flat([
+                ['foo', 'bar'],
+                ['baz, qux', ['asdf']],
+            ]),
+        )
     })
     test('deeper', () => {
         const arrayToFlatten = [
             ['foo', 'bar'],
             ['baz, qux', ['asdf', ['asdf']]],
         ] as const
-        exactly(['foo', 'bar', 'baz, qux', 'asdf', ['asdf'] as const], flat(arrayToFlatten, 2))
-        exactly(['foo', 'bar', 'baz, qux', 'asdf', 'asdf'], flat(arrayToFlatten, 3))
+
+        const expected1 = ['foo', 'bar', 'baz, qux', 'asdf', ['asdf']] as const
+        exactly(expected1 as Mutable<typeof expected1>, flat(arrayToFlatten, 2))
+
+        const expected2 = ['foo', 'bar', 'baz, qux', 'asdf', 'asdf'] as const
+        exactly(expected2 as Mutable<typeof expected2>, flat(arrayToFlatten, 3))
     })
 })
 
 test('splice', () => {
-    exactly([1, 2, 6], splice([1, 2, 3, 4, 5, 6], 2, 3))
+    const expected = [1, 2, 6] as const
+    exactly(expected as Mutable<typeof expected>, splice([1, 2, 3, 4, 5, 6], 2, 3))
 })
 
 describe('findIndexOfHighestNumber', () => {
@@ -228,38 +238,41 @@ describe('indexOfLongestString', () => {
 
 describe('sortByLongestStrings', () => {
     test('normal', () => {
-        const value = sortByLongestStrings(['foo', 'barbaz', 'foobarbaz', 'a', 'ab'])
-        exactly(['foobarbaz', 'barbaz', 'foo', 'ab', 'a'], value)
+        const expected = ['foobarbaz', 'barbaz', 'foo', 'ab', 'a'] as const
+        exactly(
+            expected as Mutable<typeof expected>,
+            sortByLongestStrings(['foo', 'barbaz', 'foobarbaz', 'a', 'ab']),
+        )
     })
 })
 
 describe('slice', () => {
     test('no end', () => {
-        const value = slice([1, 2, 3, 4, 5, 6], 3)
-        exactly([4, 5, 6], value)
+        const expected = [4, 5, 6] as const
+        exactly(expected as Mutable<typeof expected>, slice([1, 2, 3, 4, 5, 6], 3))
     })
     test('end', () => {
-        const value = slice([1, 2, 3, 4, 5, 6], 0, 3)
-        exactly([1, 2, 3], value)
+        const expected = [1, 2, 3] as const
+        exactly(expected as Mutable<typeof expected>, slice([1, 2, 3, 4, 5, 6], 0, 3))
     })
     test('start and end', () => {
-        const value1 = slice([1, 2, 3, 4, 5, 6], 2, 4)
-        exactly([3, 4], value1)
-        const value2 = slice([1, 2, 3, 4, 5, 6], 0, 1)
-        exactly([1], value2)
+        const expected1 = [3, 4] as const
+        exactly(expected1 as Mutable<typeof expected1>, slice([1, 2, 3, 4, 5, 6], 2, 4))
+        const expected2 = [1] as const
+        exactly(expected2 as Mutable<typeof expected2>, slice([1, 2, 3, 4, 5, 6], 0, 1))
     })
     describe('rest', () => {
         test('start, rest end', () => {
             exactly<[2, ...number[]]>()(slice([1, 2, 3] as [1, 2, ...number[]], 1))
         })
         test('start, rest start', () => {
-            exactly<[...number[], 1, 2]>()(slice([1, 2, 3] as [...number[], 1, 2], 1))
+            exactly<[...number[], 2, 3]>()(slice([1, 2, 3] as [...number[], 2, 3], 1))
         })
         test('end, rest end', () => {
             exactly<number[]>()(slice([1, 2, 3] as [1, 2, ...number[]], 0, 1))
         })
         test('end, rest start', () => {
-            exactly<number[]>()(slice([1, 2, 3] as [...number[], 1, 2], 0, 1))
+            exactly<number[]>()(slice([1, 2, 3] as [...number[], 2, 3], 0, 1))
         })
     })
     describe('not known at compiletime', () => {
@@ -300,11 +313,13 @@ describe('forEach', () => {
 
 describe('map', () => {
     const values = [1, 2, 3, 4, 5] as const
-    test('fixed length return value', () =>
+    test('fixed length return value', () => {
+        const expected = ['', ''] as const
         exactly(
-            ['', ''],
+            expected as Mutable<typeof expected>,
             map(['', ''], (value) => value),
-        ))
+        )
+    })
     test('next/previous', () => {
         exactly<TupleOf<1 | 2 | 3 | 4 | 5, 5>>()(
             map(values, (value, index, prev, next) => {
@@ -318,11 +333,11 @@ describe('map', () => {
 
 describe('castArray', () => {
     test('already an array', () => {
-        const value = castArray([1, 2, 3])
-        exactly([1, 2, 3], value)
+        exactly([1, 2, 3], castArray([1, 2, 3]))
     })
     test('not an array', () => {
-        exactly([1], castArray(1))
+        const expected = [1] as const
+        exactly(expected as Mutable<typeof expected>, castArray(1))
     })
 })
 

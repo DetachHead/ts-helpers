@@ -20,11 +20,11 @@ import {
 } from '../types/String'
 import _ from 'lodash'
 import { Throw } from 'throw-expression'
-import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import { List } from 'ts-toolbelt/out/List/List'
 import { Join } from 'ts-toolbelt/out/String/Join'
 import { Split } from 'ts-toolbelt/out/String/Split'
 import { Literal } from 'ts-toolbelt/out/String/_Internal'
+import { Mutable } from 'utility-types'
 
 /**
  * replaces the first occurrence of `find` with `replace`
@@ -83,18 +83,16 @@ export const substring = <Str extends string, StartIndex extends number, EndInde
  * @example
  * const foo = concatenate('foo', 'bar', 'baz') //'foobarbaz'
  */
-export const concatenate = <T extends string[]>(...strings: T): Join<T, ''> =>
-    // Narrow often causes false positives when the function is called, and we don't need it to narrow the type here
-    // because of rest parameters. instead, cast it when calling join which does rely on Narrow to work
-    join(strings as Narrow<T>, '')
+export const concatenate = <T extends string[]>(...strings: T): Join<T, ''> => join(strings, '')
 
 /**
  * joins a string by the given `delimiter` at compiletime
  */
-export const join = <T extends List<Literal>, D extends string>(
-    items: Narrow<T>,
+export const join = <const T extends List<Literal>, D extends string>(
+    items: T,
     delimiter: D,
-): Join<T, D> => items.join(delimiter) as Join<T, D>
+    // https://github.com/millsp/ts-toolbelt/issues/258
+): Join<Mutable<T>, D> => items.join(delimiter) as Join<T, D>
 
 /**
  * splits a string by the given `delimiter` at compiletime
