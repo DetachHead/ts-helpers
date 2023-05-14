@@ -1,4 +1,4 @@
-import { assertType, exactly } from '../../src/functions/misc'
+import { exactly } from '../../src/functions/misc'
 import {
     DimensionArray,
     IndexOf,
@@ -45,5 +45,5 @@ describe('RemoveValue', () => {
 })
 
 test('DimensionArray', () => {
-    assertType<DimensionArray<string, 20>>(['', [[[[[[[[[['']]]]]]]]]], ['']])
+    ;['', [[[[[[[[[['']]]]]]]]]], ['']] satisfies DimensionArray<string, 20>
 })

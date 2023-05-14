@@ -10,7 +10,6 @@ import {
 } from '../types/misc'
 import { isEqual } from 'lodash'
 import { Throw } from 'throw-expression'
-import { NoInfer } from 'ts-toolbelt/out/Function/NoInfer'
 import { Filter as TsToolbeltFilter } from 'ts-toolbelt/out/Object/Filter'
 import { IntersectOf } from 'ts-toolbelt/out/Union/IntersectOf'
 import { ListOf } from 'ts-toolbelt/out/Union/ListOf'
@@ -91,27 +90,13 @@ export const toStringType: {
     <T extends Stringable>(value: T): string
 } = (value: Stringable) => value.toString() as never
 
-export const assertType: {
-    /**
-     * @deprecated use the `satisfies` keyword instead:
-     * ```ts
-     * //old:
-     * assertType<string>('foo')
-     *
-     * //new:
-     * 'foo' satisfies string
-     * ```
-     */
-    <T>(_value: NoInfer<T>): void
-
-    /**
-     * asserts that a value matches the given type
-     *
-     * **WARNING**: for most type-testing scenarios, you probably want to use {@link exactly} instead, as it does an exact
-     * match whereas this function only verifies that the value `extends` the given type
-     */
-    <_Expected, _Actual extends _Expected>(): void
-} = (_value?: unknown) => undefined
+/**
+ * asserts that a value matches the given type
+ *
+ * **WARNING**: for most type-testing scenarios, you probably want to use {@link exactly} instead, as it does an exact
+ * match whereas this function only verifies that the value `extends` the given type
+ */
+export const assertType = <_Expected, _Actual extends _Expected>(): void => undefined
 
 export const exactly: {
     /**

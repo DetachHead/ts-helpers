@@ -25,7 +25,7 @@ import {
     truncate,
     uncapitalize,
 } from '../../src/functions/String'
-import { assertType, exactly, toStringType } from '../../src/functions/misc'
+import { exactly, toStringType } from '../../src/functions/misc'
 import { Mutable } from 'utility-types'
 
 test('match', () => {
@@ -314,7 +314,7 @@ describe('trim', () => {
             exactly<string>()(trim('foo' as string))
         })
         test('capitalization', () => {
-            assertType<Uppercase<string>>(trim('foo' as Uppercase<string>))
+            trim('foo' as Uppercase<string>) satisfies Uppercase<string>
         })
     })
 })
