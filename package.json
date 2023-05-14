@@ -72,5 +72,8 @@
     "@detachhead/eslint-config": {
       "eslint-plugin-detachhead": "1.2.0-f852a07aeb440b92d4516e2e9438b3fc43547e25"
     }
+  },
+  "engines": {
+    "node": ">=16.6.0"
   }
 }

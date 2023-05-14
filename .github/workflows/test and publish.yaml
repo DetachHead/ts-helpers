@@ -8,7 +8,7 @@ jobs:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
               with:
-                  node-version: 15.4
+                  node-version: 19.7
             - run: npm ci
             - run: npm run check
             - uses: actions/upload-artifact@v2
@@ -25,7 +25,7 @@ jobs:
             - uses: actions/checkout@v1
             - uses: actions/setup-node@v1
               with:
-                  node-version: 15.4
+                  node-version: 19.7
             - run: echo ::set-output name=CURRENT_VERSION::$(node -p "require(\"./package.json\").version")
               id: current-version
             - if: github.ref == 'refs/heads/master'
