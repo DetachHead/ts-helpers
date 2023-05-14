@@ -17,7 +17,6 @@ import { isNullOrUndefined } from './misc'
 import { castArray as lodashCastArray, orderBy } from 'lodash'
 import { Throw } from 'throw-expression'
 import { isDefined } from 'ts-is-present'
-import { Narrow } from 'ts-toolbelt/out/Function/Narrow'
 import { Flatten } from 'ts-toolbelt/out/List/Flatten'
 import { MaybePromise, NonNil } from 'tsdef'
 
@@ -114,11 +113,12 @@ export const arrayOfAll = <T>() => {
  * like {@link Array.prototype.map} but for promises where you want to execute the callback one at a time.
  * preserves the length of the array at compiletime
  */
-export const mapAsync = async <T extends unknown[], Result>(
-    arr: Narrow<T>,
+export const mapAsync = async <const T extends readonly unknown[], Result>(
+    arr: T,
     callbackfn: (value: T[number], index: number, array: T) => Promise<Result>,
 ): Promise<TupleOf<Result, T['length']>> => {
     const result: Result[] = []
+    // eslint-disable-next-line @typescript-eslint/no-for-in-array -- can't use forEach because of the await
     for (const indexStr in arr) {
         const index = Number(indexStr)
         result.push(
@@ -126,7 +126,7 @@ export const mapAsync = async <T extends unknown[], Result>(
                 arr[index],
                 index,
                 // need to cast due to Narrow type
-                arr as T,
+                arr,
             ),
         )
     }
@@ -215,42 +215,34 @@ export const findDuplicates = <T, L extends number>(arr: TupleOf<T, L>): TupleOf
 /**
  * concatenates two arrays while keeping track of their length
  */
-export const concat = <A1 extends readonly unknown[], A2 extends readonly unknown[]>(
-    array1: Narrow<A1>,
-    array2: Narrow<A2>,
-): [...A1, ...A2] =>
-    array1.concat(
-        // @ts-expect-error some wack error caused by the Narrow type, but it's the same type anyway so this is a false positive
-        array2,
-    ) as never
+export const concat = <const A1 extends readonly unknown[], const A2 extends readonly unknown[]>(
+    array1: A1,
+    array2: A2,
+): [...A1, ...A2] => array1.concat(array2) as never
 
 /**
  * {@link Array.prototype.indexOf} but it uses {@link IndexOf} such that the result can be known at compiletime
  */
-export const indexOf = <Array extends readonly unknown[], Value extends Array[number]>(
-    array: Narrow<Array>,
-    value: Narrow<Value>,
-): IndexOf<Array, Value> =>
-    array.indexOf(
-        // @ts-expect-error some wack error caused by the Narrow type, but it's the same type anyway so this is a false positive
-        value,
-    ) as never
+export const indexOf = <const Array extends readonly unknown[], const Value extends Array[number]>(
+    array: Array,
+    value: Value,
+): IndexOf<Array, Value> => array.indexOf(value) as never
 
 /**
  * {@link Array.prototype.flat} but it uses {@link Flatten} such that the result can be known at compiletime
  */
-export const flat = <Array extends readonly unknown[], Depth extends number = 1>(
-    array: Narrow<Array>,
+export const flat = <const Array extends readonly unknown[], Depth extends number = 1>(
+    array: Array,
     depth?: Depth,
 ): Flatten<Array, 1, Depth> => array.flat(depth) as never
 
 /** removes `deleteCount` values from `array` starting at `startIndex` */
 export const splice = <
-    Array extends unknown[],
+    const Array extends readonly unknown[],
     StartIndex extends number,
     DeleteCount extends number,
 >(
-    array: Narrow<Array>,
+    array: Array,
     startIndex: StartIndex,
     deleteCount: DeleteCount,
 ): Splice<Array, StartIndex, DeleteCount> =>
@@ -264,10 +256,10 @@ export const splice = <
  * @example
  * const foo = findIndexWithHighestNumber(['foo', 'barbaz', 'qux'], value => value.length) //1
  */
-export const findIndexWithHighestNumber = <T extends unknown[]>(
-    array: Narrow<T>,
+export const findIndexWithHighestNumber = <const T extends readonly unknown[]>(
+    array: T,
     predicate: (value: T[number]) => number,
-): T extends [] ? undefined : number => {
+): T extends readonly [] ? undefined : number => {
     if (lengthIs(array, 0)) return undefined as never
     let highestNumber = 0
     let result = 0
@@ -281,14 +273,14 @@ export const findIndexWithHighestNumber = <T extends unknown[]>(
     return result as never
 }
 
-export const indexOfLongestString = <Strings extends string[]>(
-    strings: Narrow<Strings>,
+export const indexOfLongestString = <const Strings extends readonly string[]>(
+    strings: Strings,
 ): IndexOfLongestString<Strings> =>
     findIndexWithHighestNumber(strings, (string) => string.length) as never
 
 /** sorts an array of strings by longest to shortest */
-export const sortByLongestStrings: <Strings extends string[]>(
-    strings: Narrow<Strings>,
+export const sortByLongestStrings: <const Strings extends readonly string[]>(
+    strings: Strings,
 ) => SortLongestStrings<Strings> = (strings) => orderBy(strings, 'length', 'desc') as never
 
 /**
@@ -302,11 +294,11 @@ export const mapNotUndefined = <T, R>(array: (T | undefined)[], callback: (value
  * {@link Array.slice} using {@link Slice} so the result can be known at compiletime
  */
 export const slice = <
-    Array extends readonly unknown[],
+    const Array extends readonly unknown[],
     Start extends number,
     End extends number | undefined = undefined,
 >(
-    array: Narrow<Array>,
+    array: Array,
     start: Start,
     end?: End,
 ): Slice<Array, Start, End> => array.slice(start, end) as never
@@ -323,8 +315,8 @@ export const slice = <
  *         const foo = prev() // 1 | 2 | 3
  * }
  */
-export const forEach = <T extends ReadonlyArray<unknown>>(
-    items: Narrow<T>,
+export const forEach = <const T extends ReadonlyArray<unknown>>(
+    items: T,
     callback: (
         value: T[number],
         index: Enumerate<T['length']>,
@@ -346,8 +338,8 @@ export const forEach = <T extends ReadonlyArray<unknown>>(
  *         const foo = prev() // 1 | 2 | 3
  * }
  */
-export const map = <T extends ReadonlyArray<unknown>, R>(
-    items: Narrow<T>,
+export const map = <const T extends ReadonlyArray<unknown>, R>(
+    items: T,
     callback: (
         value: T[number],
         index: Enumerate<T['length']>,
@@ -365,11 +357,7 @@ export const map = <T extends ReadonlyArray<unknown>, R>(
 }
 
 /** {@link _.castArray} but the type is known at compiletime */
-export const castArray = <T>(value: Narrow<T>): CastArray<T> =>
-    lodashCastArray(
-        // @ts-expect-error false positive due to narrow type
-        value,
-    ) as never
+export const castArray = <const T>(value: T): CastArray<T> => lodashCastArray(value) as never
 
 /**
  * like {@link Array.prototype.find} but works properly with promises. it still executes the `predicate`s at the same
