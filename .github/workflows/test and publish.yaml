@@ -9,7 +9,7 @@ jobs:
             - uses: actions/setup-node@v1
               with:
                   node-version: 19.7
-            - run: npm ci
+            - run: npm ci --legacy-peer-deps
             - run: npm run check
             - uses: actions/upload-artifact@v2
               with:
