@@ -1,4 +1,4 @@
-import { assertType, exactly } from '../../src/functions/misc'
+import { exactly } from '../../src/functions/misc'
 import {
     CaseInsensitive,
     DuplicateString,
@@ -13,20 +13,19 @@ import {
     SplitByLength,
     SplitByUnion,
     UriString,
-    UrlString,
 } from '../../src/types/String'
 
 test('UriString', () => {
     // @ts-expect-error TS2345: Argument of type '"asdf"' is not assignable to parameter of type '`${string}://${string}`'.
-    assertType<UriString>('asdf')
-    assertType<UriString>('asdf://asdf.com')
+    'asdf' satisfies UriString
+    'asdf://asdf.com' satisfies UriString
     // @ts-expect-error TS2345: Argument of type '"asdf://asdf.com"' is not assignable to parameter of type '`foo://${string}`'.
-    assertType<UriString<'foo'>>('asdf://asdf.com')
+    'asdf://asdf.com' satisfies UriString<'foo'>
 })
 test('UrlString', () => {
     // @ts-expect-error TS2345: Argument of type '"asdf"' is not assignable to parameter of type '`${string}://${string}`'.
-    assertType<UrlString>('asdf')
-    assertType<UrlString>('https://asdf.com')
+    'asdf' satisfies UriString
+    'https://asdf.com' satisfies UriString
 })
 test('Email', () => {
     exactly<`${string}@${string}.${string}`, Email>()
@@ -39,25 +38,25 @@ test('Guid', () => {
 describe('IP', () => {
     test('v4', () => {
         // @ts-expect-error invalid ip
-        assertType<IPv4>('a.b.c.d')
+        'a.b.c.d' satisfies IPv4
         // @ts-expect-error invalid ip (one too many)
-        assertType<IPv4>('192.168.0.1.2')
-        assertType<IPv4>('192.168.0.1')
+        '192.168.0.1.2' satisfies IPv4
+        '192.168.0.1' satisfies IPv4
     })
     test('v6', () => {
         // @ts-expect-error invalid ip
-        assertType<IPv6>('asdf')
-        assertType<IPv6>('2001:0db8:0000:0000:0000:ff00:0042:8329')
+        'asdf' satisfies IPv6
+        '2001:0db8:0000:0000:0000:ff00:0042:8329' satisfies IPv6
         // @ts-expect-error invalid ip (not enough)
-        assertType<IPv6>('2001:0db8:0000:0000:0000:ff00:0042')
+        '2001:0db8:0000:0000:0000:ff00:0042' satisfies IPv6
     })
 })
 
 test('FileName', () => {
-    assertType<FileName>('asdf')
-    assertType<FileName<'png'>>('asdf.png')
+    'asdf' satisfies FileName
+    'asdf.png' satisfies FileName<'png'>
     // @ts-expect-error wrong filetype
-    assertType<FileName<'png'>>('asdf.jpg')
+    'asdf.jpg' satisfies FileName<'png'>
 })
 
 test('LengthGreaterOrEqual', () => {
