@@ -1,6 +1,7 @@
 import {
     Add,
     Divide,
+    Factorial,
     IsGreaterOrEqual,
     IsGreaterThan,
     IsLessOrEqual,
@@ -84,6 +85,14 @@ export const power = <Num extends number, PowerOf extends number>(
 
 /** raises the value of `num` to the power of 2, at compiletime. */
 export const square = <T extends number>(num: T): Square<T> => power(num, 2)
+
+export const factorial = <T extends number>(num: T): Factorial<T> => {
+    let result = 1
+    for (let i = num; i > 1; i--) {
+        result *= i
+    }
+    return result as Factorial<T>
+}
 
 /**
  * adds leading zeros to the given `number` until it reaches the desired `length`
