@@ -153,6 +153,12 @@ export type Power<Num extends number, PowerOf extends number> = PowerTailRec<Num
  */
 export type Square<Num extends number> = Power<Num, 2>
 
+type FactorialTailRec<T extends number, Result extends number> = T extends 1
+    ? Result
+    : FactorialTailRec<Subtract<T, 1>, Multiply<Result, T>>
+
+export type Factorial<T extends number> = number extends T ? number : FactorialTailRec<T, 1>
+
 /**
  * checks whether a number is positive or negative
  */

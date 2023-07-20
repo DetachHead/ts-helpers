@@ -1,6 +1,7 @@
 import {
     add,
     divide,
+    factorial,
     isGreaterOrEqual,
     isGreaterThan,
     isLessOrEqual,
@@ -86,6 +87,21 @@ describe('arithmetic', () => {
             test('power', () => {
                 exactly(65536 as number, power(4, 8 as number))
             })
+        })
+    })
+    describe('factorial', () => {
+        test('1', () => {
+            exactly(1, factorial(1))
+        })
+        test('4', () => {
+            exactly(24, factorial(4))
+        })
+        test('stack depth', () => {
+            // the tail recusion here only gives us one extra number lol (up to 7)
+            exactly(5040, factorial(7))
+        })
+        test('not known at compiletime', () => {
+            exactly<number>()(factorial(1 as number))
         })
     })
 })
