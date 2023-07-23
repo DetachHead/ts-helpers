@@ -378,6 +378,8 @@ export type ReplaceValuesWithMap<Format extends string, Map extends ReplaceValue
     // need to narrow using a conditional type because the compiler fails to
     //  see https://github.com/microsoft/TypeScript/issues/43736
     // infer extends doesnt work here due to https://github.com/microsoft/TypeScript/issues/50721#issuecomment-1363554868 i think
+    // TODO: figure out what causes this, its a stack depth error which is apparently very dangerous to suppress
+    /** @ts-expect-error */
     _ReplaceValuesWithMap<_TokenizeString<Format, Map, []>, Map, []> extends infer Strings
         ? Strings extends ReadonlyArray<Literal>
             ? Strings
