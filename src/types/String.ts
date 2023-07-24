@@ -1,6 +1,15 @@
 import { IndexOfLongestString, TupleOf } from './Array'
 import { Extends, Or } from './Boolean'
-import { Add, Decrement, Increment, IsGreaterThan, IsLessOrEqual, Subtract } from './Number'
+import {
+    Add,
+    Decrement,
+    Enumerate,
+    Increment,
+    IsGreaterThan,
+    IsLessOrEqual,
+    RangeType,
+    Subtract,
+} from './Number'
 import { Keys } from './misc'
 import { Head as ArrayHead } from 'ts-toolbelt/out/List/Head'
 import { Tail as ArrayTail } from 'ts-toolbelt/out/List/Tail'
@@ -56,7 +65,6 @@ export type GUID = Join<TupleOf<string, 5>, '-'>
 /**
  * the name of a file with an `Extension`.
  * if `Extension` is not provided an empty string then it's treated as a file with no extension
- *
  * @example
  * type File: FileName //string, anything goes
  * type Image: FileName<'png'|'jpg'> // `${string}.png` | `${string}.jpg`
@@ -235,7 +243,6 @@ type _DuplicateStringUntilLength<
 
 /**
  * like {@link DuplicateString} except it duplicates until the exact provided `Size`, instead of a number of repetitions
- *
  * @example
  * type Foo = DuplicateStringUntilLength<'abc', 8> //'abcabcab'
  */
@@ -378,8 +385,8 @@ export type ReplaceValuesWithMap<Format extends string, Map extends ReplaceValue
     // need to narrow using a conditional type because the compiler fails to
     //  see https://github.com/microsoft/TypeScript/issues/43736
     // infer extends doesnt work here due to https://github.com/microsoft/TypeScript/issues/50721#issuecomment-1363554868 i think
-    // TODO: figure out what causes this, its a stack depth error which is apparently very dangerous to suppress
-    /** @ts-expect-error */
+    // eslint-disable-next-line jsdoc/check-tag-names -- https://github.com/microsoft/TypeScript/issues/38628#issuecomment-1378644305
+    /** @ts-expect-error -- TODO: figure out what causes this, its a stack depth error which is apparently very dangerous to suppress */
     _ReplaceValuesWithMap<_TokenizeString<Format, Map, []>, Map, []> extends infer Strings
         ? Strings extends ReadonlyArray<Literal>
             ? Strings

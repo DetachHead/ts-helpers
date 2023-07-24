@@ -1,3 +1,4 @@
+import { New } from '../functions/misc'
 import { Extends, Not } from './Boolean'
 import { ExactOptionalPropertyTypes } from './compilerOptions'
 import { Keys as TsToolbeltKeys } from 'ts-toolbelt/out/Any/Keys'
@@ -160,7 +161,6 @@ export type NoAny<T> = IsAny<T> extends true ? never : T
  * any value that's not `null` or `undefined`
  *
  * useful when banning the `{}` type with `@typescript-eslint/ban-types`
- *
  * @see https://github.com/typescript-eslint/typescript-eslint/issues/2063#issuecomment-675156492
  */
 // eslint-disable-next-line @typescript-eslint/ban-types -- duh
@@ -180,7 +180,6 @@ export type Entries<T> = [Keys<T>, T[Keys<T>]][]
  * checks whether `Key` is an "exact" optional property of `T`. (ie. the property is defined with a `?` prefix).
  * requires the [`exactOptionalPropertyTypes`](https://www.typescriptlang.org/tsconfig#exactOptionalPropertyTypes)
  * compiler option to be enabled. will return `never` if it's not
- *
  * @example
  * type Foo = {a?: number, b: number | undefined, c: number}
  * declare const foo: IsExactOptionalProperty<Foo, 'a'> // true
@@ -199,7 +198,6 @@ export type IsExactOptionalProperty<
 /**
  * makes all properties in the object `T` required. if `ExactOptionalProperties` is `true`,
  * keys that are optional but also have `undefined` in their type will keep `undefined` in their type.
- *
  * @example
  * type Foo = RequiredProperties<{ a?: string | undefined }, true> // { a: string | undefined }
  * type Bar = RequiredProperties<{ a?: string | undefined }, false> // { a: string }
@@ -212,7 +210,6 @@ export type RequiredProperties<
 /**
  * recursively makes all properties in the object `T` required. if `ExactOptionalProperties` is `true`,
  * keys that are optional but also have `undefined` in their type will keep `undefined` in their type.
- *
  * @example
  * type Foo = RequiredRecursive<{ a: { a?: string | undefined } }, true> // { a: { a: string | undefined } }
  * type Bar = RequiredRecursive<{ a: { a?: string | undefined } }, fa;se> // { a: { a: string } }
@@ -241,7 +238,6 @@ export type RequiredRecursive<
 /**
  * makes `Keys` in the object `T` required. if `ExactOptionalProperties` is `true`,
  * keys that are optional but also have `undefined` in their type will keep `undefined` in their type.
- *
  * @example
  * type Foo = RequiredBy<{ a?: string | undefined, b?: string | undefined }, true> // { a: string | undefined, b?: string | undefined }
  * type Bar = RequiredBy<{ a?: string | undefined, b?: string | undefined }, true> // { a: string, b?: string | undefined }
@@ -255,7 +251,6 @@ export type RequiredBy<
 /**
  * makes all properties in the object `T` optional. if `ExactOptionalProperties` is `true`,
  * keys that are optional but also have `undefined` in their type will keep `undefined` in their type.
- *
  * @example
  * type Foo = OptionalProperties<{ a?: string | undefined }, true> // { a: string | undefined }
  * type Bar = OptionalProperties<{ a?: string | undefined }, false> // { a: string }
@@ -268,7 +263,6 @@ export type OptionalProperties<
 /**
  * recursively makes all properties in the object `T` optional. if `ExactOptionalProperties` is `true`,
  * keys that are optional but also have `undefined` in their type will keep `undefined` in their type.
- *
  * @example
  * type Foo = OptionalRecursive<{ a: { a: string } }, true> // { a: { a?: string } }
  * type Bar = OptionalRecursive<{ a: { a: string } }, false> // { a: { a: string | undefined } }
@@ -292,7 +286,6 @@ export type OptionalRecursive<
 /**
  * makes `Keys` in the object `T` optional. if `ExactOptionalProperties` is `true`,
  * keys that are optional but also have `undefined` in their type will keep `undefined` in their type.
- *
  * @example
  * type Foo = OptionalBy<{ a?: string | undefined, b?: string | undefined }, true> // { a: string | undefined, b?: string | undefined }
  * type Bar = OptionalBy<{ a?: string | undefined, b?: string | undefined }, true> // { a: string, b?: string | undefined }
@@ -333,7 +326,6 @@ export type HasTypedConstructor<T extends AbstractConstructor = AbstractConstruc
  * (which means they do not overlap)
  *
  * **WARNING:** this will break any "branded" types as they rely on non-overlapping intersections
- *
  * @see https://stackoverflow.com/a/65908955
  */
 export type CheckNever<T> = T extends Primitive ? (T extends object ? never : T) : T
@@ -342,7 +334,6 @@ export type CheckNever<T> = T extends Primitive ? (T extends object ? never : T)
  * intersects two types, correctly merging key types & index signatures
  *
  * **WARNING:** this will break any "branded" types as they rely on non-overlapping intersections
- *
  * @see https://github.com/microsoft/TypeScript/issues/52931
  */
 export type Intersection<Left, Right> = Left extends infer DistributedLeft
@@ -358,7 +349,6 @@ export type Intersection<Left, Right> = Left extends infer DistributedLeft
 
 /**
  * recursively replaces value types in `T` that extend `Find` with `Replace`
- *
  * @example
  * type Foo = ReplaceValuesRecursive<
  *     { a: number; b: { a: number; b: boolean } },
