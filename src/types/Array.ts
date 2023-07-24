@@ -119,7 +119,6 @@ export type IndexOf<
 
 /**
  * creates a tuple type of alternating types
- *
  * @example
  * type Foo = FlattenedTupleOf<[string, number], 3> //[string, number, string, number, string, number]
  */

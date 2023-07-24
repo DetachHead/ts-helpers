@@ -179,8 +179,8 @@ export const exactly: {
      * see [these issues](https://github.com/DetachHead/ts-helpers/labels/type%20testing)
      * # value form
      * checks that the values match at runtime as well!
-     * @param expected the expected value. its type gets automatically narrowed using the {@link Narrow} type
-     * @param actual the actual value. its type gets automatically narrowed using the {@link Narrow} type
+     * @param expected the expected value.
+     * @param actual the actual value.
      * @example
      * declare const foo: 1 | 2;
      * exactly(foo, 1);  // error as `1 | 2` is not an exact match of `1`
@@ -310,7 +310,6 @@ declare const replacedUndefined: unique symbol
 /**
  * recursively removes `undefined` properties from an object type. used by the `optionalProperties` function
  * only useful when using the `exactOptionalPropertyTypes` compiler option. this type has no effect if it's disabled
- *
  * @example
  * type Foo = RemoveUndefinedPropertiesRecursive<{ a?: number | undefined, b: string | undefined }> // { a?: number, b: string | undefined }
  */

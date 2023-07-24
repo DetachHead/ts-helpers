@@ -1,3 +1,4 @@
+import { findAsync } from '../functions/Iterable'
 import {
     CastArray,
     IndexOf,
@@ -356,7 +357,7 @@ export const map = <const T extends ReadonlyArray<unknown>, R>(
     }) as never
 }
 
-/** {@link _.castArray} but the type is known at compiletime */
+/** {@link lodashCastArray} but the type is known at compiletime */
 export const castArray = <const T>(value: T): CastArray<T> => lodashCastArray(value) as never
 
 /**

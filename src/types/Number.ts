@@ -18,7 +18,6 @@ type _Enumerate<A extends Array<unknown>, N extends number> = number extends N
 
 /**
  * creates a union type of numbers from 0 to generic `N`
- *
  * @example
  * type Foo = Enumerate<3> //0|1|2
  * @see https://stackoverflow.com/a/63918062
@@ -27,7 +26,6 @@ export type Enumerate<N extends number> = _Enumerate<[], N>[never]
 
 /**
  * creates a range type of numbers from generics `FROM` (inclusive) to `TO` (inclusive)
- *
  * @example
  * type Foo = RangeType<2, 5> //2|3|4|5
  * @see https://stackoverflow.com/a/63918062
@@ -174,7 +172,6 @@ export type Decrement<T extends number> = Subtract<T, 1>
 
 /**
  * adds leading zeros to a number until it reaches a specified length
- *
  * @example
  * type Foo = LeadingZeros<12, 5> //'00012'
  * type Bar = LeadingZeros<-12, 5> //'-00012'
