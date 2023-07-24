@@ -136,7 +136,8 @@ export type Splice<
     Array extends readonly unknown[],
     StartIndex extends number,
     DeleteCount extends number = Subtract<Array['length'], StartIndex>,
-> = [...Take<Array, StartIndex>, ...Take<Array, Add<StartIndex, DeleteCount>, '<-'>]
+    InsertItems extends readonly unknown[] = [],
+> = [...Take<Array, StartIndex>, ...InsertItems, ...Take<Array, Add<StartIndex, DeleteCount>, '<-'>]
 
 /** removes the value at index `RemoveIndex` from `Array` */
 export type RemoveIndex<
