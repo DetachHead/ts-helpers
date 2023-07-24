@@ -1,6 +1,7 @@
 import { exactly } from '../../src/functions/misc'
 import {
     DimensionArray,
+    EveryCombination,
     IndexOf,
     RemoveValue,
     SortLongestStrings,
@@ -46,4 +47,11 @@ describe('RemoveValue', () => {
 
 test('DimensionArray', () => {
     ;['', [[[[[[[[[['']]]]]]]]]], ['']] satisfies DimensionArray<string, 20>
+})
+
+test('EveryCombination', () => {
+    exactly<
+        [1, 2, 3] | [3, 2, 1] | [2, 3, 1] | [2, 1, 3] | [3, 1, 2] | [1, 3, 2],
+        EveryCombination<[1, 2, 3]>
+    >
 })
