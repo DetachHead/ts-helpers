@@ -272,3 +272,48 @@ export type DimensionArray<T, Dimension extends number> = (
     | T
     | (Dimension extends 0 ? never : DimensionArray<T, Decrement<Dimension>>)
 )[]
+
+/**
+ * for some reason the ts toolbelt Tail causes a recursion error in the {@link EveryCombination}
+ * types so i made this one instead
+ */
+// TODO: figure out what's up with the ts-toolbelt Tail type, should i just export and use this one everywhere instead?
+type Tail2<T extends unknown[]> = number extends T['length'] ? never : Splice<T, 0, 1>
+
+type InsertIntoEachIndexInArray<
+    T extends unknown[],
+    ToAdd,
+    Count extends number,
+> = number extends T['length']
+    ? never
+    : [
+          Splice<T, Count, 0, [ToAdd]>,
+          ...(Count extends T['length'] ? [] : InsertIntoEachIndexInArray<T, ToAdd, Add<Count, 1>>),
+      ]
+
+type AddToCombinations<T extends unknown[][], ToAdd> = T extends []
+    ? []
+    : [
+          ...InsertIntoEachIndexInArray<T[0], ToAdd, 0>,
+          ...(Tail2<T> extends infer Narrowed extends unknown[][]
+              ? AddToCombinations<Narrowed, ToAdd>
+              : never),
+      ]
+
+type _EveryCombination<T extends unknown[], Result extends unknown[][] = [[T[0]]]> = T extends []
+    ? []
+    : T extends [unknown]
+    ? Result
+    : AddToCombinations<Result, T[1]> extends infer Narrowed extends unknown[][]
+    ? _EveryCombination<Tail2<T>, Narrowed>
+    : never
+
+/**
+ * creates a union type of every possible combination of values in the `T` array type, excluding
+ * duplicates.
+ *
+ * if you want to allow duplicates, do something like `TupleOf<T[number], T['length']>`
+ */
+export type EveryCombination<T extends unknown[]> = _EveryCombination<T> extends infer Result
+    ? Result[number & keyof Result]
+    : never
