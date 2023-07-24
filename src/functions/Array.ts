@@ -242,12 +242,19 @@ export const splice = <
     const Array extends readonly unknown[],
     StartIndex extends number,
     DeleteCount extends number,
+    const InsertItems extends readonly unknown[],
 >(
     array: Array,
     startIndex: StartIndex,
     deleteCount: DeleteCount,
-): Splice<Array, StartIndex, DeleteCount> =>
-    array.filter((_, index) => index < startIndex || index > deleteCount + 1) as never
+    ...insertItems: InsertItems
+): Splice<Array, StartIndex, DeleteCount, InsertItems> =>
+    array.toSpliced(startIndex, deleteCount, ...insertItems) as Splice<
+        Array,
+        StartIndex,
+        DeleteCount,
+        InsertItems
+    >
 
 /**
  * runs the given `predicate` on each value in the given `array`, and returns the index of the first value in the `array`

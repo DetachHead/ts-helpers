@@ -208,9 +208,15 @@ describe('flat', () => {
     })
 })
 
-test('splice', () => {
-    const expected = [1, 2, 6] as const
-    exactly(expected as Mutable<typeof expected>, splice([1, 2, 3, 4, 5, 6], 2, 3))
+describe('splice', () => {
+    test('no inserted items', () => {
+        const expected = [1, 2, 6] as const
+        exactly(expected as Mutable<typeof expected>, splice([1, 2, 3, 4, 5, 6], 2, 3))
+    })
+    test('insert items', () => {
+        const expected = [1, 2, 'a', 'b', 6] as const
+        exactly(expected as Mutable<typeof expected>, splice([1, 2, 3, 4, 5, 6], 2, 3, 'a', 'b'))
+    })
 })
 
 describe('findIndexOfHighestNumber', () => {
