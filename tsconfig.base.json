@@ -73,7 +73,8 @@
         "noImplicitOverride": true,
         "exactOptionalPropertyTypes": true,
         "allowUnreachableCode": false,
-        "stripInternal": true
+        "stripInternal": true,
+        "moduleDetection": "force"
     },
     "include": []
 }
