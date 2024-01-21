@@ -6,10 +6,7 @@ const config: JestConfigWithTsJest = {
     testRegex: '/test/.*.ts',
     globals: {
         'ts-jest': {
-            babelConfig: {
-                presets: ['power-assert'],
-            },
-            tsconfig: 'test/tsconfig.json',
+            tsconfig: 'tsconfig.json',
         },
     },
 }
